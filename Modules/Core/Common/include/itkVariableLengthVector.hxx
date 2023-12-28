@@ -26,14 +26,7 @@
 
 namespace itk
 {
-/** Default constructor  */
-template <typename TValue>
-VariableLengthVector<TValue>::VariableLengthVector()
-  : m_Data(nullptr)
 
-{}
-
-/** Constructor with size */
 template <typename TValue>
 VariableLengthVector<TValue>::VariableLengthVector(unsigned int length)
   : m_Data(nullptr)
@@ -43,7 +36,6 @@ VariableLengthVector<TValue>::VariableLengthVector(unsigned int length)
   itkAssertInDebugAndIgnoreInReleaseMacro(m_Data != nullptr);
 }
 
-/** Constructor with user specified data */
 template <typename TValue>
 VariableLengthVector<TValue>::VariableLengthVector(ValueType * datain, unsigned int sz, bool LetArrayManageMemory)
   : m_LetArrayManageMemory(LetArrayManageMemory)
@@ -51,7 +43,6 @@ VariableLengthVector<TValue>::VariableLengthVector(ValueType * datain, unsigned 
   , m_NumElements(sz)
 {}
 
-/** Constructor with user specified data */
 template <typename TValue>
 VariableLengthVector<TValue>::VariableLengthVector(const ValueType * datain, unsigned int sz, bool LetArrayManageMemory)
   : m_LetArrayManageMemory(LetArrayManageMemory)
@@ -60,8 +51,6 @@ VariableLengthVector<TValue>::VariableLengthVector(const ValueType * datain, uns
   m_NumElements = sz;
 }
 
-/** Copy constructor. Overrides the default non-templated copy constructor
- * that the compiler provides */
 template <typename TValue>
 VariableLengthVector<TValue>::VariableLengthVector(const VariableLengthVector<TValue> & v)
 {
@@ -166,7 +155,6 @@ VariableLengthVector<TValue>::operator=(
   return *this;
 }
 
-/** Destructor */
 template <typename TValue>
 VariableLengthVector<TValue>::~VariableLengthVector()
 {
@@ -177,7 +165,6 @@ VariableLengthVector<TValue>::~VariableLengthVector()
   }
 }
 
-/** Reserve memory of certain size for m_Data */
 template <typename TValue>
 void
 VariableLengthVector<TValue>::Reserve(ElementIdentifier size)
@@ -209,7 +196,6 @@ VariableLengthVector<TValue>::Reserve(ElementIdentifier size)
   itkAssertInDebugAndIgnoreInReleaseMacro(m_Data != nullptr);
 }
 
-/** Allocate memory of certain size and return it */
 template <typename TValue>
 TValue *
 VariableLengthVector<TValue>::AllocateElements(ElementIdentifier size) const
@@ -222,16 +208,10 @@ VariableLengthVector<TValue>::AllocateElements(ElementIdentifier size) const
   {
     // Intercept std::bad_alloc and any exception thrown from TValue
     // default constructor.
-    itkGenericExceptionMacro(<< "Failed to allocate memory of length " << size << " for VariableLengthVector.");
+    itkGenericExceptionMacro("Failed to allocate memory of length " << size << " for VariableLengthVector.");
   }
 }
 
-/** Set the pointer from which the data is imported.
- * If "LetArrayManageMemory" is false, then the application retains
- * the responsibility of freeing the memory for this data.  If
- * "LetArrayManageMemory" is true, then this class will free the
- * memory when this object is destroyed. Note that you need to explicitly
- * set the number of elements. */
 template <typename TValue>
 void
 VariableLengthVector<TValue>::SetData(TValue * datain, bool LetArrayManageMemory)
@@ -246,15 +226,6 @@ VariableLengthVector<TValue>::SetData(TValue * datain, bool LetArrayManageMemory
   m_Data = datain;
 }
 
-/** Similar to the previous method. In the above method, the size must be
- * separately set prior to using user-supplied data. This introduces an
- * unnecessary allocation step to be performed. This method avoids it
- * and should be used to import data wherever possible to avoid this.
- * Set the pointer from which the data is imported.
- * If "LetArrayManageMemory" is false, then the application retains
- * the responsibility of freeing the memory for this data.  If
- * "LetArrayManageMemory" is true, then this class will free the
- * memory when this object is destroyed. */
 template <typename TValue>
 void
 VariableLengthVector<TValue>::SetData(TValue * datain, unsigned int sz, bool LetArrayManageMemory)
@@ -291,10 +262,10 @@ void
 VariableLengthVector<TValue>::SetSize(unsigned int sz, TReallocatePolicy reallocatePolicy, TKeepValuesPolicy keepValues)
 {
   static_assert(
-    std::is_base_of<AllocateRootPolicy, TReallocatePolicy>::value,
+    std::is_base_of_v<AllocateRootPolicy, TReallocatePolicy>,
     "The allocation policy does not inherit from itk::VariableLengthVector::AllocateRootPolicy as expected");
   static_assert(
-    std::is_base_of<KeepValuesRootPolicy, TKeepValuesPolicy>::value,
+    std::is_base_of_v<KeepValuesRootPolicy, TKeepValuesPolicy>,
     "The old values keeping policy does not inherit from itk::VariableLengthVector::KeepValuesRootPolicy as expected");
 
   if (reallocatePolicy(sz, m_NumElements) || !m_LetArrayManageMemory)
@@ -314,7 +285,6 @@ VariableLengthVector<TValue>::SetSize(unsigned int sz, TReallocatePolicy realloc
   m_NumElements = sz;
 }
 
-/** Set all the elements of the array to the specified value */
 template <typename TValue>
 void
 VariableLengthVector<TValue>::Fill(TValue const & v)
@@ -325,7 +295,6 @@ VariableLengthVector<TValue>::Fill(TValue const & v)
   std::fill(&this->m_Data[0], &this->m_Data[m_NumElements], v);
 }
 
-/** Copy-Assignment operator */
 template <typename TValue>
 VariableLengthVector<TValue> &
 VariableLengthVector<TValue>::operator=(const Self & v)
@@ -351,7 +320,6 @@ VariableLengthVector<TValue>::operator=(const Self & v)
   return *this;
 }
 
-/** Fast Assignment */
 template <typename TValue>
 inline VariableLengthVector<TValue> &
 VariableLengthVector<TValue>::FastAssign(const Self & v)
@@ -369,7 +337,6 @@ VariableLengthVector<TValue>::FastAssign(const Self & v)
   return *this;
 }
 
-/** Assignment operator */
 template <typename TValue>
 VariableLengthVector<TValue> &
 VariableLengthVector<TValue>::operator=(TValue const & v)
@@ -407,9 +374,6 @@ VariableLengthVector<TValue>::operator==(const Self & v) const
   return true;
 }
 
-/**
- * Returns vector's Euclidean Norm
- */
 template <typename TValue>
 auto
 VariableLengthVector<TValue>::GetNorm() const -> RealValueType
@@ -418,9 +382,6 @@ VariableLengthVector<TValue>::GetNorm() const -> RealValueType
   return static_cast<RealValueType>(sqrt(this->GetSquaredNorm()));
 }
 
-/**
- * Returns vector's Squared Euclidean Norm
- */
 template <typename TValue>
 auto
 VariableLengthVector<TValue>::GetSquaredNorm() const -> RealValueType

@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedImage, typename TMovingImage>
 ImageRegistrationMethod<TFixedImage, TMovingImage>::ImageRegistrationMethod()
 {
@@ -52,9 +50,6 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::ImageRegistrationMethod()
   this->SetNumberOfWorkUnits(this->GetMultiThreader()->GetNumberOfWorkUnits());
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage>
 ModifiedTimeType
 ImageRegistrationMethod<TFixedImage, TMovingImage>::GetMTime() const
@@ -104,9 +99,6 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::GetMTime() const
   return mtime;
 }
 
-/*
- * Set the initial transform parameters
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 ImageRegistrationMethod<TFixedImage, TMovingImage>::SetInitialTransformParameters(const ParametersType & param)
@@ -115,10 +107,6 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::SetInitialTransformParameter
   this->Modified();
 }
 
-/**
-
- * Set the region of the fixed image to be considered for registration
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 ImageRegistrationMethod<TFixedImage, TMovingImage>::SetFixedImageRegion(const FixedImageRegionType & region)
@@ -128,36 +116,33 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::SetFixedImageRegion(const Fi
   this->Modified();
 }
 
-/**
- * Initialize by setting the interconnects between components.
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 ImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
 {
   if (!m_FixedImage)
   {
-    itkExceptionMacro(<< "FixedImage is not present");
+    itkExceptionMacro("FixedImage is not present");
   }
 
   if (!m_MovingImage)
   {
-    itkExceptionMacro(<< "MovingImage is not present");
+    itkExceptionMacro("MovingImage is not present");
   }
 
   if (!m_Metric)
   {
-    itkExceptionMacro(<< "Metric is not present");
+    itkExceptionMacro("Metric is not present");
   }
 
   if (!m_Optimizer)
   {
-    itkExceptionMacro(<< "Optimizer is not present");
+    itkExceptionMacro("Optimizer is not present");
   }
 
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
 
   //
@@ -169,7 +154,7 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
 
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator is not present");
+    itkExceptionMacro("Interpolator is not present");
   }
 
   // Setup the metric
@@ -197,7 +182,7 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
   // Validate initial transform parameters
   if (m_InitialTransformParameters.Size() != m_Transform->GetNumberOfParameters())
   {
-    itkExceptionMacro(<< "Size mismatch between initial parameters and transform."
+    itkExceptionMacro("Size mismatch between initial parameters and transform."
                       << "Expected " << m_Transform->GetNumberOfParameters() << " parameters and received "
                       << m_InitialTransformParameters.Size() << " parameters");
   }
@@ -205,9 +190,6 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
   m_Optimizer->SetInitialPosition(m_InitialTransformParameters);
 }
 
-/**
- * Starts the Optimization process
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 ImageRegistrationMethod<TFixedImage, TMovingImage>::StartOptimization()
@@ -232,29 +214,25 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::StartOptimization()
   m_Transform->SetParameters(m_LastTransformParameters);
 }
 
-/**
- * PrintSelf
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 ImageRegistrationMethod<TFixedImage, TMovingImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Metric: " << m_Metric.GetPointer() << std::endl;
-  os << indent << "Optimizer: " << m_Optimizer.GetPointer() << std::endl;
-  os << indent << "Transform: " << m_Transform.GetPointer() << std::endl;
-  os << indent << "Interpolator: " << m_Interpolator.GetPointer() << std::endl;
-  os << indent << "Fixed Image: " << m_FixedImage.GetPointer() << std::endl;
-  os << indent << "Moving Image: " << m_MovingImage.GetPointer() << std::endl;
-  os << indent << "Fixed Image Region Defined: " << m_FixedImageRegionDefined << std::endl;
-  os << indent << "Fixed Image Region: " << m_FixedImageRegion << std::endl;
-  os << indent << "Initial Transform Parameters: " << m_InitialTransformParameters << std::endl;
-  os << indent << "Last    Transform Parameters: " << m_LastTransformParameters << std::endl;
+
+  itkPrintSelfObjectMacro(Metric);
+  itkPrintSelfObjectMacro(Optimizer);
+  itkPrintSelfObjectMacro(FixedImage);
+  itkPrintSelfObjectMacro(MovingImage);
+  itkPrintSelfObjectMacro(Transform);
+  itkPrintSelfObjectMacro(Interpolator);
+
+  os << indent << "InitialTransformParameters: " << m_InitialTransformParameters << std::endl;
+  os << indent << "LastTransformParameters: " << m_LastTransformParameters << std::endl;
+  os << indent << "FixedImageRegionDefined: " << (m_FixedImageRegionDefined ? "On" : "Off") << std::endl;
+  os << indent << "FixedImageRegion: " << m_FixedImageRegion << std::endl;
 }
 
-/*
- * Generate Data
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 ImageRegistrationMethod<TFixedImage, TMovingImage>::GenerateData()
@@ -277,9 +255,6 @@ ImageRegistrationMethod<TFixedImage, TMovingImage>::GenerateData()
   this->StartOptimization();
 }
 
-/**
- *  Get Output
- */
 template <typename TFixedImage, typename TMovingImage>
 auto
 ImageRegistrationMethod<TFixedImage, TMovingImage>::GetOutput() const -> const TransformOutputType *

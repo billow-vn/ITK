@@ -102,7 +102,7 @@ public:
   using Self = SobelOperator;
   using Superclass = NeighborhoodOperator<TPixel, VDimension, TAllocator>;
 
-  itkTypeMacro(SobelOperator, NeighborhoodOperator);
+  itkOverrideGetNameOfClassMacro(SobelOperator);
 
   /** Creates the operator with length only in the specified direction.
    * The radius of the operator will be 0 except along the axis on which
@@ -120,13 +120,13 @@ public:
    * \sa CreateDirectional \sa Fill */
   // virtual void CreateToRadius(const unsigned long);
 
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
-
 protected:
+#ifdef ITK_USE_CONCEPT_CHECKING
+  // Begin concept checking
+  itkConceptMacro(SignedOutputPixelType, (Concept::Signed<typename NumericTraits<TPixel>::ValueType>));
+  // End concept checking
+#endif
+
   /** Type alias support for coefficient vector type.*/
   using typename Superclass::CoefficientVector;
 

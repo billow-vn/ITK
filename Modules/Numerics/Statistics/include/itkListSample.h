@@ -60,7 +60,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(ListSample, Sample);
+  itkOverrideGetNameOfClassMacro(ListSample);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -284,7 +284,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  InternalDataContainerType m_InternalContainer;
+  InternalDataContainerType m_InternalContainer{};
 };
 } // end of namespace Statistics
 } // end of namespace itk

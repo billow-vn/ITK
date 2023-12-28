@@ -72,9 +72,9 @@ GaussianInterpolateImageFunction<TImageType, TCoordRep>::ComputeBoundingBox()
 
 
 template <typename TInputImage, typename TCoordRep>
-typename GaussianInterpolateImageFunction<TInputImage, TCoordRep>::RegionType
+auto
 GaussianInterpolateImageFunction<TInputImage, TCoordRep>::ComputeInterpolationRegion(
-  const ContinuousIndexType & cindex) const
+  const ContinuousIndexType & cindex) const -> RegionType
 {
   RegionType region = this->GetInputImage()->GetBufferedRegion();
   for (unsigned int d = 0; d < ImageDimension; ++d)
@@ -91,9 +91,10 @@ GaussianInterpolateImageFunction<TInputImage, TCoordRep>::ComputeInterpolationRe
 }
 
 template <typename TImageType, typename TCoordRep>
-typename GaussianInterpolateImageFunction<TImageType, TCoordRep>::OutputType
+auto
 GaussianInterpolateImageFunction<TImageType, TCoordRep>::EvaluateAtContinuousIndex(const ContinuousIndexType & cindex,
                                                                                    OutputType * grad) const
+  -> OutputType
 {
   vnl_vector<RealType> erfArray[ImageDimension];
   vnl_vector<RealType> gerfArray[ImageDimension];
@@ -116,9 +117,7 @@ GaussianInterpolateImageFunction<TImageType, TCoordRep>::EvaluateAtContinuousInd
   dsum_me.Fill(0.0);
   dw.Fill(0.0);
 
-
-  ImageRegionConstIteratorWithIndex<InputImageType> It(this->GetInputImage(), region);
-  for (It.GoToBegin(); !It.IsAtEnd(); ++It)
+  for (ImageRegionConstIteratorWithIndex<InputImageType> It(this->GetInputImage(), region); !It.IsAtEnd(); ++It)
   {
     unsigned int j = It.GetIndex()[0] - region.GetIndex()[0];
     RealType     w = erfArray[0][j];
@@ -241,13 +240,13 @@ GaussianInterpolateImageFunction<TImageType, TCoordRep>::PrintSelf(std::ostream 
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Alpha: " << this->m_Alpha << std::endl;
-  os << indent << "Sigma: " << this->m_Sigma << std::endl;
+  os << indent << "Alpha: " << m_Alpha << std::endl;
+  os << indent << "Sigma: " << m_Sigma << std::endl;
 
-  os << indent << "Bounding box start: " << this->m_BoundingBoxStart << std::endl;
-  os << indent << "Bounding box end: " << this->m_BoundingBoxEnd << std::endl;
-  os << indent << "Scaling factor: " << this->m_ScalingFactor << std::endl;
-  os << indent << "Cut-off distance: " << this->m_CutOffDistance << std::endl;
+  os << indent << "BoundingBoxStart: " << m_BoundingBoxStart << std::endl;
+  os << indent << "BoundingBoxEnd: " << m_BoundingBoxEnd << std::endl;
+  os << indent << "ScalingFactor: " << m_ScalingFactor << std::endl;
+  os << indent << "CutOffDistance: " << m_CutOffDistance << std::endl;
 }
 } // namespace itk
 

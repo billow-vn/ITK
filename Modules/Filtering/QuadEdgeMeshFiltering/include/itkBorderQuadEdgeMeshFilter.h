@@ -26,14 +26,14 @@
 
 namespace itk
 {
-/**\class BorderQuadEdgeMeshFilterEnums
+/** \class BorderQuadEdgeMeshFilterEnums
  * \brief Contains all enum classes used by
  * \ingroup ITKQuadEdgeMeshFiltering
  */
 class BorderQuadEdgeMeshFilterEnums
 {
 public:
-  /**\class BorderTransform
+  /** \class BorderTransform
    * \ingroup ITKQuadEdgeMeshFiltering
    * */
   enum class BorderTransform : uint8_t
@@ -42,7 +42,7 @@ public:
     DISK_BORDER_TRANSFORM
   };
 
-  /**\class BorderPick
+  /** \class BorderPick
    * \ingroup ITKQuadEdgeMeshFiltering
    * */
   enum class BorderPick : uint8_t
@@ -126,7 +126,7 @@ public:
   using OutputCellsContainerConstIterator = typename OutputMeshType::CellsContainerConstIterator;
 
   itkNewMacro(Self);
-  itkTypeMacro(BorderQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(BorderQuadEdgeMeshFilter);
   static constexpr unsigned int PointDimension = InputTraits::PointDimension;
 
   using InputVectorPointType = std::vector<InputPointType>;
@@ -173,14 +173,14 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  BorderTransformEnum m_TransformType;
-  BorderPickEnum      m_BorderPick;
+  BorderTransformEnum m_TransformType{};
+  BorderPickEnum      m_BorderPick{};
 
-  InputCoordRepType m_Radius;
+  InputCoordRepType m_Radius{};
 
-  InputVectorPointType m_Border;
+  InputVectorPointType m_Border{};
 
-  MapPointIdentifier m_BoundaryPtMap;
+  MapPointIdentifier m_BoundaryPtMap{};
 
   void
   GenerateData() override;

@@ -20,9 +20,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
   GPUDemonsRegistrationFilter()
@@ -43,14 +41,10 @@ GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TPare
   Indent         indent) const
 {
   GPUSuperclass::PrintSelf(os, indent);
-  os << indent << "UseMovingImageGradient: ";
-  os << m_UseMovingImageGradient << std::endl;
-  os << indent << "Intensity difference threshold: " << this->GetIntensityDifferenceThreshold() << std::endl;
+
+  os << indent << "UseMovingImageGradient: " << (m_UseMovingImageGradient ? "On" : "Off") << std::endl;
 }
 
-/*
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::InitializeIteration()
@@ -63,23 +57,18 @@ GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TPare
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   drfp->SetUseMovingImageGradient(m_UseMovingImageGradient);
 
-  /**
-   * Smooth the deformation field
-   */
+  // Smooth the deformation field
   if (this->GetSmoothDisplacementField())
   {
     this->SmoothDisplacementField();
   }
 }
 
-/**
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 double
 GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::GetMetric() const
@@ -88,15 +77,12 @@ GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TPare
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   return drfp->GetMetric();
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 double
 GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -106,15 +92,12 @@ GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TPare
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   return drfp->GetIntensityDifferenceThreshold();
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -124,22 +107,19 @@ GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TPare
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   drfp->SetIntensityDifferenceThreshold(threshold);
 }
 
-/**
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::ApplyUpdate(
   const TimeStepType & dt)
 {
   // If we smooth the update buffer before applying it, then the are
-  // approximating a viscuous problem as opposed to an elastic problem
+  // approximating a viscous problem as opposed to an elastic problem
   if (this->GetSmoothUpdateField())
   {
     this->SmoothUpdateField();
@@ -153,7 +133,7 @@ GPUDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TPare
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   this->SetRMSChange(drfp->GetRMSChange());

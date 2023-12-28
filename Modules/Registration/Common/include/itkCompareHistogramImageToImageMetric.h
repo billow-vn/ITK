@@ -66,7 +66,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CompareHistogramImageToImageMetric, HistogramImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(CompareHistogramImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -153,12 +153,12 @@ protected:
   EvaluateMeasure(HistogramType & histogram) const override = 0;
 
 private:
-  FixedImageConstPointer  m_TrainingFixedImage;
-  MovingImageConstPointer m_TrainingMovingImage;
-  TransformPointer        m_TrainingTransform;
-  InterpolatorPointer     m_TrainingInterpolator;
-  FixedImageRegionType    m_TrainingFixedImageRegion;
-  HistogramPointerType    m_TrainingHistogram;
+  FixedImageConstPointer  m_TrainingFixedImage{};
+  MovingImageConstPointer m_TrainingMovingImage{};
+  TransformPointer        m_TrainingTransform{};
+  InterpolatorPointer     m_TrainingInterpolator{};
+  FixedImageRegionType    m_TrainingFixedImageRegion{};
+  HistogramPointerType    m_TrainingHistogram{};
 };
 
 } // end namespace itk

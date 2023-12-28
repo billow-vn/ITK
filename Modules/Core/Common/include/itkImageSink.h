@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageSink, StreamingProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageSink);
 
   /** Smart Pointer type to a DataObject. */
   using DataObjectPointer = DataObject::Pointer;
@@ -189,8 +189,8 @@ protected:
 
 private:
   unsigned int          m_NumberOfStreamDivisions{ 1 };
-  RegionSplitterPointer m_RegionSplitter;
-  InputImageRegionType  m_CurrentInputRegion;
+  RegionSplitterPointer m_RegionSplitter{};
+  InputImageRegionType  m_CurrentInputRegion{};
 
   /**
    *  Tolerances for checking whether input images are defined to

@@ -175,7 +175,7 @@ Segmenter<TInputImage>::GenerateData()
   Self::MinMax(input, regionToProcess, minimum, maximum);
   // cap the maximum in the image so that we can always define a pixel
   // value that is one greater than the maximum value in the image.
-  if (std::is_integral<InputPixelType>::value
+  if (std::is_integral_v<InputPixelType>
         // clang-format off
 CLANG_PRAGMA_PUSH
 CLANG_SUPPRESS_Wfloat_equal
@@ -853,13 +853,12 @@ Segmenter<TInputImage>::GradientDescent(InputImageTypePointer img, ImageRegionTy
   }
   ConstNeighborhoodIterator<InputImageType> valueIt(rad, img, region);
   NeighborhoodIterator<OutputImageType>     labelIt(zeroRad, output, region);
-  ImageRegionIterator<OutputImageType>      it(output, region);
 
   //
   // Sweep through the image and trace all unlabeled
   // pixels to a labeled region
   //
-  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+  for (ImageRegionIterator<OutputImageType> it(output, region); !it.IsAtEnd(); ++it)
   {
     if (it.Get() == NULL_LABEL)
     {
@@ -1018,7 +1017,7 @@ Segmenter<TInputImage>::UpdateSegmentTable(InputImageTypePointer input, ImageReg
     segment_ptr = segments->Lookup(edge_table_entry_ptr->first);
     if (segment_ptr == nullptr)
     {
-      itkGenericExceptionMacro(<< "UpdateSegmentTable:: An unexpected and fatal error has occurred.");
+      itkGenericExceptionMacro("UpdateSegmentTable:: An unexpected and fatal error has occurred.");
     }
 
     // Copy into the segment list
@@ -1136,7 +1135,7 @@ Segmenter<TInputImage>::MergeFlatRegions(flat_region_table_t & regions, Equivale
   {
     if (((a = regions.find(it->first)) == regions.end()) || ((b = regions.find(it->second)) == regions.end()))
     {
-      itkGenericExceptionMacro(<< "MergeFlatRegions:: An unexpected and fatal error has occurred.");
+      itkGenericExceptionMacro("MergeFlatRegions:: An unexpected and fatal error has occurred.");
     }
 
     if (a->second.bounds_min < b->second.bounds_min)
@@ -1326,7 +1325,6 @@ Segmenter<TInputImage>::GenerateOutputRequestedRegion(DataObject * output)
   ImageBase<ImageDimension> * imgData;
   ImageBase<ImageDimension> * op;
   imgData = dynamic_cast<ImageBase<ImageDimension> *>(output);
-  typename TInputImage::RegionType c_reg;
 
   if (imgData)
   {

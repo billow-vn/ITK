@@ -112,7 +112,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(InvertIntensityImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(InvertIntensityImageFilter);
 
   /** Set/Get the maximum intensity value for the inversion. */
   itkSetMacro(Maximum, InputPixelType);
@@ -136,7 +136,7 @@ protected:
   ~InvertIntensityImageFilter() override = default;
 
 private:
-  InputPixelType m_Maximum;
+  InputPixelType m_Maximum{};
 };
 } // end namespace itk
 

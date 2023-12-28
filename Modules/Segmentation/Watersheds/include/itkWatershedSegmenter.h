@@ -28,7 +28,7 @@ namespace itk
 namespace watershed
 {
 /**
- *\class Segmenter
+ * \class Segmenter
  *
  * This filter implements the first step in the N-d watershed segmentation
  * algorithm.  It produces a segmented, labeled image from a scalar-valued
@@ -111,7 +111,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(Segmenter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(Segmenter);
 
   /** Typedefs necessary on microsoft VC++ to avoid internal compiler errors */
   using InputImageTypePointer = typename InputImageType::Pointer;
@@ -379,7 +379,7 @@ protected:
 
   /** Holds generalized connectivity information for connected component
    * labeling and gradient descent analysis in pixel neighborhoods.  */
-  connectivity_t m_Connectivity;
+  connectivity_t m_Connectivity{};
 
 private:
   /** Helper, debug method.   */
@@ -388,13 +388,13 @@ private:
   /** This is the actual data set size.  The pipeline will alter its
    *  LargestPossibleRegion, so we need to preserve it here explicitly for
    *  streaming applications*/
-  ImageRegionType m_LargestPossibleRegion;
+  ImageRegionType m_LargestPossibleRegion{};
 
-  bool           m_SortEdgeLists;
-  bool           m_DoBoundaryAnalysis;
-  double         m_Threshold;
-  double         m_MaximumFloodLevel;
-  IdentifierType m_CurrentLabel;
+  bool           m_SortEdgeLists{};
+  bool           m_DoBoundaryAnalysis{};
+  double         m_Threshold{};
+  double         m_MaximumFloodLevel{};
+  IdentifierType m_CurrentLabel{};
 };
 } // end namespace watershed
 } // end namespace itk

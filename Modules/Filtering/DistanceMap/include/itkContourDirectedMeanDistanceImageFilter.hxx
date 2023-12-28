@@ -148,7 +148,7 @@ ContourDirectedMeanDistanceImageFilter<TInputImage1, TInputImage2>::AfterThreade
 
   // Find mean over all threads
   IdentifierType count = 0;
-  RealType       sum = NumericTraits<RealType>::ZeroValue();
+  RealType       sum{};
 
   for (ThreadIdType i = 0; i < numberOfWorkUnits; ++i)
   {
@@ -191,10 +191,10 @@ ContourDirectedMeanDistanceImageFilter<TInputImage1, TInputImage2>::ThreadedGene
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  for (auto fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    ImageRegionConstIterator<DistanceMapType> it2(m_DistanceMap, *fit);
-    bit = ConstNeighborhoodIterator<InputImage1Type>(radius, input, *fit);
+    ImageRegionConstIterator<DistanceMapType> it2(m_DistanceMap, face);
+    bit = ConstNeighborhoodIterator<InputImage1Type>(radius, input, face);
     unsigned int neighborhoodSize = bit.Size();
 
     bit.OverrideBoundaryCondition(&nbc);
@@ -240,7 +240,7 @@ ContourDirectedMeanDistanceImageFilter<TInputImage1, TInputImage2>::PrintSelf(st
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   os << indent << "ContourDirectedMeanDistance: " << m_ContourDirectedMeanDistance << std::endl;
 }
 } // end namespace itk

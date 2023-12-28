@@ -74,7 +74,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoggerThreadWrapper, SimpleLoggerType);
+  itkOverrideGetNameOfClassMacro(LoggerThreadWrapper);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -152,29 +152,21 @@ protected:
   ThreadFunction();
 
 private:
-  using OperationContainerType = std::queue<OperationEnum>;
+  std::thread m_Thread{};
 
-  using MessageContainerType = std::queue<std::string>;
+  std::atomic<bool> m_TerminationRequested{};
 
-  using LevelContainerType = std::queue<PriorityLevelEnum>;
+  std::queue<OperationEnum> m_OperationQ{};
 
-  using OutputContainerType = std::queue<typename OutputType::Pointer>;
+  std::queue<std::string> m_MessageQ{};
 
-  std::thread m_Thread;
+  std::queue<PriorityLevelEnum> m_LevelQ{};
 
-  std::atomic<bool> m_TerminationRequested;
+  std::queue<typename OutputType::Pointer> m_OutputQ{};
 
-  OperationContainerType m_OperationQ;
+  mutable std::mutex m_Mutex{};
 
-  MessageContainerType m_MessageQ;
-
-  LevelContainerType m_LevelQ;
-
-  OutputContainerType m_OutputQ;
-
-  mutable std::mutex m_Mutex;
-
-  DelayType m_Delay;
+  DelayType m_Delay{};
 
 }; // class LoggerThreadWrapper
 

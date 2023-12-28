@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class DirectedHausdorffDistanceImageFilter
+ * \class DirectedHausdorffDistanceImageFilter
  * \brief Computes the directed Hausdorff distance between the set of
  * non-zero pixels of two images.
  *
@@ -86,7 +86,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(DirectedHausdorffDistanceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(DirectedHausdorffDistanceImageFilter);
 
   /** Image related type alias. */
   using InputImage1Type = TInputImage1;
@@ -181,16 +181,16 @@ private:
 
   DistanceMapPointer m_DistanceMap{ nullptr };
 
-  RealType       m_MaxDistance{ NumericTraits<RealType>::ZeroValue() };
+  RealType       m_MaxDistance{};
   IdentifierType m_PixelCount{};
 
-  CompensatedSummationType m_Sum;
+  CompensatedSummationType m_Sum{};
 
-  RealType m_DirectedHausdorffDistance{ NumericTraits<RealType>::ZeroValue() };
-  RealType m_AverageHausdorffDistance{ NumericTraits<RealType>::ZeroValue() };
+  RealType m_DirectedHausdorffDistance{};
+  RealType m_AverageHausdorffDistance{};
   bool     m_UseImageSpacing{ true };
 
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 }; // end of class
 } // end namespace itk
 

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class StatisticsPositionLabelMapFilter
+ * \class StatisticsPositionLabelMapFilter
  * \brief Mark a single pixel in the label object which correspond to a position given by an attribute
  *
  *
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsPositionLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(StatisticsPositionLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

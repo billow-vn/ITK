@@ -48,7 +48,7 @@ public:
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
   using SpatialObjectConstPointer = typename SpatialObjectType::ConstPointer;
 
-  /** base type for MetaConverters -- bidirections conversion btw
+  /** base type for MetaConverters -- bidirectional conversion btw
    *  SpatialObject & MetaObject
    */
   using MetaConverterBaseType = MetaConverterBase<VDimension>;
@@ -58,7 +58,7 @@ public:
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
-  itkTypeMacro(SpatialObjectWriter, Object);
+  itkOverrideGetNameOfClassMacro(SpatialObjectWriter);
 
   /** Load a tube file. */
   void
@@ -99,17 +99,17 @@ public:
                         MetaConverterBaseType * converter);
 
 protected:
-  std::string m_FileName;
-  bool        m_BinaryPoints;
-  bool        m_WriteImagesInSeparateFile;
+  std::string m_FileName{};
+  bool        m_BinaryPoints{};
+  bool        m_WriteImagesInSeparateFile{};
 
   SpatialObjectWriter();
   ~SpatialObjectWriter() override = default;
 
 private:
-  SpatialObjectConstPointer m_SpatialObject;
+  SpatialObjectConstPointer m_SpatialObject{};
 
-  typename MetaSceneConverterType::Pointer m_MetaToSpatialConverter;
+  typename MetaSceneConverterType::Pointer m_MetaToSpatialConverter{};
 };
 } // namespace itk
 

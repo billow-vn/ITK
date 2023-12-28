@@ -40,7 +40,7 @@ namespace itk
 {
 
 /**
- *\class MeshFileReader
+ * \class MeshFileReader
  * \brief Mesh source that reads mesh data from a single file.
  *
  * This source object is a general filter to read data from
@@ -68,7 +68,7 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup ITKIOMeshBase
  *
- * \author Wanlin Zhu. Uviversity of New South Wales, Australia.
+ * \author Wanlin Zhu. University of New South Wales, Australia.
  *
  * \sphinx
  * \sphinxexample{IO/Mesh/ReadMesh,Read Mesh}
@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshFileReader, MeshSource);
+  itkOverrideGetNameOfClassMacro(MeshFileReader);
 
   /** Define output mesh types */
   using OutputMeshType = TOutputMesh;
@@ -181,10 +181,10 @@ protected:
   void
   GenerateData() override;
 
-  MeshIOBase::Pointer m_MeshIO;
-  bool                m_UserSpecifiedMeshIO; // keep track whether the MeshIO is
-                                             // user specified
-  std::string m_FileName;                    // The file to be read
+  MeshIOBase::Pointer m_MeshIO{};
+  bool                m_UserSpecifiedMeshIO{}; // keep track whether the MeshIO is
+                                               // user specified
+  std::string m_FileName{};                    // The file to be read
 
 private:
   template <typename T>
@@ -195,7 +195,7 @@ private:
   void
   ReadCellsUsingMeshIO();
 
-  std::string m_ExceptionMessage;
+  std::string m_ExceptionMessage{};
 };
 
 

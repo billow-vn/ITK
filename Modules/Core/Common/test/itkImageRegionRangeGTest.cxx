@@ -56,7 +56,7 @@ DoesImageRegionRangeIteratorDereferenceOperatorReturnReference()
 {
   using IteratorType = typename ImageRegionRange<TImage>::iterator;
 
-  return std::is_reference<decltype(*std::declval<IteratorType>())>::value;
+  return std::is_reference_v<decltype(*std::declval<IteratorType>())>;
 }
 
 
@@ -78,7 +78,7 @@ IsIteratorTypeTheSameAsConstIteratorType()
 {
   using RangeType = ImageRegionRange<TImage>;
 
-  return std::is_same<typename RangeType::iterator, typename RangeType::const_iterator>::value;
+  return std::is_same_v<typename RangeType::iterator, typename RangeType::const_iterator>;
 }
 
 
@@ -108,8 +108,8 @@ typename TImage::Pointer
 CreateImageFilledWithSequenceOfNaturalNumbers(const unsigned int sizeX, const unsigned int sizeY)
 {
   using PixelType = typename TImage::PixelType;
-  const auto                          image = CreateImage<TImage>(sizeX, sizeY);
-  const itk::ImageBufferRange<TImage> imageBufferRange{ *image };
+  const auto                  image = CreateImage<TImage>(sizeX, sizeY);
+  const itk::ImageBufferRange imageBufferRange{ *image };
   std::iota(imageBufferRange.begin(), imageBufferRange.end(), PixelType{ 1 });
   return image;
 }
@@ -587,7 +587,7 @@ TEST(ImageRegionRange, IteratesForwardOverSamePixelsAsImageRegionIterator)
   const auto image = ImageType::New();
   image->SetRegions(RegionType{ IndexType{ { -1, -2 } }, SizeType{ { 9, 11 } } });
   image->Allocate();
-  const itk::ImageBufferRange<ImageType> imageBufferRange{ *image };
+  const itk::ImageBufferRange imageBufferRange{ *image };
   std::iota(imageBufferRange.begin(), imageBufferRange.end(), PixelType{ 1 });
 
   Expect_ImageRegionRange_iterates_forward_over_same_pixels_as_ImageRegionIterator(
@@ -607,7 +607,7 @@ TEST(ImageRegionRange, IteratesBackwardOverSamePixelsAsImageRegionIterator)
   const auto image = ImageType::New();
   image->SetRegions(RegionType{ IndexType{ { -1, -2 } }, SizeType{ { 9, 11 } } });
   image->Allocate();
-  const itk::ImageBufferRange<ImageType> imageBufferRange{ *image };
+  const itk::ImageBufferRange imageBufferRange{ *image };
   std::iota(imageBufferRange.begin(), imageBufferRange.end(), PixelType{ 1 });
 
   Expect_ImageRegionRange_iterates_backward_over_same_pixels_as_ImageRegionIterator(

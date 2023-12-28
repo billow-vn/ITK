@@ -70,7 +70,7 @@ private:
 } // end namespace Functor
 
 /**
- *\class VectorRescaleIntensityImageFilter
+ * \class VectorRescaleIntensityImageFilter
  * \brief Applies a linear transformation to the magnitude of pixel vectors in a
  * vector Image.
  *
@@ -123,7 +123,7 @@ public:
   using typename Superclass::InputImagePointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorRescaleIntensityImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorRescaleIntensityImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -160,11 +160,11 @@ protected:
   ~VectorRescaleIntensityImageFilter() override = default;
 
 private:
-  InputRealType m_Scale;
-  InputRealType m_Shift;
+  InputRealType m_Scale{};
+  InputRealType m_Shift{};
 
-  InputRealType  m_InputMaximumMagnitude;
-  OutputRealType m_OutputMaximumMagnitude;
+  InputRealType  m_InputMaximumMagnitude{};
+  OutputRealType m_OutputMaximumMagnitude{};
 };
 } // end namespace itk
 

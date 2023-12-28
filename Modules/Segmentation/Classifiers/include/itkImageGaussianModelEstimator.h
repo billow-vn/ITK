@@ -36,7 +36,7 @@
 namespace itk
 {
 /**
- *\class ImageGaussianModelEstimator
+ * \class ImageGaussianModelEstimator
  * \brief Base class for ImageGaussianModelEstimator object.
  *
  * itkImageGaussianModelEstimator generates the Gaussian model for given
@@ -89,7 +89,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageGaussianModelEstimator, ImageModelEstimatorBase);
+  itkOverrideGetNameOfClassMacro(ImageGaussianModelEstimator);
 
   /** Type definition for the input image. */
   using InputImageType = TInputImage;
@@ -129,7 +129,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /** Starts the image modelling process */
+  /** Starts the image modeling process */
   void
   GenerateData() override;
 
@@ -152,11 +152,11 @@ private:
   void
   EstimateGaussianModelParameters();
 
-  MatrixType                    m_NumberOfSamples;
-  MatrixType                    m_Means;
+  MatrixType                    m_NumberOfSamples{};
+  MatrixType                    m_Means{};
   std::unique_ptr<MatrixType[]> m_Covariance{ nullptr };
 
-  TrainingImagePointer m_TrainingImage;
+  TrainingImagePointer m_TrainingImage{};
 };
 } // end namespace itk
 

@@ -79,7 +79,7 @@ WarpHarmonicEnergyCalculator<TInputImage>::Compute()
     {
       if (m_Image->GetSpacing()[i] <= 0.0)
       {
-        itkExceptionMacro(<< "Image spacing in dimension " << i << " is zero.");
+        itkExceptionMacro("Image spacing in dimension " << i << " is zero.");
       }
       m_DerivativeWeights[i] = 1.0 / static_cast<double>(m_Image->GetSpacing()[i]);
     }
@@ -91,9 +91,9 @@ WarpHarmonicEnergyCalculator<TInputImage>::Compute()
   ConstNeighborhoodIteratorType               bIt;
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>                        bC;
-  faceList = bC(m_Image, m_Region, m_NeighborhoodRadius);
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>::FaceListType faceList =
+    bC(m_Image, m_Region, m_NeighborhoodRadius);
 
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>::FaceListType::iterator fIt;
   fIt = faceList.begin();

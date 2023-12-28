@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class YenThresholdImageFilter
+ * \class YenThresholdImageFilter
  * \brief Threshold an image using the Yen Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(YenThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(YenThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

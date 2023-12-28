@@ -70,7 +70,7 @@ public:
     double y = m_Parameters[1];
 
     std::cout << "GetValue( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     MeasureType measure = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -193,9 +193,6 @@ private:
 int
 itkOnePlusOneEvolutionaryOptimizerv4Test(int, char *[])
 {
-  std::cout << "OnePlusOne Evolutionary Optimizer Test ";
-  std::cout << std::endl << std::endl;
-
   using OptimizerType = itk::OnePlusOneEvolutionaryOptimizerv4<double>;
 
   // Declaration of an itkOptimizer
@@ -260,23 +257,13 @@ itkOnePlusOneEvolutionaryOptimizerv4Test(int, char *[])
   std::cout << "Set metric parameters." << std::endl;
   metric->SetParameters(initialPosition);
 
-  try
-  {
-    itkOptimizer->StartOptimization();
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cout << "Exception thrown ! " << std::endl;
-    std::cout << "An error occurred during Optimization" << std::endl;
-    std::cout << "Location    = " << e.GetLocation() << std::endl;
-    std::cout << "Description = " << e.GetDescription() << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(itkOptimizer->StartOptimization());
+
 
   ParametersType finalPosition = itkOptimizer->GetCurrentPosition();
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ')' << std::endl;
 
   //
   // check results to see if it is within range

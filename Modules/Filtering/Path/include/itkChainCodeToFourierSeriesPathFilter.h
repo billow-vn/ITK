@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ChainCodeToFourierSeriesPathFilter
+ * \class ChainCodeToFourierSeriesPathFilter
  * \brief Filter that produces a Fourier series version of a chain code path
  *
  * ChainCodeToFourierSeriesPathFilter produces a Fourier series representation
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ChainCodeToFourierSeriesPathFilter, PathToPathFilter);
+  itkOverrideGetNameOfClassMacro(ChainCodeToFourierSeriesPathFilter);
 
   /** Some convenient type alias. */
   using InputPathType = TInputChainCodePath;
@@ -88,7 +88,7 @@ protected:
   GenerateData() override;
 
 private:
-  unsigned int m_NumberOfHarmonics;
+  unsigned int m_NumberOfHarmonics{};
 };
 } // end namespace itk
 

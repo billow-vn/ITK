@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class LinearInterpolateImageFunction
+ * \class LinearInterpolateImageFunction
  * \brief Linearly interpolate an image at specified positions.
  *
  * LinearInterpolateImageFunction linearly interpolates image intensity at
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LinearInterpolateImageFunction, InterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(LinearInterpolateImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

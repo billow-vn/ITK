@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class TernaryAddImageFilter
+ * \class TernaryAddImageFilter
  * \brief Pixel-wise addition of three images.
  *
  * This class is templated over the types of the three
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(TernaryAddImageFilter, TernaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(TernaryAddImageFilter);
 
 protected:
   TernaryAddImageFilter()

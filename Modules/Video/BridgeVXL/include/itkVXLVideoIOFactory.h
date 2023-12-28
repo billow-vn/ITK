@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VXLVideoIOFactory
+ * \class VXLVideoIOFactory
  * \brief Create instances of VXLVideoIO objects using an object factory.
  *
  * \ingroup ITKVideoBridgeVXL
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VXLVideoIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(VXLVideoIOFactory);
 
   /** Register one factory of this type  */
   static void

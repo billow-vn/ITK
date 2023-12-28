@@ -31,11 +31,13 @@ int
 itkDeformableSimplexMesh3DGradientConstraintForceFilterTest(int, char *[])
 {
 
+  constexpr unsigned int PointDimension = 3;
+
   // Declare the type of the input and output mesh
-  using TriangleMeshTraits = itk::DefaultDynamicMeshTraits<double, 3, 3, double, double>;
-  using SimplexMeshTraits = itk::DefaultDynamicMeshTraits<double, 3, 3, double, double>;
-  using TriangleMeshType = itk::Mesh<double, 3, TriangleMeshTraits>;
-  using SimplexMeshType = itk::SimplexMesh<double, 3, SimplexMeshTraits>;
+  using TriangleMeshTraits = itk::DefaultDynamicMeshTraits<double, PointDimension, PointDimension, double, double>;
+  using SimplexMeshTraits = itk::DefaultDynamicMeshTraits<double, PointDimension, PointDimension, double, double>;
+  using TriangleMeshType = itk::Mesh<double, PointDimension, TriangleMeshTraits>;
+  using SimplexMeshType = itk::SimplexMesh<double, PointDimension, SimplexMeshTraits>;
 
   // declare triangle mesh source
   using SphereMeshSourceType = itk::RegularSphereMeshSource<TriangleMeshType>;
@@ -50,7 +52,7 @@ itkDeformableSimplexMesh3DGradientConstraintForceFilterTest(int, char *[])
   auto      mySphereMeshSource = SphereMeshSourceType::New();
   PointType center;
   center.Fill(10);
-  PointType::ValueType scaleInit[3] = { 5, 5, 5 };
+  PointType::ValueType scaleInit[PointDimension] = { 5, 5, 5 };
   VectorType           scale = scaleInit;
 
   mySphereMeshSource->SetCenter(center);
@@ -142,8 +144,9 @@ itkDeformableSimplexMesh3DGradientConstraintForceFilterTest(int, char *[])
 
   std::cout << "Deformation Result: " << deformResult << std::endl;
 
-
-  std::cout << "[TEST DONE]" << std::endl;
+  // Print the filter after its update so that its StartVoxel, Positive and Negative ivars's ImageVoxel class stream
+  // insertion operator overload gets exercised.
+  deformFilter->Print(std::cout);
 
   // Test streaming enumeration for DeformableSimplexMesh3DGradientConstraintForceFilterEnums::SIDE elements
   const std::set<itk::DeformableSimplexMesh3DGradientConstraintForceFilterEnums::SIDE> allSIDE{
@@ -157,5 +160,7 @@ itkDeformableSimplexMesh3DGradientConstraintForceFilterTest(int, char *[])
               << std::endl;
   }
 
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

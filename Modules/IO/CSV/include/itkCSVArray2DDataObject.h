@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class CSVArray2DDataObject
+ * \class CSVArray2DDataObject
  * \brief Stores parsed data from csv files.
  *
  * CSVArray2DDataObject contains methods for accessing data from the
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CSVArray2DDataObject, DataObject);
+  itkOverrideGetNameOfClassMacro(CSVArray2DDataObject);
 
   /* Vector type alias. */
   using NumericVectorType = typename std::vector<TData>;
@@ -176,7 +176,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  MatrixType       m_Matrix;
+  MatrixType       m_Matrix{};
   StringVectorType m_ColumnHeaders{};
   StringVectorType m_RowHeaders{};
   bool             m_HasRowHeaders{ false };

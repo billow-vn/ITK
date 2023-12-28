@@ -27,7 +27,6 @@
 namespace itk
 {
 
-/** Destructor */
 template <unsigned int TDimension>
 SpatialObject<TDimension>::~SpatialObject()
 {
@@ -81,7 +80,6 @@ SpatialObject<TDimension>::SetId(int id)
   }
 }
 
-/** Return the Derivative at a point given the order of the derivative */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::DerivativeAtInObjectSpace(const PointType &            point,
@@ -93,7 +91,7 @@ SpatialObject<TDimension>::DerivativeAtInObjectSpace(const PointType &          
 {
   if (!IsEvaluableAtInObjectSpace(point, depth, name))
   {
-    itkExceptionMacro(<< "This spatial object is not evaluable at the point");
+    itkExceptionMacro("This spatial object is not evaluable at the point");
   }
 
   if (order == 0)
@@ -133,7 +131,6 @@ SpatialObject<TDimension>::DerivativeAtInObjectSpace(const PointType &          
   }
 }
 
-/** Return the Derivative at a point given the order of the derivative */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::DerivativeAtInWorldSpace(const PointType &            point,
@@ -148,7 +145,6 @@ SpatialObject<TDimension>::DerivativeAtInWorldSpace(const PointType &           
   this->DerivativeAtInObjectSpace(pnt, order, value, depth, name, offset);
 }
 
-/** Return if a point is inside the object or its children */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::IsInsideInObjectSpace(const PointType &   point,
@@ -181,7 +177,6 @@ SpatialObject<TDimension>::IsInsideInObjectSpace(const PointType & itkNotUsed(po
   return false;
 }
 
-/** Return if a point is inside the object or its children */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::IsInsideInWorldSpace(const PointType &   point,
@@ -193,7 +188,6 @@ SpatialObject<TDimension>::IsInsideInWorldSpace(const PointType &   point,
   return IsInsideInObjectSpace(pnt, depth, name);
 }
 
-/** Return if a point is inside the object or its children */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::IsInsideChildrenInObjectSpace(const PointType &   point,
@@ -216,7 +210,6 @@ SpatialObject<TDimension>::IsInsideChildrenInObjectSpace(const PointType &   poi
   return false;
 }
 
-/** Return if the object is evaluable at a point */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::IsEvaluableAtInObjectSpace(const PointType &   point,
@@ -240,7 +233,6 @@ SpatialObject<TDimension>::IsEvaluableAtInObjectSpace(const PointType &   point,
   }
 }
 
-/** Return if the object is evaluable at a point */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::IsEvaluableAtInWorldSpace(const PointType &   point,
@@ -252,7 +244,6 @@ SpatialObject<TDimension>::IsEvaluableAtInWorldSpace(const PointType &   point,
   return this->IsEvaluableAtInObjectSpace(pnt, depth, name);
 }
 
-/** Return if the object is evaluable at a point */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::IsEvaluableAtChildrenInObjectSpace(const PointType &   point,
@@ -275,7 +266,6 @@ SpatialObject<TDimension>::IsEvaluableAtChildrenInObjectSpace(const PointType & 
   return false;
 }
 
-/** Return the value of the object at a point */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::ValueAtInObjectSpace(const PointType &   point,
@@ -311,7 +301,6 @@ SpatialObject<TDimension>::ValueAtInObjectSpace(const PointType &   point,
   return false;
 }
 
-/** Return the value of the object at a point */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::ValueAtInWorldSpace(const PointType &   point,
@@ -324,7 +313,6 @@ SpatialObject<TDimension>::ValueAtInWorldSpace(const PointType &   point,
   return this->ValueAtInObjectSpace(pnt, value, depth, name);
 }
 
-/** Return the value of the object at a point */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::ValueAtChildrenInObjectSpace(const PointType &   point,
@@ -350,8 +338,6 @@ SpatialObject<TDimension>::ValueAtChildrenInObjectSpace(const PointType &   poin
   return false;
 }
 
-
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 SpatialObject<TDimension>::InternalClone() const
@@ -361,7 +347,7 @@ SpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   rval->SetTypeName(this->GetTypeName());
@@ -375,40 +361,43 @@ SpatialObject<TDimension>::InternalClone() const
   return loPtr;
 }
 
-/** Print self */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Id:" << m_Id << std::endl;
-  os << indent << "TypeName:" << m_TypeName << std::endl;
-  os << indent << "ParentId:" << m_ParentId << std::endl;
-  os << indent << "Parent:" << m_Parent << std::endl;
-  os << indent << "LargestPossibleRegion:" << m_LargestPossibleRegion << std::endl;
-  os << indent << "RequestedRegion:" << m_RequestedRegion << std::endl;
-  os << indent << "BufferedRegion:" << m_BufferedRegion << std::endl;
-  os << indent << "My Bounding Box In Object Space:" << std::endl;
-  os << indent << m_MyBoundingBoxInObjectSpace << std::endl;
-  os << indent << "My Bounding Box In World Space:" << std::endl;
-  os << indent << m_MyBoundingBoxInWorldSpace << std::endl;
-  os << indent << "Family Bounding Box In Object Space:" << std::endl;
-  os << indent << m_FamilyBoundingBoxInObjectSpace << std::endl;
-  os << indent << "Family Bounding Box In World Space:" << std::endl;
-  os << indent << m_FamilyBoundingBoxInWorldSpace << std::endl;
-  os << indent << "Object to World Transform: " << m_ObjectToWorldTransform << std::endl;
-  os << indent << "Object to World Transform Inverse: " << m_ObjectToWorldTransformInverse << std::endl;
-  os << indent << "Object to Parent Transform: " << m_ObjectToParentTransform << std::endl;
-  os << indent << "Object to Parent Transform Inverse: " << m_ObjectToParentTransformInverse << std::endl;
-  os << std::endl << std::endl;
-  os << indent << "Object properties: " << std::endl;
-  m_Property.Print(std::cout);
-  os << indent << "ChildrenList:" << m_ChildrenList.size() << std::endl;
-  os << indent << "DefaultInsideValue:" << m_DefaultInsideValue << std::endl;
-  os << indent << "DefaultOutsideValue:" << m_DefaultOutsideValue << std::endl;
+
+  os << indent << "Id: " << m_Id << std::endl;
+  os << indent << "TypeName: " << m_TypeName << std::endl;
+  os << indent << "ParentId: " << m_ParentId << std::endl;
+  os << indent << "Parent: " << m_Parent << std::endl;
+  os << indent << "LargestPossibleRegion: " << m_LargestPossibleRegion << std::endl;
+  os << indent << "RequestedRegion: " << m_RequestedRegion << std::endl;
+  os << indent << "BufferedRegion: " << m_BufferedRegion << std::endl;
+
+  itkPrintSelfObjectMacro(MyBoundingBoxInObjectSpace);
+  itkPrintSelfObjectMacro(MyBoundingBoxInWorldSpace);
+  itkPrintSelfObjectMacro(FamilyBoundingBoxInObjectSpace);
+  itkPrintSelfObjectMacro(FamilyBoundingBoxInWorldSpace);
+
+  itkPrintSelfObjectMacro(ObjectToWorldTransform);
+  itkPrintSelfObjectMacro(ObjectToWorldTransformInverse);
+  itkPrintSelfObjectMacro(ObjectToParentTransform);
+  itkPrintSelfObjectMacro(ObjectToParentTransformInverse);
+
+  os << indent << "Property: ";
+  m_Property.Print(os);
+
+  os << indent << "ChildrenList: " << std::endl;
+  for (const auto & elem : m_ChildrenList)
+  {
+    os << indent.GetNextIndent() << "[" << &elem - &*(m_ChildrenList.begin()) << "]: " << *elem << std::endl;
+  }
+
+  os << indent << "DefaultInsideValue: " << m_DefaultInsideValue << std::endl;
+  os << indent << "DefaultOutsideValue: " << m_DefaultOutsideValue << std::endl;
 }
 
-/** Get the bounds of the object */
 template <unsigned int TDimension>
 auto
 SpatialObject<TDimension>::GetFamilyBoundingBoxInWorldSpace() const -> const BoundingBoxType *
@@ -435,7 +424,6 @@ SpatialObject<TDimension>::GetFamilyBoundingBoxInWorldSpace() const -> const Bou
   return m_FamilyBoundingBoxInWorldSpace;
 }
 
-/** Add a child to the object */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::AddChild(Self * pointer)
@@ -457,7 +445,6 @@ SpatialObject<TDimension>::AddChild(Self * pointer)
   }
 }
 
-/** Remove a child to the object */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::RemoveChild(Self * pointer)
@@ -483,7 +470,6 @@ SpatialObject<TDimension>::RemoveChild(Self * pointer)
   }
 }
 
-/** Remove a child to the object */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::RemoveAllChildren(unsigned int depth)
@@ -503,14 +489,13 @@ SpatialObject<TDimension>::RemoveAllChildren(unsigned int depth)
   this->Modified();
 }
 
-/** Set the local to global transformation */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::SetObjectToParentTransform(const TransformType * transform)
 {
   if (!transform->GetInverse(m_ObjectToParentTransformInverse))
   {
-    itkExceptionMacro(<< "Transform must be invertible.");
+    itkExceptionMacro("Transform must be invertible.");
   }
 
   m_ObjectToParentTransform->SetFixedParameters(transform->GetFixedParameters());
@@ -519,7 +504,6 @@ SpatialObject<TDimension>::SetObjectToParentTransform(const TransformType * tran
   ProtectedComputeObjectToWorldTransform();
 }
 
-/** Set the local to global transformation */
 template <unsigned int TDimension>
 auto
 SpatialObject<TDimension>::GetObjectToParentTransformInverse() const -> const TransformType *
@@ -531,7 +515,6 @@ SpatialObject<TDimension>::GetObjectToParentTransformInverse() const -> const Tr
   return m_ObjectToParentTransformInverse.GetPointer();
 }
 
-/** Compute the Global Transform */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::ProtectedComputeObjectToWorldTransform()
@@ -545,7 +528,7 @@ SpatialObject<TDimension>::ProtectedComputeObjectToWorldTransform()
 
   if (!m_ObjectToWorldTransform->GetInverse(m_ObjectToWorldTransformInverse))
   {
-    itkExceptionMacro(<< "Transform must be invertible.");
+    itkExceptionMacro("Transform must be invertible.");
   }
 
   // Propagate the changes to the children
@@ -559,14 +542,13 @@ SpatialObject<TDimension>::ProtectedComputeObjectToWorldTransform()
   this->Modified();
 }
 
-/** Set the global to local transformation */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::SetObjectToWorldTransform(const TransformType * transform)
 {
   if (!transform->GetInverse(m_ObjectToWorldTransformInverse))
   {
-    itkExceptionMacro(<< "Transform must be invertible.");
+    itkExceptionMacro("Transform must be invertible.");
   }
 
   m_ObjectToWorldTransform->SetFixedParameters(transform->GetFixedParameters());
@@ -576,7 +558,6 @@ SpatialObject<TDimension>::SetObjectToWorldTransform(const TransformType * trans
   ProtectedComputeObjectToWorldTransform();
 }
 
-/** Set the local to global transformation */
 template <unsigned int TDimension>
 auto
 SpatialObject<TDimension>::GetObjectToWorldTransformInverse() const -> const TransformType *
@@ -588,8 +569,6 @@ SpatialObject<TDimension>::GetObjectToWorldTransformInverse() const -> const Tra
   return m_ObjectToWorldTransformInverse.GetPointer();
 }
 
-/** Compute the Transform when the global transform as been set
- *  This does not change the IndexToObjectMatrix */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::ComputeObjectToParentTransform()
@@ -606,18 +585,17 @@ SpatialObject<TDimension>::ComputeObjectToParentTransform()
     }
     else
     {
-      itkExceptionMacro(<< "Parent's ObjectToWorldTransform not invertible.");
+      itkExceptionMacro("Parent's ObjectToWorldTransform not invertible.");
     }
   }
 
   if (!m_ObjectToParentTransform->GetInverse(m_ObjectToParentTransformInverse))
   {
-    itkExceptionMacro(<< "ObjectToParentTransform not invertible.");
+    itkExceptionMacro("ObjectToParentTransform not invertible.");
   }
   ProtectedComputeObjectToWorldTransform();
 }
 
-/** Get the modification time  */
 template <unsigned int TDimension>
 ModifiedTimeType
 SpatialObject<TDimension>::GetMTime() const
@@ -656,7 +634,6 @@ SpatialObject<TDimension>::ComputeMyBoundingBox()
   }
 }
 
-/** Get the bounds of the object */
 template <unsigned int TDimension>
 auto
 SpatialObject<TDimension>::GetMyBoundingBoxInWorldSpace() const -> const BoundingBoxType *
@@ -683,10 +660,6 @@ SpatialObject<TDimension>::GetMyBoundingBoxInWorldSpace() const -> const Boundin
   return m_MyBoundingBoxInWorldSpace;
 }
 
-/**
- * Compute an axis-aligned bounding box for an object and its selected
- * children, down to a specified depth.  After computation, the
- * resulting bounding box is stored in this->m_FamilyBoundingBoxInWorldSpace.  */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::ComputeFamilyBoundingBox(unsigned int depth, const std::string & name) const
@@ -750,9 +723,6 @@ SpatialObject<TDimension>::ComputeFamilyBoundingBox(unsigned int depth, const st
   return bbDefined;
 }
 
-/** Get the children list.
- * User is responsible for freeing the list, but not the elements of
- * the list. */
 template <unsigned int TDimension>
 auto
 SpatialObject<TDimension>::GetChildren(unsigned int depth, const std::string & name) const -> ChildrenListType *
@@ -782,9 +752,6 @@ SpatialObject<TDimension>::GetChildren(unsigned int depth, const std::string & n
   return childrenSO;
 }
 
-/** Get the children list as const pointers.
- * User is responsible for freeing the list, but not the elements of
- * the list. */
 template <unsigned int TDimension>
 auto
 SpatialObject<TDimension>::GetConstChildren(unsigned int depth, const std::string & name) const
@@ -869,7 +836,6 @@ SpatialObject<TDimension>::AddChildrenToConstList(ChildrenConstListType * childr
   }
 }
 
-/** Set children list */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::SetChildren(ChildrenListType & children)
@@ -885,7 +851,6 @@ SpatialObject<TDimension>::SetChildren(ChildrenListType & children)
   }
 }
 
-/** Get the number of children */
 template <unsigned int TDimension>
 unsigned int
 SpatialObject<TDimension>::GetNumberOfChildren(unsigned int depth, const std::string & name) const
@@ -914,8 +879,6 @@ SpatialObject<TDimension>::GetNumberOfChildren(unsigned int depth, const std::st
   return ccount;
 }
 
-/** Return a SpatialObject in the SpatialObject
- *  given a parent ID */
 template <unsigned int TDimension>
 SpatialObject<TDimension> *
 SpatialObject<TDimension>::GetObjectById(int id)
@@ -972,7 +935,6 @@ SpatialObject<TDimension>::FixParentChildHierarchyUsingParentIds()
   return ret;
 }
 
-/** Check if the parent objects have a defined ID */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::CheckIdValidity() const
@@ -1055,7 +1017,6 @@ SpatialObject<TDimension>::FixIdValidity()
   delete children;
 }
 
-/** Return the next available Id. For speed reason the MaxID+1 is returned */
 template <unsigned int TDimension>
 int
 SpatialObject<TDimension>::GetNextAvailableId() const
@@ -1078,7 +1039,6 @@ SpatialObject<TDimension>::GetNextAvailableId() const
   return maxId + 1;
 }
 
-/** Get the parent of the spatial object */
 template <unsigned int TDimension>
 SpatialObject<TDimension> *
 SpatialObject<TDimension>::GetParent()
@@ -1086,7 +1046,6 @@ SpatialObject<TDimension>::GetParent()
   return m_Parent;
 }
 
-/** Get the parent of the spatial object */
 template <unsigned int TDimension>
 const SpatialObject<TDimension> *
 SpatialObject<TDimension>::GetParent() const
@@ -1094,7 +1053,6 @@ SpatialObject<TDimension>::GetParent() const
   return m_Parent;
 }
 
-/** Set the parent of the spatial object */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::SetParent(Self * parent)
@@ -1128,7 +1086,6 @@ SpatialObject<TDimension>::SetParent(Self * parent)
   }
 }
 
-/** Return true if the spatial object has a parent */
 template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::HasParent() const
@@ -1140,7 +1097,6 @@ SpatialObject<TDimension>::HasParent() const
   return true;
 }
 
-/** Set the largest possible region */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::SetLargestPossibleRegion(const RegionType & region)
@@ -1152,7 +1108,6 @@ SpatialObject<TDimension>::SetLargestPossibleRegion(const RegionType & region)
   }
 }
 
-/** Update the Output information */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::UpdateOutputInformation()
@@ -1278,8 +1233,8 @@ SpatialObject<TDimension>::SetRequestedRegion(const DataObject * data)
   }
   else
   {
-    itkExceptionMacro(<< "SpatialObject::SetRequestedRegion(const DataObject *) cannot cast " << typeid(data).name()
-                      << " to " << typeid(SpatialObject *).name());
+    itkExceptionMacro("SpatialObject::SetRequestedRegion(const DataObject *) cannot cast "
+                      << typeid(data).name() << " to " << typeid(SpatialObject *).name());
   }
 }
 
@@ -1297,22 +1252,17 @@ SpatialObject<TDimension>::Update()
   this->ProtectedComputeObjectToWorldTransform();
 }
 
-/** Return the type of the spatial object as a string
- *  This is used by the SpatialObjectFactory */
 template <unsigned int TDimension>
 std::string
 SpatialObject<TDimension>::GetClassNameAndDimension() const
 {
   std::ostringstream n;
 
-  n << GetNameOfClass();
-  n << "_";
-  n << TDimension;
+  n << GetNameOfClass() << '_' << TDimension;
 
   return n.str();
 }
 
-/** Copy the information from another spatial object */
 template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::CopyInformation(const DataObject * data)
@@ -1327,8 +1277,8 @@ SpatialObject<TDimension>::CopyInformation(const DataObject * data)
   if (soData == nullptr)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::SpatialObject::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(SpatialObject<TDimension> *).name());
+    itkExceptionMacro("itk::SpatialObject::CopyInformation() cannot cast "
+                      << typeid(data).name() << " to " << typeid(SpatialObject<TDimension> *).name());
   }
 
   // Copy the meta data for this data type

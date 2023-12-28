@@ -30,7 +30,7 @@ namespace itk
  * \author Burstein, Pablo D.; Yushkevich, Paul; Gee, James C.
  *
  * This implementation was contributed as a paper to the Insight Journal
- * https://hdl.handle.net/1926/303
+ * https://www.insight-journal.org/browse/publication/118
  *
  * \ingroup ITKReview
  */
@@ -56,7 +56,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VoxBoCUBImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(VoxBoCUBImageIOFactory);
 
   /** Register one factory of this type  */
   static void

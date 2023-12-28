@@ -54,7 +54,7 @@ PlatformMultiThreader::MultipleMethodExecute()
   {
     if (m_MultipleMethod[thread_loop] == (ThreadFunctionType) nullptr)
     {
-      itkExceptionMacro(<< "No multiple method set for: " << thread_loop);
+      itkExceptionMacro("No multiple method set for: " << thread_loop);
     }
   }
 
@@ -86,7 +86,7 @@ PlatformMultiThreader::MultipleMethodExecute()
                                      ((void *)(&m_ThreadInfoArray[thread_loop])));
     if (threadError != 0)
     {
-      itkExceptionMacro(<< "Unable to create a thread.  pthread_create() returned " << threadError);
+      itkExceptionMacro("Unable to create a thread.  pthread_create() returned " << threadError);
     }
   }
 
@@ -107,34 +107,31 @@ PlatformMultiThreader::SpawnThread(ThreadFunctionType f, void * UserData)
 {
   ThreadIdType id = 0;
 
-  while (id < ITK_MAX_THREADS)
+  for (; id < ITK_MAX_THREADS; ++id)
   {
-    if (!m_SpawnedThreadActiveFlagLock[id])
+    if (!m_SpawnedThreadActiveFlagMutex[id])
     {
-      m_SpawnedThreadActiveFlagLock[id] = std::make_shared<std::mutex>();
+      m_SpawnedThreadActiveFlagMutex[id] = std::make_shared<std::mutex>();
     }
-    m_SpawnedThreadActiveFlagLock[id]->lock();
+    const std::lock_guard<std::mutex> lockGuard(*m_SpawnedThreadActiveFlagMutex[id]);
+
     if (m_SpawnedThreadActiveFlag[id] == 0)
     {
       // We've got a useable thread id, so grab it
       m_SpawnedThreadActiveFlag[id] = 1;
-      m_SpawnedThreadActiveFlagLock[id]->unlock();
       break;
     }
-    m_SpawnedThreadActiveFlagLock[id]->unlock();
-
-    ++id;
   }
 
   if (id >= ITK_MAX_THREADS)
   {
-    itkExceptionMacro(<< "You have too many active threads!");
+    itkExceptionMacro("You have too many active threads!");
   }
 
   m_SpawnedThreadInfoArray[id].UserData = UserData;
   m_SpawnedThreadInfoArray[id].NumberOfWorkUnits = 1;
   m_SpawnedThreadInfoArray[id].ActiveFlag = &m_SpawnedThreadActiveFlag[id];
-  m_SpawnedThreadInfoArray[id].ActiveFlagLock = m_SpawnedThreadActiveFlagLock[id];
+  m_SpawnedThreadInfoArray[id].ActiveFlagLock = m_SpawnedThreadActiveFlagMutex[id];
 
   pthread_attr_t attr;
 
@@ -149,7 +146,7 @@ PlatformMultiThreader::SpawnThread(ThreadFunctionType f, void * UserData)
                                    ((void *)(&m_SpawnedThreadInfoArray[id])));
   if (threadError != 0)
   {
-    itkExceptionMacro(<< "Unable to create a thread.  pthread_create() returned " << threadError);
+    itkExceptionMacro("Unable to create a thread.  pthread_create() returned " << threadError);
   }
 
   return id;
@@ -163,14 +160,14 @@ PlatformMultiThreader::TerminateThread(ThreadIdType WorkUnitID)
     return;
   }
 
-  m_SpawnedThreadActiveFlagLock[WorkUnitID]->lock();
-  m_SpawnedThreadActiveFlag[WorkUnitID] = 0;
-  m_SpawnedThreadActiveFlagLock[WorkUnitID]->unlock();
+  {
+    const std::lock_guard<std::mutex> lockGuard(*m_SpawnedThreadActiveFlagMutex[WorkUnitID]);
+    m_SpawnedThreadActiveFlag[WorkUnitID] = 0;
+  }
 
   pthread_join(m_SpawnedThreadProcessID[WorkUnitID], nullptr);
 
-  m_SpawnedThreadActiveFlagLock[WorkUnitID] = nullptr;
-  m_SpawnedThreadActiveFlagLock[WorkUnitID] = nullptr;
+  m_SpawnedThreadActiveFlagMutex[WorkUnitID] = nullptr;
 }
 #endif
 
@@ -180,7 +177,7 @@ PlatformMultiThreader::SpawnWaitForSingleMethodThread(ThreadProcessIdType thread
   // Using POSIX threads
   if (pthread_join(threadHandle, nullptr))
   {
-    itkExceptionMacro(<< "Unable to join thread.");
+    itkExceptionMacro("Unable to join thread.");
   }
 }
 
@@ -201,7 +198,7 @@ PlatformMultiThreader::SpawnDispatchSingleMethodThread(PlatformMultiThreader::Wo
     &threadHandle, &attr, reinterpret_cast<c_void_cast>(this->SingleMethodProxy), reinterpret_cast<void *>(threadInfo));
   if (threadError != 0)
   {
-    itkExceptionMacro(<< "Unable to create a thread.  pthread_create() returned " << threadError);
+    itkExceptionMacro("Unable to create a thread.  pthread_create() returned " << threadError);
   }
   return threadHandle;
 }

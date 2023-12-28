@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class ShapePositionLabelMapFilter
+ * \class ShapePositionLabelMapFilter
  * \brief Mark a single pixel in the label object which correspond to a position given by an attribute
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShapePositionLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ShapePositionLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -136,7 +136,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  AttributeType m_Attribute;
+  AttributeType m_Attribute{};
 }; // end of class
 
 } // end namespace itk

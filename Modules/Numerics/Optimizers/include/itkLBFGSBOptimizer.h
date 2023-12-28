@@ -21,6 +21,7 @@
 #include "itkIntTypes.h"
 #include "itkSingleValuedNonLinearVnlOptimizer.h"
 #include "ITKOptimizersExport.h"
+#include <memory> // For unique_ptr.
 
 namespace itk
 {
@@ -39,7 +40,7 @@ class ITK_FORWARD_EXPORT LBFGSBOptimizerHelper;
  *
  * This class is a wrapper for converted Fortran code for performing limited
  * memory Broyden Fletcher Goldfarb Shannon minimization with simple bounds.
- * The algorithm mininizes a nonlinear function f(x) of n variables subject to
+ * The algorithm minimizes a nonlinear function f(x) of n variables subject to
  * simple bound constraints of l <= x <= u.
  *
  * See also the documentation in Numerics/lbfgsb.c
@@ -75,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LBFGSBOptimizer, SingleValuedNonLinearVnlOptimizer);
+  itkOverrideGetNameOfClassMacro(LBFGSBOptimizer);
 
   /**  BoundValue type.
    *  Use for defining the lower and upper bounds on the variables.
@@ -175,7 +176,7 @@ public:
   void
   SetScales(const ScalesType &)
   {
-    itkExceptionMacro(<< "This optimizer does not support scales.");
+    itkExceptionMacro("This optimizer does not support scales.");
   }
 
   /** Get the current iteration number. */
@@ -192,6 +193,13 @@ public:
   /** Get the reason for termination */
   const std::string
   GetStopConditionDescription() const override;
+
+  /** Returns false unconditionally because LBFGSBOptimizer does not support using scales. */
+  bool
+  CanUseScales() const override
+  {
+    return false;
+  }
 
 protected:
   LBFGSBOptimizer();
@@ -216,10 +224,10 @@ private:
   unsigned int m_CurrentIteration{ 0 };
   double       m_InfinityNormOfProjectedGradient{ 0.0 };
 
-  InternalOptimizerType * m_VnlOptimizer{ nullptr };
-  BoundValueType          m_LowerBound;
-  BoundValueType          m_UpperBound;
-  BoundSelectionType      m_BoundSelection;
+  std::unique_ptr<InternalOptimizerType> m_VnlOptimizer;
+  BoundValueType                         m_LowerBound{};
+  BoundValueType                         m_UpperBound{};
+  BoundSelectionType                     m_BoundSelection{};
 };
 } // end namespace itk
 

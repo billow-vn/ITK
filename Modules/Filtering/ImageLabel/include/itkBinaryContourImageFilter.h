@@ -70,7 +70,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(BinaryContourImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryContourImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -173,11 +173,11 @@ protected:
   using ConsecutiveVectorType = typename ScanlineFunctions::ConsecutiveVectorType;
 
 private:
-  LineMapType m_ForegroundLineMap;
-  LineMapType m_BackgroundLineMap;
+  LineMapType m_ForegroundLineMap{};
+  LineMapType m_BackgroundLineMap{};
 
-  InputImagePixelType  m_ForegroundValue;
-  OutputImagePixelType m_BackgroundValue;
+  InputImagePixelType  m_ForegroundValue{};
+  OutputImagePixelType m_BackgroundValue{};
 };
 } // end namespace itk
 

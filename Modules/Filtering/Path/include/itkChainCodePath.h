@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class ChainCodePath
+ * \class ChainCodePath
  * \brief  Represent a path as a sequence of connected image index offsets
  *
  * This class is intended to represent sequences of connected indices in an
@@ -63,7 +63,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ChainCodePath, Path);
+  itkOverrideGetNameOfClassMacro(ChainCodePath);
 
   /** OutputType type alias support */
   using typename Superclass::OutputType;
@@ -157,8 +157,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  IndexType     m_Start; // origin image index for the path
-  ChainCodeType m_Chain; // the chain code (vector of offsets)
+  IndexType     m_Start{}; // origin image index for the path
+  ChainCodeType m_Chain{}; // the chain code (vector of offsets)
 };
 } // end namespace itk
 

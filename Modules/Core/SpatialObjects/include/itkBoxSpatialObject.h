@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BoxSpatialObject
+ * \class BoxSpatialObject
  *
  * \brief
  * The class may be used to represent N-dimensional boxes.
@@ -52,7 +52,7 @@ public:
   using PointsContainerType = typename BoundingBoxType::PointsContainer;
 
   itkNewMacro(Self);
-  itkTypeMacro(BoxSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(BoxSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -71,7 +71,7 @@ public:
   /** Get the position of the box spatial object in object space. */
   itkGetConstReferenceMacro(PositionInObjectSpace, PointType);
 
-  /** Test whether a point is inside or outside the object */
+  /** Test whether a point is inside the object. */
   bool
   IsInsideInObjectSpace(const PointType & point) const override;
 
@@ -88,7 +88,6 @@ protected:
   BoxSpatialObject();
   ~BoxSpatialObject() override = default;
 
-  /** Print the object information in a stream. */
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
@@ -96,9 +95,8 @@ protected:
   InternalClone() const override;
 
 private:
-  /** object space */
-  SizeType  m_SizeInObjectSpace;
-  PointType m_PositionInObjectSpace;
+  SizeType  m_SizeInObjectSpace{};
+  PointType m_PositionInObjectSpace{};
 };
 } // end namespace itk
 

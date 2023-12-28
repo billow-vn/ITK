@@ -27,11 +27,7 @@
 
 namespace itk
 {
-/**
- * A protected default constructor allows the New() routine to create an
- * instance of SimplexMesh.   All the containers are initialized to empty
- * containers.
- */
+
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
 SimplexMesh<TPixelType, VDimension, TMeshTraits>::SimplexMesh()
   : m_LastCellId(0)
@@ -39,11 +35,6 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>::SimplexMesh()
   m_GeometryData = GeometryMapType::New();
 }
 
-/**
- * Mesh Destructor takes care of releasing the memory of Cells
- * and CellBoundaries objects for which normal pointers are
- * stored.
- */
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
 SimplexMesh<TPixelType, VDimension, TMeshTraits>::~SimplexMesh()
 {
@@ -75,8 +66,8 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>::CopyInformation(const DataObje
   if (mesh == nullptr)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::Mesh::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(Superclass *).name());
+    itkExceptionMacro("itk::Mesh::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                  << typeid(Superclass *).name());
   }
 
   this->m_MaximumNumberOfRegions = mesh->GetMaximumNumberOfRegions();
@@ -208,9 +199,9 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>::AddFace(CellAutoPointer & cell
 }
 
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-typename SimplexMesh<TPixelType, VDimension, TMeshTraits>::CellIdentifier
+auto
 SimplexMesh<TPixelType, VDimension, TMeshTraits>::ReplaceFace(CellIdentifier    replaceIndex,
-                                                              CellAutoPointer & cellPointer)
+                                                              CellAutoPointer & cellPointer) -> CellIdentifier
 {
   // Release previous cell, if any.
   // See documentation of Mesh::SetCell().
@@ -224,17 +215,16 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>::ReplaceFace(CellIdentifier    
   return replaceIndex;
 }
 
-/* PrintSelf. */
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
 void
 SimplexMesh<TPixelType, VDimension, TMeshTraits>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
 
-  os << indent << "LastCellId = " << m_LastCellId << std::endl;
+  os << indent << "LastCellId: " << static_cast<typename NumericTraits<CellIdentifier>::PrintType>(m_LastCellId)
+     << std::endl;
 
-  GeometryMapPointer geometryMap = this->GetGeometryData();
-  os << indent << "GeometryData: " << geometryMap << std::endl;
+  itkPrintSelfObjectMacro(GeometryData);
 }
 
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
@@ -258,10 +248,10 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>::GetNeighbors(PointIdentifier i
 }
 
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-typename SimplexMesh<TPixelType, VDimension, TMeshTraits>::NeighborListType *
+auto
 SimplexMesh<TPixelType, VDimension, TMeshTraits>::GetNeighbors(PointIdentifier    idx,
                                                                unsigned int       radius,
-                                                               NeighborListType * list) const
+                                                               NeighborListType * list) const -> NeighborListType *
 {
   if (list == nullptr)
   {

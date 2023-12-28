@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class RegistrationParameterScalesFromPhysicalShift
+ * \class RegistrationParameterScalesFromPhysicalShift
  *  \brief Registration helper class for estimating scales of
  * transform parameters a step sizes, from the maximum voxel shift
  * in physical space caused by a parameter change.
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegistrationParameterScalesFromPhysicalShift, RegistrationParameterScalesFromShiftBase);
+  itkOverrideGetNameOfClassMacro(RegistrationParameterScalesFromPhysicalShift);
 
   /** Type of scales */
   using typename Superclass::ScalesType;

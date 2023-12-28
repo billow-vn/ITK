@@ -26,8 +26,8 @@
 namespace itk
 {
 /**
- *\class HDF5ImageIOFactory
- * \author KEnt Williams
+ * \class HDF5ImageIOFactory
+ * \author Kent Williams
  * \brief Create instances of HDF5ImageIO objects using an object
  * factory.
  * \ingroup ITKIOHDF5
@@ -54,7 +54,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HDF5ImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(HDF5ImageIOFactory);
 
   /** Register one factory of this type  */
   static void

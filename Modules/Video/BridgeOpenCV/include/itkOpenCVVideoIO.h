@@ -38,7 +38,7 @@
 namespace itk
 {
 /**
- *\class OpenCVVideoIO
+ * \class OpenCVVideoIO
  *
  * \brief VideoIO object for reading and writing videos using OpenCV
  *
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OpenCVVideoIO, Superclass);
+  itkOverrideGetNameOfClassMacro(OpenCVVideoIO);
 
   /** Close the reader and writer and reset members */
   virtual void
@@ -195,13 +195,13 @@ protected:
 
 private:
 private:
-  IplImage *      m_CVImage;
-  IplImage *      m_TempImage;
-  CvCapture *     m_Capture;
-  CvVideoWriter * m_Writer;
-  int             m_FourCC;
+  IplImage *      m_CVImage{};
+  IplImage *      m_TempImage{};
+  CvCapture *     m_Capture{};
+  CvVideoWriter * m_Writer{};
+  int             m_FourCC{};
 
-  int m_CameraIndex;
+  int m_CameraIndex{};
 };
 } // end namespace itk
 

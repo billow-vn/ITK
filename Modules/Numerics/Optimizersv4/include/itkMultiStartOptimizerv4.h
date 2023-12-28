@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class MultiStartOptimizerv4Template
+ * \class MultiStartOptimizerv4Template
  *  \brief Multi-start searches over input parameters and returns the best metric value
  *
  *   The multi-start algorithm performs gradient descent from N (large) number of starting points and
@@ -52,7 +52,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiStartOptimizerv4Template, Superclass);
+  itkOverrideGetNameOfClassMacro(MultiStartOptimizerv4Template);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -134,15 +134,15 @@ public:
   ParametersListType &
   GetParametersList();
 
-  /** Set the list of parameters over which to search */
+  /** Set the list of parameters over which to search. */
   void
   SetParametersList(ParametersListType & p);
 
-  /** Get the list of metric values that we produced after the multi-start search.  */
+  /** Get the list of metric values that we produced after the multi-start search. */
   const MetricValuesListType &
   GetMetricValuesList() const;
 
-  /** Return the parameters from the best visited position */
+  /** Return the parameters from the best visited position. */
   ParametersType
   GetBestParameters();
 
@@ -166,14 +166,14 @@ protected:
 
   /* Common variables for optimization control and reporting */
   bool                                     m_Stop{ false };
-  StopConditionObjectToObjectOptimizerEnum m_StopCondition;
-  StopConditionDescriptionType             m_StopConditionDescription;
-  ParametersListType                       m_ParametersList;
-  MetricValuesListType                     m_MetricValuesList;
-  MeasureType                              m_MinimumMetricValue;
-  MeasureType                              m_MaximumMetricValue;
-  ParameterListSizeType                    m_BestParametersIndex;
-  OptimizerPointer                         m_LocalOptimizer;
+  StopConditionObjectToObjectOptimizerEnum m_StopCondition{};
+  StopConditionDescriptionType             m_StopConditionDescription{};
+  ParametersListType                       m_ParametersList{};
+  MetricValuesListType                     m_MetricValuesList{};
+  MeasureType                              m_MinimumMetricValue{};
+  MeasureType                              m_MaximumMetricValue{};
+  ParameterListSizeType                    m_BestParametersIndex{};
+  OptimizerPointer                         m_LocalOptimizer{};
 };
 
 /** This helps to meet backward compatibility */

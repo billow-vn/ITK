@@ -226,7 +226,7 @@ TestMattesMetricWithAffineTransform(TInterpolator * interpolator,
   metric->SetFixedImageSamplesIntensityThreshold(100);
   if (metric->GetFixedImageSamplesIntensityThreshold() != 100)
   {
-    std::cout << "ERROR: SetFixedImageSamplesIntensityThreshold(100) failed: " << __FILE__ << " " << __LINE__
+    std::cout << "ERROR: SetFixedImageSamplesIntensityThreshold(100) failed: " << __FILE__ << ' ' << __LINE__
               << std::endl;
     return EXIT_FAILURE;
   }
@@ -234,20 +234,20 @@ TestMattesMetricWithAffineTransform(TInterpolator * interpolator,
                                                      // explicitly.
   if (metric->GetFixedImageSamplesIntensityThreshold() != 0)
   {
-    std::cout << "ERROR: SetFixedImageSamplesIntensityThreshold(0) failed: " << __FILE__ << " " << __LINE__
+    std::cout << "ERROR: SetFixedImageSamplesIntensityThreshold(0) failed: " << __FILE__ << ' ' << __LINE__
               << std::endl;
     return EXIT_FAILURE;
   }
   metric->UseAllPixelsOn();
   if (metric->GetUseAllPixels() != true)
   {
-    std::cout << "ERROR: UseAllPixelsOn() failed: " << __FILE__ << " " << __LINE__ << std::endl;
+    std::cout << "ERROR: UseAllPixelsOn() failed: " << __FILE__ << ' ' << __LINE__ << std::endl;
     return EXIT_FAILURE;
   }
   metric->UseAllPixelsOff(); // This should be the default, but exercise this function explicitly.
   if (metric->GetUseAllPixels() != false)
   {
-    std::cout << "ERROR: UseAllPixelsOff() failed: " << __FILE__ << " " << __LINE__ << std::endl;
+    std::cout << "ERROR: UseAllPixelsOff() failed: " << __FILE__ << ' ' << __LINE__ << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -347,7 +347,7 @@ TestMattesMetricWithAffineTransform(TInterpolator * interpolator,
     metric->GetValueAndDerivative(parameters, measure, derivative);
     measure2 = metric->GetValue(parameters);
 
-    std::cout << trans << "\t" << measure << "\t" << measure2 << "\t" << derivative[4] << std::endl;
+    std::cout << trans << '\t' << measure << '\t' << measure2 << '\t' << derivative[4] << std::endl;
 
     // exercise the other functions
     metric->GetDerivative(parameters, derivative);
@@ -391,11 +391,11 @@ TestMattesMetricWithAffineTransform(TInterpolator * interpolator,
     double approxDerivative = (measurePlus - measureMinus) / (2 * delta);
     double ratio = derivative[i] / approxDerivative;
 
-    std::cout << i << "\t";
-    std::cout << parameters[i] << "\t";
-    std::cout << derivative[i] << "\t";
-    std::cout << approxDerivative << "\t";
-    std::cout << ratio << "\t";
+    std::cout << i << '\t';
+    std::cout << parameters[i] << '\t';
+    std::cout << derivative[i] << '\t';
+    std::cout << approxDerivative << '\t';
+    std::cout << ratio << '\t';
     std::cout << std::endl;
 
     if (itk::Math::abs(ratio - 1.0) > 0.012)
@@ -620,7 +620,7 @@ TestMattesMetricWithBSplineTransform(TInterpolator * interpolator,
     metric->GetValueAndDerivative(parameters, measure, derivative);
     measure2 = metric->GetValue(parameters);
 
-    std::cout << trans << "\t" << measure << "\t" << measure2 << "\t" << derivative[q] << std::endl;
+    std::cout << trans << '\t' << measure << '\t' << measure2 << '\t' << derivative[q] << std::endl;
 
     // exercise the other functions
     metric->GetDerivative(parameters, derivative);
@@ -674,11 +674,11 @@ TestMattesMetricWithBSplineTransform(TInterpolator * interpolator,
     double approxDerivative = (measurePlus - measureMinus) / (2 * delta);
     double ratio = derivative[i] / approxDerivative;
 
-    std::cout << i << "\t";
-    std::cout << parameters[i] << "\t";
-    std::cout << derivative[i] << "\t";
-    std::cout << approxDerivative << "\t";
-    std::cout << ratio << "\t";
+    std::cout << i << '\t';
+    std::cout << parameters[i] << '\t';
+    std::cout << derivative[i] << '\t';
+    std::cout << approxDerivative << '\t';
+    std::cout << ratio << '\t';
     std::cout << std::endl;
 
     if (itk::Math::abs(ratio - 1.0) > 0.05 && itk::Math::abs(derivative[i]) > 1e-4)

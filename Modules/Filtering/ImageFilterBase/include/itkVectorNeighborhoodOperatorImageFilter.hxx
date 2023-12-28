@@ -83,7 +83,6 @@ VectorNeighborhoodOperatorImageFilter<TInputImage, TOutputImage>::DynamicThreade
 
   VectorNeighborhoodInnerProduct<InputImageType> smartInnerProduct;
   BFC                                            faceCalculator;
-  FaceListType                                   faceList;
 
   // Allocate output
   OutputImageType *      output = this->GetOutput();
@@ -94,8 +93,7 @@ VectorNeighborhoodOperatorImageFilter<TInputImage, TOutputImage>::DynamicThreade
   // we pass in the input image and the OUTPUT requested region. We are
   // only concerned with centering the neighborhood operator at the
   // pixels that correspond to output pixels.
-  faceList = faceCalculator(input, outputRegionForThread, m_Operator.GetRadius());
-  typename FaceListType::iterator fit;
+  FaceListType faceList = faceCalculator(input, outputRegionForThread, m_Operator.GetRadius());
 
   TotalProgressReporter progress(this, output->GetRequestedRegion().GetNumberOfPixels());
 
@@ -104,10 +102,10 @@ VectorNeighborhoodOperatorImageFilter<TInputImage, TOutputImage>::DynamicThreade
   // Process non-boundary region and then each of the boundary faces.
   // These are N-d regions which border the edge of the buffer.
   ConstNeighborhoodIterator<InputImageType> bit;
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    bit = ConstNeighborhoodIterator<InputImageType>(m_Operator.GetRadius(), input, *fit);
-    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    bit = ConstNeighborhoodIterator<InputImageType>(m_Operator.GetRadius(), input, face);
+    it = ImageRegionIterator<OutputImageType>(output, face);
     bit.GoToBegin();
     while (!bit.IsAtEnd())
     {

@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class AddImageFilter
+ * \class AddImageFilter
  * \brief Pixel-wise addition of two images.
  *
  * This class is templated over the types of the two
@@ -68,7 +68,8 @@ namespace itk
  *
  * \warning No numeric overflow checking is performed in this filter.
  *
- * \ingroup IntensityImageFilters  MultiThreaded
+ * \ingroup IntensityImageFilters
+ * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  *
  * \sphinx
@@ -98,7 +99,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AddImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(AddImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

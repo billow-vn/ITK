@@ -42,8 +42,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(DemonsImageToImageMetricv4GetValueAndDerivativeThreader,
-               ImageToImageMetricv4GetValueAndDerivativeThreader);
+  itkOverrideGetNameOfClassMacro(DemonsImageToImageMetricv4GetValueAndDerivativeThreader);
 
   itkNewMacro(Self);
 
@@ -96,7 +95,7 @@ protected:
 private:
   /** Internal pointer to the Mattes metric object in use by this threader.
    *  This will avoid costly dynamic casting in tight loops. */
-  TDemonsMetric * m_DemonsAssociate;
+  TDemonsMetric * m_DemonsAssociate{};
 };
 
 } // end namespace itk

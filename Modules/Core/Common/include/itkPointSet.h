@@ -94,7 +94,7 @@ public:
   itkNewMacro(Self);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(PointSet, DataObject);
+  itkOverrideGetNameOfClassMacro(PointSet);
 
   /** Hold on to the type information specified by the template parameters. */
   using MeshTraits = TMeshTraits;
@@ -135,13 +135,13 @@ public:
 protected:
   /** An object containing points used by the mesh.  Individual points are
    * accessed through point identifiers. */
-  PointsContainerPointer m_PointsContainer;
+  PointsContainerPointer m_PointsContainer{};
 
   /** An object containing data associated with the mesh's points.
    * Optionally, this can be nullptr, indicating that no data are associated with
    * the points.  The data for a point can be accessed through its point
    * identifier. */
-  PointDataContainerPointer m_PointDataContainer;
+  PointDataContainerPointer m_PointDataContainer{};
 
 public:
   /** Copy the geometric and topological structure of the given input pointSet.
@@ -260,7 +260,7 @@ public:
 
 protected:
   /** Constructor for use by New() method. */
-  PointSet();
+  PointSet() = default;
   ~PointSet() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -275,11 +275,11 @@ protected:
   // RequestedRegion are used to define the currently requested
   // region. The LargestPossibleRegion is always requested region = 0
   // and number of regions = 1;
-  RegionType m_MaximumNumberOfRegions;
-  RegionType m_NumberOfRegions;
-  RegionType m_RequestedNumberOfRegions;
-  RegionType m_BufferedRegion;
-  RegionType m_RequestedRegion;
+  RegionType m_MaximumNumberOfRegions{ 1 };
+  RegionType m_NumberOfRegions{ 1 };
+  RegionType m_RequestedNumberOfRegions{};
+  RegionType m_BufferedRegion{ -1 };
+  RegionType m_RequestedRegion{ -1 };
 }; // End Class: PointSet
 } // end namespace itk
 

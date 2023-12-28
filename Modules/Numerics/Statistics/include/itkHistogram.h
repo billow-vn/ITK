@@ -31,7 +31,7 @@ namespace Statistics
 {
 
 /**
- *\class Histogram
+ * \class Histogram
  *  \brief This class stores measurement vectors in the context of n-dimensional histogram.
  *
  * Histogram represents an ND histogram.  Histogram bins can be
@@ -89,7 +89,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Histogram, Sample);
+  itkOverrideGetNameOfClassMacro(Histogram);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -156,13 +156,10 @@ public:
   const IndexType &
   GetIndex(InstanceIdentifier id) const;
 
-  /** Is set to false if the bins at edges of the histogram extend to
-   *   +/- infinity. */
+  /** Set/Get whether the bins at the edges of the histogram extend to +/- infinity. */
   itkGetConstMacro(ClipBinsAtEnds, bool);
-
-  /** Set to false to have the bins at edges of the histogram extend to
-   *   +/- infinity. */
   itkSetMacro(ClipBinsAtEnds, bool);
+  itkBooleanMacro(ClipBinsAtEnds);
 
   /** Returns true if the given index is out of bound meaning one of index
    * is not between [0, last index] */
@@ -315,7 +312,7 @@ public:
    * min = min value of the dimension of the bin,
    * max = max value of the dimension of the bin,
    * interval = max - min ,
-   * pp = cumulated proportion until n-1 bin;
+   * pp = accumulated proportion until n-1 bin;
    * and pb = frequency of the bin / total frequency of the dimension.
    *
    * If p is less than 0.5,
@@ -341,7 +338,7 @@ protected:
 
 public:
   /**
-   *\class ConstIterator
+   * \class ConstIterator
    * \brief class that walks through the elements of the histogram.
    * \ingroup ITKStatistics
    */
@@ -426,7 +423,7 @@ public:
   }; // end of iterator class
 
   /**
-   *\class Iterator
+   * \class Iterator
    * \brief class that walks through the elements of the histogram.
    * \ingroup ITKStatistics
    */
@@ -501,12 +498,12 @@ protected:
   ~Histogram() override = default;
 
   // The number of bins for each dimension
-  SizeType m_Size;
+  SizeType m_Size{};
 
 private:
   using OffsetTableType = std::vector<InstanceIdentifier>;
-  OffsetTableType           m_OffsetTable;
-  FrequencyContainerPointer m_FrequencyContainer;
+  OffsetTableType           m_OffsetTable{};
+  FrequencyContainerPointer m_FrequencyContainer{};
   unsigned int              m_NumberOfInstances{ 0 };
 
   // This method is provided here just to avoid a "hidden" warning
@@ -516,13 +513,13 @@ private:
   {}
 
   // lower bound of each bin
-  std::vector<std::vector<MeasurementType>> m_Min;
+  std::vector<std::vector<MeasurementType>> m_Min{};
 
   // upper bound of each bin
-  std::vector<std::vector<MeasurementType>> m_Max;
+  std::vector<std::vector<MeasurementType>> m_Max{};
 
-  mutable MeasurementVectorType m_TempMeasurementVector;
-  mutable IndexType             m_TempIndex;
+  mutable MeasurementVectorType m_TempMeasurementVector{};
+  mutable IndexType             m_TempIndex{};
 
   bool m_ClipBinsAtEnds{ true };
 };

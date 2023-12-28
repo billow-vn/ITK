@@ -27,7 +27,7 @@ template <unsigned int VDimension, typename TInput>
 FiniteCylinderSpatialFunction<VDimension, TInput>::FiniteCylinderSpatialFunction()
 {
   // a normalized {1,1,...1} vector is
-  // { 1.0 / sqrt( VDmim ), ... }
+  // { 1.0 / sqrt( VDim ), ... }
   const double orientationVal = 1.0 / std::sqrt(static_cast<double>(VDimension));
   m_Orientation.Fill(orientationVal);
   m_NormalizedOrientation.Fill(orientationVal);
@@ -55,7 +55,7 @@ FiniteCylinderSpatialFunction<VDimension, TInput>::SetOrientation(const InputTyp
     norm = std::sqrt(norm);
     if (norm == 0.0) // avoid divide by zero
     {
-      itkExceptionMacro(<< "Degenerate orientation vector " << this->m_Orientation);
+      itkExceptionMacro("Degenerate orientation vector " << this->m_Orientation);
     }
     for (unsigned int i = 0; i < VDimension; ++i)
     {
@@ -126,13 +126,13 @@ FiniteCylinderSpatialFunction<VDimension, TInput>::PrintSelf(std::ostream & os, 
   os << indent << "Orientation: " << std::endl;
   for (i = 0; i < VDimension; ++i)
   {
-    os << indent << indent << m_Orientation[i] << " ";
+    os << indent << indent << m_Orientation[i] << ' ';
   }
   os << std::endl;
   os << indent << "Normalized Orientation: " << std::endl;
   for (i = 0; i < VDimension; ++i)
   {
-    os << indent << indent << m_NormalizedOrientation[i] << " ";
+    os << indent << indent << m_NormalizedOrientation[i] << ' ';
   }
   os << std::endl;
 }

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class GaussianImageSource
+ * \class GaussianImageSource
  * \brief Generate an n-dimensional image of a Gaussian.
  *
  * GaussianImageSource generates an image of a Gaussian.
@@ -89,7 +89,7 @@ public:
   using typename Superclass::ParametersType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianImageSource, ParametricImageSource);
+  itkOverrideGetNameOfClassMacro(GaussianImageSource);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -139,9 +139,9 @@ protected:
   GenerateData() override;
 
 private:
-  ArrayType m_Sigma;
+  ArrayType m_Sigma{};
 
-  ArrayType m_Mean;
+  ArrayType m_Mean{};
 
   double m_Scale{ 255.0 };
 

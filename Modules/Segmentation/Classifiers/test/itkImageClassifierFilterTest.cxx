@@ -33,7 +33,7 @@ itkImageClassifierFilterTest(int argc, char * argv[])
 {
   if (argc < 2)
   {
-    std::cerr << "Missing command line arguments: " << itkNameOfTestExecutableMacro(argv) << "\t"
+    std::cerr << "Missing command line arguments: " << itkNameOfTestExecutableMacro(argv) << '\t'
               << "ClassifiedOutputImage name" << std::endl;
     return EXIT_FAILURE;
   }
@@ -83,7 +83,7 @@ itkImageClassifierFilterTest(int argc, char * argv[])
       index[0] = x;
       InputPixelType value;
       value[0] = (normalGenerator->GetVariate() * standardDeviation) + mean;
-      // std::cout << "Index = \t" << index << "\t" << value << std::endl;
+      // std::cout << "Index = \t" << index << '\t' << value << std::endl;
       image->SetPixel(index, value);
     }
   }
@@ -100,7 +100,7 @@ itkImageClassifierFilterTest(int argc, char * argv[])
       index[0] = x;
       InputPixelType value;
       value[0] = (normalGenerator->GetVariate() * standardDeviation2) + mean2;
-      // std::cout << "Index = \t" << index << "\t" << value << std::endl;
+      // std::cout << "Index = \t" << index << '\t' << value << std::endl;
       image->SetPixel(index, value);
     }
   }
@@ -159,7 +159,7 @@ itkImageClassifierFilterTest(int argc, char * argv[])
 
   for (unsigned int i = 0; i < numberOfClasses; ++i)
   {
-    std::cout << "Cluster[" << i << "]" << std::endl;
+    std::cout << "Cluster[" << i << ']' << std::endl;
     std::cout << "    Parameters:" << std::endl;
     std::cout << "         " << (components[i])->GetFullParameters() << std::endl;
     std::cout << "    Proportion: ";
@@ -229,7 +229,7 @@ itkImageClassifierFilterTest(int argc, char * argv[])
   std::cout << "Estimator membership function Weight/proporation output: " << std::endl;
   for (unsigned int i = 0; i < weightsArray.Size(); ++i)
   {
-    std::cout << "Membership function: \t" << i << "\t" << weightsArray[i] << std::endl;
+    std::cout << "Membership function: \t" << i << '\t' << weightsArray[i] << std::endl;
   }
 
   filter->SetImage(image);
@@ -251,8 +251,8 @@ itkImageClassifierFilterTest(int argc, char * argv[])
   try
   {
     filter->Update();
-    std::cerr << "Attempting to run a classification without setting"
-              << "decision rule, should throw an exception" << std::endl;
+    std::cerr << "Attempting to run a classification without setting decision rule, should throw an exception"
+              << std::endl;
     return EXIT_FAILURE;
   }
   catch (const itk::ExceptionObject & excp)

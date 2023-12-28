@@ -124,7 +124,7 @@ namespace itk
  * \ingroup ITKImageGrid
  *
  * \sphinx
- * \sphinxexample{Filtering/ImageGrid/FitSplineIntoPointSet,}
+ * \sphinxexample{Filtering/ImageGrid/FitSplineIntoPointSet,Fit Spline Into Point Set}
  * \endsphinx
  */
 
@@ -145,7 +145,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineScatteredDataPointSetToImageFilter, PointSetToImageFilter);
+  itkOverrideGetNameOfClassMacro(BSplineScatteredDataPointSetToImageFilter);
 
   /** Extract dimension from the output image. */
   static constexpr unsigned int ImageDimension = TOutputImage::ImageDimension;
@@ -165,6 +165,7 @@ public:
   using PointSetPointer = typename PointSetType::Pointer;
   using PointDataType = typename PointSetType::PixelType;
   using PointDataContainerType = typename PointSetType::PointDataContainer;
+  using PointDataContainerPointer = typename PointDataContainerType::Pointer;
 
   /** Other type alias. */
   using RealType = float;
@@ -318,10 +319,6 @@ private:
   void
   RefineControlPointLattice();
 
-  /** Determine the residuals after fitting to one level. */
-  void
-  UpdatePointSet();
-
   /** This function is not used as it requires an evaluation of all
    * (SplineOrder+1)^ImageDimensions B-spline weights for each evaluation. */
   void
@@ -334,6 +331,10 @@ private:
   /** Function used to generate the sampled B-spline object quickly. */
   void
   ThreadedGenerateDataForReconstruction(const RegionType &, ThreadIdType);
+
+  /** Update the residuals for multi-level fitting. */
+  void
+  ThreadedGenerateDataForUpdatingResidualValues(const RegionType &, ThreadIdType);
 
   /** Sub-function used by GenerateOutputImageFast() to generate the sampled
    * B-spline object quickly. */
@@ -355,34 +356,34 @@ private:
   bool         m_UsePointWeights{ false };
   unsigned int m_MaximumNumberOfLevels{ 1 };
   unsigned int m_CurrentLevel{ 0 };
-  ArrayType    m_NumberOfControlPoints;
-  ArrayType    m_CurrentNumberOfControlPoints;
-  ArrayType    m_CloseDimension;
-  ArrayType    m_SplineOrder;
-  ArrayType    m_NumberOfLevels;
+  ArrayType    m_NumberOfControlPoints{};
+  ArrayType    m_CurrentNumberOfControlPoints{};
+  ArrayType    m_CloseDimension{};
+  ArrayType    m_SplineOrder{};
+  ArrayType    m_NumberOfLevels{};
 
-  typename WeightsContainerType::Pointer m_PointWeights;
+  typename WeightsContainerType::Pointer m_PointWeights{};
 
-  typename PointDataImageType::Pointer m_PhiLattice;
-  typename PointDataImageType::Pointer m_PsiLattice;
+  typename PointDataImageType::Pointer m_PhiLattice{};
+  typename PointDataImageType::Pointer m_PsiLattice{};
 
-  vnl_matrix<RealType> m_RefinedLatticeCoefficients[ImageDimension];
+  vnl_matrix<RealType> m_RefinedLatticeCoefficients[ImageDimension]{};
 
-  typename PointDataContainerType::Pointer m_InputPointData;
-  typename PointDataContainerType::Pointer m_OutputPointData;
+  PointDataContainerPointer m_ResidualPointSetValues{};
 
-  typename KernelType::Pointer m_Kernel[ImageDimension];
+  typename KernelType::Pointer m_Kernel[ImageDimension]{};
 
-  typename KernelOrder0Type::Pointer m_KernelOrder0;
-  typename KernelOrder1Type::Pointer m_KernelOrder1;
-  typename KernelOrder2Type::Pointer m_KernelOrder2;
-  typename KernelOrder3Type::Pointer m_KernelOrder3;
+  typename KernelOrder0Type::Pointer m_KernelOrder0{};
+  typename KernelOrder1Type::Pointer m_KernelOrder1{};
+  typename KernelOrder2Type::Pointer m_KernelOrder2{};
+  typename KernelOrder3Type::Pointer m_KernelOrder3{};
 
-  std::vector<RealImagePointer>      m_OmegaLatticePerThread;
-  std::vector<PointDataImagePointer> m_DeltaLatticePerThread;
+  std::vector<RealImagePointer>      m_OmegaLatticePerThread{};
+  std::vector<PointDataImagePointer> m_DeltaLatticePerThread{};
 
   RealType m_BSplineEpsilon{ static_cast<RealType>(1e-3) };
   bool     m_IsFittingComplete{ false };
+  bool     m_DoUpdateResidualValues{ false };
 };
 } // end namespace itk
 

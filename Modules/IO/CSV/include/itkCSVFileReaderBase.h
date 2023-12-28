@@ -29,7 +29,7 @@
 namespace itk
 {
 /**
- *\class CSVFileReaderBase
+ * \class CSVFileReaderBase
  * \brief A base class that contains common methods used for parsing csv files.
  *
  * CSVFileReaderBase is a base abstract class for reading csv files. It
@@ -74,7 +74,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(CSVFileReaderBase, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(CSVFileReaderBase);
 
   /** Set the name of the file to be read */
   itkSetStringMacro(FileName);
@@ -164,15 +164,15 @@ public:
   Parse() = 0;
 
 protected:
-  std::string   m_FileName;
-  char          m_FieldDelimiterCharacter;
-  char          m_StringDelimiterCharacter;
-  bool          m_UseStringDelimiterCharacter;
-  bool          m_HasRowHeaders;
-  bool          m_HasColumnHeaders;
-  std::ifstream m_InputStream;
-  int           m_EndOfColumnHeadersLine;
-  std::string   m_Line;
+  std::string   m_FileName{};
+  char          m_FieldDelimiterCharacter{};
+  char          m_StringDelimiterCharacter{};
+  bool          m_UseStringDelimiterCharacter{};
+  bool          m_HasRowHeaders{};
+  bool          m_HasColumnHeaders{};
+  std::ifstream m_InputStream{};
+  int           m_EndOfColumnHeadersLine{};
+  std::string   m_Line{};
 
   CSVFileReaderBase();
   ~CSVFileReaderBase() override = default;

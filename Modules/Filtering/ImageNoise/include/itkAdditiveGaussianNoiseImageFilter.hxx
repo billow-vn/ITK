@@ -63,11 +63,8 @@ AdditiveGaussianNoiseImageFilter<TInputImage, TOutputImage>::ThreadedGenerateDat
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators
-  ImageScanlineConstIterator<TInputImage> inputIt(inputPtr, inputRegionForThread);
-  ImageScanlineIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
-
-  inputIt.GoToBegin();
-  outputIt.GoToBegin();
+  ImageScanlineConstIterator inputIt(inputPtr, inputRegionForThread);
+  ImageScanlineIterator      outputIt(outputPtr, outputRegionForThread);
 
   while (!inputIt.IsAtEnd())
   {

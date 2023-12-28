@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ImageBoundaryCondition
+ * \class ImageBoundaryCondition
  * \brief A virtual base object that defines an interface to a class of
  * boundary condition objects for use by neighborhood iterators.
  *
@@ -79,13 +79,13 @@ public:
   ImageBoundaryCondition() = default;
 
   /** Runtime information support. */
-  itkTypeMacroNoParent(ImageBoundaryCondition);
+  itkVirtualGetNameOfClassMacro(ImageBoundaryCondition);
 
   /** Utility for printing the boundary condition. */
   virtual void
   Print(std::ostream & os, Indent i = 0) const
   {
-    os << i << this->GetNameOfClass() << " (" << this << ")" << std::endl;
+    os << i << this->GetNameOfClass() << " (" << this << ')' << std::endl;
   }
 
   /** Returns a value for a given out-of-bounds pixel.  The arguments are the

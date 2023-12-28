@@ -38,11 +38,8 @@ class MaskInput
 public:
   using AccumulatorType = typename NumericTraits<TInput>::AccumulateType;
 
-  MaskInput()
-  {
-    m_MaskingValue = NumericTraits<TMask>::ZeroValue();
-    InitializeOutsideValue(static_cast<TOutput *>(nullptr));
-  }
+  MaskInput() = default;
+
   ~MaskInput() = default;
   bool
   operator==(const MaskInput &) const
@@ -94,27 +91,26 @@ public:
 
 private:
   template <typename TPixelType>
-  void
-  InitializeOutsideValue(TPixelType *)
+  TPixelType
+  DefaultOutsideValue(TPixelType *)
   {
-    this->m_OutsideValue = NumericTraits<TPixelType>::ZeroValue();
+    return NumericTraits<TPixelType>::ZeroValue();
   }
 
   template <typename TValue>
-  void
-  InitializeOutsideValue(VariableLengthVector<TValue> *)
+  VariableLengthVector<TValue>
+  DefaultOutsideValue(VariableLengthVector<TValue> *)
   {
     // set the outside value to be of zero length
-    this->m_OutsideValue = VariableLengthVector<TValue>(0);
+    return VariableLengthVector<TValue>(0);
   }
-
-  TOutput m_OutsideValue;
-  TMask   m_MaskingValue;
+  TOutput m_OutsideValue{ DefaultOutsideValue(static_cast<TOutput *>(nullptr)) };
+  TMask   m_MaskingValue{};
 };
 } // namespace Functor
 
 /**
- *\class MaskImageFilter
+ * \class MaskImageFilter
  * \brief Mask an image with a mask.
  *
  * This class is templated over the types of the
@@ -168,7 +164,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MaskImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(MaskImageFilter);
 
   /** Typedefs **/
   using MaskImageType = TMaskImage;
@@ -260,7 +256,7 @@ private:
     return m_Functor;
   }
 
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 
   template <typename TPixelType>
   void
@@ -288,8 +284,8 @@ private:
     }
     else if (this->GetFunctor().GetOutsideValue().GetSize() != this->GetOutput()->GetVectorLength())
     {
-      itkExceptionMacro(<< "Number of components in OutsideValue: " << this->GetFunctor().GetOutsideValue().GetSize()
-                        << " is not the same as the "
+      itkExceptionMacro("Number of components in OutsideValue: "
+                        << this->GetFunctor().GetOutsideValue().GetSize() << " is not the same as the "
                         << "number of components in the image: " << this->GetOutput()->GetVectorLength());
     }
   }

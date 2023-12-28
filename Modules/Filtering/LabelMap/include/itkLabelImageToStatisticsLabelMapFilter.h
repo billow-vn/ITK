@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LabelImageToStatisticsLabelMapFilter
+ * \class LabelImageToStatisticsLabelMapFilter
  * \brief a convenient class to convert a label image to a label map and valuate the statistics attributes at once
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelImageToStatisticsLabelMapFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelImageToStatisticsLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -185,11 +185,11 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  bool                 m_ComputeFeretDiameter;
-  bool                 m_ComputePerimeter;
-  unsigned int         m_NumberOfBins;
-  bool                 m_ComputeHistogram;
+  OutputImagePixelType m_BackgroundValue{};
+  bool                 m_ComputeFeretDiameter{};
+  bool                 m_ComputePerimeter{};
+  unsigned int         m_NumberOfBins{};
+  bool                 m_ComputeHistogram{};
 }; // end of class
 } // end namespace itk
 

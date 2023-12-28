@@ -27,7 +27,7 @@
 
 namespace itk
 {
-/**\class ObjectToObjectOptimizerBaseTemplateEnums
+/** \class ObjectToObjectOptimizerBaseTemplateEnums
  *\brief This class contains all the enum classes used by ObjectToObjectOptimizerBaseTemplate class.
  *\ingroup ITKOptimizersv4
  */
@@ -58,7 +58,7 @@ extern ITKOptimizersv4_EXPORT std::ostream &
            const ObjectToObjectOptimizerBaseTemplateEnums::StopConditionObjectToObjectOptimizer value);
 
 /**
- *\class ObjectToObjectOptimizerBaseTemplate
+ * \class ObjectToObjectOptimizerBaseTemplate
  * \brief Abstract base for object-to-object optimizers.
  *
  * The goal of this optimizer hierarchy is to work with metrics
@@ -122,7 +122,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ObjectToObjectOptimizerBaseTemplate, Object);
+  itkOverrideGetNameOfClassMacro(ObjectToObjectOptimizerBaseTemplate);
 
   /**  Scale type. */
   using ScalesType = OptimizerParameters<TInternalComputationValueType>;
@@ -262,42 +262,51 @@ public:
   virtual const StopConditionReturnStringType
   GetStopConditionDescription() const = 0;
 
+  /** Returns true if derived optimizer supports using scales.
+   * For optimizers that do not support scaling, this
+   * default function is overridden to return false.*/
+  virtual bool
+  CanUseScales() const
+  {
+    return true;
+  }
+
 protected:
   /** Default constructor */
   ObjectToObjectOptimizerBaseTemplate();
   ~ObjectToObjectOptimizerBaseTemplate() override;
 
-  MetricTypePointer m_Metric;
-  ThreadIdType      m_NumberOfWorkUnits;
-  SizeValueType     m_CurrentIteration;
-  SizeValueType     m_NumberOfIterations;
+  MetricTypePointer m_Metric{};
+  ThreadIdType      m_NumberOfWorkUnits{};
+  SizeValueType     m_CurrentIteration{};
+  SizeValueType     m_NumberOfIterations{};
 
   /** Metric measure value at a given iteration, as most recently evaluated. */
-  MeasureType m_CurrentMetricValue;
+  MeasureType m_CurrentMetricValue{};
 
   /** Scales. Size is expected to be == metric->GetNumberOfLocalParameters().
    * See the main documentation for more details. */
-  ScalesType m_Scales;
+  ScalesType m_Scales{};
 
   /** Parameter weights. These are applied to local parameters, at the same time
    * as scales. See main documentation.
    * If not set by user, the array remains empty and treated as identity to simplify
    * the reuse of an optimizer with transforms with different numbers of parameters. */
-  ScalesType m_Weights;
+  ScalesType m_Weights{};
 
   /** Flag to avoid unnecessary arithmetic when scales are identity. */
-  bool m_ScalesAreIdentity;
+  bool m_ScalesAreIdentity{};
 
   /** Scales estimator. Optionally provided by user. */
-  typename ScalesEstimatorType::Pointer m_ScalesEstimator;
+  typename ScalesEstimatorType::Pointer m_ScalesEstimator{};
 
   /** Flag to avoid unnecessary arithmetic when weights are identity. */
-  bool m_WeightsAreIdentity;
+  bool m_WeightsAreIdentity{};
 
   /** Flag to control use of the ScalesEstimator (if set) for
    * automatic scale estimation during StartOptimization()
    */
-  bool m_DoEstimateScales;
+  bool m_DoEstimateScales{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

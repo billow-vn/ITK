@@ -108,7 +108,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
 
   // Create an internal image to protect the input image's metadata
   // (e.g. RequestedRegion). The StreamingImageFilter changes the
-  // requested region as poart of its normal provessing.
+  // requested region as part of its normal processing.
   auto localInput = TInputImage::New();
   localInput->Graft(this->GetInput());
 
@@ -282,7 +282,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::PrintSelf(std:
   os << indent << "Variance: " << m_Variance << std::endl;
   os << indent << "MaximumError: " << m_MaximumError << std::endl;
   os << indent << "MaximumKernelWidth: " << m_MaximumKernelWidth << std::endl;
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   os << indent << "InternalNumberOfStreamDivisions: " << m_InternalNumberOfStreamDivisions << std::endl;
   os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
 }

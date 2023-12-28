@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class DerivativeImageFilter
+ * \class DerivativeImageFilter
  * \brief Computes the directional derivative of an image.
  * The directional derivative at each pixel location is computed by convolution
  * with a derivative operator of user-specified order.
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DerivativeImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(DerivativeImageFilter);
 
   /** The output pixel type must be signed. */
 #ifdef ITK_USE_CONCEPT_CHECKING
@@ -150,12 +150,12 @@ protected:
 
 private:
   /** The order of the derivative. */
-  unsigned int m_Order;
+  unsigned int m_Order{};
 
   /** The direction of the derivative. */
-  unsigned int m_Direction;
+  unsigned int m_Direction{};
 
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 };
 } // end namespace itk
 

@@ -53,7 +53,7 @@ public:
 } // namespace Functor
 
 /**
- *\class TanImageFilter
+ * \class TanImageFilter
  * \brief Computes the tangent of each input pixel.
  *
  * The computations are performed using std::tan(x).
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(TanImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(TanImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

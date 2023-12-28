@@ -27,7 +27,7 @@ namespace itk
 {
 namespace Statistics
 {
-/**\class HistogramToRunLengthFeaturesFilterEnums
+/** \class HistogramToRunLengthFeaturesFilterEnums
  * \brief Contains all enum classes used by HistogramToRunLengthFeaturesFilter class.
  * \ingroup ITKStatistics
  */
@@ -59,7 +59,7 @@ using RunLengthFeatureEnum = HistogramToRunLengthFeaturesFilterEnums::RunLengthF
 extern ITKStatistics_EXPORT std::ostream &
                             operator<<(std::ostream & out, const HistogramToRunLengthFeaturesFilterEnums::RunLengthFeature value);
 /**
- *\class HistogramToRunLengthFeaturesFilter
+ * \class HistogramToRunLengthFeaturesFilter
  *  \brief This class computes texture feature coefficients from a grey level
  * run-length matrix.
  *
@@ -90,7 +90,6 @@ extern ITKStatistics_EXPORT std::ostream &
  *
  * \sa ScalarImageToRunLengthFeaturesFilter
  * \sa ScalarImageToRunLengthMatrixFilter
- * \sa HistogramToRunLengthFeaturesFilter
  *
  * \author: Nick Tustison
  * \ingroup ITKStatistics
@@ -109,7 +108,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HistogramToRunLengthFeaturesFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(HistogramToRunLengthFeaturesFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -233,7 +232,7 @@ protected:
   GenerateData() override;
 
 private:
-  unsigned long m_TotalNumberOfRuns;
+  unsigned long m_TotalNumberOfRuns{};
 };
 
 } // end of namespace Statistics

@@ -25,9 +25,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::LaplacianRecursiveGaussianImageFilter()
 {
@@ -63,9 +61,6 @@ LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::LaplacianRecur
   this->SetSigma(1.0);
 }
 
-/**
- * Set value of Sigma
- */
 template <typename TInputImage, typename TOutputImage>
 void
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigma(RealType sigma)
@@ -79,9 +74,6 @@ LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigma(RealT
   this->Modified();
 }
 
-/**
- * Get value of Sigma
- */
 template <typename TInputImage, typename TOutputImage>
 auto
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GetSigma() const -> RealType
@@ -89,9 +81,6 @@ LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GetSigma() con
   return m_DerivativeFilter->GetSigma();
 }
 
-/**
- * Set Normalize Across Scale Space
- */
 template <typename TInputImage, typename TOutputImage>
 void
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNormalizeAcrossScale(bool normalize)
@@ -107,10 +96,6 @@ LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNormalizeAc
   this->Modified();
 }
 
-
-//
-//
-//
 template <typename TInputImage, typename TOutputImage>
 void
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::EnlargeOutputRequestedRegion(DataObject * output)
@@ -123,14 +108,11 @@ LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::EnlargeOutputR
   }
 }
 
-/**
- * Compute filter for Gaussian kernel
- */
 template <typename TInputImage, typename TOutputImage>
 void
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
-  itkDebugMacro(<< "LaplacianRecursiveGaussianImageFilter generating data ");
+  itkDebugMacro("LaplacianRecursiveGaussianImageFilter generating data ");
 
   // Set the number of threads on all the filters
   for (unsigned int i = 0; i < ImageDimension - 1; ++i)
@@ -224,7 +206,7 @@ LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateData()
       return static_cast<InternalRealType>(a + b * (1.0 / spacing2));
     });
 
-    // Cummulate the results on the output image
+    // Cumulate the results on the output image
     addFilter->SetInput1(cumulativeImage);
     addFilter->SetInput2(lastFilter->GetOutput());
     addFilter->InPlaceOn();
@@ -264,7 +246,7 @@ void
 LaplacianRecursiveGaussianImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
+  os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
 }
 } // end namespace itk
 

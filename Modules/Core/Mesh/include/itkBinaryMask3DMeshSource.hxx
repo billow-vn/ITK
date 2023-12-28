@@ -87,7 +87,6 @@ BinaryMask3DMeshSource<TInputImage, TOutputMesh>::SetInput(const InputImageType 
   this->ProcessObject::SetNthInput(0, const_cast<InputImageType *>(image));
 }
 
-/** Generate the data */
 template <typename TInputImage, typename TOutputMesh>
 void
 BinaryMask3DMeshSource<TInputImage, TOutputMesh>::GenerateData()
@@ -1188,7 +1187,7 @@ BinaryMask3DMeshSource<TInputImage, TOutputMesh>::CreateMesh()
   }
 
   // This indicates that the current BufferedRegion is equal to the
-  // requested region. This action prevents useless rexecutions of
+  // requested region. This action prevents useless re-executions of
   // the pipeline.
   this->m_OutputMesh->SetBufferedRegion(this->GetOutput()->GetRequestedRegion());
 }
@@ -2689,22 +2688,124 @@ BinaryMask3DMeshSource<TInputImage, TOutputMesh>::SearchThroughLastFrame(int ind
   return result;
 }
 
-/** PrintSelf */
 template <typename TInputImage, typename TOutputMesh>
 void
 BinaryMask3DMeshSource<TInputImage, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "ObjectValue: " << static_cast<NumericTraits<unsigned char>::PrintType>(m_ObjectValue) << std::endl;
-
-  os << indent << "NumberOfNodes: " << m_NumberOfNodes << std::endl;
-
-  os << indent << "NumberOfCells: " << m_NumberOfCells << std::endl;
-
-  os << indent << "RegionOfInterestProvidedByUser: " << m_RegionOfInterestProvidedByUser << std::endl;
-
+  os << indent << "RegionOfInterestProvidedByUser: " << (m_RegionOfInterestProvidedByUser ? "On" : "Off") << std::endl;
   os << indent << "RegionOfInterest: " << m_RegionOfInterest << std::endl;
+
+  os << indent << "LUT: " << m_LUT << std::endl;
+
+  os << indent << "LastVoxel: " << static_cast<typename NumericTraits<IdentifierType>::PrintType>(*m_LastVoxel)
+     << std::endl;
+  os << indent << "CurrentVoxel: " << static_cast<typename NumericTraits<IdentifierType>::PrintType>(*m_CurrentVoxel)
+     << std::endl;
+
+  os << indent << "LastRow: ";
+  if (m_LastRow != nullptr)
+  {
+    if (*m_LastRow != nullptr)
+    {
+      os << static_cast<typename NumericTraits<IdentifierType>::PrintType>(**m_LastRow) << std::endl;
+    }
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "LastFrame: ";
+  if (m_LastFrame != nullptr)
+  {
+    if (*m_LastFrame != nullptr)
+    {
+      os << static_cast<typename NumericTraits<IdentifierType>::PrintType>(**m_LastFrame) << std::endl;
+    }
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "CurrentRow: ";
+  if (m_CurrentRow != nullptr)
+  {
+    if (*m_CurrentRow != nullptr)
+    {
+      os << static_cast<typename NumericTraits<IdentifierType>::PrintType>(**m_CurrentRow) << std::endl;
+    }
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "CurrentFrame: ";
+  if (m_CurrentFrame != nullptr)
+  {
+    if (*m_CurrentFrame != nullptr)
+    {
+      os << static_cast<typename NumericTraits<IdentifierType>::PrintType>(**m_CurrentFrame) << std::endl;
+    }
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "CurrentRowIndex: " << m_CurrentRowIndex << std::endl;
+  os << indent << "CurrentFrameIndex: " << m_CurrentFrameIndex << std::endl;
+  os << indent << "LastRowNum: " << m_LastRowNum << std::endl;
+  os << indent << "LastFrameNum: " << m_LastFrameNum << std::endl;
+  os << indent << "CurrentRowNum: " << m_CurrentRowNum << std::endl;
+  os << indent << "CurrentFrameNum: " << m_CurrentFrameNum << std::endl;
+  os << indent << "AvailableNodes: " << m_AvailableNodes << std::endl;
+
+  os << indent << "LocationOffset: " << m_LocationOffset << std::endl;
+
+  os << indent << "NumberOfNodes: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfNodes)
+     << std::endl;
+  os << indent << "NumberOfCells: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfCells)
+     << std::endl;
+
+  os << indent << "NodeLimit: " << m_NodeLimit << std::endl;
+  os << indent << "CellLimit: " << m_CellLimit << std::endl;
+  os << indent << "ImageWidth: " << m_ImageWidth << std::endl;
+  os << indent << "ImageHeight: " << m_ImageHeight << std::endl;
+  os << indent << "ImageDepth: " << m_ImageDepth << std::endl;
+  os << indent << "ColFlag: " << m_ColFlag << std::endl;
+  os << indent << "RowFlag: " << m_RowFlag << std::endl;
+  os << indent << "FrameFlag: " << m_FrameFlag << std::endl;
+  os << indent << "LastRowIndex: " << m_LastRowIndex << std::endl;
+  os << indent << "LastVoxelIndex: " << m_LastVoxelIndex << std::endl;
+  os << indent << "LastFrameIndex: " << m_LastFrameIndex << std::endl;
+
+  os << indent << "PointFound: " << m_PointFound << std::endl;
+  os << indent << "ObjectValue: " << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_ObjectValue)
+     << std::endl;
+
+  os << indent << "m_OutputMesh: ";
+  if (m_OutputMesh != nullptr)
+  {
+    os << *m_OutputMesh << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "InputImage: ";
+  if (m_InputImage != nullptr)
+  {
+    os << *m_InputImage << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
 }
 } // namespace itk
 

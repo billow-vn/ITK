@@ -21,7 +21,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 LineSpatialObject<TDimension>::LineSpatialObject()
 {
@@ -32,7 +32,6 @@ LineSpatialObject<TDimension>::LineSpatialObject()
   this->GetProperty().SetAlpha(1);
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 LineSpatialObject<TDimension>::InternalClone() const
@@ -44,19 +43,10 @@ LineSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   return loPtr;
-}
-
-/** Print the object. */
-template <unsigned int TDimension>
-void
-LineSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  os << indent << "LineSpatialObject(" << this << ")" << std::endl;
-  Superclass::PrintSelf(os, indent);
 }
 
 template <unsigned int TDimension>

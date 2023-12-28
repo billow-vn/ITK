@@ -56,7 +56,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianSmoothingOnUpdateDisplacementFieldTransform, DisplacementFieldTransform);
+  itkOverrideGetNameOfClassMacro(GaussianSmoothingOnUpdateDisplacementFieldTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -115,15 +115,15 @@ protected:
 
   /** Used in GaussianSmoothDisplacementField as variance for the
    * GaussianOperator */
-  ScalarType m_GaussianSmoothingVarianceForTheUpdateField;
-  ScalarType m_GaussianSmoothingVarianceForTheTotalField;
+  ScalarType m_GaussianSmoothingVarianceForTheUpdateField{};
+  ScalarType m_GaussianSmoothingVarianceForTheTotalField{};
 
   /** Type of Gaussian Operator used during smoothing. Define here
    * so we can use a member var during the operation. */
   using GaussianSmoothingOperatorType = GaussianOperator<ScalarType, Superclass::Dimension>;
   using GaussianSmoothingSmootherType =
     VectorNeighborhoodOperatorImageFilter<DisplacementFieldType, DisplacementFieldType>;
-  GaussianSmoothingOperatorType m_GaussianSmoothingOperator;
+  GaussianSmoothingOperatorType m_GaussianSmoothingOperator{};
 };
 
 } // end namespace itk

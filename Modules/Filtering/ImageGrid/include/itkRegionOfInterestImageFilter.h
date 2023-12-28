@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class RegionOfInterestImageFilter
+ * \class RegionOfInterestImageFilter
  * \brief Extract a region of interest from the input image.
  *
  *  This filter produces an output image of the same dimension as the input
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegionOfInterestImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(RegionOfInterestImageFilter);
 
   /** Typedef to describe the input image region types. */
   using RegionType = typename TInputImage::RegionType;
@@ -128,7 +128,7 @@ protected:
   DynamicThreadedGenerateData(const RegionType & outputRegionForThread) override;
 
 private:
-  RegionType m_RegionOfInterest;
+  RegionType m_RegionOfInterest{};
 };
 } // end namespace itk
 

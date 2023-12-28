@@ -27,9 +27,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <typename TParametersValueType, unsigned int VDimension>
 BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType,
                                                    VDimension>::BSplineSmoothingOnUpdateDisplacementFieldTransform()
@@ -39,9 +36,6 @@ BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType,
   this->m_NumberOfControlPointsForTheTotalField.Fill(0);
 }
 
-/**
- * set mesh size for update field
- */
 template <typename TParametersValueType, unsigned int VDimension>
 void
 BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimension>::SetMeshSizeForTheUpdateField(
@@ -55,9 +49,6 @@ BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimens
   this->SetNumberOfControlPointsForTheUpdateField(numberOfControlPoints);
 }
 
-/**
- * set mesh size for total field
- */
 template <typename TParametersValueType, unsigned int VDimension>
 void
 BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimension>::SetMeshSizeForTheTotalField(
@@ -169,14 +160,11 @@ BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimens
   }
 }
 
-/**
- * set displacement field and project it onto the space of b-spline transforms
- */
 template <typename TParametersValueType, unsigned int VDimension>
-typename BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimension>::DisplacementFieldPointer
+auto
 BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimension>::BSplineSmoothDisplacementField(
   const DisplacementFieldType * field,
-  const ArrayType &             numberOfControlPoints)
+  const ArrayType &             numberOfControlPoints) -> DisplacementFieldPointer
 {
   auto bspliner = BSplineFilterType::New();
   bspliner->SetUseInputFieldToDefineTheBSplineDomain(true);
@@ -202,7 +190,7 @@ BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimens
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   //
@@ -226,21 +214,11 @@ BSplineSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimens
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Enforce stationary boundary: ";
-  if (this->m_EnforceStationaryBoundary)
-  {
-    os << "true" << std::endl;
-  }
-  else
-  {
-    os << "false" << std::endl;
-  }
-  os << indent << "B-spline parameters: " << std::endl;
-  os << indent << "  spline order = " << this->m_SplineOrder << std::endl;
-  os << indent << "  number of control points for the update field = " << this->m_NumberOfControlPointsForTheUpdateField
+  os << indent << "SplineOrder: " << static_cast<typename NumericTraits<SplineOrderType>::PrintType>(m_SplineOrder)
      << std::endl;
-  os << indent << "  number of control points for the total field = " << this->m_NumberOfControlPointsForTheTotalField
-     << std::endl;
+  os << indent << "EnforceStationaryBoundary: " << (m_EnforceStationaryBoundary ? "On" : "Off") << std::endl;
+  os << indent << "NumberOfControlPointsForTheUpdateField: " << m_NumberOfControlPointsForTheUpdateField << std::endl;
+  os << indent << "NumberOfControlPointsForTheTotalField: " << m_NumberOfControlPointsForTheTotalField << std::endl;
 }
 } // namespace itk
 

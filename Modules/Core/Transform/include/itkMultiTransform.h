@@ -72,7 +72,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiTransform, Transform);
+  itkOverrideGetNameOfClassMacro(MultiTransform);
 
   /** Sub transform type **/
   using TransformType = Transform<TParametersValueType, VSubDimensions, VSubDimensions>;
@@ -300,7 +300,7 @@ public:
   //  virtual void FlattenTransformQueue();
 
 protected:
-  MultiTransform();
+  MultiTransform() = default;
   ~MultiTransform() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -334,11 +334,11 @@ protected:
   }
 
   /** Transform container object. */
-  mutable TransformQueueType m_TransformQueue;
+  mutable TransformQueueType m_TransformQueue{};
 
   /** Cache to save time returning the number of local parameters */
-  mutable NumberOfParametersType m_NumberOfLocalParameters;
-  mutable ModifiedTimeType       m_LocalParametersUpdateTime;
+  mutable NumberOfParametersType m_NumberOfLocalParameters{};
+  mutable ModifiedTimeType       m_LocalParametersUpdateTime{};
 };
 
 } // end namespace itk

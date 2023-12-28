@@ -29,9 +29,9 @@ namespace itk
 class GiplImageIOInternals;
 
 /**
- *\class GiplImageIO
+ * \class GiplImageIO
  *
- *  \brief Read GiplImage file format.
+ *  \brief Read GIPL (Guy's Image Processing Lab) file format.
  *
  *  \ingroup IOFilters
  *
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GiplImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(GiplImageIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
@@ -96,11 +96,11 @@ private:
   bool
   CheckExtension(const char *);
 
-  std::ifstream m_Ifstream;
-  std::ofstream m_Ofstream;
-  bool          m_IsCompressed;
+  std::ifstream m_Ifstream{};
+  std::ofstream m_Ofstream{};
+  bool          m_IsCompressed{};
 
-  GiplImageIOInternals * m_Internal;
+  GiplImageIOInternals * m_Internal{};
 };
 } // end namespace itk
 

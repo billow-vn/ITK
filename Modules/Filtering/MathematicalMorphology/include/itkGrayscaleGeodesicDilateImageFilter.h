@@ -49,7 +49,7 @@ namespace itk
  * A noniterative version of this algorithm can be found in the
  * ReconstructionByDilationImageFilter. This noniterative solution is
  * much faster than the implementation provided here.  All ITK filters
- * that previously used GrayscaleGeodesicDiliateImageFilter as part of
+ * that previously used GrayscaleGeodesicDilateImageFilter as part of
  * their implementation have been converted to use the
  * ReconstructionByDilationImageFilter. The
  * GrayscaleGeodesicDilateImageFilter is maintained for backward
@@ -98,7 +98,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GrayscaleGeodesicDilateImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GrayscaleGeodesicDilateImageFilter);
 
   /** Set/Get the marker image. The marker image must be pixelwise
    * less than or equal to the mask image. The marker image the
@@ -187,9 +187,9 @@ protected:
 
 
 private:
-  bool          m_RunOneIteration;
-  unsigned long m_NumberOfIterationsUsed;
-  bool          m_FullyConnected;
+  bool          m_RunOneIteration{};
+  unsigned long m_NumberOfIterationsUsed{};
+  bool          m_FullyConnected{};
 }; // end of class
 } // end namespace itk
 

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class KappaSigmaThresholdImageFilter
+ * \class KappaSigmaThresholdImageFilter
  * \brief Threshold an image using Kappa-Sigma-Clipping.
  *
  * This filter creates a binary thresholded image which separates background and
@@ -61,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(KappaSigmaThresholdImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(KappaSigmaThresholdImageFilter);
 
   /** Standard image type within this class. */
   using InputImageType = TInputImage;
@@ -169,12 +169,12 @@ protected:
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
 private:
-  MaskPixelType   m_MaskValue;
+  MaskPixelType   m_MaskValue{};
   double          m_SigmaFactor{ 2 };
   unsigned int    m_NumberOfIterations{ 2 };
-  InputPixelType  m_Threshold;
-  OutputPixelType m_InsideValue;
-  OutputPixelType m_OutsideValue;
+  InputPixelType  m_Threshold{};
+  OutputPixelType m_InsideValue{};
+  OutputPixelType m_OutsideValue{};
 };
 } // end namespace itk
 

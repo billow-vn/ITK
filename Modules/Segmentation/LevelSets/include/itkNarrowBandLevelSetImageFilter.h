@@ -172,7 +172,7 @@ public:
   using VectorImageType = typename SegmentationFunctionType::VectorImageType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NarrowBandLevelSetImageFilter, NarrowBandImageFilterBase);
+  itkOverrideGetNameOfClassMacro(NarrowBandLevelSetImageFilter);
 
   /** Set/Get the feature image to be used for speed function of the level set
    *  equation.  Equivalent to calling Set/GetInput(1, ..) */
@@ -233,7 +233,7 @@ public:
   void
   SetUseNegativeFeatures(bool u)
   {
-    itkWarningMacro(<< "SetUseNegativeFeatures has been deprecated.  Please use SetReverseExpansionDirection instead");
+    itkWarningMacro("SetUseNegativeFeatures has been deprecated.  Please use SetReverseExpansionDirection instead");
     if (u == true)
     {
       this->SetReverseExpansionDirection(false);
@@ -412,19 +412,19 @@ protected:
 
   /** Flag which sets the inward/outward direction of propagation speed. See
       SetReverseExpansionDirection for more information. */
-  bool m_ReverseExpansionDirection;
+  bool m_ReverseExpansionDirection{};
 
   /** Reinitialization filters **/
   /** Internal filter types used for reinitialization */
   using IsoFilterType = IsoContourDistanceImageFilter<OutputImageType, OutputImageType>;
   using ChamferFilterType = FastChamferDistanceImageFilter<OutputImageType, OutputImageType>;
 
-  typename IsoFilterType::Pointer m_IsoFilter;
+  typename IsoFilterType::Pointer m_IsoFilter{};
 
-  typename ChamferFilterType::Pointer m_ChamferFilter;
+  typename ChamferFilterType::Pointer m_ChamferFilter{};
 
 private:
-  SegmentationFunctionType * m_SegmentationFunction;
+  SegmentationFunctionType * m_SegmentationFunction{};
 };
 } // end namespace itk
 

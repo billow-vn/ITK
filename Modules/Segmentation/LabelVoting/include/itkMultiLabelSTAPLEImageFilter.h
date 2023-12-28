@@ -32,7 +32,7 @@
 namespace itk
 {
 /**
- *\class MultiLabelSTAPLEImageFilter
+ * \class MultiLabelSTAPLEImageFilter
  *
  * \brief This filter performs a pixelwise combination of an arbitrary number
  * of input images, where each of them represents a segmentation of the same
@@ -131,7 +131,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MultiLabelSTAPLEImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(MultiLabelSTAPLEImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -302,17 +302,17 @@ protected:
 private:
   size_t m_TotalLabelCount{ 0 };
 
-  OutputPixelType m_LabelForUndecidedPixels;
+  OutputPixelType m_LabelForUndecidedPixels{};
   bool            m_HasLabelForUndecidedPixels{ false };
 
   bool                   m_HasPriorProbabilities{ false };
-  PriorProbabilitiesType m_PriorProbabilities;
+  PriorProbabilitiesType m_PriorProbabilities{};
 
   void
   InitializePriorProbabilities();
 
-  std::vector<ConfusionMatrixType> m_ConfusionMatrixArray;
-  std::vector<ConfusionMatrixType> m_UpdatedConfusionMatrixArray;
+  std::vector<ConfusionMatrixType> m_ConfusionMatrixArray{};
+  std::vector<ConfusionMatrixType> m_UpdatedConfusionMatrixArray{};
 
   void
   AllocateConfusionMatrixArray();
@@ -323,7 +323,7 @@ private:
   unsigned int m_MaximumNumberOfIterations{ 0 };
   unsigned int m_ElapsedNumberOfIterations{ 0u };
 
-  TWeights m_TerminationUpdateThreshold;
+  TWeights m_TerminationUpdateThreshold{};
 };
 
 } // end namespace itk

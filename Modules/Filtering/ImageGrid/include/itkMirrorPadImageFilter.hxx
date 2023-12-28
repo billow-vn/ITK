@@ -485,9 +485,6 @@ MirrorPadImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
   OutputImageSizeType  outputSize = outputPtr->GetRequestedRegion().GetSize();
   InputImageSizeType   inputSize = inputPtr->GetLargestPossibleRegion().GetSize();
 
-  OutputImageRegionType outputRegion;
-  InputImageRegionType  inputRegion;
-
   // For n dimensions, there are k^n combinations of before, between, and
   // after on these regions.  We are keeping this flexible so that we
   // can handle other blockings imposed by the mirror and wrap algorithms.
@@ -632,7 +629,7 @@ MirrorPadImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   int          goodInput, goodOutput;
 
   // Are the regions non-empty?
-  itkDebugMacro(<< "MirrorPadImageFilter::DynamicThreadedGenerateData");
+  itkDebugMacro("MirrorPadImageFilter::DynamicThreadedGenerateData");
 
   // Get the input and output pointers
   const InputImageType * inputPtr = this->GetInput();
@@ -771,8 +768,8 @@ MirrorPadImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
             RegionIsOdd(inputIndex[dimCtr], outputRegion.GetIndex()[dimCtr], static_cast<long>(inputSize[dimCtr]));
         }
 
-        OutputIterator outIt = OutputIterator(outputPtr, outputRegion);
-        InputIterator  inIt = InputIterator(inputPtr, inputRegion);
+        OutputIterator outIt(outputPtr, outputRegion);
+        InputIterator  inIt(inputPtr, inputRegion);
         double         decayFactor = 1.0;
 
         // Do the actual copy of the input pixels to the output pixels here.

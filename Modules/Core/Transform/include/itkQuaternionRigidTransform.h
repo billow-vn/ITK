@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(QuaternionRigidTransform, Rigid3DTransform);
+  itkOverrideGetNameOfClassMacro(QuaternionRigidTransform);
 
   /** Dimension of parameters   */
   static constexpr unsigned int InputSpaceDimension = 3;
@@ -160,7 +160,7 @@ protected:
 
 private:
   /** Rotation of the transformation. */
-  VnlQuaternionType m_Rotation;
+  VnlQuaternionType m_Rotation{};
 }; // class QuaternionRigidTransform
 } // namespace itk
 

@@ -27,15 +27,15 @@
 namespace itk
 {
 /**
- *\class ObjectMorphologyImageFilter
+ * \class ObjectMorphologyImageFilter
  * \brief Base class for the morphological operations
  * being applied to isolated objects in an image.
  *
  * This class provides the infrastructure to support of
  * morphological operations being applied to images in which
  * the foreground and background intensities are fixed. This filter
- * operates significantly faster than itkBinaryMorhologicalImageFilters;
- * however itkBinaryMorhologicalImageFilters preserve
+ * operates significantly faster than itkBinaryMorphologicalImageFilters;
+ * however itkBinaryMorphologicalImageFilters preserve
  * background pixels based on values of neighboring background
  * pixels - potentially important during erosion.
  *
@@ -83,7 +83,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Runtime information support. */
-  itkTypeMacro(ObjectMorphologyImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ObjectMorphologyImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -207,19 +207,19 @@ protected:
 
   /** Pointer to a persistent boundary condition object used
    * for the image iterator. */
-  ImageBoundaryConditionPointerType m_BoundaryCondition;
+  ImageBoundaryConditionPointerType m_BoundaryCondition{};
 
   /** Default boundary condition */
-  DefaultBoundaryConditionType m_DefaultBoundaryCondition;
+  DefaultBoundaryConditionType m_DefaultBoundaryCondition{};
 
   /** Defaults to false */
-  bool m_UseBoundaryCondition;
+  bool m_UseBoundaryCondition{};
 
   /** kernel or structuring element to use. */
-  KernelType m_Kernel;
+  KernelType m_Kernel{};
 
   /** Pixel value that indicates the object be operated upon */
-  PixelType m_ObjectValue;
+  PixelType m_ObjectValue{};
 
   void
   BeforeThreadedGenerateData() override;

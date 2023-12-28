@@ -27,7 +27,7 @@ namespace Functor
 {
 
 /**
- *\class Clamp
+ * \class Clamp
  *
  * \brief Functor used to clamp a value to a specified range.
  *
@@ -89,8 +89,8 @@ private:
 
 
 template <typename TInput, typename TOutput>
-inline typename Clamp<TInput, TOutput>::OutputType
-Clamp<TInput, TOutput>::operator()(const InputType & A) const
+inline auto
+Clamp<TInput, TOutput>::operator()(const InputType & A) const -> OutputType
 {
   const auto dA = static_cast<double>(A);
 
@@ -111,7 +111,7 @@ Clamp<TInput, TOutput>::operator()(const InputType & A) const
 
 
 /**
- *\class ClampImageFilter
+ * \class ClampImageFilter
  *
  * \brief Casts input pixels to output pixel type and clamps the
  * output pixel values to a specified range.
@@ -161,7 +161,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ClampImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(ClampImageFilter);
 
   OutputPixelType
   GetLowerBound() const;

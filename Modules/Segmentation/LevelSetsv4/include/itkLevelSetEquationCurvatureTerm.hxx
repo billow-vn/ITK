@@ -45,9 +45,10 @@ LevelSetEquationCurvatureTerm<TInput, TLevelSetContainer, TCurvatureImage>::SetC
 }
 
 template <typename TInput, typename TLevelSetContainer, typename TCurvatureImage>
-typename LevelSetEquationCurvatureTerm<TInput, TLevelSetContainer, TCurvatureImage>::LevelSetOutputRealType
+auto
 LevelSetEquationCurvatureTerm<TInput, TLevelSetContainer, TCurvatureImage>::Value(const LevelSetInputIndexType & iP,
                                                                                   const LevelSetDataType &       iData)
+  -> LevelSetOutputRealType
 {
   // MeanCurvature has should be computed by this point.
   itkAssertInDebugAndIgnoreInReleaseMacro(iData.MeanCurvature.m_Computed == true);
@@ -72,7 +73,7 @@ LevelSetEquationCurvatureTerm<TInput, TLevelSetContainer, TCurvatureImage>::Init
   {
     if (m_CurvatureImage.IsNull())
     {
-      itkGenericExceptionMacro(<< "m_UseCurvatureImage is true and m_CurvatureImage is null");
+      itkGenericExceptionMacro("m_UseCurvatureImage is true and m_CurvatureImage is null");
     }
   }
 }

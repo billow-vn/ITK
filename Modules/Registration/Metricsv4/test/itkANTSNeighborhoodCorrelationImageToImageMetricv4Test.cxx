@@ -53,9 +53,9 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4Test_PrintDerivativeAsVectorImage
       std::cout << '[';
       for (itk::SizeValueType d = 0; d < vecdim - 1; ++d)
       {
-        std::cout << derivative[cnt * vecdim + d] << ",";
+        std::cout << derivative[cnt * vecdim + d] << ',';
       }
-      std::cout << derivative[cnt * vecdim + vecdim - 1] << ']' << "\t";
+      std::cout << derivative[cnt * vecdim + vecdim - 1] << ']' << '\t';
       ++it;
       ++cnt;
     }
@@ -86,7 +86,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4Test_PrintImage(ImageType * image
   {
     for (itk::SizeValueType xcnt = 0; xcnt < dim0; ++xcnt)
     {
-      std::cout << it.Get() << "\t";
+      std::cout << it.Get() << '\t';
       ++it;
     }
     std::cout << std::endl;
@@ -113,7 +113,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4Test_PrintImage(const ImagePointe
   {
     for (itk::SizeValueType xcnt = 0; xcnt < dim0; ++xcnt)
     {
-      std::cout << it.Get() << "\t";
+      std::cout << it.Get() << '\t';
       ++it;
     }
     std::cout << std::endl;
@@ -238,10 +238,22 @@ itkANTSNeighborhoodCorrelationImageToImageMetricv4Test(int, char ** const)
   using MetricTypePointer = MetricType::Pointer;
   MetricTypePointer metric = MetricType::New();
 
-  itk::Size<ImageDimension> neighborhood_radius;
-  neighborhood_radius.Fill(1);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(metric, ANTSNeighborhoodCorrelationImageToImageMetricv4, ImageToImageMetricv4);
 
-  metric->SetRadius(neighborhood_radius);
+
+  const itk::Size<ImageDimension> neighborhoodRadius0{ { 1 } };
+
+  metric->SetRadius(neighborhoodRadius0);
+  ITK_TEST_SET_GET_VALUE(neighborhoodRadius0, metric->GetRadius());
+
+  const MetricType::RadiusType constRadius = metric->GetRadius();
+  ITK_TEST_EXPECT_EQUAL(neighborhoodRadius0, constRadius);
+
+  itk::Size<ImageDimension> neighborhoodRadius;
+  neighborhoodRadius.Fill(1);
+
+  metric->SetRadius(neighborhoodRadius);
+  ITK_TEST_SET_GET_VALUE(neighborhoodRadius, metric->GetRadius());
 
   metric->SetFixedImage(fixedImage);
   metric->SetMovingImage(movingImage);
@@ -255,60 +267,23 @@ itkANTSNeighborhoodCorrelationImageToImageMetricv4Test(int, char ** const)
   std::cout << "movingImage:" << std::endl;
   ANTSNeighborhoodCorrelationImageToImageMetricv4Test_PrintImage(movingImage);
 
-  /* Initialize. */
-  try
-  {
-    std::cout << "Calling Initialize..." << std::endl;
-    metric->Initialize();
-  }
-  catch (const itk::ExceptionObject & exc)
-  {
-    std::cerr << "Caught unexpected exception during Initialize: " << exc;
-    std::cerr << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-  }
+  // Initialize
+  ITK_TRY_EXPECT_NO_EXCEPTION(metric->Initialize());
+
 
   // Evaluate
   MetricType::MeasureType    valueReturn1;
   MetricType::DerivativeType derivativeReturn;
-  try
-  {
-    std::cout << "Calling GetValueAndDerivative..." << std::endl;
-    metric->GetValueAndDerivative(valueReturn1, derivativeReturn);
-  }
-  catch (const itk::ExceptionObject & exc)
-  {
-    std::cerr << "Caught unexpected exception during GetValueAndDerivative: " << exc;
-    std::cerr << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(metric->GetValueAndDerivative(valueReturn1, derivativeReturn));
 
-  /* Re-initialize. */
-  try
-  {
-    std::cout << "Calling Initialize..." << std::endl;
-    metric->Initialize();
-  }
-  catch (const itk::ExceptionObject & exc)
-  {
-    std::cerr << "Caught unexpected exception during re-initialize: " << exc;
-    std::cerr << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-  }
+  // Re-initialize
+  ITK_TRY_EXPECT_NO_EXCEPTION(metric->Initialize());
+
 
   // Evaluate with GetValue
   MetricType::MeasureType valueReturn2;
-  try
-  {
-    std::cout << "Calling GetValue..." << std::endl;
-    valueReturn2 = metric->GetValue();
-  }
-  catch (const itk::ExceptionObject & exc)
-  {
-    std::cerr << "Caught unexpected exception during GetValue: " << exc;
-    std::cerr << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(valueReturn2 = metric->GetValue());
+
 
   // Test same value returned by different methods
   std::cout << "Check Value return values..." << std::endl;
@@ -337,7 +312,7 @@ itkANTSNeighborhoodCorrelationImageToImageMetricv4Test(int, char ** const)
 
   PointSetType::Pointer pset(PointSetType::New());
 
-  unsigned int                                 ind = 0, ct = 0;
+  unsigned int                                 ind = 0;
   itk::ImageRegionIteratorWithIndex<ImageType> It(fixedImage, fixedImage->GetLargestPossibleRegion());
   for (It.GoToBegin(); !It.IsAtEnd(); ++It)
   {
@@ -346,7 +321,6 @@ itkANTSNeighborhoodCorrelationImageToImageMetricv4Test(int, char ** const)
     fixedImage->TransformIndexToPhysicalPoint(It.GetIndex(), pt);
     pset->SetPoint(ind, pt);
     ind++;
-    ct++;
   }
   std::cout << "Setting point set with " << ind << " points of "
             << fixedImage->GetLargestPossibleRegion().GetNumberOfPixels() << " total " << std::endl;
@@ -354,7 +328,7 @@ itkANTSNeighborhoodCorrelationImageToImageMetricv4Test(int, char ** const)
 
   /* run the metric with the sparse threader */
   MetricTypePointer metricSparse = MetricType::New();
-  metricSparse->SetRadius(neighborhood_radius);
+  metricSparse->SetRadius(neighborhoodRadius);
   metricSparse->SetFixedImage(fixedImage);
   metricSparse->SetMovingImage(movingImage);
   metricSparse->SetFixedTransform(transformFId);
@@ -362,31 +336,13 @@ itkANTSNeighborhoodCorrelationImageToImageMetricv4Test(int, char ** const)
   metricSparse->SetFixedSampledPointSet(pset);
   metricSparse->SetUseSampledPointSet(true);
 
-  try
-  {
-    metricSparse->Initialize();
-  }
-  catch (const itk::ExceptionObject & exc)
-  {
-    std::cerr << "Caught unexpected exception during Initialize() for sparse threader: " << exc;
-    std::cerr << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(metricSparse->Initialize());
+
 
   MetricType::MeasureType    valueReturnSparse;
   MetricType::DerivativeType derivativeReturnSparse;
+  ITK_TRY_EXPECT_NO_EXCEPTION(metricSparse->GetValueAndDerivative(valueReturnSparse, derivativeReturnSparse));
 
-  try
-  {
-    std::cout << "Calling GetValueAndDerivative..." << std::endl;
-    metricSparse->GetValueAndDerivative(valueReturnSparse, derivativeReturnSparse);
-  }
-  catch (const itk::ExceptionObject & exc)
-  {
-    std::cerr << "Caught unexpected exception during GetValueAndDrivative() for sparse threader: " << exc;
-    std::cerr << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-  }
 
   std::cout << "Check Value return values between dense and sparse threader..." << std::endl;
   std::cout << "dense: " << valueReturn1 << ", sparse: " << valueReturnSparse << std::endl;

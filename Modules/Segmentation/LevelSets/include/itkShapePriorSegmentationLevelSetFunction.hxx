@@ -22,9 +22,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TImageType, typename TFeatureImageType>
 ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ShapePriorSegmentationLevelSetFunction()
 {
@@ -32,27 +30,25 @@ ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ShapePrio
   m_ShapePriorWeight = NumericTraits<ScalarValueType>::ZeroValue();
 }
 
-/**
- * PrintSelf
- */
 template <typename TImageType, typename TFeatureImageType>
 void
 ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "ShapeFunction: " << m_ShapeFunction.GetPointer() << std::endl;
-  os << indent << "ShapePriorWeight: " << m_ShapePriorWeight << std::endl;
+
+  itkPrintSelfObjectMacro(ShapeFunction);
+
+  os << indent
+     << "ShapePriorWeight: " << static_cast<typename NumericTraits<ScalarValueType>::PrintType>(m_ShapePriorWeight)
+     << std::endl;
 }
 
-/**
- * Compute the equation value.
- */
 template <typename TImageType, typename TFeatureImageType>
-typename ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::PixelType
+auto
 ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ComputeUpdate(
   const NeighborhoodType & neighborhood,
   void *                   gd,
-  const FloatOffsetType &  offset)
+  const FloatOffsetType &  offset) -> PixelType
 {
   // Compute the generic level set update using superclass
   PixelType value = this->Superclass::ComputeUpdate(neighborhood, gd, offset);
@@ -82,9 +78,6 @@ ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ComputeUp
   return value;
 }
 
-/**
- * Compute the global time step.
- */
 template <typename TImageType, typename TFeatureImageType>
 auto
 ShapePriorSegmentationLevelSetFunction<TImageType, TFeatureImageType>::ComputeGlobalTimeStep(void * gd) const

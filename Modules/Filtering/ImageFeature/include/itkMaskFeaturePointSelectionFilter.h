@@ -32,7 +32,7 @@
 namespace itk
 {
 /**
- *\class MaskFeaturePointSelectionFilter
+ * \class MaskFeaturePointSelectionFilter
  * \brief Generate a PointSet containing the feature points
  * selected from a masked 3D input image.
  *
@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaskFeaturePointSelectionFilter, ImageToMeshFilter);
+  itkOverrideGetNameOfClassMacro(MaskFeaturePointSelectionFilter);
 
   static constexpr unsigned int ImageDimension = 3u;
 
@@ -158,11 +158,11 @@ protected:
   ComputeConnectivityOffsets();
 
 private:
-  unsigned int            m_NonConnectivity;
-  std::vector<OffsetType> m_NonConnectivityOffsets;
-  SizeType                m_BlockRadius;
-  double                  m_SelectFraction;
-  bool                    m_ComputeStructureTensors;
+  unsigned int            m_NonConnectivity{};
+  std::vector<OffsetType> m_NonConnectivityOffsets{};
+  SizeType                m_BlockRadius{};
+  double                  m_SelectFraction{};
+  bool                    m_ComputeStructureTensors{};
 };
 } // end namespace itk
 

@@ -295,7 +295,7 @@ itkSTAPLEImageFilterTest(int argc, char * argv[])
   {
     avgQ += stapler->GetSpecificity(i);
     avgP += stapler->GetSensitivity(i);
-    std::cout << i << ": " << stapler->GetFileName(i) << "\t" << stapler->GetSensitivity(i) << "\t\t"
+    std::cout << i << ": " << stapler->GetFileName(i) << '\t' << stapler->GetSensitivity(i) << "\t\t"
               << stapler->GetSpecificity(i) << std::endl;
   }
 
@@ -303,7 +303,7 @@ itkSTAPLEImageFilterTest(int argc, char * argv[])
   std::cout << "Specificity: ";
   for (auto value : specificity)
   {
-    std::cout << value << " ";
+    std::cout << value << ' ';
   }
   std::cout << std::endl;
 
@@ -311,7 +311,7 @@ itkSTAPLEImageFilterTest(int argc, char * argv[])
   std::cout << "Sensitivity: ";
   for (auto value : specificity)
   {
-    std::cout << value << " ";
+    std::cout << value << ' ';
   }
   std::cout << std::endl;
 

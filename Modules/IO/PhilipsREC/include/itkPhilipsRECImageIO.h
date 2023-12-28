@@ -27,7 +27,7 @@
  *         The Pennsylvania State University 2005
  *
  * This implementation was contributed as a paper to the Insight Journal
- * https://hdl.handle.net/1926/1381
+ * https://www.insight-journal.org/browse/publication/237
  *
  */
 
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PhilipsRECImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(PhilipsRECImageIO);
 
   /** Special types used for Philips PAR meta data. */
   using EchoTimesContainerType = VectorContainer<unsigned int, double>;
@@ -158,8 +158,8 @@ private:
   IndexValueType
   GetSliceIndex(IndexValueType index) const;
 
-  SliceIndexType * m_SliceIndex;
-  IOByteOrderEnum  m_MachineByteOrder;
+  SliceIndexType * m_SliceIndex{};
+  IOByteOrderEnum  m_MachineByteOrder{};
 };
 } // end namespace itk
 

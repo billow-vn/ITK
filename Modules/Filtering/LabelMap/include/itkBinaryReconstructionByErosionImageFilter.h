@@ -32,7 +32,7 @@ namespace itk
 {
 
 /**
- *\class BinaryReconstructionByErosionImageFilter
+ * \class BinaryReconstructionByErosionImageFilter
  * \brief binary reconstruction by erosion of an image
  *
  * Reconstruction by erosion operates on a "marker" image and a "mask"
@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryReconstructionByErosionImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryReconstructionByErosionImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -157,9 +157,9 @@ protected:
   GenerateData() override;
 
 private:
-  bool                 m_FullyConnected;
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
+  bool                 m_FullyConnected{};
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
 }; // end of class
 
 } // end namespace itk

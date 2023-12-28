@@ -38,7 +38,7 @@ GaussianRandomSpatialNeighborSubsampler<TSample, TRegion>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   rval->m_Variance = this->m_Variance;
@@ -46,14 +46,14 @@ GaussianRandomSpatialNeighborSubsampler<TSample, TRegion>::InternalClone() const
 }
 
 template <typename TSample, typename TRegion>
-typename GaussianRandomSpatialNeighborSubsampler<TSample, TRegion>::RandomIntType
+auto
 GaussianRandomSpatialNeighborSubsampler<TSample, TRegion>::GetIntegerVariate(RandomIntType lowerBound,
                                                                              RandomIntType upperBound,
-                                                                             RandomIntType mean)
+                                                                             RandomIntType mean) -> RandomIntType
 {
   if (upperBound < lowerBound)
   {
-    itkExceptionMacro(<< "upperBound (" << upperBound << ") not >= to lowerBound(" << lowerBound << ")");
+    itkExceptionMacro("upperBound (" << upperBound << ") not >= to lowerBound(" << lowerBound << ')');
   }
 
   RandomIntType randInt = 0;

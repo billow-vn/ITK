@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class CurvatureFlowImageFilter
+ * \class CurvatureFlowImageFilter
  * \brief Denoise an image using curvature driven flow.
  *
  * CurvatureFlowImageFilter implements a curvature driven image denoising
@@ -108,7 +108,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CurvatureFlowImageFilter, DenseFiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(CurvatureFlowImageFilter);
 
   /** InputImage type. */
   using typename Superclass::InputImageType;
@@ -191,7 +191,7 @@ protected:
   GenerateInputRequestedRegion() override;
 
 private:
-  TimeStepType m_TimeStep;
+  TimeStepType m_TimeStep{};
 };
 } // namespace itk
 

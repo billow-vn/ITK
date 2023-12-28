@@ -127,7 +127,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(DisplacementFieldJacobianDeterminantFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(DisplacementFieldJacobianDeterminantFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -254,19 +254,19 @@ protected:
   EvaluateAtNeighborhood(const ConstNeighborhoodIteratorType & it) const;
 
   /** The weights used to scale partial derivatives during processing */
-  WeightsType m_DerivativeWeights;
+  WeightsType m_DerivativeWeights{};
   /** Pre-compute 0.5*m_DerivativeWeights since that is the only thing used in
     the computations. */
-  WeightsType m_HalfDerivativeWeights;
+  WeightsType m_HalfDerivativeWeights{};
 
 private:
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 
-  ThreadIdType m_RequestedNumberOfWorkUnits;
+  ThreadIdType m_RequestedNumberOfWorkUnits{};
 
-  typename ImageBaseType::ConstPointer m_RealValuedInputImage;
+  typename ImageBaseType::ConstPointer m_RealValuedInputImage{};
 
-  RadiusType m_NeighborhoodRadius;
+  RadiusType m_NeighborhoodRadius{};
 };
 } // end namespace itk
 

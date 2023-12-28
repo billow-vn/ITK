@@ -37,7 +37,7 @@
 namespace itk
 {
 /**
- *\class PatchBasedDenoisingImageFilter
+ * \class PatchBasedDenoisingImageFilter
  * \brief Derived class implementing a specific patch-based denoising algorithm, as detailed below.
  *
  * This class is derived from the base class PatchBasedDenoisingBaseImageFilter; please refer to the
@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PatchBasedDenoisingImageFilter, PatchBasedDenoisingBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(PatchBasedDenoisingImageFilter);
 
   /** Type definition for the input image. */
   using typename Superclass::InputImageType;
@@ -232,12 +232,10 @@ protected:
   GenerateInputRequestedRegion() override;
 
   template <typename T, typename U = void>
-  using DisableIfMultiComponent =
-    typename std::enable_if<std::is_same<T, typename NumericTraits<T>::ValueType>::value, U>;
+  using DisableIfMultiComponent = typename std::enable_if<std::is_same_v<T, typename NumericTraits<T>::ValueType>, U>;
 
   template <typename T, typename U = void>
-  using EnableIfMultiComponent =
-    typename std::enable_if<!std::is_same<T, typename NumericTraits<T>::ValueType>::value, U>;
+  using EnableIfMultiComponent = typename std::enable_if<!std::is_same_v<T, typename NumericTraits<T>::ValueType>, U>;
 
 
   /** \brief A method to generically get a component.
@@ -532,10 +530,10 @@ private:
     InputImageType *                 Img;
   };
 
-  std::vector<ThreadDataStruct> m_ThreadData;
+  std::vector<ThreadDataStruct> m_ThreadData{};
 
   /** The buffer that holds the updates for an iteration of the algorithm. */
-  typename OutputImageType::Pointer m_UpdateBuffer;
+  typename OutputImageType::Pointer m_UpdateBuffer{};
 
   unsigned int m_NumPixelComponents{ 0 };
   unsigned int m_NumIndependentComponents{ 0 };
@@ -545,27 +543,27 @@ private:
 
   bool m_UseFastTensorComputations{ true };
 
-  RealArrayType  m_KernelBandwidthSigma;
+  RealArrayType  m_KernelBandwidthSigma{};
   bool           m_KernelBandwidthSigmaIsSet{ false };
-  RealArrayType  m_IntensityRescaleInvFactor;
-  PixelType      m_ZeroPixel;
-  PixelArrayType m_ImageMin;
-  PixelArrayType m_ImageMax;
+  RealArrayType  m_IntensityRescaleInvFactor{};
+  PixelType      m_ZeroPixel{};
+  PixelArrayType m_ImageMin{};
+  PixelArrayType m_ImageMax{};
   double         m_KernelBandwidthFractionPixelsForEstimation{ 0.20 };
   bool           m_ComputeConditionalDerivatives{ false };
-  double         m_MinSigma;
-  double         m_MinProbability;
-  unsigned int   m_SigmaUpdateDecimationFactor;
+  double         m_MinSigma{};
+  double         m_MinProbability{};
+  unsigned int   m_SigmaUpdateDecimationFactor{};
   double         m_SigmaUpdateConvergenceTolerance{ 0.01 };
-  ShortArrayType m_SigmaConverged;
+  ShortArrayType m_SigmaConverged{};
   double         m_KernelBandwidthMultiplicationFactor{ 1.0 };
 
-  RealType m_NoiseSigma;
-  RealType m_NoiseSigmaSquared;
+  RealType m_NoiseSigma{};
+  RealType m_NoiseSigmaSquared{};
   bool     m_NoiseSigmaIsSet{ false };
 
-  BaseSamplerPointer                m_Sampler;
-  typename ListAdaptorType::Pointer m_SearchSpaceList;
+  BaseSamplerPointer                m_Sampler{};
+  typename ListAdaptorType::Pointer m_SearchSpaceList{};
 };
 } // end namespace itk
 

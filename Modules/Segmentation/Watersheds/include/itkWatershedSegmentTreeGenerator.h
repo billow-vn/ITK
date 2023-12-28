@@ -88,7 +88,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  itkTypeMacro(SegmentTreeGenerator, ProcessObject);
+  itkOverrideGetNameOfClassMacro(SegmentTreeGenerator);
 
   /** Convenient type definitions */
   using ScalarType = TScalar;
@@ -231,7 +231,7 @@ private:
 
   using HashMapType = std::unordered_map<IdentifierType, bool>;
 
-  OneWayEquivalencyTableType::Pointer m_MergedSegmentsTable;
+  OneWayEquivalencyTableType::Pointer m_MergedSegmentsTable{};
 
   /** This value keeps track of the highest level this filter has been
    *  calculated.  m_FloodLevel can be manipulated anywhere below this

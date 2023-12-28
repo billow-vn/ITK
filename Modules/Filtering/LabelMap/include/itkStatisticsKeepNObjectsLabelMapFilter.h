@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class StatisticsKeepNObjectsLabelMapFilter
+ * \class StatisticsKeepNObjectsLabelMapFilter
  * \brief keep N objects according to their statistics attributes
  *
  * StatisticsKeepNObjectsLabelMapFilter keep the N objects in a label collection image
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsKeepNObjectsLabelMapFilter, ShapeKeepNObjectsLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(StatisticsKeepNObjectsLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

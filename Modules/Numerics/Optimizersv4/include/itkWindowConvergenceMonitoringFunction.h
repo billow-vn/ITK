@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WindowConvergenceMonitoringFunction, ConvergenceMonitoringFunction);
+  itkOverrideGetNameOfClassMacro(WindowConvergenceMonitoringFunction);
 
   using ScalarType = TScalar;
   using RealType = typename NumericTraits<ScalarType>::RealType;
@@ -73,7 +73,7 @@ public:
   itkSetMacro(WindowSize, EnergyValueContainerSizeType);
   itkGetConstMacro(WindowSize, EnergyValueContainerSizeType);
 
-  /** Calculate convergence value by fitting to a window of the enrgy profile */
+  /** Calculate convergence value by fitting to a window of the energy profile */
   RealType
   GetConvergenceValue() const override;
 
@@ -86,9 +86,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  EnergyValueContainerSizeType m_WindowSize;
+  EnergyValueContainerSizeType m_WindowSize{};
 
-  RealType m_TotalEnergy;
+  RealType m_TotalEnergy{};
 };
 } // end namespace Function
 } // end namespace itk

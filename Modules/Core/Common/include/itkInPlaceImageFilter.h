@@ -86,7 +86,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(InPlaceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(InPlaceImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageType;
@@ -147,7 +147,7 @@ protected:
   void
   AllocateOutputs() override
   {
-    if (std::is_same<TInputImage, TOutputImage>::value)
+    if (std::is_same_v<TInputImage, TOutputImage>)
     {
       this->InternalAllocateOutputs();
     }

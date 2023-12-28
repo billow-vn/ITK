@@ -207,7 +207,7 @@ public:
  * \ingroup ITKCommon
  *
  * \sphinx
- * \sphinxexample{Core/Common/RandomSelectPixelFromRegionWithoutReplacee,Random Select Pixel From Region Without
+ * \sphinxexample{Core/Common/RandomSelectPixelFromRegionWithoutReplace,Random Select Pixel From Region Without
  * Replacing} \sphinxexample{Core/Common/PermuteSequenceOfIndices,Permute Sequence Of Indices} \endsphinx
  */
 template <typename TImage>
@@ -234,7 +234,7 @@ public:
   using typename Superclass::SizeValueType;
 
   /** Default constructor. Needed since we provide a cast constructor. */
-  ImageRandomNonRepeatingConstIteratorWithIndex();
+  ImageRandomNonRepeatingConstIteratorWithIndex() = default;
   ~ImageRandomNonRepeatingConstIteratorWithIndex() override { delete m_Permutation; }
 
   /** Constructor establishes an iterator to walk a particular image and a
@@ -322,14 +322,14 @@ public:
     return *this;
   }
 
-  /** Set/Get number of random samples to get from the image region */
+  /** Set/Get number of random samples to extract from the image region. */
   void
   SetNumberOfSamples(SizeValueType number);
 
   SizeValueType
   GetNumberOfSamples() const;
 
-  /** Reinitialize the seed of the random number generator  */
+  /** Reinitialize the seed of the random number generator. */
   void
   ReinitializeSeed();
 
@@ -339,13 +339,14 @@ public:
   ReinitializeSeed(int);
 
 private:
+  /** Update the position. */
   void
   UpdatePosition();
 
-  SizeValueType       m_NumberOfSamplesRequested;
-  SizeValueType       m_NumberOfSamplesDone;
-  SizeValueType       m_NumberOfPixelsInRegion;
-  RandomPermutation * m_Permutation;
+  SizeValueType       m_NumberOfSamplesRequested{};
+  SizeValueType       m_NumberOfSamplesDone{};
+  SizeValueType       m_NumberOfPixelsInRegion{};
+  RandomPermutation * m_Permutation{};
 };
 } // end namespace itk
 

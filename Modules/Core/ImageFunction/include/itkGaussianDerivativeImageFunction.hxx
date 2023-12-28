@@ -236,9 +236,9 @@ GaussianDerivativeImageFunction<TInputImage, TOutput>::Evaluate(const PointType 
 }
 
 template <typename TInputImage, typename TOutput>
-typename GaussianDerivativeImageFunction<TInputImage, TOutput>::OutputType
+auto
 GaussianDerivativeImageFunction<TInputImage, TOutput>::EvaluateAtContinuousIndex(
-  const ContinuousIndexType & cindex) const
+  const ContinuousIndexType & cindex) const -> OutputType
 {
   IndexType index;
 
@@ -251,7 +251,7 @@ void
 GaussianDerivativeImageFunction<TInputImage, TOutput>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 
   os << indent << "Sigma: " << m_Sigma << std::endl;
   os << indent << "Extent: " << m_Extent << std::endl;

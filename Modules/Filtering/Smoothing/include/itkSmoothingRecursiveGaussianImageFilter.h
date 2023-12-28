@@ -29,7 +29,7 @@ namespace itk
 {
 
 /**
- *\class SmoothingRecursiveGaussianImageFilter
+ * \class SmoothingRecursiveGaussianImageFilter
  * \brief Computes the smoothing of an image by convolution with the Gaussian kernels implemented as IIR filters.
  *
  * This filter is implemented using the recursive gaussian
@@ -66,7 +66,7 @@ public:
   using ScalarRealType = typename NumericTraits<PixelType>::ScalarRealType;
 
   /** Runtime information support. */
-  itkTypeMacro(SmoothingRecursiveGaussianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(SmoothingRecursiveGaussianImageFilter);
 
   /** Image dimension. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -169,13 +169,13 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
 private:
-  InternalGaussianFilterPointer m_SmoothingFilters[ImageDimension - 1];
-  FirstGaussianFilterPointer    m_FirstSmoothingFilter;
-  CastingFilterPointer          m_CastingFilter;
+  InternalGaussianFilterPointer m_SmoothingFilters[ImageDimension - 1]{};
+  FirstGaussianFilterPointer    m_FirstSmoothingFilter{};
+  CastingFilterPointer          m_CastingFilter{};
 
   bool m_NormalizeAcrossScale{ false };
 
-  SigmaArrayType m_Sigma;
+  SigmaArrayType m_Sigma{};
 };
 } // end namespace itk
 

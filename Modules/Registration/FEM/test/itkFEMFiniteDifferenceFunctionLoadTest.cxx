@@ -316,7 +316,7 @@ RunTest(InputImageType *            fixedImage,
       {
         coords[d] = element->GetNodeCoordinates(n)[d];
       }
-      fixedImage->TransformPhysicalPointToIndex(coords, index);
+      index = fixedImage->TransformPhysicalPointToIndex(coords);
       if (!region.IsInside(index))
       {
         continue;
@@ -352,8 +352,9 @@ itkFEMFiniteDifferenceFunctionLoadTest(int argc, char * argv[])
 {
   if (argc != 2)
   {
-    std::cerr << "Missing Parameters" << std::endl;
-    std::cerr << "Usage: " << argv[0] << " outputFilenamePrefix" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv);
+    std::cerr << " outputFilenamePrefix" << std::endl;
     return EXIT_FAILURE;
   }
 

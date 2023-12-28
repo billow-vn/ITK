@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PlatformMultiThreader, MultiThreaderBase);
+  itkOverrideGetNameOfClassMacro(PlatformMultiThreader);
 
 #if !defined(ITK_LEGACY_REMOVE)
   /** Set/Get the maximum number of threads to use when multithreading.  It
@@ -72,16 +72,14 @@ public:
    * of threads was accepted. Legacy: use MultiThreaderBase to invoke these. */
   itkLegacyMacro(static void SetGlobalMaximumNumberOfThreads(ThreadIdType val))
   {
-    itkGenericOutputMacro("Warning: SetGlobalMaximumNumberOfThreads \
-should now be called on itk::MultiThreaderBase. \
-It can affect all MultiThreaderBase's derived classes in ITK");
+    itkGenericOutputMacro("Warning: SetGlobalMaximumNumberOfThreads should now be called on itk::MultiThreaderBase. It "
+                          "can affect all MultiThreaderBase's derived classes in ITK");
     Superclass::SetGlobalMaximumNumberOfThreads(val);
   }
   itkLegacyMacro(static ThreadIdType GetGlobalMaximumNumberOfThreads())
   {
-    itkGenericOutputMacro("Warning: GetGlobalMaximumNumberOfThreads \
-should now be called on itk::MultiThreaderBase. \
-It can affect all MultiThreaderBase's derived classes in ITK");
+    itkGenericOutputMacro("Warning: GetGlobalMaximumNumberOfThreads should now be called on itk::MultiThreaderBase. It "
+                          "can affect all MultiThreaderBase's derived classes in ITK");
     return Superclass::GetGlobalMaximumNumberOfThreads();
   }
 
@@ -91,16 +89,14 @@ It can affect all MultiThreaderBase's derived classes in ITK");
    * of threads was accepted. Legacy: use MultiThreaderBase to invoke these. */
   itkLegacyMacro(static void SetGlobalDefaultNumberOfThreads(ThreadIdType val))
   {
-    itkGenericOutputMacro("Warning: SetGlobalDefaultNumberOfThreads \
-should now be called on itk::MultiThreaderBase. \
-It can affect all MultiThreaderBase's derived classes in ITK");
+    itkGenericOutputMacro("Warning: SetGlobalDefaultNumberOfThreads should now be called on itk::MultiThreaderBase. It "
+                          "can affect all MultiThreaderBase's derived classes in ITK");
     Superclass::SetGlobalDefaultNumberOfThreads(val);
   }
   itkLegacyMacro(static ThreadIdType GetGlobalDefaultNumberOfThreads())
   {
-    itkGenericOutputMacro("Warning: GetGlobalDefaultNumberOfThreads \
-should now be called on itk::MultiThreaderBase. \
-It can affect all MultiThreaderBase's derived classes in ITK");
+    itkGenericOutputMacro("Warning: GetGlobalDefaultNumberOfThreads should now be called on itk::MultiThreaderBase. It "
+                          "can affect all MultiThreaderBase's derived classes in ITK");
     return Superclass::GetGlobalDefaultNumberOfThreads();
   }
 #endif
@@ -161,21 +157,21 @@ private:
   /** An array of thread info containing a thread id
    *  (0, 1, 2, .. ITK_MAX_THREADS-1), the thread count, and a pointer
    *  to void so that user data can be passed to each thread. */
-  WorkUnitInfo m_ThreadInfoArray[ITK_MAX_THREADS];
+  WorkUnitInfo m_ThreadInfoArray[ITK_MAX_THREADS]{};
 
   /** Storage of MutexFunctions and ints used to control spawned
    *  threads and the spawned thread ids. */
-  int                         m_SpawnedThreadActiveFlag[ITK_MAX_THREADS];
-  std::shared_ptr<std::mutex> m_SpawnedThreadActiveFlagLock[ITK_MAX_THREADS];
-  ThreadProcessIdType         m_SpawnedThreadProcessID[ITK_MAX_THREADS];
-  WorkUnitInfo                m_SpawnedThreadInfoArray[ITK_MAX_THREADS];
+  int                         m_SpawnedThreadActiveFlag[ITK_MAX_THREADS]{};
+  std::shared_ptr<std::mutex> m_SpawnedThreadActiveFlagMutex[ITK_MAX_THREADS]{};
+  ThreadProcessIdType         m_SpawnedThreadProcessID[ITK_MAX_THREADS]{};
+  WorkUnitInfo                m_SpawnedThreadInfoArray[ITK_MAX_THREADS]{};
 
 #if !defined(ITK_LEGACY_REMOVE)
   /** The methods to invoke. */
-  ThreadFunctionType m_MultipleMethod[ITK_MAX_THREADS];
+  ThreadFunctionType m_MultipleMethod[ITK_MAX_THREADS]{};
 
   /** Internal storage of the data. */
-  void * m_MultipleData[ITK_MAX_THREADS];
+  void * m_MultipleData[ITK_MAX_THREADS]{};
 #endif
 
   /** spawn a new thread for the SingleMethod */

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class StatisticsLabelObject
+ * \class StatisticsLabelObject
  *  \brief A Label object to store the common attributes related to the statistics of the object
  *
  * StatisticsLabelObject stores  the common attributes related to the statistics of the object
@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StatisticsLabelObject, LabelObject);
+  itkOverrideGetNameOfClassMacro(StatisticsLabelObject);
 
   using LabelMapType = LabelMap<Self>;
 
@@ -185,58 +185,40 @@ public:
     {
       case MINIMUM:
         return "Minimum";
-        break;
       case MAXIMUM:
         return "Maximum";
-        break;
       case MEAN:
         return "Mean";
-        break;
       case SUM:
         return "Sum";
-        break;
       case STANDARD_DEVIATION:
         return "StandardDeviation";
-        break;
       case VARIANCE:
         return "Variance";
-        break;
       case MEDIAN:
         return "Median";
-        break;
       case MAXIMUM_INDEX:
         return "MaximumIndex";
-        break;
       case MINIMUM_INDEX:
         return "MinimumIndex";
-        break;
       case CENTER_OF_GRAVITY:
         return "CenterOfGravity";
-        break;
       /*      case CENTRAL_MOMENTS:
-              return "CentralMoments";
-              break;*/
+              return "CentralMoments";*/
       case WEIGHTED_PRINCIPAL_MOMENTS:
         return "WeightedPrincipalMoments";
-        break;
       case WEIGHTED_PRINCIPAL_AXES:
         return "WeightedPrincipalAxes";
-        break;
       case KURTOSIS:
         return "Kurtosis";
-        break;
       case SKEWNESS:
         return "Skewness";
-        break;
       case WEIGHTED_ELONGATION:
         return "WeightedElongation";
-        break;
       case HISTOGRAM:
         return "Histogram";
-        break;
       case WEIGHTED_FLATNESS:
         return "WeightedFlatness";
-        break;
     }
     // can't recognize the name
     return Superclass::GetNameFromAttribute(a);
@@ -603,26 +585,26 @@ protected:
   }
 
 private:
-  double    m_Minimum;
-  double    m_Maximum;
-  double    m_Mean;
-  double    m_Sum;
-  double    m_StandardDeviation;
-  double    m_Variance;
-  double    m_Median;
-  IndexType m_MaximumIndex;
-  IndexType m_MinimumIndex;
-  PointType m_CenterOfGravity;
+  double    m_Minimum{};
+  double    m_Maximum{};
+  double    m_Mean{};
+  double    m_Sum{};
+  double    m_StandardDeviation{};
+  double    m_Variance{};
+  double    m_Median{};
+  IndexType m_MaximumIndex{};
+  IndexType m_MinimumIndex{};
+  PointType m_CenterOfGravity{};
   // MatrixType m_CentralMoments;
-  VectorType m_WeightedPrincipalMoments;
-  MatrixType m_WeightedPrincipalAxes;
-  double     m_Skewness;
-  double     m_Kurtosis;
-  double     m_WeightedElongation;
+  VectorType m_WeightedPrincipalMoments{};
+  MatrixType m_WeightedPrincipalAxes{};
+  double     m_Skewness{};
+  double     m_Kurtosis{};
+  double     m_WeightedElongation{};
 
-  typename HistogramType::ConstPointer m_Histogram;
+  typename HistogramType::ConstPointer m_Histogram{};
 
-  double m_WeightedFlatness;
+  double m_WeightedFlatness{};
 };
 } // end namespace itk
 

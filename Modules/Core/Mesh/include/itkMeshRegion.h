@@ -57,7 +57,7 @@ public:
   using Superclass = Region;
 
   /** Standard part of all itk objects. */
-  itkTypeMacro(MeshRegion, Region);
+  itkOverrideGetNameOfClassMacro(MeshRegion);
 
   /** Constructor.  MeshRegion is a lightweight object and is not reference
    * counted. */
@@ -98,7 +98,7 @@ public:
     return m_Region;
   }
 
-  /** Set the number of regions. */
+  /** Set the current region. */
   void
   SetRegion(SizeValueType region)
   {
@@ -110,10 +110,10 @@ public:
 
 private:
   // The maximum number of regions possible.
-  SizeValueType m_NumberOfRegions;
+  SizeValueType m_NumberOfRegions{};
 
   // The specified region.
-  SizeValueType m_Region;
+  SizeValueType m_Region{};
 };
 } // end namespace itk
 

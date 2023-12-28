@@ -31,7 +31,7 @@
 namespace itk
 {
 /**
- *\class Transform
+ * \class Transform
  * \brief Transform points and vectors from an input space to an output space.
  *
  * This abstract class defines the generic interface for a geometric
@@ -71,7 +71,7 @@ namespace itk
  *                                                             const InputPointType & x,
  *                                                             JacobianPositionType &jacobian ) const;<br>
  *
- * Since TranformVector and TransformCovariantVector have multiple
+ * Since TransformVector and TransformCovariantVector have multiple
  * overloaded methods from the base class, subclasses must specify:<br>
  *  using Superclass::TransformVector;<br>
  *  using Superclass::TransformCovariantVector;<br>
@@ -92,7 +92,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Transform, TransformBaseTemplate);
+  itkOverrideGetNameOfClassMacro(Transform);
 
   /** Dimension of the domain space. */
   static constexpr unsigned int InputSpaceDimension = VInputDimension;
@@ -153,7 +153,7 @@ public:
   using InputVectorPixelType = VariableLengthVector<TParametersValueType>;
   using OutputVectorPixelType = VariableLengthVector<TParametersValueType>;
 
-  /* Standard symmetric second rank tenosr type for this class */
+  /* Standard symmetric second rank tensor type for this class */
   using InputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, VInputDimension>;
   using OutputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, VOutputDimension>;
 
@@ -599,16 +599,16 @@ protected:
 #else
   ~Transform() override = default;
 #endif
-  mutable ParametersType      m_Parameters;
-  mutable FixedParametersType m_FixedParameters;
+  mutable ParametersType      m_Parameters{};
+  mutable FixedParametersType m_FixedParameters{};
 
   OutputDiffusionTensor3DType
   PreservationOfPrincipalDirectionDiffusionTensor3DReorientation(const InputDiffusionTensor3DType &,
                                                                  const InverseJacobianPositionType &) const;
 
 private:
-  std::string m_InputSpaceName;
-  std::string m_OutputSpaceName;
+  std::string m_InputSpaceName{};
+  std::string m_OutputSpaceName{};
 
   template <typename TType>
   static std::string

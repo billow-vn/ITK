@@ -107,7 +107,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GeodesicActiveContourShapePriorLevelSetFunction, ShapePriorSegmentationLevelSetFunction);
+  itkOverrideGetNameOfClassMacro(GeodesicActiveContourShapePriorLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using typename Superclass::ImageType;
@@ -180,7 +180,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_DerivativeSigma;
+  double m_DerivativeSigma{};
 };
 } // end namespace itk
 

@@ -54,7 +54,7 @@ public:
   using ObjectType = TObjectType;
 
   template <typename T>
-  using EnableIfConvertible = typename std::enable_if<std::is_convertible<T *, TObjectType *>::value>;
+  using EnableIfConvertible = typename std::enable_if<std::is_convertible_v<T *, TObjectType *>>;
 
   /** Default-constructor  */
   constexpr SmartPointer() noexcept = default;
@@ -133,6 +133,15 @@ public:
   {
     return m_Pointer;
   }
+
+  /** Returns the stored (raw) pointer. Equivalent to `GetPointer()`, but then following the Standard C++ Library naming
+   * conversion (like `std::shared_ptr::get()`). */
+  ObjectType *
+  get() const noexcept
+  {
+    return m_Pointer;
+  }
+
 
   /** Overload operator assignment.
    *

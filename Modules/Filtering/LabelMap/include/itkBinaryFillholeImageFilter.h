@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class BinaryFillholeImageFilter
+ * \class BinaryFillholeImageFilter
  * \brief Remove holes not connected to the boundary of the image.
  *
  * BinaryFillholeImageFilter fills holes in a binary image.
@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryFillholeImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryFillholeImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -122,9 +122,9 @@ protected:
   GenerateData() override;
 
 private:
-  InputImagePixelType m_ForegroundValue;
+  InputImagePixelType m_ForegroundValue{};
 
-  bool m_FullyConnected;
+  bool m_FullyConnected{};
 
 }; // end of class
 

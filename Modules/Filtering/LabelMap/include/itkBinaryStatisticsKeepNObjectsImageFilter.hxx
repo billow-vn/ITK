@@ -115,7 +115,7 @@ BinaryStatisticsKeepNObjectsImageFilter<TInputImage, TFeatureImage>::PrintSelf(s
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
   os << indent
      << "BackgroundValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue)
      << std::endl;
@@ -124,7 +124,7 @@ BinaryStatisticsKeepNObjectsImageFilter<TInputImage, TFeatureImage>::PrintSelf(s
      << std::endl;
   os << indent << "NumberOfObjects: " << m_NumberOfObjects << std::endl;
   os << indent << "ReverseOrdering: " << m_ReverseOrdering << std::endl;
-  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ")"
+  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ')'
      << std::endl;
 }
 } // end namespace itk

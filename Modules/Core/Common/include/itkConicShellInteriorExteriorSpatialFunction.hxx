@@ -22,14 +22,6 @@
 namespace itk
 {
 template <unsigned int VDimension, typename TInput>
-ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>::ConicShellInteriorExteriorSpatialFunction()
-
-{
-  m_Origin.Fill(0.0);
-  m_OriginGradient.Fill(0.0);
-}
-
-template <unsigned int VDimension, typename TInput>
 void
 ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>::SetOriginGradient(GradientType grad)
 {
@@ -98,14 +90,14 @@ ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>::PrintSelf(std::os
   {
     os << m_Origin[i] << ", ";
   }
-  os << "]" << std::endl;
+  os << ']' << std::endl;
 
   os << indent << "Gradient at origin: [";
   for (i = 0; i < VDimension - 1; ++i)
   {
     os << m_OriginGradient[i] << ", ";
   }
-  os << "]" << std::endl;
+  os << ']' << std::endl;
 
   os << indent << "DistanceMin: " << m_DistanceMin << std::endl;
   os << indent << "DistanceMax: " << m_DistanceMax << std::endl;

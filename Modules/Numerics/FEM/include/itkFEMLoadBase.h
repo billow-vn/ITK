@@ -47,7 +47,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Load, FEMLightObject);
+  itkOverrideGetNameOfClassMacro(Load);
 
   /** Array class that holds special pointers to the load objects */
   using ArrayType = FEMPArray<Self>;
@@ -99,7 +99,7 @@ protected:
    * Pointer to an element in a system that contains the DOF
    * on which the external force is applied.
    */
-  Element::ConstPointer m_Element;
+  Element::ConstPointer m_Element{};
 };
 } // end namespace fem
 } // end namespace itk

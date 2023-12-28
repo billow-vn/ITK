@@ -27,7 +27,7 @@
 
 namespace itk
 {
-/**\class ThresholdMaximumConnectedComponentsImageFilter
+/** \class ThresholdMaximumConnectedComponentsImageFilter
  * \brief Finds the threshold value of an image based on  maximizing the number
  * of objects in the image that are larger than a given minimal size.
  *
@@ -58,9 +58,9 @@ namespace itk
  *
  * \par References:
  * 1) Urish KL, August J, Huard J. "Unsupervised segmentation for myofiber
- * counting in immunoflourescent microscopy images". Insight Journal.
+ * counting in immunofluorescent microscopy images". Insight Journal.
  * ISC/NA-MIC/MICCAI Workshop on Open-Source Software (2005)
- * https://insight-journal.org/browse/publication/40
+ * https://www.insight-journal.org/browse/publication/40
  * 2) Pikaz A, Averbuch, A. "Digital image thresholding based on topological
  * stable-state". Pattern Recognition, 29(5): 829-843, 1996.
  *
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ThresholdMaximumConnectedComponentsImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ThresholdMaximumConnectedComponentsImageFilter);
 
   /** Typedef to describe the type of pixel. */
   using PixelType = typename TInputImage::PixelType;
@@ -133,7 +133,7 @@ public:
   itkGetConstMacro(NumberOfObjects, SizeValueType);
 
   /**
-   * Returns the automatic threshold setpoint. This information is
+   * Returns the automatic threshold value. This information is
    * only valid after the filter has executed. */
   itkGetConstMacro(ThresholdValue, PixelType);
 
@@ -207,26 +207,26 @@ private:
   //
   // Declare member variables for the filters of the internal pipeline.
   //
-  typename ThresholdFilterType::Pointer m_ThresholdFilter;
-  typename ConnectedFilterType::Pointer m_ConnectedComponent;
+  typename ThresholdFilterType::Pointer m_ThresholdFilter{};
+  typename ConnectedFilterType::Pointer m_ConnectedComponent{};
 
-  typename RelabelFilterType::Pointer m_LabeledComponent;
+  typename RelabelFilterType::Pointer m_LabeledComponent{};
 
-  typename MinMaxCalculatorType::Pointer m_MinMaxCalculator;
+  typename MinMaxCalculatorType::Pointer m_MinMaxCalculator{};
 
   // Variables defined by the user
-  unsigned int m_MinimumObjectSizeInPixels;
+  unsigned int m_MinimumObjectSizeInPixels{};
 
   // Binary threshold variables
-  OutputPixelType m_OutsideValue;
-  OutputPixelType m_InsideValue;
+  OutputPixelType m_OutsideValue{};
+  OutputPixelType m_InsideValue{};
 
-  PixelType m_LowerBoundary;
-  PixelType m_UpperBoundary;
+  PixelType m_LowerBoundary{};
+  PixelType m_UpperBoundary{};
 
   // Filter variables
-  PixelType     m_ThresholdValue;
-  SizeValueType m_NumberOfObjects;
+  PixelType     m_ThresholdValue{};
+  SizeValueType m_NumberOfObjects{};
 };
 } // end namespace itk
 

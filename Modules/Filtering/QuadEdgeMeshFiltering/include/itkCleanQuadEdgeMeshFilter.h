@@ -44,7 +44,7 @@ public:
   using Superclass = QuadEdgeMeshToQuadEdgeMeshFilter<TInputMesh, TOutputMesh>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(CleanQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(CleanQuadEdgeMeshFilter);
 
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
@@ -124,12 +124,12 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  InputCoordRepType m_AbsoluteTolerance;
-  InputCoordRepType m_RelativeTolerance;
+  InputCoordRepType m_AbsoluteTolerance{};
+  InputCoordRepType m_RelativeTolerance{};
 
-  BoundingBoxPointer m_BoundingBox;
-  CriterionPointer   m_Criterion;
-  DecimationPointer  m_Decimation;
+  BoundingBoxPointer m_BoundingBox{};
+  CriterionPointer   m_Criterion{};
+  DecimationPointer  m_Decimation{};
 };
 } // end namespace itk
 

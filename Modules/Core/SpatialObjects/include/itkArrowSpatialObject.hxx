@@ -21,7 +21,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 ArrowSpatialObject<TDimension>::ArrowSpatialObject()
 {
@@ -51,7 +51,6 @@ ArrowSpatialObject<TDimension>::Clear()
   this->Modified();
 }
 
-/** Compute the bounding box */
 template <unsigned int TDimension>
 void
 ArrowSpatialObject<TDimension>::ComputeMyBoundingBox()
@@ -64,7 +63,6 @@ ArrowSpatialObject<TDimension>::ComputeMyBoundingBox()
   this->GetModifiableMyBoundingBoxInObjectSpace()->SetMaximum(pnt);
 }
 
-/** Check if a given point is on the arrow */
 template <unsigned int TDimension>
 bool
 ArrowSpatialObject<TDimension>::IsInsideInObjectSpace(const PointType & point) const
@@ -140,7 +138,6 @@ ArrowSpatialObject<TDimension>::GetLengthInWorldSpace() const
   return len;
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 ArrowSpatialObject<TDimension>::InternalClone() const
@@ -152,7 +149,7 @@ ArrowSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
   rval->SetDirectionInObjectSpace(this->GetDirectionInObjectSpace());
   rval->SetPositionInObjectSpace(this->GetPositionInObjectSpace());
@@ -165,11 +162,14 @@ template <unsigned int TDimension>
 void
 ArrowSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  os << indent << "ArrowSpatialObject(" << this << ")" << std::endl;
   Superclass::PrintSelf(os, indent);
-  os << indent << "Object Position = " << m_PositionInObjectSpace << std::endl;
-  os << indent << "Object Direction = " << m_DirectionInObjectSpace << std::endl;
-  os << indent << "Object Length = " << m_LengthInObjectSpace << std::endl;
+
+  os << indent << "DirectionInObjectSpace: "
+     << static_cast<typename NumericTraits<VectorType>::PrintType>(m_DirectionInObjectSpace) << std::endl;
+  os << indent
+     << "PositionInObjectSpace: " << static_cast<typename NumericTraits<PointType>::PrintType>(m_PositionInObjectSpace)
+     << std::endl;
+  os << indent << "LengthInObjectSpace: " << m_LengthInObjectSpace << std::endl;
 }
 } // end namespace itk
 

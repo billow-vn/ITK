@@ -23,14 +23,14 @@
 
 namespace itk
 {
-/**\class RecursiveGaussianImageFilterEnums
+/** \class RecursiveGaussianImageFilterEnums
  * \brief Contains all enum classes used by RecursiveGaussianImageFilter class.
  * \ingroup ITKSmoothing
  */
 class RecursiveGaussianImageFilterEnums
 {
 public:
-  /**\class GaussianOrder
+  /** \class GaussianOrder
 * \ingroup ITKSmoothing
 * Enum type that indicates if the filter applies the equivalent operation
 of convolving with a gaussian, first derivative of a gaussian or the
@@ -59,7 +59,7 @@ static constexpr GaussianOrderEnum SecondOrder = GaussianOrderEnum::SecondOrder;
 #endif
 
 /**
- *\class RecursiveGaussianImageFilter
+ * \class RecursiveGaussianImageFilter
  * \brief Base class for computing IIR convolution with an approximation of a  Gaussian kernel.
  *
  *    \f[
@@ -115,7 +115,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro that defines a name for this class */
-  itkTypeMacro(RecursiveGaussianImageFilter, RecursiveSeparableImageFilter);
+  itkOverrideGetNameOfClassMacro(RecursiveGaussianImageFilter);
 
   /** Set/Get the Sigma, measured in world coordinates, of the Gaussian
    * kernel.  The default is 1.0. An exception will be generated if
@@ -178,6 +178,7 @@ public:
      */
   itkSetMacro(NormalizeAcrossScale, bool);
   itkGetConstMacro(NormalizeAcrossScale, bool);
+  itkBooleanMacro(NormalizeAcrossScale);
 
   /** Set/Get the Order of the Gaussian to convolve with.
       \li ZeroOrder is equivalent to convolving with a Gaussian.  This
@@ -255,12 +256,12 @@ private:
   ComputeRemainingCoefficients(bool symmetric);
 
   /** Sigma of the gaussian kernel. */
-  ScalarRealType m_Sigma;
+  ScalarRealType m_Sigma{};
 
   /** Normalize the image across scale space */
-  bool m_NormalizeAcrossScale;
+  bool m_NormalizeAcrossScale{};
 
-  GaussianOrderEnum m_Order;
+  GaussianOrderEnum m_Order{};
 };
 } // end namespace itk
 

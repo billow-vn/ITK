@@ -74,7 +74,7 @@ namespace itk
  * The variance can be set via methods SetFixedImageStandardDeviation()
  * and SetMovingImageStandardDeviation().
  *
- * Implementaton of this class is based on:
+ * Implementation of this class is based on:
  * Viola, P. and Wells III, W. (1997).
  * "Alignment by Maximization of Mutual Information"
  * International Journal of Computer Vision, 24(2):137-154
@@ -106,7 +106,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MutualInformationImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(MutualInformationImageToImageMetric);
 
   /** Types inherited from Superclass. */
   using typename Superclass::TransformType;
@@ -137,11 +137,11 @@ public:
   void
   GetDerivative(const ParametersType & parameters, DerivativeType & derivative) const override;
 
-  /**  Get the value. */
+  /** Get the value. */
   MeasureType
   GetValue(const ParametersType & parameters) const override;
 
-  /**  Get the value and derivatives for single valued optimizers. */
+  /** Get the value and derivatives for single valued optimizers. */
   void
   GetValueAndDerivative(const ParametersType & parameters,
                         MeasureType &          value,
@@ -213,29 +213,41 @@ private:
 
   /** Container to store sample set  A - used to approximate the probability
    * density function (pdf). */
-  mutable SpatialSampleContainer m_SampleA;
+  mutable SpatialSampleContainer m_SampleA{};
 
   /** Container to store sample set  B - used to approximate the mutual
    * information value. */
-  mutable SpatialSampleContainer m_SampleB;
+  mutable SpatialSampleContainer m_SampleB{};
 
-  unsigned int m_NumberOfSpatialSamples;
-  double       m_MovingImageStandardDeviation;
-  double       m_FixedImageStandardDeviation;
-  double       m_MinProbability;
+  unsigned int m_NumberOfSpatialSamples{};
+  double       m_MovingImageStandardDeviation{};
+  double       m_FixedImageStandardDeviation{};
+  double       m_MinProbability{};
 
-  typename KernelFunctionType::Pointer m_KernelFunction;
+  typename KernelFunctionType::Pointer m_KernelFunction{};
 
   /** Uniformly select samples from the fixed image buffer.
+   *
+   * Each sample consists of:
+   *  - the fixed image value
+   *  - the corresponding moving image value
+   *
    * \warning Note that this method has a different signature than the one in
    * the base OptImageToImageMetric and therefore they are not intended to
    * provide polymorphism. That is, this function is not overriding the one in
-   * the base class. */
+   * the base class.
+   */
   virtual void
   SampleFixedImageDomain(SpatialSampleContainer & samples) const;
 
-  /**
-   * Calculate the intensity derivatives at a point
+  /*
+   * Calculate derivatives of the image intensity at the specified point with respect to the transform parameters.
+   *
+   * \todo This should really be done by the mapper.
+   *
+   * \todo This is a temporary solution until this feature is implemented
+   * in the mapper. This solution only works for any transform
+   * that support ComputeJacobianWithRespectToParameters()
    */
   void
   CalculateDerivatives(const FixedImagePointType &, DerivativeType &, TransformJacobianType &) const;
@@ -243,7 +255,7 @@ private:
   using typename Superclass::CoordinateRepresentationType;
   using DerivativeFunctionType = CentralDifferenceImageFunction<MovingImageType, CoordinateRepresentationType>;
 
-  typename DerivativeFunctionType::Pointer m_DerivativeCalculator;
+  typename DerivativeFunctionType::Pointer m_DerivativeCalculator{};
 };
 } // end namespace itk
 

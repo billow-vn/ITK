@@ -29,7 +29,7 @@ MultiphaseDenseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputIm
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "m_ReinitializeCounter: " << m_ReinitializeCounter << std::endl;
+  os << indent << "ReinitializeCounter: " << m_ReinitializeCounter << std::endl;
 }
 
 template <typename TInputImage, typename TFeatureImage, typename TOutputImage, typename TFunction, typename TIdCell>
@@ -49,8 +49,7 @@ MultiphaseDenseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputIm
 
     // Find the index of the target image where this Level Set
     // should be pasted.
-    OutputIndexType start;
-    output->TransformPhysicalPointToIndex(origin, start);
+    const OutputIndexType start = output->TransformPhysicalPointToIndex(origin);
 
     OutputRegionType region;
     region.SetSize(size);
@@ -58,7 +57,7 @@ MultiphaseDenseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputIm
 
     if (!input || !output)
     {
-      itkExceptionMacro(<< "Either input and/or output is nullptr.");
+      itkExceptionMacro("Either input and/or output is nullptr.");
     }
 
     ImageRegionConstIterator<InputImageType> in(input, input->GetBufferedRegion());

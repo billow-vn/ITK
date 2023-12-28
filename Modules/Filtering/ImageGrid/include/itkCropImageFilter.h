@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class CropImageFilter
+ * \class CropImageFilter
  * \brief Decrease the image size by cropping the image by an itk::Size at
  * both the upper and lower bounds of the largest possible region.
  *
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CropImageFilter, ExtractImageFilter);
+  itkOverrideGetNameOfClassMacro(CropImageFilter);
 
   /** Typedef to describe the output and input image region types. */
   using typename Superclass::OutputImageRegionType;
@@ -116,8 +116,8 @@ protected:
   VerifyInputInformation() ITKv5_CONST override;
 
 private:
-  SizeType m_UpperBoundaryCropSize;
-  SizeType m_LowerBoundaryCropSize;
+  SizeType m_UpperBoundaryCropSize{};
+  SizeType m_LowerBoundaryCropSize{};
 };
 } // end namespace itk
 

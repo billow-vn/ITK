@@ -119,10 +119,10 @@ BinaryImageToLabelMapFilter<TInputImage, TOutputImage>::GenerateData()
   // check for overflow exception here
   if (m_NumberOfObjects > static_cast<SizeValueType>(NumericTraits<OutputPixelType>::max()))
   {
-    itkExceptionMacro(<< "Number of objects (" << m_NumberOfObjects << ") greater than maximum of output pixel type ("
-                      << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(
-                           NumericTraits<OutputPixelType>::max())
-                      << ").");
+    itkExceptionMacro("Number of objects (" << m_NumberOfObjects << ") greater than maximum of output pixel type ("
+                                            << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(
+                                                 NumericTraits<OutputPixelType>::max())
+                                            << ").");
   }
 
   for (SizeValueType thisIdx = 0; thisIdx < linecount; ++thisIdx)
@@ -153,14 +153,12 @@ BinaryImageToLabelMapFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateD
   const RegionType & outputRegionForThread)
 {
   const TInputImage * input = this->GetInput();
-  using InputLineIteratorType = ImageScanlineConstIterator<InputImageType>;
-  InputLineIteratorType inLineIt(input, outputRegionForThread);
 
   WorkUnitData  workUnitData = this->CreateWorkUnitData(outputRegionForThread);
   SizeValueType lineId = workUnitData.firstLine;
 
   SizeValueType nbOfLabels = 0;
-  for (inLineIt.GoToBegin(); !inLineIt.IsAtEnd(); inLineIt.NextLine())
+  for (ImageScanlineConstIterator inLineIt(input, outputRegionForThread); !inLineIt.IsAtEnd(); inLineIt.NextLine())
   {
     LineEncodingType thisLine;
     while (!inLineIt.IsAtEndOfLine())
@@ -195,7 +193,7 @@ BinaryImageToLabelMapFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateD
   }
 
   this->m_NumberOfLabels.fetch_add(nbOfLabels, std::memory_order_relaxed);
-  std::lock_guard<std::mutex> mutexHolder(this->m_Mutex);
+  const std::lock_guard<std::mutex> lockGuard(this->m_Mutex);
   this->m_WorkUnitResults.push_back(workUnitData);
 }
 

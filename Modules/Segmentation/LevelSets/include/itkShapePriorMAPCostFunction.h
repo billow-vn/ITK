@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShapePriorMAPCostFunction, ShapePriorMAPCostFunctionBase);
+  itkOverrideGetNameOfClassMacro(ShapePriorMAPCostFunction);
 
   /**  ParametersType type alias.
    *  It defines a position in the optimization search space. */
@@ -121,7 +121,7 @@ public:
 
   /** Compute the gradient term component of the MAP cost function.
    * In particular, this method assume that ( 1 - FeatureImage ) approximates
-   * a Gaussian (zero mean, unit variance) algon the normal of the evolving contour.
+   * a Gaussian (zero mean, unit variance) along the normal of the evolving contour.
    * The gradient term is then given by a Laplacian of the goodness of fit of
    * the Gaussian. */
   MeasureType
@@ -153,11 +153,11 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ArrayType   m_ShapeParameterMeans;
-  ArrayType   m_ShapeParameterStandardDeviations;
-  WeightsType m_Weights;
+  ArrayType   m_ShapeParameterMeans{};
+  ArrayType   m_ShapeParameterStandardDeviations{};
+  WeightsType m_Weights{};
 
-  typename GaussianKernelFunction<double>::Pointer m_GaussianFunction;
+  typename GaussianKernelFunction<double>::Pointer m_GaussianFunction{};
 };
 } // end namespace itk
 

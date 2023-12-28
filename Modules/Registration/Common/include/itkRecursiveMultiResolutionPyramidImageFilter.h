@@ -26,7 +26,7 @@ namespace itk
 /** \class RecursiveMultiResolutionPyramidImageFilter
  * \brief Creates a multi-resolution pyramid using a recursive implementation.
  *
- * RecursiveMultiResolutionPyramidImageFilter creates an image pryamid
+ * RecursiveMultiResolutionPyramidImageFilter creates an image pyramid
  * according to a user defined multi-resolution schedule.
  *
  * If a schedule is downward divisible, a fast recursive implementation is
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RecursiveMultiResolutionPyramidImageFilter, MultiResolutionPyramidImageFilter);
+  itkOverrideGetNameOfClassMacro(RecursiveMultiResolutionPyramidImageFilter);
 
   /** ImageDimension enumeration. */
   static constexpr unsigned int ImageDimension = Superclass::ImageDimension;
@@ -109,8 +109,6 @@ public:
 protected:
   RecursiveMultiResolutionPyramidImageFilter();
   ~RecursiveMultiResolutionPyramidImageFilter() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Generate the output data. */
   void

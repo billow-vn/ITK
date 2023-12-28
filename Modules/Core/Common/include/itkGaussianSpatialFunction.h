@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianSpatialFunction, SpatialFunction);
+  itkOverrideGetNameOfClassMacro(GaussianSpatialFunction);
 
   /** Input type for the function. */
   using typename Superclass::InputType;
@@ -89,15 +89,15 @@ public:
   itkGetConstMacro(Mean, ArrayType);
 
 protected:
-  GaussianSpatialFunction();
+  GaussianSpatialFunction() = default;
   ~GaussianSpatialFunction() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ArrayType m_Sigma;
+  ArrayType m_Sigma{ ArrayType::Filled(5.0) };
 
-  ArrayType m_Mean;
+  ArrayType m_Mean{ ArrayType::Filled(10.0) };
 
   double m_Scale{ 1.0 };
 

@@ -39,6 +39,7 @@ namespace itk
 PyCommand::PyCommand()
 {
   this->m_Object = nullptr;
+  this->m_EmptyArgumentList = Py_BuildValue("()", 0);
 }
 
 
@@ -50,6 +51,13 @@ PyCommand::~PyCommand()
     Py_DECREF(this->m_Object);
   }
   this->m_Object = nullptr;
+
+  if (this->m_EmptyArgumentList)
+  {
+    PyGILStateEnsure gil;
+    Py_DECREF(this->m_EmptyArgumentList);
+  }
+  this->m_EmptyArgumentList = nullptr;
 }
 
 
@@ -108,13 +116,13 @@ PyCommand::PyExecute()
     // we throw a standard ITK exception: this makes it possible for
     // our standard Swig exception handling logic to take this
     // through to the invoking Python process
-    itkExceptionMacro(<< "CommandCallable is not a callable Python object, "
+    itkExceptionMacro("CommandCallable is not a callable Python object, "
                       << "or it has not been set.");
   }
   else
   {
     PyGILStateEnsure gil;
-    PyObject *       result = PyEval_CallObject(this->m_Object, (PyObject *)nullptr);
+    PyObject *       result = PyObject_Call(this->m_Object, this->m_EmptyArgumentList, (PyObject *)nullptr);
 
     if (result)
     {
@@ -126,7 +134,7 @@ PyCommand::PyExecute()
       PyErr_Print();
       // make sure the invoking Python code knows there was a problem
       // by raising an exception
-      itkExceptionMacro(<< "There was an error executing the "
+      itkExceptionMacro("There was an error executing the "
                         << "CommandCallable.");
     }
   }

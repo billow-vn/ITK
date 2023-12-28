@@ -137,7 +137,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(WeightedAddImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(WeightedAddImageFilter);
 
   /** Set the weight for the first operand of the weighted addition */
   void
@@ -182,7 +182,7 @@ private:
     return m_Functor;
   }
 
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 };
 } // end namespace itk
 

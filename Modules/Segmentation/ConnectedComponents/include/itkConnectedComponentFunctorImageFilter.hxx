@@ -35,7 +35,7 @@ ConnectedComponentFunctorImageFilter<TInputImage, TOutputImage, TFunctor, TMaskI
 
   InputPixelType        value, neighborValue;
   OutputPixelType       label, originalLabel, neighborLabel;
-  OutputPixelType       maxLabel = NumericTraits<OutputPixelType>::ZeroValue();
+  OutputPixelType       maxLabel{};
   const OutputPixelType maxPossibleLabel = NumericTraits<OutputPixelType>::max();
 
   typename TOutputImage::Pointer     output = this->GetOutput();
@@ -188,7 +188,7 @@ ConnectedComponentFunctorImageFilter<TInputImage, TOutputImage, TFunctor, TMaskI
         // create a new entry label
         if (maxLabel == maxPossibleLabel)
         {
-          itkWarningMacro(<< "ConnectedComponentFunctorImageFilter::GenerateData: Number of labels "
+          itkWarningMacro("ConnectedComponentFunctorImageFilter::GenerateData: Number of labels "
                           << static_cast<long>(maxLabel) << " exceeds number of available labels "
                           << static_cast<long>(maxPossibleLabel) << " for the output type.");
         }
@@ -216,7 +216,7 @@ ConnectedComponentFunctorImageFilter<TInputImage, TOutputImage, TFunctor, TMaskI
     progress.CompletedPixel();
   }
 
-  // Flatten the equavalency table
+  // Flatten the equivalency table
   eqTable->Flatten();
 
   // remap the labels

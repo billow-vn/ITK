@@ -26,7 +26,7 @@ namespace itk
 namespace Accessor
 {
 /**
- *\class TanPixelAccessor
+ * \class TanPixelAccessor
  * \brief Give access to the std::tan() function of a value
  *
  * TanPixelAccessor is templated over an internal type and an
@@ -64,7 +64,7 @@ public:
 } // end namespace Accessor
 
 /**
- *\class TanImageAdaptor
+ * \class TanImageAdaptor
  * \brief Presents an image as being composed of the std::tan() of its pixels
  *
  * Additional casting is performed according to the input and output image
@@ -92,7 +92,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TanImageAdaptor, ImageAdaptor);
+  itkOverrideGetNameOfClassMacro(TanImageAdaptor);
 
 protected:
   TanImageAdaptor() = default;

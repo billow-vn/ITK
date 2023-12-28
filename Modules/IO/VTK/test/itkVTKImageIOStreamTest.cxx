@@ -30,7 +30,7 @@
 namespace itk
 {
 /**
- *\class ConstantImageSource
+ * \class ConstantImageSource
  * Image Source that generates an image with constant pixel value.
  */
 template <class TOutputImage>
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConstantImageSource, GenerateImageSource);
+  itkOverrideGetNameOfClassMacro(ConstantImageSource);
 
   /** Set the value to fill the image. */
   itkSetMacro(Value, typename TOutputImage::PixelType);
@@ -87,9 +87,13 @@ bool
 ImagesEqual(const TImage * img1, const TImage * img2, const typename TImage::RegionType & region)
 {
   if (!img1->GetBufferedRegion().IsInside(region))
+  {
     return false;
+  }
   if (!img2->GetBufferedRegion().IsInside(region))
+  {
     return false;
+  }
 
   itk::ImageRegionConstIterator<TImage> it1(img1, region);
   itk::ImageRegionConstIterator<TImage> it2(img2, region);
@@ -174,12 +178,12 @@ TestStreamWrite(char * file1, unsigned int numberOfStreams = 0)
   if (!imagesEqual)
   {
     std::cout << "[FAILED] writing (" << componentType << ", dim = " << TDimension
-              << ", numberOfStreams = " << numberOfStreams << ")" << std::endl;
+              << ", numberOfStreams = " << numberOfStreams << ')' << std::endl;
     return EXIT_FAILURE;
   }
 
   std::cout << "[PASSED] writing (" << componentType << ", dim = " << TDimension
-            << ", numberOfStreams = " << numberOfStreams << ")" << std::endl;
+            << ", numberOfStreams = " << numberOfStreams << ')' << std::endl;
   return EXIT_SUCCESS;
 }
 
@@ -238,7 +242,7 @@ TestStreamRead(char * file1, unsigned int numberOfStreams = 0)
   }
 
   // Simulate streaming and compares regions
-  numberOfStreams = std::max(1u, std::min(static_cast<unsigned int>(size[TDimension - 1]), numberOfStreams));
+  numberOfStreams = std::clamp(numberOfStreams, 1u, static_cast<unsigned int>(size[TDimension - 1]));
   typename ImageType::SizeValueType width = (size[TDimension - 1] + numberOfStreams - 1) / numberOfStreams;
   typename ImageType::RegionType    totalRegion = consValueImage->GetLargestPossibleRegion();
 
@@ -269,12 +273,12 @@ TestStreamRead(char * file1, unsigned int numberOfStreams = 0)
   if (!imagesEqual)
   {
     std::cout << "[FAILED] reading (" << componentType << ", dim = " << TDimension
-              << ", numberOfStreams = " << numberOfStreams << ")" << std::endl;
+              << ", numberOfStreams = " << numberOfStreams << ')' << std::endl;
     return EXIT_FAILURE;
   }
 
   std::cout << "[PASSED] reading (" << componentType << ", dim = " << TDimension
-            << ", numberOfStreams = " << numberOfStreams << ")" << std::endl;
+            << ", numberOfStreams = " << numberOfStreams << ')' << std::endl;
   return EXIT_SUCCESS;
 }
 

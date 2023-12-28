@@ -98,7 +98,6 @@ MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>::Dyna
   InLineIt.GoToBegin();
   IndexType LineStart;
   // PrevLineStart = InLineIt.GetIndex();
-  InLineIt.GoToBegin();
 
   using HistVecType = typename std::vector<HistogramType>;
   HistVecType HistVec(ImageDimension);
@@ -122,7 +121,7 @@ MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>::Dyna
     IndexType       PrevLineStart = InLineIt.GetIndex();
     for (InLineIt.GoToBeginOfLine(); !InLineIt.IsAtEndOfLine(); ++InLineIt)
     {
-      // Update the historgram
+      // Update the histogram
       IndexType currentIdx = InLineIt.GetIndex();
       outputImage->SetPixel(currentIdx,
                             static_cast<OutputPixelType>(histRef.GetValue(inputImage->GetPixel(currentIdx))));

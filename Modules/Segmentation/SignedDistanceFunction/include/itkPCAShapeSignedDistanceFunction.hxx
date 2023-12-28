@@ -110,14 +110,14 @@ PCAShapeSignedDistanceFunction<TCoordRep, VSpaceDimension, TImage>::Initialize()
   // verify mean image
   if (!m_MeanImage)
   {
-    itkExceptionMacro(<< "MeanImage is not present.");
+    itkExceptionMacro("MeanImage is not present.");
   }
 
   // verify principal component images
   if (m_PrincipalComponentImages.size() < m_NumberOfPrincipalComponents)
   {
-    itkExceptionMacro(<< "PrincipalComponentsImages does not have at least " << m_NumberOfPrincipalComponents
-                      << " number of elements.");
+    itkExceptionMacro("PrincipalComponentsImages does not have at least " << m_NumberOfPrincipalComponents
+                                                                          << " number of elements.");
   }
 
   // verify image buffered region
@@ -127,13 +127,13 @@ PCAShapeSignedDistanceFunction<TCoordRep, VSpaceDimension, TImage>::Initialize()
   {
     if (!m_PrincipalComponentImages[i])
     {
-      itkExceptionMacro(<< "PrincipalComponentImages[" << i << "] is not present.");
+      itkExceptionMacro("PrincipalComponentImages[" << i << "] is not present.");
     }
 
     if (m_PrincipalComponentImages[i]->GetBufferedRegion() != meanImageRegion)
     {
-      itkExceptionMacro(<< "The buffered region of the PrincipalComponentImages[" << i
-                        << "] is different from the MeanImage.");
+      itkExceptionMacro("The buffered region of the PrincipalComponentImages[" << i
+                                                                               << "] is different from the MeanImage.");
     }
   }
 
@@ -168,14 +168,14 @@ PCAShapeSignedDistanceFunction<TCoordRep, VSpaceDimension, TImage>::Evaluate(con
   // transform the point into the shape model space
   PointType mappedPoint = m_Transform->TransformPoint(point);
 
-  itkDebugMacro(<< "mappedPoint:" << mappedPoint);
+  itkDebugMacro("mappedPoint:" << mappedPoint);
 
   using RealType = typename NumericTraits<OutputType>::RealType;
   RealType output;
 
   if (!m_Interpolators[0]->IsInsideBuffer(mappedPoint))
   {
-    itkDebugMacro(<< "use extrapolator");
+    itkDebugMacro("use extrapolator");
     output = m_Extrapolators[0]->Evaluate(mappedPoint);
 
     for (unsigned int i = 0; i < m_NumberOfPrincipalComponents; ++i)
@@ -186,7 +186,7 @@ PCAShapeSignedDistanceFunction<TCoordRep, VSpaceDimension, TImage>::Evaluate(con
   }
   else
   {
-    itkDebugMacro(<< "use interpolator");
+    itkDebugMacro("use interpolator");
     output = m_Interpolators[0]->Evaluate(mappedPoint);
 
     for (unsigned int i = 0; i < m_NumberOfPrincipalComponents; ++i)

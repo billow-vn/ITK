@@ -63,7 +63,7 @@ namespace itk
  * \par IMPORTANT
  * The TSparseOutputImage template parameter must be a sparse image templated
  * over a NodeType which at least has the following members: m_Data,
- * m_InputData, m_Update and m_MAnifoldNormal.
+ * m_InputData, m_Update and m_ManifoldNormal.
  * Depending on the Function object being used it might need other
  * members. For instance, NormalVectorDiffusionFunction will also require that
  * the NodeType has the following additional members: m_Flux.
@@ -84,7 +84,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(ImplicitManifoldNormalVectorFilter, FiniteDifferenceSparseImageFilter);
+  itkOverrideGetNameOfClassMacro(ImplicitManifoldNormalVectorFilter);
 
   /** Standard New macro. */
   itkNewMacro(Self);
@@ -186,31 +186,31 @@ protected:
 
 private:
   /** The finite difference function. */
-  NormalFunctionType * m_NormalFunction;
+  NormalFunctionType * m_NormalFunction{};
 
   /** The number of iterations this filter will execute. */
-  unsigned int m_MaxIteration;
+  unsigned int m_MaxIteration{};
 
   /** The upper and lower limits of the band of the scalar image on which we
       operate. */
-  NodeValueType m_IsoLevelLow, m_IsoLevelHigh;
+  NodeValueType m_IsoLevelLow, m_IsoLevelHigh{};
 
   /** The minimum length a vector is allowed to have to avoid divide by zero. */
-  NodeValueType m_MinVectorNorm;
+  NodeValueType m_MinVectorNorm{};
 
   /** The ON/OFF switch for unsharp masking. Default is OFF. */
-  bool m_UnsharpMaskingFlag;
+  bool m_UnsharpMaskingFlag{};
 
   /** The weight determining the extent of enhancement if unsharp masking is
       turned on. */
-  NodeValueType m_UnsharpMaskingWeight;
+  NodeValueType m_UnsharpMaskingWeight{};
 
   /** Constants used in computations. */
-  unsigned long m_Indicator[Self::ImageDimension];
-  unsigned int  m_NumVertex;
-  NodeValueType m_DimConst;
-  NodeValueType m_DimConst2;
-  RadiusType    m_ManifoldRadius;
+  unsigned long m_Indicator[Self::ImageDimension]{};
+  unsigned int  m_NumVertex{};
+  NodeValueType m_DimConst{};
+  NodeValueType m_DimConst2{};
+  RadiusType    m_ManifoldRadius{};
 };
 } // end namespace itk
 

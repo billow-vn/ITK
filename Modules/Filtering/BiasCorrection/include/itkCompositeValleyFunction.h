@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class CompositeValleyFunction
+ * \class CompositeValleyFunction
  * \brief Multiple valley shaped curve function
  *
  * Its functional form f(x) is :
@@ -160,7 +160,7 @@ public:
     }
   }
 
-  /** Evalaute the function at point x.  */
+  /** Evaluate the function at point x.  */
   MeasureType
   Evaluate(MeasureType x) override;
 
@@ -186,15 +186,15 @@ protected:
 
 private:
   /** Storage for tissue classes' statistics. */
-  std::vector<TargetClass> m_Targets;
+  std::vector<TargetClass> m_Targets{};
 
   /** The highest mean value + the sigma of the tissue class
    * which has the highest mean value * 9. */
-  double m_UpperBound;
+  double m_UpperBound{};
 
   /** The lowest mean value - the sigma of the tissue class
    * which has the lowest mean value * 9. */
-  double m_LowerBound;
+  double m_LowerBound{};
 }; // end of class
 } // end of namespace itk
 #endif

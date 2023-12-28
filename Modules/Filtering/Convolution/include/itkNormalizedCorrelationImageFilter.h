@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class NormalizedCorrelationImageFilter
+ * \class NormalizedCorrelationImageFilter
  * \brief Computes the normalized correlation of an image and a template.
  *
  * This filter calculates the normalized correlation between an image
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NormalizedCorrelationImageFilter, NeighborhoodOperatorImageFilter);
+  itkOverrideGetNameOfClassMacro(NormalizedCorrelationImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */

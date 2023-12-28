@@ -78,7 +78,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(LevelSetFunction, FiniteDifferenceFunction);
+  itkOverrideGetNameOfClassMacro(LevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   static constexpr unsigned int ImageDimension = Superclass::ImageDimension;
@@ -355,7 +355,7 @@ protected:
   OffsetValueType m_Center{ 0 };
 
   /** Stride length along the y-dimension. */
-  OffsetValueType m_xStride[Self::ImageDimension];
+  OffsetValueType m_xStride[Self::ImageDimension]{};
 
   bool m_UseMinimalCurvature{ false };
 
@@ -368,19 +368,19 @@ protected:
   static VectorType m_ZeroVectorConstant;
 
   /** Epsilon magnitude controls the lower limit for gradient magnitude. */
-  ScalarValueType m_EpsilonMagnitude;
+  ScalarValueType m_EpsilonMagnitude{};
 
   /** Alpha. */
-  ScalarValueType m_AdvectionWeight;
+  ScalarValueType m_AdvectionWeight{};
 
   /** Beta. */
-  ScalarValueType m_PropagationWeight;
+  ScalarValueType m_PropagationWeight{};
 
   /** Gamma. */
-  ScalarValueType m_CurvatureWeight;
+  ScalarValueType m_CurvatureWeight{};
 
-  /** Laplacean smoothing term */
-  ScalarValueType m_LaplacianSmoothingWeight;
+  /** Laplacian smoothing term */
+  ScalarValueType m_LaplacianSmoothingWeight{};
 };
 } // namespace itk
 

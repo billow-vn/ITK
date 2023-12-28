@@ -27,9 +27,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <typename TParametersValueType, unsigned int VDimension>
 ConstantVelocityFieldTransform<TParametersValueType, VDimension>::ConstantVelocityFieldTransform()
   : m_ConstantVelocityField(nullptr)
@@ -69,9 +66,6 @@ ConstantVelocityFieldTransform<TParametersValueType, VDimension>::UpdateTransfor
   this->IntegrateVelocityField();
 }
 
-/**
- * return an inverse transformation
- */
 template <typename TParametersValueType, unsigned int VDimension>
 bool
 ConstantVelocityFieldTransform<TParametersValueType, VDimension>::GetInverse(Self * inverse) const
@@ -94,7 +88,6 @@ ConstantVelocityFieldTransform<TParametersValueType, VDimension>::GetInverse(Sel
   }
 }
 
-// Return an inverse of this transform
 template <typename TParametersValueType, unsigned int VDimension>
 auto
 ConstantVelocityFieldTransform<TParametersValueType, VDimension>::GetInverseTransform() const
@@ -314,9 +307,9 @@ ConstantVelocityFieldTransform<TParametersValueType, VDimension>::IntegrateVeloc
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
-typename ConstantVelocityFieldTransform<TParametersValueType, VDimension>::DisplacementFieldType::Pointer
+auto
 ConstantVelocityFieldTransform<TParametersValueType, VDimension>::CopyDisplacementField(
-  const DisplacementFieldType * toCopy) const
+  const DisplacementFieldType * toCopy) const -> typename DisplacementFieldType::Pointer
 {
   auto rval = DisplacementFieldType::New();
   rval->SetOrigin(toCopy->GetOrigin());
@@ -344,7 +337,7 @@ ConstantVelocityFieldTransform<TParametersValueType, VDimension>::InternalClone(
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   // set the fixed/moving parameters.

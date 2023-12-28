@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class CacheableScalarFunction
+ * \class CacheableScalarFunction
  * \brief function cache implementation
  *
  * This is the base class for continuous scalar functions which
@@ -141,7 +141,7 @@ private:
   SizeValueType m_NumberOfSamples{ 0 };
 
   /** Storage for the precalculated function values. */
-  MeasureArrayType m_CacheTable;
+  MeasureArrayType m_CacheTable{};
 
   /** The upper-bound of domain that is used for filling the cache table. */
   double m_CacheUpperBound{ 0.0 };

@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 GPUBinaryThresholdImageFilter<TInputImage, TOutputImage>::GPUBinaryThresholdImageFilter()
 {
@@ -43,14 +41,13 @@ GPUBinaryThresholdImageFilter<TInputImage, TOutputImage>::GPUBinaryThresholdImag
   validTypes.emplace_back("float");
   validTypes.emplace_back("double");
 
-  defines << "#define DIM_" << TInputImage::ImageDimension << "\n";
+  defines << "#define DIM_" << TInputImage::ImageDimension << '\n';
 
   std::string validTypeName;
   bool        isValid = GetValidTypename(typeid(typename TInputImage::PixelType), validTypes, validTypeName);
   if (isValid)
   {
-    defines << "#define InPixelType " << validTypeName << "\n";
-    defines << "#define OutPixelType " << validTypeName << "\n";
+    defines << "#define InPixelType " << validTypeName << '\n' << "#define OutPixelType " << validTypeName << '\n';
 #ifdef __APPLE__
     // This is to work around a bug in the OpenCL compiler on Mac OS 10.6 and 10.7 with NVidia drivers
     // where the compiler was not handling unsigned char arguments correctly.
@@ -59,17 +56,15 @@ GPUBinaryThresholdImageFilter<TInputImage, TOutputImage>::GPUBinaryThresholdImag
     // is a known workaround to this problem.
     if (validTypeName == "unsigned char")
     {
-      defines << "#define InArgType unsigned short\n";
-      defines << "#define OutArgType unsigned short\n";
+      defines << "#define InArgType unsigned short\n"
+              << "#define OutArgType unsigned short\n";
     }
     else
     {
-      defines << "#define InArgType " << validTypeName << "\n";
-      defines << "#define OutArgType " << validTypeName << "\n";
+      defines << "#define InArgType " << validTypeName << '\n' << "#define OutArgType " << validTypeName << '\n';
     }
 #else
-    defines << "#define InArgType " << validTypeName << "\n";
-    defines << "#define OutArgType " << validTypeName << "\n";
+    defines << "#define InArgType " << validTypeName << '\n' << "#define OutArgType " << validTypeName << '\n';
 #endif
   }
   else
@@ -81,7 +76,7 @@ GPUBinaryThresholdImageFilter<TInputImage, TOutputImage>::GPUBinaryThresholdImag
     {
       if (ii < sz - 1)
       {
-        excpMsg << " " << validTypes[ii] << ",";
+        excpMsg << ' ' << validTypes[ii] << ',';
       }
       else
       {
@@ -110,7 +105,7 @@ GPUBinaryThresholdImageFilter<TInputImage, TOutputImage>::GPUGenerateData()
 
   if (lowerThreshold->Get() > upperThreshold->Get())
   {
-    itkExceptionMacro(<< "Lower threshold cannot be greater than upper threshold.");
+    itkExceptionMacro("Lower threshold cannot be greater than upper threshold.");
   }
 
   // Setup up the functor

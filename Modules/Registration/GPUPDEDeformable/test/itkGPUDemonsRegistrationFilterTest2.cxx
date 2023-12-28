@@ -24,6 +24,7 @@
 #include "itkCommand.h"
 #include "itkCastImageFilter.h"
 #include "itkImageFileWriter.h"
+#include "itkTestingMacros.h"
 
 
 namespace
@@ -78,9 +79,13 @@ FillWithCircle(TImage *                   image,
       distance += itk::Math::sqr(static_cast<double>(index[j]) - center[j]);
     }
     if (distance <= r2)
+    {
       it.Set(foregnd);
+    }
     else
+    {
       it.Set(backgnd);
+    }
     ++it;
   }
 }
@@ -102,13 +107,12 @@ CopyImageBuffer(TImage * input, TImage * output)
 int
 itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
 {
-
-
   if (argc < 3)
   {
-    std::cerr << "Missing Parameters " << std::endl;
-    std::cerr << "Usage: " << argv[0];
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv);
     std::cerr << " fixedImageFile warpedOutputImageFile" << std::endl;
+    return EXIT_FAILURE;
   }
 
   //   using PixelType = unsigned char;
@@ -124,9 +128,7 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
   using SizeType = ImageType::SizeType;
   using RegionType = ImageType::RegionType;
 
-  //--------------------------------------------------------
-  std::cout << "Generate input images and initial deformation field";
-  std::cout << std::endl;
+  std::cout << "Generate input images and initial deformation field" << std::endl;
 
   ImageType::SizeValueType sizeArray[ImageDimension] = { 128, 128 };
   SizeType                 size;
@@ -182,7 +184,6 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
   caster->SetInput(initField);
   caster->InPlaceOff();
 
-  //-------------------------------------------------------------
   std::cout << "Run registration and warp moving" << std::endl;
 
   using RegistrationType = itk::GPUDemonsRegistrationFilter<ImageType, ImageType, FieldType>;
@@ -259,7 +260,6 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
 
   warper->Update();
 
-  // ---------------------------------------------------------
   std::cout << "Compare warped moving and fixed." << std::endl;
 
   // compare the warp and fixed images
@@ -293,8 +293,7 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
     ++warpedIter;
   }
 
-  std::cout << "Number of pixels different: " << numPixelsDifferent;
-  std::cout << std::endl;
+  std::cout << "Number of pixels different: " << numPixelsDifferent << std::endl;
 
   if (numPixelsDifferent > 10)
   {
@@ -304,9 +303,7 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
 
   registrator->Print(std::cout);
 
-  // -----------------------------------------------------------
-  std::cout << "Test running registrator without initial deformation field.";
-  std::cout << std::endl;
+  std::cout << "Test running registrator without initial deformation field." << std::endl;
 
   bool passed = true;
   try
@@ -328,7 +325,7 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  //--------------------------------------------------------------
+  // Test exceptions
   std::cout << "Test exception handling." << std::endl;
 
   std::cout << "Test nullptr moving image. " << std::endl;
@@ -376,6 +373,6 @@ itkGPUDemonsRegistrationFilterTest2(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  std::cout << "Test passed" << std::endl;
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

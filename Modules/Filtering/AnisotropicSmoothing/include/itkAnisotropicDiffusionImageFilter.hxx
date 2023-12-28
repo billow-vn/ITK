@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>::AnisotropicDiffusionImageFilter()
 {
@@ -36,7 +34,6 @@ AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>::AnisotropicDiffusion
   m_GradientMagnitudeIsFixed = false;
 }
 
-/** Prepare for the iteration process. */
 template <typename TInputImage, typename TOutputImage>
 void
 AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>::InitializeIteration()
@@ -71,7 +68,8 @@ AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>::InitializeIteration(
   {
     //    f->SetTimeStep(1.0 / std::pow(2.0,
     // static_cast<double>(ImageDimension)));
-    itkWarningMacro(<< "Anisotropic diffusion unstable time step: " << m_TimeStep << std::endl
+    itkWarningMacro("Anisotropic diffusion unstable time step: "
+                    << m_TimeStep << std::endl
                     << "Stable time step for this image must be smaller than "
                     << minSpacing / std::pow(2.0, static_cast<double>(ImageDimension + 1)));
   }
@@ -104,7 +102,8 @@ template <typename TInputImage, typename TOutputImage>
 void
 AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  Superclass::PrintSelf(os, indent.GetNextIndent());
+  Superclass::PrintSelf(os, indent);
+
   os << indent << "TimeStep: " << m_TimeStep << std::endl;
   os << indent << "ConductanceParameter: " << m_ConductanceParameter << std::endl;
   os << indent << "ConductanceScalingParameter: " << m_ConductanceScalingParameter << std::endl;

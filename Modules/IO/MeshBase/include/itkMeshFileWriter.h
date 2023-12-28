@@ -26,14 +26,14 @@ namespace itk
 {
 
 /**
- *\class MeshFileWriter
+ * \class MeshFileWriter
  * \brief Writes mesh data to a single file.
  *
  * MeshFileWriter writes its input data to a single output file.
  * MeshFileWriter interfaces with an MeshIO class to write out the
  * data.
  *
- * A pluggable factory pattern is used that allows different kinds of writers
+ * A plugable factory pattern is used that allows different kinds of writers
  * to be registered (even at run time) without having to modify the
  * code in this class. You can either manually instantiate the MeshIO
  * object and associate it with the MeshFileWriter, or let the class
@@ -41,7 +41,7 @@ namespace itk
  * with a suitable suffix (".vtk", etc) and setting the input
  * to the writer is enough to get the writer to work properly.
  *
- * \author Wanlin Zhu. Uviversity of New South Wales, Australia.
+ * \author Wanlin Zhu. University of New South Wales, Australia.
  *
  * \sa MeshIOBase
  *
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshFileWriter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(MeshFileWriter);
 
   /** Some convenient type alias. */
   using InputMeshType = TInputMesh;
@@ -176,14 +176,14 @@ protected:
   WriteCellData();
 
 private:
-  std::string         m_FileName;
-  MeshIOBase::Pointer m_MeshIO;
-  bool                m_UserSpecifiedMeshIO; // track whether the MeshIO is
-                                             // user specified
-  bool m_FactorySpecifiedMeshIO;             // track whether the factory
-                                             // mechanism set the MeshIO
-  bool m_UseCompression;
-  bool m_FileTypeIsBINARY;
+  std::string         m_FileName{};
+  MeshIOBase::Pointer m_MeshIO{};
+  bool                m_UserSpecifiedMeshIO{}; // track whether the MeshIO is
+                                               // user specified
+  bool m_FactorySpecifiedMeshIO{};             // track whether the factory
+                                               // mechanism set the MeshIO
+  bool m_UseCompression{};
+  bool m_FileTypeIsBINARY{};
 };
 
 
@@ -196,7 +196,7 @@ ITK_TEMPLATE_EXPORT void
 WriteMesh(TMeshPointer && mesh, const std::string & filename, bool compress = false)
 {
   using NonReferenceMeshPointer = std::remove_reference_t<TMeshPointer>;
-  static_assert(std::is_pointer<NonReferenceMeshPointer>::value || mpl::IsSmartPointer<NonReferenceMeshPointer>::Value,
+  static_assert(std::is_pointer_v<NonReferenceMeshPointer> || mpl::IsSmartPointer<NonReferenceMeshPointer>::Value,
                 "WriteMesh requires a raw pointer or SmartPointer.");
 
   using MeshType = std::remove_const_t<std::remove_reference_t<decltype(*mesh)>>;

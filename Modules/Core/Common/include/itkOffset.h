@@ -139,7 +139,7 @@ public:
 
   /** Subtract two offsets. */
   const Self
-  operator-(const Self & vec)
+  operator-(const Self & vec) const
   {
     Self result;
 
@@ -460,7 +460,7 @@ template <unsigned int VDimension>
 std::ostream &
 operator<<(std::ostream & os, const Offset<VDimension> & ind)
 {
-  os << "[";
+  os << '[';
   unsigned int dimlim = VDimension - 1;
   for (unsigned int i = 0; i < dimlim; ++i)
   {
@@ -470,7 +470,7 @@ operator<<(std::ostream & os, const Offset<VDimension> & ind)
   {
     os << ind[VDimension - 1];
   }
-  os << "]";
+  os << ']';
   return os;
 }
 
@@ -525,10 +525,6 @@ swap(Offset<VDimension> & one, Offset<VDimension> & two)
 {
   std::swap(one.m_InternalArray, two.m_InternalArray);
 }
-
-// static constexpr definition explicitly needed in C++11
-template <unsigned int VDimension>
-constexpr unsigned int Offset<VDimension>::Dimension;
 
 } // end namespace itk
 

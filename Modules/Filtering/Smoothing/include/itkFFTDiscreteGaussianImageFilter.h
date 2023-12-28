@@ -26,7 +26,7 @@
 
 namespace itk
 {
-/**\class FFTDiscreteGaussianImageFilterEnums
+/** \class FFTDiscreteGaussianImageFilterEnums
  * \brief Contains all enum classes used by FFTDiscreteGaussianImageFilter class.
  * \ingroup ITKSmoothing
  */
@@ -94,7 +94,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTDiscreteGaussianImageFilter, DiscreteGaussianImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTDiscreteGaussianImageFilter);
 
   /** Image type information. */
   using InputImageType = typename Superclass::InputImageType;
@@ -178,7 +178,7 @@ private:
     FFTDiscreteGaussianImageFilterEnums::KernelSource::OPERATORS;
 
   /* Kernel image is allocated with GenerateKernelImage() */
-  typename RealImageType::Pointer m_KernelImage;
+  typename RealImageType::Pointer m_KernelImage{};
 
   /* Persist mini-pipeline filter to minimize construction costs
    * on repeated calls to GenerateData() */

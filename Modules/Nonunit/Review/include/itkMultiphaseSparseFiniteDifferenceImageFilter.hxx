@@ -751,7 +751,7 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
       distance = outputIt.GetCenterPixel() / gradientMagnitude;
 
       // Insert in the update buffer
-      sparsePtr->m_UpdateBuffer.push_back(std::min(std::max(-MIN_NORM, distance), MIN_NORM));
+      sparsePtr->m_UpdateBuffer.push_back(std::clamp(distance, -MIN_NORM, MIN_NORM));
       ++activeIt;
     }
 
@@ -814,7 +814,7 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
 
   unsigned int    i;
   ValueType       value_temp, delta;
-  ValueType       value = NumericTraits<ValueType>::ZeroValue(); // warnings
+  ValueType       value{}; // warnings
   bool            found_neighbor_flag;
   LayerIterator   toIt;
   LayerNodeType * node;
@@ -1024,15 +1024,15 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
     // Initialize the boundary pixels in the status image to
     // m_StatusBoundaryPixel values.  Uses the face calculator to find all of
     // the region faces.
-    BFCType                        faceCalculator;
-    typename BFCType::FaceListType faceList;
+    BFCType faceCalculator;
 
     // Set the difference function radius here
     typename BFCType::SizeType               sz = this->m_DifferenceFunctions[fId]->GetRadius();
     typename BFCType::FaceListType::iterator fit;
 
     // Compute the boundary pixel regions set in a container
-    faceList = faceCalculator(sparsePtr->m_StatusImage, sparsePtr->m_StatusImage->GetRequestedRegion(), sz);
+    typename BFCType::FaceListType faceList =
+      faceCalculator(sparsePtr->m_StatusImage, sparsePtr->m_StatusImage->GetRequestedRegion(), sz);
 
     // Iterate over the boundary region sets
     fit = faceList.begin();
@@ -1072,8 +1072,8 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
     // Throw an exception if we don't have enough layers.
     if (sparsePtr->m_Layers.size() < 3)
     {
-      itkExceptionMacro(<< "Not enough layers have been allocated for the"
-                           "sparse field.  Requires at least one layer.");
+      itkExceptionMacro("Not enough layers have been allocated for the"
+                        "sparse field.  Requires at least one layer.");
     }
   }
 
@@ -1353,8 +1353,7 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
     ImageRegionIterator<InputImageType> inIt(this->m_LevelSet[fId], this->m_LevelSet[fId]->GetRequestedRegion());
 
     // In the context of the global coordinates
-    OutputIndexType start;
-    output->TransformPhysicalPointToIndex(origin, start);
+    const OutputIndexType start = output->TransformPhysicalPointToIndex(origin);
 
     // Defining sub-region in the global coordinates
     OutputRegionType region;
@@ -1363,7 +1362,7 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
 
     if (!input || !output)
     {
-      itkExceptionMacro(<< "Either input and/or output is nullptr.");
+      itkExceptionMacro("Either input and/or output is nullptr.");
     }
 
     ImageRegionIterator<OutputImageType> outIt(output, region);
@@ -1409,7 +1408,40 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
      << std::endl;
   os << indent << "StatusNull: " << static_cast<typename NumericTraits<StatusType>::PrintType>(m_StatusNull)
      << std::endl;
-  os << indent << "SparseData: " << m_SparseData << std::endl;
+
+  os << indent << "SparseData: ";
+  for (IdCellType i = 0; i < this->m_FunctionCount; ++i)
+  {
+    SparseDataStruct * sparsePtr = this->m_SparseData[i];
+
+    os << indent.GetNextIndent() << "Layers: " << sparsePtr->m_Layers << std::endl;
+
+    os << indent.GetNextIndent() << "StatusImage: ";
+    if (sparsePtr->m_StatusImage != nullptr)
+    {
+      os << sparsePtr->m_StatusImage << std::endl;
+    }
+    else
+    {
+      os << "(null)" << std::endl;
+    }
+
+    os << indent.GetNextIndent() << "LayerNodeStore: ";
+    if (sparsePtr->m_LayerNodeStore != nullptr)
+    {
+      os << sparsePtr->m_LayerNodeStore << std::endl;
+    }
+    else
+    {
+      os << "(null)" << std::endl;
+    }
+
+    os << indent.GetNextIndent() << "UpdateBuffer: " << sparsePtr->m_UpdateBuffer << std::endl;
+
+    os << indent.GetNextIndent()
+       << "Index: " << static_cast<typename NumericTraits<IdCellType>::PrintType>(sparsePtr->m_Index) << std::endl;
+  }
+
   os << indent << "NumberOfLayers: " << m_NumberOfLayers << std::endl;
   os << indent << "IsoSurfaceValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_IsoSurfaceValue)
      << std::endl;
@@ -1420,21 +1452,6 @@ MultiphaseSparseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputI
   os << indent << "RMSSum: " << m_RMSSum << std::endl;
   os << indent << "RMSCounter: " << m_RMSCounter << std::endl;
   os << indent << "BoundsCheckingActive: " << m_BoundsCheckingActive << std::endl;
-
-  for (IdCellType i = 0; i < this->m_FunctionCount; ++i)
-  {
-    SparseDataStruct * sparsePtr = this->m_SparseData[i];
-    os << indent << "m_LayerNodeStore: " << std::endl;
-    sparsePtr->m_LayerNodeStore->Print(os, indent.GetNextIndent());
-    for (i = 0; i < sparsePtr->m_Layers.size(); ++i)
-    {
-      os << indent << "m_Layers[" << i << "]: size=" << sparsePtr->m_Layers[i]->Size() << std::endl;
-      os << indent << sparsePtr->m_Layers[i];
-    }
-
-    os << indent << "m_UpdateBuffer: size=" << static_cast<InputSizeValueType>(sparsePtr->m_UpdateBuffer.size())
-       << " capacity = " << static_cast<InputSizeValueType>(sparsePtr->m_UpdateBuffer.capacity()) << std::endl;
-  }
 }
 } // end namespace itk
 

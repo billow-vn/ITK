@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class LSMImageIOFactory
+ * \class LSMImageIOFactory
  * \brief Create instances of LSMImageIO objects using an object factory.
  * \ingroup ITKIOLSM
  */
@@ -61,7 +61,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LSMImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(LSMImageIOFactory);
 
   /** Register one factory of this type  */
   static void

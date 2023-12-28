@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWComplexToComplex1DFFTImageFilter, ComplexToComplex1DFFTImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTWComplexToComplex1DFFTImageFilter);
 
 
 protected:
@@ -88,17 +88,17 @@ private:
   void
   operator=(const Self &); // purposely not implemented
 
-  ImageRegionSplitterDirection::Pointer m_ImageRegionSplitter;
+  ImageRegionSplitterDirection::Pointer m_ImageRegionSplitter{};
 
   /** Destroy FFTW Plans and associated buffers. */
   void
   DestroyPlans();
 
   bool                  m_PlanComputed{ false };
-  PlanArrayType         m_PlanArray;
+  PlanArrayType         m_PlanArray{};
   unsigned int          m_LastImageSize{ 0 };
-  PlanBufferPointerType m_InputBufferArray;
-  PlanBufferPointerType m_OutputBufferArray;
+  PlanBufferPointerType m_InputBufferArray{};
+  PlanBufferPointerType m_OutputBufferArray{};
 };
 
 

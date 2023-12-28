@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class PNGImageIO
+ * \class PNGImageIO
  *
  * \brief ImageIO object for reading and writing PNG images
  *
@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PNGImageIO, ImageIOBase);
+  itkOverrideGetNameOfClassMacro(PNGImageIO);
 
   /** Get a const ref to the palette of the image. In the case of non palette
    * image or ExpandRGBPalette set to true, a vector of size
@@ -117,7 +117,7 @@ protected:
   WriteSlice(const std::string & fileName, const void * const buffer);
 
 
-  PaletteType m_ColorPalette;
+  PaletteType m_ColorPalette{};
 };
 } // end namespace itk
 

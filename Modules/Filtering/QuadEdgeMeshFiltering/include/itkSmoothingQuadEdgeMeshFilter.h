@@ -66,7 +66,7 @@ public:
   using Superclass = QuadEdgeMeshToQuadEdgeMeshFilter<TInputMesh, TOutputMesh>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(SmoothingQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(SmoothingQuadEdgeMeshFilter);
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
 
@@ -114,23 +114,23 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  CoefficientsComputation * m_CoefficientsMethod;
+  CoefficientsComputation * m_CoefficientsMethod{};
 
   using InputOutputDelaunayConformingType = DelaunayConformingQuadEdgeMeshFilter<InputMeshType, OutputMeshType>;
   using InputOutputDelaunayConformingPointer = typename InputOutputDelaunayConformingType::Pointer;
 
-  InputOutputDelaunayConformingPointer m_InputDelaunayFilter;
+  InputOutputDelaunayConformingPointer m_InputDelaunayFilter{};
 
   using OutputDelaunayConformingType = DelaunayConformingQuadEdgeMeshFilter<OutputMeshType, OutputMeshType>;
   using OutputDelaunayConformingPointer = typename OutputDelaunayConformingType::Pointer;
 
-  OutputDelaunayConformingPointer m_OutputDelaunayFilter;
+  OutputDelaunayConformingPointer m_OutputDelaunayFilter{};
 
-  bool m_DelaunayConforming;
+  bool m_DelaunayConforming{};
 
-  unsigned int m_NumberOfIterations;
+  unsigned int m_NumberOfIterations{};
 
-  OutputCoordType m_RelaxationFactor;
+  OutputCoordType m_RelaxationFactor{};
 
   void
   GenerateData() override;

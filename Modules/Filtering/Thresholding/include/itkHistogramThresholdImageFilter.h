@@ -28,7 +28,7 @@ namespace itk
 {
 
 /**
- *\class HistogramThresholdImageFilter
+ * \class HistogramThresholdImageFilter
  * \brief Threshold an image using a HistogramThresholdCalculator
  *
  * This filter creates a binary thresholded image that separates an
@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(HistogramThresholdImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HistogramThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;
@@ -206,7 +206,7 @@ protected:
     Superclass::VerifyPreconditions();
     if (m_Calculator.IsNull())
     {
-      itkExceptionMacro(<< "No threshold calculator set.");
+      itkExceptionMacro("No threshold calculator set.");
     }
   }
 
@@ -215,13 +215,13 @@ private:
   void
   SetUpHistogramGenerator(HistogramGeneratorPointer histogramGenerator);
 
-  OutputPixelType   m_InsideValue;
-  OutputPixelType   m_OutsideValue;
-  InputPixelType    m_Threshold;
-  MaskPixelType     m_MaskValue;
-  CalculatorPointer m_Calculator;
+  OutputPixelType   m_InsideValue{};
+  OutputPixelType   m_OutsideValue{};
+  InputPixelType    m_Threshold{};
+  MaskPixelType     m_MaskValue{};
+  CalculatorPointer m_Calculator{};
   unsigned int      m_NumberOfHistogramBins{ 256 };
-  bool              m_AutoMinimumMaximum;
+  bool              m_AutoMinimumMaximum{};
   bool              m_MaskOutput{ true };
 };
 

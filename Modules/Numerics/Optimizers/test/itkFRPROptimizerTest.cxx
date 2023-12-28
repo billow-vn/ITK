@@ -44,7 +44,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(FRPRGradientCostFunction, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(FRPRGradientCostFunction);
 
   enum
   {
@@ -66,7 +66,7 @@ public:
     double y = parameters[1];
 
     std::cout << "GetValue( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     MeasureType measure = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -84,7 +84,7 @@ public:
     double y = parameters[1];
 
     std::cout << "GetDerivative( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     DerivativeType temp(SpaceDimension);
@@ -165,8 +165,8 @@ itkFRPROptimizerTest(int, char *[])
 
     ParametersType finalPosition = itkOptimizer->GetCurrentPosition();
     std::cout << "Solution        = (";
-    std::cout << finalPosition[0] << ",";
-    std::cout << finalPosition[1] << ")" << std::endl;
+    std::cout << finalPosition[0] << ',';
+    std::cout << finalPosition[1] << ')' << std::endl;
 
     //
     // check results to see if it is within range
@@ -176,7 +176,9 @@ itkFRPROptimizerTest(int, char *[])
     for (unsigned int j = 0; j < 2; ++j)
     {
       if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > 0.01)
+      {
         pass = false;
+      }
     }
 
     // Exercise various member functions.
@@ -218,8 +220,8 @@ itkFRPROptimizerTest(int, char *[])
 
     ParametersType finalPosition = itkOptimizer->GetCurrentPosition();
     std::cout << "Solution        = (";
-    std::cout << finalPosition[0] << ",";
-    std::cout << finalPosition[1] << ")" << std::endl;
+    std::cout << finalPosition[0] << ',';
+    std::cout << finalPosition[1] << ')' << std::endl;
 
     //
     // check results to see if it is within range
@@ -229,7 +231,9 @@ itkFRPROptimizerTest(int, char *[])
     for (unsigned int j = 0; j < 2; ++j)
     {
       if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > 0.01)
+      {
         pass = false;
+      }
     }
 
     // Exercise various member functions.

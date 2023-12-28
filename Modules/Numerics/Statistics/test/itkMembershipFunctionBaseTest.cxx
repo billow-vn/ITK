@@ -40,7 +40,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(MyMembershipFunctionBase, MembershipFunctionBase);
+  itkOverrideGetNameOfClassMacro(MyMembershipFunctionBase);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -89,9 +89,9 @@ itkMembershipFunctionBaseTest(int, char *[])
   try
   {
     function->SetMeasurementVectorSize(MeasurementVectorSize + 1);
-    std::cerr << "Exception should have been thrown since we are trying to resize\
-                  non-resizeable measurement vector type "
-              << std::endl;
+    std::cerr
+      << "Exception should have been thrown since we are trying to resize non-resizeable measurement vector type "
+      << std::endl;
     return EXIT_FAILURE;
   }
   catch (const itk::ExceptionObject & excp)

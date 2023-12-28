@@ -24,8 +24,8 @@
 namespace itk
 {
 /**
- *\class ZeroCrossingBasedEdgeDetectionImageFilter
- * \brief This filter implements a zero-crossing based edge detecor.
+ * \class ZeroCrossingBasedEdgeDetectionImageFilter
+ * \brief This filter implements a zero-crossing based edge detector.
  *
  * The zero-crossing based edge detector looks for pixels in the Laplacian of
  * an image where the value of the Laplacian passes through zero --- points
@@ -101,7 +101,7 @@ public:
   using OutputImageRegionType = typename TOutputImage::RegionType;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(ZeroCrossingBasedEdgeDetectionImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ZeroCrossingBasedEdgeDetectionImageFilter);
 
   /** ImageDimension enumeration   */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -169,14 +169,14 @@ protected:
 
 private:
   /** The variance of the Gaussian Filter used in this filter */
-  ArrayType m_Variance;
+  ArrayType m_Variance{};
 
   /** The maximum error of the gaussian blurring kernel in each dimensional
    * direction.  */
-  ArrayType m_MaximumError;
+  ArrayType m_MaximumError{};
 
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
 };
 } // end of namespace itk
 

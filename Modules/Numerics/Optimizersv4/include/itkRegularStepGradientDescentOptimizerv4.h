@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class RegularStepGradientDescentOptimizerv4
+ * \class RegularStepGradientDescentOptimizerv4
  *  \brief Regular Step Gradient descent optimizer.
  *
  *   This optimizer is a variant of gradient descent that attempts to prevent it
@@ -36,7 +36,7 @@ namespace itk
  *   The default value for the initial step length is 1, and this value can only
  *   be changed manually via SetLearningRate() since this optimizer does not use
  *   the ScaleEstimator to automatically estimate the learning rate.
- *   Also note that unlike the previous version of ReuglarStepGradientDescentOptimizer,
+ *   Also note that unlike the previous version of RegularStepGradientDescentOptimizer,
  *   ITKv4 does not have a "maximize/minimize" option to modify the effect of
  *   the metric derivative. The assigned metric is assumed to return a parameter
  *   derivative result that "improves" the optimization.
@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegularStepGradientDescentOptimizerv4, GradientDescentOptimizerv4Template);
+  itkOverrideGetNameOfClassMacro(RegularStepGradientDescentOptimizerv4);
 
   /** New macro for creation of through a Smart Pointer. */
   itkNewMacro(Self);
@@ -138,13 +138,13 @@ protected:
 
 
 private:
-  TInternalComputationValueType m_RelaxationFactor;
+  TInternalComputationValueType m_RelaxationFactor{};
 
-  TInternalComputationValueType m_MinimumStepLength;
+  TInternalComputationValueType m_MinimumStepLength{};
 
-  TInternalComputationValueType m_GradientMagnitudeTolerance;
+  TInternalComputationValueType m_GradientMagnitudeTolerance{};
 
-  MeasureType m_CurrentLearningRateRelaxation;
+  MeasureType m_CurrentLearningRateRelaxation{};
 };
 
 } // end namespace itk

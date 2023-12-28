@@ -126,7 +126,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(MorphFunction, LevelSetFunction);
+  itkOverrideGetNameOfClassMacro(MorphFunction);
 
   /**
    * Method for creation through the object factory.
@@ -169,7 +169,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(MorphFilter, ParallelSparseFieldLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(MorphFilter);
 
   /**
    * Method for creation through the object factory.
@@ -208,9 +208,13 @@ private:
   Halt() override
   {
     if (this->GetElapsedIterations() == m_Iterations)
+    {
       return true;
+    }
     else
+    {
       return false;
+    }
   }
 };
 
@@ -226,7 +230,10 @@ itkParallelSparseFieldLevelSetImageFilterTest(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  using ImageType = itk::Image<float, 3>;
+  constexpr unsigned int Dimension = 3;
+
+  using PixelType = float;
+  using ImageType = itk::Image<PixelType, Dimension>;
 
   constexpr int n = 100;                // Number of iterations
   constexpr int numberOfWorkUnits = 11; // Number of work units to be used
@@ -297,16 +304,17 @@ itkParallelSparseFieldLevelSetImageFilterTest(int argc, char * argv[])
   mf->SetIterations(n);
   mf->SetInput(im_init);
   mf->SetNumberOfWorkUnits(numberOfWorkUnits);
-  mf->SetNumberOfLayers(3);
 
-  try
-  {
-    mf->Update();
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << e << std::endl;
-  }
+  typename PSFLSIFT::MorphFilter::StatusType numberOfLayers = 3;
+  mf->SetNumberOfLayers(numberOfLayers);
+  ITK_TEST_SET_GET_VALUE(numberOfLayers, mf->GetNumberOfLayers());
+
+  typename PSFLSIFT::MorphFilter::ValueType isoSurfaceValue = 0.0;
+  mf->SetIsoSurfaceValue(isoSurfaceValue);
+  ITK_TEST_SET_GET_VALUE(isoSurfaceValue, mf->GetIsoSurfaceValue());
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(mf->Update());
+
 
   mf->GetOutput()->Print(std::cout);
 

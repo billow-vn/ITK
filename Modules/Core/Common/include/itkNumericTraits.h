@@ -31,11 +31,12 @@
 
 #include <limits> // for std::numeric_limits
 #include <complex>
+#include <type_traits> // for std::is_floating_point
 
 namespace itk
 {
 
-// forward decare to avoid circular dependencies
+// forward declare to avoid circular dependencies
 template <typename TValue, unsigned int VLength>
 class FixedArray;
 
@@ -186,7 +187,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -365,7 +366,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -471,7 +472,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -593,7 +594,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -697,7 +698,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -799,7 +800,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -902,7 +903,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1004,7 +1005,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1126,7 +1127,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1229,7 +1230,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1332,7 +1333,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1436,7 +1437,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1539,7 +1540,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1650,7 +1651,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1754,7 +1755,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1849,7 +1850,7 @@ public:
   {
     if (s != 1)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
@@ -1924,7 +1925,7 @@ public:
     return val.real() >= 0;
   }
 
-  static constexpr bool IsSigned = std::is_signed<ValueType>::value;
+  static constexpr bool IsSigned = std::is_signed_v<ValueType>;
   static constexpr bool IsInteger = false;
   static constexpr bool IsComplex = true;
   static Self
@@ -1975,10 +1976,16 @@ public:
   {
     if (s != 2)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
+      itkGenericExceptionMacro("Cannot set the size of a complex to " << s);
     }
     m = NumericTraits<ValueType>::ZeroValue();
   }
+
+#if defined(ITK_LEGACY_REMOVE)
+  static_assert(std::is_floating_point_v<TComponent>,
+                "As per https://en.cppreference.com/w/cpp/numeric/complex the behavior is unspecified and may fail to "
+                "compile if TComponent is not float, double, or long double and undefined if T is not NumericType.");
+#endif // defined(ITK_LEGACY_REMOVE)
 };
 /// \endcond
 } // end namespace itk

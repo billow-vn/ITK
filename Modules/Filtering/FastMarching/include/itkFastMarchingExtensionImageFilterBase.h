@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class FastMarchingExtensionImageFilterBase
+ * \class FastMarchingExtensionImageFilterBase
  * \brief Extend auxiliary variables smoothly using Fast Marching.
  *
  * Fast marching can be used to extend auxiliary variables smoothly
@@ -60,7 +60,7 @@ class ITK_TEMPLATE_EXPORT FastMarchingExtensionImageFilterBase : public FastMarc
 public:
   ITK_DISALLOW_COPY_AND_MOVE(FastMarchingExtensionImageFilterBase);
 
-  /** Standard class typdedefs. */
+  /** Standard class typedefs. */
   using Self = FastMarchingExtensionImageFilterBase;
   using Superclass = FastMarchingImageFilterBase<TInput, TOutput>;
   using Pointer = SmartPointer<Self>;
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingExtensionImageFilterBase, FastMarchingImageFilterBase);
+  itkOverrideGetNameOfClassMacro(FastMarchingExtensionImageFilterBase);
 
   /** The dimension of the level set. */
   static constexpr unsigned int ImageDimension = Superclass::ImageDimension;
@@ -144,11 +144,11 @@ protected:
   void
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
-  AuxValueContainerPointer m_AuxiliaryAliveValues;
-  AuxValueContainerPointer m_AuxiliaryTrialValues;
+  AuxValueContainerPointer m_AuxiliaryAliveValues{};
+  AuxValueContainerPointer m_AuxiliaryTrialValues{};
 
 private:
-  AuxImageType * m_AuxImages[VAuxDimension];
+  AuxImageType * m_AuxImages[VAuxDimension]{};
 };
 } // namespace itk
 

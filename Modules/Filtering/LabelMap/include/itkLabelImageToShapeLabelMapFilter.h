@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LabelImageToShapeLabelMapFilter
+ * \class LabelImageToShapeLabelMapFilter
  * \brief Converts a label image to a label map and valuates the shape attributes
  *
  *  A convenient class that converts a label image to a label map and valuates the shape attribute at once.
@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelImageToShapeLabelMapFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelImageToShapeLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -149,10 +149,10 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  bool                 m_ComputeFeretDiameter;
-  bool                 m_ComputePerimeter;
-  bool                 m_ComputeOrientedBoundingBox;
+  OutputImagePixelType m_BackgroundValue{};
+  bool                 m_ComputeFeretDiameter{};
+  bool                 m_ComputePerimeter{};
+  bool                 m_ComputeOrientedBoundingBox{};
 }; // end of class
 } // end namespace itk
 

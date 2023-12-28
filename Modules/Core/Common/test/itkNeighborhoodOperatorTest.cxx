@@ -36,14 +36,14 @@ template <typename T>
 constexpr bool
 IsDefaultConstructibleCopyableNoThrowMovableAndDestructible()
 {
-  return std::is_default_constructible<T>::value && std::is_copy_constructible<T>::value &&
-         std::is_copy_assignable<T>::value && std::is_nothrow_move_constructible<T>::value &&
-         std::is_nothrow_move_assignable<T>::value && std::is_nothrow_destructible<T>::value;
+  return std::is_default_constructible_v<T> && std::is_copy_constructible_v<T> && std::is_copy_assignable_v<T> &&
+         std::is_nothrow_move_constructible_v<T> && std::is_nothrow_move_assignable_v<T> &&
+         std::is_nothrow_destructible_v<T>;
 }
 
-static_assert(std::is_copy_assignable<itk::NeighborhoodOperator<int, 3>>::value,
+static_assert(std::is_copy_assignable_v<itk::NeighborhoodOperator<int, 3>>,
               "NeighborhoodOperator should be copy-assignable.");
-static_assert(std::is_nothrow_move_assignable<itk::NeighborhoodOperator<int, 3>>::value,
+static_assert(std::is_nothrow_move_assignable_v<itk::NeighborhoodOperator<int, 3>>,
               "NeighborhoodOperator should be noexcept move-assignable.");
 
 static_assert(IsDefaultConstructibleCopyableNoThrowMovableAndDestructible<itk::AnnulusOperator<int>>(),
@@ -160,7 +160,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   std::cout << "Testing 2D LaplacianOperator" << std::endl;
   itk::LaplacianOperator<PixelType, Dimension2D, vnl_vector<PixelType>> a2;
@@ -180,7 +180,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   std::cout << "Testing 3D LaplacianOperator" << std::endl;
   itk::LaplacianOperator<PixelType, Dimension3D, vnl_vector<PixelType>> a3;
@@ -200,7 +200,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   std::cout << "Testing SobelOperator2D" << std::endl;
   itk::SobelOperator<PixelType, Dimension2D, vnl_vector<PixelType>> c;
@@ -222,7 +222,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   direction = 1;
   c.SetDirection(direction);
@@ -239,7 +239,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   std::cout << "Testing SobelOperator3D" << std::endl;
   itk::SobelOperator<PixelType, Dimension3D, vnl_vector<PixelType>> c2;
@@ -259,7 +259,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   direction = 1;
   c2.SetDirection(direction);
@@ -276,7 +276,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
   direction = 2;
   c2.SetDirection(direction);
@@ -293,7 +293,7 @@ itkNeighborhoodOperatorTest(int, char *[])
       std::cout << ", ";
     }
   }
-  std::cout << "]" << std::endl << std::endl;
+  std::cout << ']' << std::endl << std::endl;
 
 
   std::cout << "Test finished." << std::endl;

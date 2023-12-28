@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VTKImageExport
+ * \class VTKImageExport
  * \brief Connect the end of an ITK image pipeline to a VTK pipeline.
  *
  * VTKImageExport can be used at the end of an ITK image pipeline to
@@ -65,7 +65,7 @@ public:
   static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKImageExport, VTKImageExportBase);
+  itkOverrideGetNameOfClassMacro(VTKImageExport);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -128,14 +128,14 @@ protected:
   BufferPointerCallback() override;
 
 private:
-  std::string m_ScalarTypeName;
-  int         m_WholeExtent[6];
-  int         m_DataExtent[6];
-  double      m_DataSpacing[3];
-  double      m_DataOrigin[3];
-  double      m_DataDirection[9];
-  float       m_FloatDataSpacing[3];
-  float       m_FloatDataOrigin[3];
+  std::string m_ScalarTypeName{};
+  int         m_WholeExtent[6]{};
+  int         m_DataExtent[6]{};
+  double      m_DataSpacing[3]{};
+  double      m_DataOrigin[3]{};
+  double      m_DataDirection[9]{};
+  float       m_FloatDataSpacing[3]{};
+  float       m_FloatDataOrigin[3]{};
 };
 } // end namespace itk
 

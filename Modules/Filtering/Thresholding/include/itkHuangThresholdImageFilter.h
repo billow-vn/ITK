@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class HuangThresholdImageFilter
+ * \class HuangThresholdImageFilter
  * \brief Threshold an image using the Huang Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(HuangThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(HuangThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

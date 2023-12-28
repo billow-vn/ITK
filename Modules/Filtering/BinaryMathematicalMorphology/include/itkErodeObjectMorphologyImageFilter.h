@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class ErodeObjectMorphologyImageFilter
+ * \class ErodeObjectMorphologyImageFilter
  * \brief Erosion of an object in an image
  *
  * Erosion of an image using binary morphology.
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support */
-  itkTypeMacro(ErodeObjectMorphologyImageFilter, ObjectMorphologyImageFilter);
+  itkOverrideGetNameOfClassMacro(ErodeObjectMorphologyImageFilter);
 
   /** Declaration of Pixel Type */
   using typename Superclass::PixelType;
@@ -121,11 +121,11 @@ protected:
   Evaluate(OutputNeighborhoodIteratorType & nit, const KernelType & kernel) override;
 
 private:
-  PixelType m_BackgroundValue;
+  PixelType m_BackgroundValue{};
 
   // Default boundary condition for erosion filter, defaults to
   // NumericTraits<PixelType>::max()
-  DefaultBoundaryConditionType m_ErodeBoundaryCondition;
+  DefaultBoundaryConditionType m_ErodeBoundaryCondition{};
 }; // end of class
 } // end namespace itk
 

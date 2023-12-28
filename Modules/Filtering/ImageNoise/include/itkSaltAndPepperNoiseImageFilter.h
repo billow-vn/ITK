@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class SaltAndPepperNoiseImageFilter
+ * \class SaltAndPepperNoiseImageFilter
  *
  * \brief Alter an image with fixed value impulse noise, often called salt and pepper noise.
  *
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SaltAndPepperNoiseImageFilter, NoiseBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(SaltAndPepperNoiseImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageType;
@@ -130,8 +130,8 @@ protected:
 
 private:
   double               m_Probability{ 0.01 };
-  OutputImagePixelType m_SaltValue;
-  OutputImagePixelType m_PepperValue;
+  OutputImagePixelType m_SaltValue{};
+  OutputImagePixelType m_PepperValue{};
 };
 } // end namespace itk
 

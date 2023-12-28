@@ -35,9 +35,9 @@ const typename ElementWrapperInterface<TElement, TElementIdentifier>::ElementIde
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 template <typename TElementWrapperPointer, typename TElementIdentifier>
-typename ElementWrapperPointerInterface<TElementWrapperPointer, TElementIdentifier>::ElementIdentifierType
+auto
 ElementWrapperPointerInterface<TElementWrapperPointer, TElementIdentifier>::GetLocation(
-  const ElementWrapperPointerType & element) const
+  const ElementWrapperPointerType & element) const -> ElementIdentifierType
 {
   return (element->GetLocation(*element));
 }
@@ -86,13 +86,6 @@ const TElementIdentifier ElementWrapperPointerInterface<TElement, TElementIdenti
 
 
 // -----------------------------------------------------------------------------
-// MinPriorityQueueElementWrapper
-// -----------------------------------------------------------------------------
-template <typename TElement, typename TElementPriority, typename TElementIdentifier>
-MinPriorityQueueElementWrapper<TElement, TElementPriority, TElementIdentifier>::MinPriorityQueueElementWrapper()
-  : m_Location(Superclass::m_ElementNotFound)
-{}
-// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 template <typename TElement, typename TElementPriority, typename TElementIdentifier>
@@ -137,9 +130,9 @@ MinPriorityQueueElementWrapper<TElement, TElementPriority, TElementIdentifier>::
 
 // -----------------------------------------------------------------------------
 template <typename TElement, typename TElementPriority, typename TElementIdentifier>
-typename MinPriorityQueueElementWrapper<TElement, TElementPriority, TElementIdentifier>::ElementIdentifierType
+auto
 MinPriorityQueueElementWrapper<TElement, TElementPriority, TElementIdentifier>::GetLocation(
-  const MinPriorityQueueElementWrapper & element) const
+  const MinPriorityQueueElementWrapper & element) const -> ElementIdentifierType
 {
   return element.m_Location;
 }
@@ -184,10 +177,6 @@ MinPriorityQueueElementWrapper<TElement, TElementPriority, TElementIdentifier>::
 // -----------------------------------------------------------------------------
 // MaxPriorityQueueElementWrapper
 // -----------------------------------------------------------------------------
-template <typename TElement, typename TElementPriority, typename TElementIdentifier>
-MaxPriorityQueueElementWrapper<TElement, TElementPriority, TElementIdentifier>::MaxPriorityQueueElementWrapper()
-  : Superclass()
-{}
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
@@ -263,17 +252,6 @@ template <typename TElementWrapper,
           typename TElementWrapperInterface,
           typename TElementPriority,
           typename TElementIdentifier>
-PriorityQueueContainer<TElementWrapper, TElementWrapperInterface, TElementPriority, TElementIdentifier>::
-  PriorityQueueContainer()
-  : Superclass()
-{}
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
-template <typename TElementWrapper,
-          typename TElementWrapperInterface,
-          typename TElementPriority,
-          typename TElementIdentifier>
 void
 PriorityQueueContainer<TElementWrapper, TElementWrapperInterface, TElementPriority, TElementIdentifier>::Clear()
 {
@@ -318,7 +296,7 @@ const typename PriorityQueueContainer<TElementWrapper, TElementWrapperInterface,
 {
   if (Empty())
   {
-    itkGenericExceptionMacro(<< "Empty PriorityQueueContainer");
+    itkGenericExceptionMacro("Empty PriorityQueueContainer");
   }
   return (GetElementAtLocation(0));
 }
@@ -365,7 +343,7 @@ PriorityQueueContainer<TElementWrapper, TElementWrapperInterface, TElementPriori
   {
     if (location >= this->Size())
     {
-      itkGenericExceptionMacro(<< " ElementWrapperType location is out of range");
+      itkGenericExceptionMacro(" ElementWrapperType location is out of range");
     }
     UpdateDownTree(location);
     UpdateUpTree(location);
@@ -395,7 +373,7 @@ PriorityQueueContainer<TElementWrapper, TElementWrapperInterface, TElementPriori
 
     if (location >= tsize)
     {
-      itkGenericExceptionMacro(<< " ElementWrapperType location is out of range");
+      itkGenericExceptionMacro(" ElementWrapperType location is out of range");
     }
     else
     {

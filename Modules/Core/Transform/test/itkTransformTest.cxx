@@ -36,7 +36,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
-  itkTypeMacro(TransformTestHelper, Transform);
+  itkOverrideGetNameOfClassMacro(TransformTestHelper);
 
   using typename Superclass::JacobianType;
   using typename Superclass::JacobianPositionType;
@@ -195,7 +195,7 @@ public:
   bool
   RunTests()
   {
-    std::cout << "Testing itkTransform<" << VInputDimension << "," << VOutputDimension << ">" << std::endl;
+    std::cout << "Testing itkTransform<" << VInputDimension << ',' << VOutputDimension << '>' << std::endl;
     auto transform = TransformType::New();
 
     InputPointType pnt;

@@ -52,10 +52,10 @@ VnlForwardFFTImageFilter<TInputImage, TOutputImage>::GenerateData()
   {
     if (!VnlFFTCommon::IsDimensionSizeLegal(inputSize[i]))
     {
-      itkExceptionMacro(<< "Cannot compute FFT of image with size " << inputSize
-                        << ". VnlForwardFFTImageFilter operates "
-                        << "only on images whose size in each dimension has"
-                        << "only a combination of 2,3, and 5 as prime factors.");
+      itkExceptionMacro("Cannot compute FFT of image with size "
+                        << inputSize
+                        << ". VnlForwardFFTImageFilter operates only on images whose size in each dimension has only a "
+                           "combination of 2,3, and 5 as prime factors.");
     }
     vectorSize *= inputSize[i];
   }
@@ -72,8 +72,8 @@ VnlForwardFFTImageFilter<TInputImage, TOutputImage>::GenerateData()
   vnlfft.transform(signal.data_block(), -1);
 
   // Copy the VNL output back to the ITK image.
-  ImageRegionIteratorWithIndex<TOutputImage> oIt(outputPtr, outputPtr->GetLargestPossibleRegion());
-  for (oIt.GoToBegin(); !oIt.IsAtEnd(); ++oIt)
+  for (ImageRegionIteratorWithIndex<TOutputImage> oIt(outputPtr, outputPtr->GetLargestPossibleRegion()); !oIt.IsAtEnd();
+       ++oIt)
   {
     typename OutputImageType::IndexType       index = oIt.GetIndex();
     typename OutputImageType::OffsetValueType offset = inputPtr->ComputeOffset(index);

@@ -268,6 +268,16 @@ str = str
             msg << "swig_name(" << self->GetIndex() << ", " << self->GetSize()  << ")";
             return msg.str();
     }
+        %pythoncode %{
+    def __getstate__(self):
+        """Get object state, necessary for serialization with pickle."""
+        state = (tuple(self.GetIndex()), tuple(self.GetSize()))
+        return state
+
+    def __setstate__(self, state):
+        """Set object state, necessary for serialization with pickle."""
+        self.__init__(*state)
+        %}
 }
 
 %enddef
@@ -476,27 +486,19 @@ str = str
     %rename(__SetDirection_orig__) swig_name::SetDirection;
     %extend swig_name {
         itkIndex##template_params TransformPhysicalPointToIndex( itkPointD##template_params & point ) {
-            itkIndex##template_params idx;
-            self->TransformPhysicalPointToIndex<double>( point, idx );
-            return idx;
+            return self->TransformPhysicalPointToIndex( point );
          }
 
         itkContinuousIndexD##template_params TransformPhysicalPointToContinuousIndex( itkPointD##template_params & point ) {
-            itkContinuousIndexD##template_params idx;
-            self->TransformPhysicalPointToContinuousIndex<double>( point, idx );
-            return idx;
+            return self->TransformPhysicalPointToContinuousIndex<itkContinuousIndexD##template_params::ValueType>( point );
         }
 
         itkPointD##template_params TransformContinuousIndexToPhysicalPoint( itkContinuousIndexD##template_params & idx ) {
-            itkPointD##template_params point;
-            self->TransformContinuousIndexToPhysicalPoint<double>( idx, point );
-            return point;
+            return self->TransformContinuousIndexToPhysicalPoint<double>( idx );
         }
 
         itkPointD##template_params TransformIndexToPhysicalPoint( itkIndex##template_params & idx ) {
-            itkPointD##template_params point;
-            self->TransformIndexToPhysicalPoint<double>( idx, point );
-            return point;
+            return self->TransformIndexToPhysicalPoint<double>( idx );
         }
 
         %pythoncode %{
@@ -806,6 +808,16 @@ str = str
                 array = itk.array_from_matrix(self)
                 return np.asarray(array, dtype=dtype)
 
+            def __getstate__(self):
+                """Get object state, necessary for serialization with pickle."""
+                import itk
+                state = itk.array_from_matrix(self)
+                return state
+
+            def __setstate__(self, state):
+                """Set object state, necessary for serialization with pickle."""
+                matrix = itk.matrix_from_array(state)
+                self.__init__(matrix)
             %}
         }
 

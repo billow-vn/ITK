@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class ExtrapolateImageFunction
+ * \class ExtrapolateImageFunction
  * \brief Base class for all image extrapolaters.
  *
  * ExtrapolateImageFunction is the base for all ImageFunctions that
@@ -55,7 +55,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExtrapolateImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(ExtrapolateImageFunction);
 
   /** OutputType type alias support */
   using typename Superclass::OutputType;
@@ -110,11 +110,6 @@ public:
 protected:
   ExtrapolateImageFunction() = default;
   ~ExtrapolateImageFunction() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
 };
 } // end namespace itk
 

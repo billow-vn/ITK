@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class JPEGImageIOFactory
+ * \class JPEGImageIOFactory
  * \brief Create instances of JPEGImageIO objects using an object factory.
  * \ingroup ITKIOJPEG
  */
@@ -56,7 +56,7 @@ public:
     return new JPEGImageIOFactory;
   }
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JPEGImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(JPEGImageIOFactory);
 
   /** Register one factory of this type  */
   static void

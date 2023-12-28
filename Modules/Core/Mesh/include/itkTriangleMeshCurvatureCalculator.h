@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TriangleMeshCurvatureCalculator, Object);
+  itkOverrideGetNameOfClassMacro(TriangleMeshCurvatureCalculator);
 
   /** Convenient type alias for this Calculator. */
   using InputMeshType = TInputMesh;
@@ -135,8 +135,8 @@ protected:
 
 private:
   CurvaturesEnum               m_CurvatureType = CurvaturesEnum::GaussCurvature;
-  DoubleVectorContainerPointer m_GaussCurvatureData;
-  MeshConstPointer             m_TriangleMesh;
+  DoubleVectorContainerPointer m_GaussCurvatureData{};
+  MeshConstPointer             m_TriangleMesh{};
 };
 
 } // namespace itk

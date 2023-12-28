@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class MeshIOFactory
+ * \class MeshIOFactory
  * \brief Create instances of MeshIO objects using an object factory.
  *
  * Below are the supported mesh file format:
@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshIOFactory, Object);
+  itkOverrideGetNameOfClassMacro(MeshIOFactory);
 
   /** Convenient type alias. */
   using MeshIOBasePointer = itk::MeshIOBase::Pointer;

@@ -136,7 +136,7 @@ TestGeometricPoint(const TInterpolator * interp, const PointType & point, bool i
   std::cout << " Point: " << point;
 
   bool bvalue = interp->IsInsideBuffer(point);
-  std::cout << " Inside: " << bvalue << " ";
+  std::cout << " Inside: " << bvalue << ' ';
 
   if (bvalue != isInside)
   {
@@ -210,7 +210,7 @@ TestContinuousIndexDerivative(const TInterpolator *       interp,
   std::cout << " Index: " << index;
 
   bool bvalue = interp->IsInsideBuffer(index);
-  std::cout << " Inside: " << bvalue << "\n";
+  std::cout << " Inside: " << bvalue << '\n';
 
   if (bvalue != isInside)
   {
@@ -222,7 +222,7 @@ TestContinuousIndexDerivative(const TInterpolator *       interp,
   {
     typename TInterpolator::CovariantVectorType value;
     double                                      value2 = interp->EvaluateAtContinuousIndex(index);
-    std::cout << "Interpolated Value: " << value2 << "\n";
+    std::cout << "Interpolated Value: " << value2 << '\n';
     value = interp->EvaluateDerivativeAtContinuousIndex(index);
     std::cout << " Value: ";
     for (int i = 0; i < ImageDimension3D; ++i)
@@ -303,13 +303,17 @@ test1DCubicSpline()
     passed = TestContinuousIndex<InterpolatorType1D, ContinuousIndexType1D>(interp, cindex, b_Inside[ii], truth[ii]);
 
     if (!passed)
+    {
       flag += 1;
+    }
 
     image->TransformContinuousIndexToPhysicalPoint(cindex, point);
     passed = TestGeometricPoint<InterpolatorType1D, PointType1D>(interp, point, b_Inside[ii], truth[ii]);
 
     if (!passed)
+    {
       flag += 1;
+    }
   }
 
   return (flag);
@@ -377,13 +381,17 @@ test2DSpline()
         interp, cindex, b_Inside[ii], truth[ii][splineOrder]);
 
       if (!passed)
+      {
         flag += 1;
+      }
 
       image->TransformContinuousIndexToPhysicalPoint(cindex, point);
       passed = TestGeometricPoint<InterpolatorType2D, PointType2D>(interp, point, b_Inside[ii], truth[ii][splineOrder]);
 
       if (!passed)
+      {
         flag += 1;
+      }
     }
   } // end of splineOrder
 
@@ -447,14 +455,18 @@ test3DSpline()
         interp, cindex, b_Inside[ii], truth[ii][splineOrder - 2]);
 
       if (!passed)
+      {
         flag += 1;
+      }
 
       image->TransformContinuousIndexToPhysicalPoint(cindex, point);
       passed =
         TestGeometricPoint<InterpolatorType3D, PointType3D>(interp, point, b_Inside[ii], truth[ii][splineOrder - 2]);
 
       if (!passed)
+      {
         flag += 1;
+      }
     }
   } // end of splineOrder
 
@@ -521,7 +533,9 @@ test3DSplineDerivative()
       passed = TestContinuousIndexDerivative<InterpolatorType3D, ContinuousIndexType3D>(
         interp, cindex, b_Inside[ii], &truth[splineOrder - 1][ii][0]);
       if (!passed)
+      {
         flag += 1;
+      }
     }
   } // end of splineOrder
 
@@ -585,14 +599,18 @@ testInteger3DSpline()
         interp, cindex, b_Inside[ii], truth[ii][splineOrder - 2]);
 
       if (!passed)
+      {
         flag += 1;
+      }
 
       image->TransformContinuousIndexToPhysicalPoint(cindex, point);
       passed = TestGeometricPoint<InterpolatorIntegerType3D, PointIntegerType3D>(
         interp, point, b_Inside[ii], truth[ii][splineOrder - 2]);
 
       if (!passed)
+      {
         flag += 1;
+      }
     }
   } // end of splineOrder
 

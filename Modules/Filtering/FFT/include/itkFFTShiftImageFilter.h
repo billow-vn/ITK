@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class FFTShiftImageFilter
+ * \class FFTShiftImageFilter
  * \brief Shift the zero-frequency components of a Fourier transform
  * to the center of the image.
  *
@@ -78,7 +78,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(FFTShiftImageFilter, CyclicShiftImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTShiftImageFilter);
 
   /** Set/Get whether the filter must invert the transform or not.
    * This option has no effect if none of the size of the input image is even,
@@ -100,7 +100,7 @@ protected:
   GenerateData() override;
 
 private:
-  bool m_Inverse;
+  bool m_Inverse{};
 
 }; // end of class
 } // end namespace itk

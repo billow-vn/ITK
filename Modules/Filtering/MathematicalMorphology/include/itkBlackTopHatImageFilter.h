@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BlackTopHatImageFilter, KernelImageFilter);
+  itkOverrideGetNameOfClassMacro(BlackTopHatImageFilter);
 
   /** A safe border is added to input image to avoid borders effects
    * and remove it once the closing is done */
@@ -113,11 +113,11 @@ protected:
   GenerateData() override;
 
 private:
-  bool m_SafeBorder;
+  bool m_SafeBorder{};
 
-  AlgorithmEnum m_Algorithm;
+  AlgorithmEnum m_Algorithm{};
 
-  bool m_ForceAlgorithm;
+  bool m_ForceAlgorithm{};
 }; // end of class
 } // end namespace itk
 

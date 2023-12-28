@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GiftiMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(GiftiMeshIO);
 
   itkGetConstMacro(ReadPointData, bool);
   itkSetMacro(ReadPointData, bool);
@@ -82,7 +82,7 @@ public:
   /*-------- This part of the interfaces deals with reading data. ----- */
 
   /** Determine if the file can be read with this MeshIO implementation.
-   * \param FileNameToRead The name of the file to test for reading.
+   * \param fileName The name of the file to test for reading.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can read the file specified.
    */
@@ -109,7 +109,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this MeshIO implementation.
-   * \param FileNameToWrite The name of the file to test for writing.
+   * \param fileName The name of the file to test for writing.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can write the file specified.
    */
@@ -168,8 +168,8 @@ private:
 
   GiftiImageProxy & m_GiftiImage;
 
-  bool          m_ReadPointData;
-  DirectionType m_Direction;
+  bool          m_ReadPointData{};
+  DirectionType m_Direction{};
 
   // Translate (G|N)ifti datatypes to IOComponentEnum
   IOComponentEnum

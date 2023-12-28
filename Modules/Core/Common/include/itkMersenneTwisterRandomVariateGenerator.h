@@ -136,7 +136,7 @@ public:
   using IntegerType = uint32_t;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MersenneTwisterRandomVariateGenerator, RandomVariateGeneratorBase);
+  itkOverrideGetNameOfClassMacro(MersenneTwisterRandomVariateGenerator);
 
   /** \brief Method for creation through the object factory.
    *
@@ -159,6 +159,11 @@ public:
    */
   static Pointer
   GetInstance();
+
+  /** Resets the internal data that is used to calculate the next seed. (Does not reset the initial seed.) Allows
+   * generating a reproducible sequence of pseudo-random numbers. */
+  static void
+  ResetNextSeed();
 
   /** Length of state vector */
   static constexpr IntegerType StateVectorLength = 624;
@@ -307,13 +312,13 @@ protected:
   IntegerType state[StateVectorLength];
 
   // Next value to get from state
-  IntegerType * m_PNext;
+  IntegerType * m_PNext{};
 
   // Number of values left before reload is needed
-  int m_Left;
+  int m_Left{};
 
   // Seed value
-  std::atomic<IntegerType> m_Seed;
+  std::atomic<IntegerType> m_Seed{};
 
 private:
   /** Only used to synchronize the global variable across static libraries.*/
@@ -324,7 +329,7 @@ private:
   CreateInstance();
 
   // Local lock to enable concurrent access to singleton
-  std::mutex m_InstanceLock;
+  std::mutex m_InstanceMutex{};
 
   // Static/Global Variable need to be thread-safely accessed
 
@@ -337,7 +342,7 @@ private:
 inline void
 MersenneTwisterRandomVariateGenerator::Initialize(const IntegerType seed)
 {
-  std::lock_guard<std::mutex> mutexHolder(m_InstanceLock);
+  const std::lock_guard<std::mutex> lockGuard(m_InstanceMutex);
   this->m_Seed = seed;
   // Initialize generator state with seed
   // See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.

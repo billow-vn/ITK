@@ -52,7 +52,7 @@ public:
   using TransformType = itk::VersorTransform<double>;
 
   itkNewMacro(Self);
-  itkTypeMacro(versorCostFunction, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(versorCostFunction);
 
   enum
   {
@@ -256,7 +256,7 @@ itkVersorTransformOptimizerTest(int, char *[])
     finalRightPart[i] = finalPosition[i];
   }
   finalRotation.Set(finalRightPart);
-  std::cout << "Solution        = (" << finalRotation << ")" << std::endl;
+  std::cout << "Solution        = (" << finalRotation << ')' << std::endl;
 
   //
   // check results to see if it is within range

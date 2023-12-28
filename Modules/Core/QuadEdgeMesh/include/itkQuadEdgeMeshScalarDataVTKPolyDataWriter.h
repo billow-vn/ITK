@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- * \class QuadEdgeMeshScalarDataVTKPolyData
+ * \class QuadEdgeMeshScalarDataVTKPolyDataWriter
  *
  * \brief This class saves a QuadMesh into a VTK-legacy file format,
  *        including its scalar data associated with points.
@@ -45,7 +45,7 @@ public:
   using Superclass = VTKPolyDataWriter<TMesh>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(QuadEdgeMeshScalarDataVTKPolyDataWriter, VTKPolyDataWriter);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshScalarDataVTKPolyDataWriter);
 
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
@@ -85,8 +85,8 @@ protected:
   QuadEdgeMeshScalarDataVTKPolyDataWriter();
   ~QuadEdgeMeshScalarDataVTKPolyDataWriter() override = default;
 
-  std::string m_CellDataName;
-  std::string m_PointDataName;
+  std::string m_CellDataName{};
+  std::string m_PointDataName{};
 
   void
   GenerateData() override;

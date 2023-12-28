@@ -130,7 +130,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MattesMutualInformationImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(MattesMutualInformationImageToImageMetric);
 
   /** Types inherited from Superclass. */
   using typename Superclass::TransformType;
@@ -278,7 +278,11 @@ private:
   using CubicBSplineFunctionType = BSplineKernelFunction<3, PDFValueType>;
   using CubicBSplineDerivativeFunctionType = BSplineDerivativeKernelFunction<3, PDFValueType>;
 
-  /** Precompute fixed image parzen window indices. */
+  /** Extract common processing for both GetValueAndDerivative and GetValue functions */
+  void
+  CommonGetValueProcessing() const;
+
+  /** Compute the Parzen window index locations from the pre-computed samples. */
   void
   ComputeFixedImageParzenWindowIndices(FixedImageSampleContainer & samples);
 
@@ -328,11 +332,11 @@ private:
   using PRatioType = PDFValueType;
   using PRatioArrayType = Array2D<PRatioType>;
 
-  mutable PRatioArrayType m_PRatioArray;
+  mutable PRatioArrayType m_PRatioArray{};
 
   /** The moving image marginal PDF. */
   using MarginalPDFType = std::vector<PDFValueType>;
-  mutable MarginalPDFType m_MovingImageMarginalPDF;
+  mutable MarginalPDFType m_MovingImageMarginalPDF{};
 
   struct MMIMetricPerThreadStruct
   {

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class SimilarityIndexImageFilter
+ * \class SimilarityIndexImageFilter
  * \brief Measures the similarity between the set of non-zero pixels of
  * two images.
  *
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SimilarityIndexImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(SimilarityIndexImageFilter);
 
   /** Image related type alias. */
   using InputImage1Type = TInputImage1;
@@ -114,7 +114,7 @@ public:
     return this->GetInput();
   }
 
-  /** Get the secong input. */
+  /** Get the second input. */
   const InputImage2Type *
   GetInput2();
 
@@ -167,11 +167,11 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * data) override;
 
 private:
-  RealType m_SimilarityIndex;
+  RealType m_SimilarityIndex{};
 
-  Array<SizeValueType> m_CountOfImage1;
-  Array<SizeValueType> m_CountOfImage2;
-  Array<SizeValueType> m_CountOfIntersection;
+  Array<SizeValueType> m_CountOfImage1{};
+  Array<SizeValueType> m_CountOfImage2{};
+  Array<SizeValueType> m_CountOfIntersection{};
 }; // end of class
 } // end namespace itk
 

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class VectorMagnitudeImageFilter
+ * \class VectorMagnitudeImageFilter
  *
  * \brief Take an image of vectors as input and produce an image with the
  *  magnitude of those vectors.
@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(VectorMagnitudeImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorMagnitudeImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

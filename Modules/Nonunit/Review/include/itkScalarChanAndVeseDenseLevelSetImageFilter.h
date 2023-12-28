@@ -39,19 +39,16 @@ namespace itk
  *
  *      "Cell Tracking using Coupled Active Surfaces for Nuclei and Membranes"
  *      https://www.insight-journal.org/browse/publication/642
- *      https://hdl.handle.net/10380/3055
  *
  *  That is based on the papers:
  *
  *      "Level Set Segmentation: Active Contours without edge"
  *      https://www.insight-journal.org/browse/publication/322
- *      https://hdl.handle.net/1926/1532
  *
  *      and
  *
  *      "Level set segmentation using coupled active surfaces"
  *      https://www.insight-journal.org/browse/publication/323
- *      https://hdl.handle.net/1926/1533
  *
  * \ingroup ITKReview
  */
@@ -75,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarChanAndVeseDenseLevelSetImageFilter, MultiphaseDenseFiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(ScalarChanAndVeseDenseLevelSetImageFilter);
 
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
 
@@ -93,7 +90,7 @@ public:
   using FeatureIndexValueType = typename FeatureIndexType::IndexValueType;
   using FeatureRegionType = typename FeatureImageType::RegionType;
 
-  /** Output image type type alias */
+  /** Output image type alias */
   using OutputImageType = TOutputImage;
   using IndexType = typename OutputImageType::IndexType;
   using OutputPixelType = typename OutputImageType::PixelType;
@@ -129,7 +126,7 @@ protected:
 
   ~ScalarChanAndVeseDenseLevelSetImageFilter() override = default;
 
-  SharedDataPointer m_SharedData;
+  SharedDataPointer m_SharedData{};
 
   void
   Initialize() override;

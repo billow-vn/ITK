@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ExtractOrthogonalSwath2DImageFilter
+ * \class ExtractOrthogonalSwath2DImageFilter
  * \brief Extracts into rectangular form a "swath" image from the input image along the parametric path.
  *
  * Extracts a rectangular "swath" image from the 2D input image by interpolating
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExtractOrthogonalSwath2DImageFilter, ImageAndPathToImageFilter);
+  itkOverrideGetNameOfClassMacro(ExtractOrthogonalSwath2DImageFilter);
 
   /** Some convenient type alias. */
   using ImageType = TImage;
@@ -165,10 +165,10 @@ protected:
   //--------------------------------------------------------------------------
 
 private:
-  ImagePixelType m_DefaultPixelValue;
-  SizeType       m_Size;
-  double         m_Origin[ImageDimension];
-  double         m_Spacing[ImageDimension];
+  ImagePixelType m_DefaultPixelValue{};
+  SizeType       m_Size{};
+  double         m_Origin[ImageDimension]{};
+  double         m_Spacing[ImageDimension]{};
 };
 } // end namespace itk
 

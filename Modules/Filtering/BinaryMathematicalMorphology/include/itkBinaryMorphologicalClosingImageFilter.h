@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryMorphologicalClosingImageFilter, KernelImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryMorphologicalClosingImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;
@@ -111,9 +111,9 @@ protected:
   GenerateData() override;
 
 private:
-  InputPixelType m_ForegroundValue;
+  InputPixelType m_ForegroundValue{};
 
-  bool m_SafeBorder;
+  bool m_SafeBorder{};
 }; // end of class
 } // end namespace itk
 

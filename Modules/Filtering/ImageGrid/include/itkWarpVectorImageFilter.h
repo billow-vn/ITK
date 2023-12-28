@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class WarpVectorImageFilter
+ * \class WarpVectorImageFilter
  * \brief Warps an image using an input displacement field.
  *
  * WarpVectorImageFilter warps an existing image with respect to
@@ -59,7 +59,7 @@ namespace itk
  * Position mapped to outside of the input image buffer are assigned
  * a edge padding value.
  *
- * The LargetPossibleRegion for the output is inherited
+ * The LargestPossibleRegion for the output is inherited
  * from the input displacement field. The output image
  * spacing, origin and direction may be set via
  * SetOutputSpacing, SetOutputOrigin and
@@ -101,7 +101,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(WarpVectorImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(WarpVectorImageFilter);
 
   /** Typedef to describe the output image region type. */
   using OutputImageRegionType = typename TOutputImage::RegionType;
@@ -229,12 +229,12 @@ protected:
 
 
 private:
-  PixelType     m_EdgePaddingValue;
-  SpacingType   m_OutputSpacing;
-  PointType     m_OutputOrigin;
-  DirectionType m_OutputDirection;
+  PixelType     m_EdgePaddingValue{};
+  SpacingType   m_OutputSpacing{};
+  PointType     m_OutputOrigin{};
+  DirectionType m_OutputDirection{};
 
-  InterpolatorPointer m_Interpolator;
+  InterpolatorPointer m_Interpolator{};
 };
 } // end namespace itk
 

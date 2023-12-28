@@ -146,48 +146,41 @@ itkObjectMorphologyImageFilterTest(int, char *[])
   double  elapsedTime;
 
   // Execute the filter
-  try
-  {
-    std::cout << "Object Dilate..." << std::endl;
-    start = clock();
-    dilateFilter->Update();
-    end = clock();
+  std::cout << "Object Dilate..." << std::endl;
 
-    elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+  start = clock();
 
-    //  Print the content of the result image
-    std::cout << "  Success: " << std::endl;
-    std::cout << "    Time = " << elapsedTime << std::endl;
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception caught during dilate filter Update\n" << e;
-    return -1;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(dilateFilter->Update());
+
+
+  end = clock();
+
+  elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+
+  // Print the content of the result image
+  std::cout << "  Success: " << std::endl;
+  std::cout << "    Time = " << elapsedTime << std::endl;
 
   binDilateFilter->SetInput(inputImage);
   binDilateFilter->SetKernel(ball);
   binDilateFilter->SetDilateValue(fgValue);
   myImageType::Pointer outputBinImage = binDilateFilter->GetOutput();
-  try
-  {
-    std::cout << "Binary Dilate..." << std::endl;
 
-    start = clock();
-    binDilateFilter->Update();
-    end = clock();
+  // Execute the filter
+  std::cout << "Binary Dilate..." << std::endl;
 
-    elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+  start = clock();
 
-    //  Print the content of the result image
-    std::cout << "  Success: " << std::endl;
-    std::cout << "    Time = " << elapsedTime << std::endl;
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception caught during dilate filter Update\n" << e;
-    return -1;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(binDilateFilter->Update());
+
+
+  end = clock();
+
+  elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+
+  // Print the content of the result image
+  std::cout << "  Success: " << std::endl;
+  std::cout << "    Time = " << elapsedTime << std::endl;
 
   // Create an iterator for going through the image output
   myIteratorType itObj(outputImage, outputImage->GetBufferedRegion());
@@ -212,7 +205,7 @@ itkObjectMorphologyImageFilterTest(int, char *[])
         for (x = 0; x < size[0]; ++x)
         {
           i[0] = x;
-          std::cerr << outputImage->GetPixel(i) << outputBinImage->GetPixel(i) << " ";
+          std::cerr << outputImage->GetPixel(i) << outputBinImage->GetPixel(i) << ' ';
         }
         std::cerr << std::endl;
       }
@@ -241,24 +234,20 @@ itkObjectMorphologyImageFilterTest(int, char *[])
   myImageType::Pointer output2Image = erodeFilter->GetOutput();
 
   // Execute the filter
-  try
-  {
-    std::cout << "Object Erode..." << std::endl;
-    start = clock();
-    erodeFilter->Update();
-    end = clock();
+  std::cout << "Object Erode..." << std::endl;
 
-    elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+  start = clock();
 
-    //  Print the content of the result image
-    std::cout << "  Success: " << std::endl;
-    std::cout << "    Time = " << elapsedTime << std::endl;
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception caught during erode filter Update\n" << e;
-    return -1;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(erodeFilter->Update());
+
+
+  end = clock();
+
+  elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+
+  // Print the content of the result image
+  std::cout << "  Success: " << std::endl;
+  std::cout << "    Time = " << elapsedTime << std::endl;
 
   binErodeFilter->SetInput(outputImage);
   binErodeFilter->SetKernel(ball);
@@ -266,24 +255,20 @@ itkObjectMorphologyImageFilterTest(int, char *[])
   myImageType::Pointer outputBin2Image = binErodeFilter->GetOutput();
 
   // Execute the filter
-  try
-  {
-    std::cout << "Binary Erode..." << std::endl;
-    start = clock();
-    binErodeFilter->Update();
-    end = clock();
+  std::cout << "Binary Erode..." << std::endl;
 
-    elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+  start = clock();
 
-    //  Print the content of the result image
-    std::cout << "  Success: " << std::endl;
-    std::cout << "    Time = " << elapsedTime << std::endl;
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception caught during erode filter Update\n" << e;
-    return -1;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(binErodeFilter->Update());
+
+
+  end = clock();
+
+  elapsedTime = (end - start) / static_cast<double>(CLOCKS_PER_SEC);
+
+  // Print the content of the result image
+  std::cout << "  Success: " << std::endl;
+  std::cout << "    Time = " << elapsedTime << std::endl;
 
   // Create an iterator for going through the image output
   myIteratorType it2Obj(output2Image, output2Image->GetBufferedRegion());
@@ -308,7 +293,7 @@ itkObjectMorphologyImageFilterTest(int, char *[])
         for (x = 0; x < size[0]; ++x)
         {
           i[0] = x;
-          std::cout << output2Image->GetPixel(i) << outputBin2Image->GetPixel(i) << " ";
+          std::cout << output2Image->GetPixel(i) << outputBin2Image->GetPixel(i) << ' ';
         }
         std::cout << std::endl;
       }
@@ -324,5 +309,7 @@ itkObjectMorphologyImageFilterTest(int, char *[])
   std::cout << "    Time = " << elapsedTime << std::endl;
 
   // All objects should be automatically destroyed at this point
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

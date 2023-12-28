@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AccumulateImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(AccumulateImageFilter);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;
@@ -128,8 +128,8 @@ protected:
   GenerateData() override;
 
 private:
-  unsigned int m_AccumulateDimension;
-  bool         m_Average;
+  unsigned int m_AccumulateDimension{};
+  bool         m_Average{};
 };
 } // end namespace itk
 

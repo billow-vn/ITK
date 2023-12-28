@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class AbsoluteValueDifferenceImageFilter
+ * \class AbsoluteValueDifferenceImageFilter
  * \brief Implements pixel-wise the computation of absolute value difference.
  *
  * This filter is parameterized over the types of the two
@@ -104,7 +104,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AbsoluteValueDifferenceImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(AbsoluteValueDifferenceImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

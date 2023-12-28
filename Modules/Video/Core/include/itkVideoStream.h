@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class VideoStream
+ * \class VideoStream
  * \brief A DataObject that holds a buffered portion of a video
  *
  * The function of VideoStream is to provide an Image-specific subclass of
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VideoStream, TemporalDataObject);
+  itkOverrideGetNameOfClassMacro(VideoStream);
 
   /** Safely expand the internal ring buffer. */
   void
@@ -351,16 +351,16 @@ protected:
   /** These maps are used to cache a mapping between frame number and spatial
    * region. This is done because frames will often not be in actual existence
    * at the time when the region gets set. */
-  SpatialRegionMapType m_LargestPossibleSpatialRegionCache;
-  SpatialRegionMapType m_RequestedSpatialRegionCache;
-  SpatialRegionMapType m_BufferedSpatialRegionCache;
+  SpatialRegionMapType m_LargestPossibleSpatialRegionCache{};
+  SpatialRegionMapType m_RequestedSpatialRegionCache{};
+  SpatialRegionMapType m_BufferedSpatialRegionCache{};
 
   /** These maps cache a mapping between frame number and the meta data for
    * origin, spacing, direction, and number of components per pixel */
-  SpacingMapType                    m_SpacingCache;
-  DirectionMapType                  m_DirectionCache;
-  PointMapType                      m_OriginCache;
-  NumberOfComponentsPerPixelMapType m_NumberOfComponentsPerPixelCache;
+  SpacingMapType                    m_SpacingCache{};
+  DirectionMapType                  m_DirectionCache{};
+  PointMapType                      m_OriginCache{};
+  NumberOfComponentsPerPixelMapType m_NumberOfComponentsPerPixelCache{};
 
 }; // end class VideoStream
 

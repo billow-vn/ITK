@@ -48,7 +48,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NonlinearAffineTransform, AffineTransform);
+  itkOverrideGetNameOfClassMacro(NonlinearAffineTransform);
 
   /** Override this so not linear. See test below. */
   typename itk::TransformBaseTemplate<TCoordRepType>::TransformCategoryEnum
@@ -66,10 +66,8 @@ itkResampleImageTest2Streaming(int argc, char * argv[])
   {
     std::cerr << "Missing parameters." << std::endl;
     std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv);
-    std::cerr << "inputImage referenceImage "
-              << "resampledImageLinear resampledImageNonLinear "
-              << "resampledImageLinearNearestExtrapolate"
-              << "resampledImageNonLinearNearestExtrapolate";
+    std::cerr << "inputImage referenceImage resampledImageLinear resampledImageNonLinear "
+                 "resampledImageLinearNearestExtrapolate resampledImageNonLinearNearestExtrapolate";
     std::cerr << std::endl;
     return EXIT_FAILURE;
   }
@@ -180,8 +178,7 @@ itkResampleImageTest2Streaming(int argc, char * argv[])
   writer2->SetNumberOfStreamDivisions(8);
   ITK_TRY_EXPECT_NO_EXCEPTION(writer2->Update());
 
-  std::cout << "We demanded splitting into 8 pieces for streaming, \
-but faked non-linearity should disable streaming."
+  std::cout << "We demanded splitting into 8 pieces for streaming, but faked non-linearity should disable streaming."
             << std::endl;
   if (monitor->VerifyInputFilterExecutedStreaming(8))
   {

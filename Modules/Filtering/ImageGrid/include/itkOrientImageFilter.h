@@ -82,7 +82,7 @@ namespace itk
    #include "itkImage.h"
    #include "itkOrientImageFilter.h"
    using ImageType = itk::Image<unsigned char,3>;
-   using ImageReaderType = itk::ImageFileReader< TstImageType >;
+   using ImageReaderType = itk::ImageFileReader< TestImageType >;
    ImageType::Pointer ReadAnalyzeFile(const char *path)
    {
      itk::AnalyzeImageIO::Pointer io = itk::AnalyzeImageIO::New();
@@ -179,7 +179,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(OrientImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(OrientImageFilter);
 
   /** Set/Get the orientation codes to define the coordinate transform. */
   itkGetEnumMacro(GivenCoordinateOrientation, CoordinateOrientationCode);
@@ -316,11 +316,11 @@ private:
   };
   bool m_UseImageDirection{ false };
 
-  PermuteOrderArrayType m_PermuteOrder;
-  FlipAxesArrayType     m_FlipAxes;
+  PermuteOrderArrayType m_PermuteOrder{};
+  FlipAxesArrayType     m_FlipAxes{};
 
-  std::map<std::string, CoordinateOrientationCode> m_StringToCode;
-  std::map<CoordinateOrientationCode, std::string> m_CodeToString;
+  std::map<std::string, CoordinateOrientationCode> m_StringToCode{};
+  std::map<CoordinateOrientationCode, std::string> m_CodeToString{};
 }; // end of class
 } // end namespace itk
 

@@ -52,7 +52,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(amoebaTestF1, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(amoebaTestF1);
 
   enum
   {
@@ -161,7 +161,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(amoebaTestF1, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(amoebaTestF1);
 
   using ParametersType = Superclass::ParametersType;
   using MeasureType = Superclass::MeasureType;
@@ -278,6 +278,8 @@ AmoebaTest1()
   ITK_EXERCISE_BASIC_OBJECT_METHODS(itkOptimizer, AmoebaOptimizer, SingleValuedNonLinearVnlOptimizer);
 
 
+  ITK_TEST_EXPECT_TRUE(itkOptimizer->CanUseScales());
+
   // set optimizer parameters
   typename OptimizerType::NumberOfIterationsType numberOfIterations = 10;
   itkOptimizer->SetMaximumNumberOfIterations(numberOfIterations);
@@ -369,7 +371,9 @@ AmoebaTest1()
   for (unsigned int j = 0; j < 2; ++j)
   {
     if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > xTolerance)
+    {
       pass = false;
+    }
   }
 
   if (!pass)
@@ -442,7 +446,9 @@ AmoebaTest1()
     for (unsigned int j = 0; j < 2; ++j)
     {
       if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > xTolerance)
+      {
         pass = false;
+      }
     }
 
     if (!pass)

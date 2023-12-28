@@ -44,7 +44,7 @@ namespace itk
  * of all the "internal" region. Or a binary boundary delineate, which is defined as
  * the connected lines between seed points of "boundary" region.
  * This class is a base class for voronoi segmentation, single channel or multiple channel
- * image segmentation can be implemented by deriving imagefilters from this class, by
+ * image segmentation can be implemented by deriving image filters from this class, by
  * implementing the virtual methods
  *
  * Detailed information about this algorithm can be found in:
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VoronoiSegmentationImageFilterBase, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VoronoiSegmentationImageFilterBase);
 
   /** Get the image dimension from the template parameter. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -172,7 +172,7 @@ public:
   virtual void
   MakeSegmentObject();
 
-  /** Return the Voroni Diagram structure. */
+  /** Return the Voronoi Diagram structure. */
   VoronoiPointer
   GetVoronoiDiagram()
   {
@@ -237,7 +237,7 @@ protected:
   void
   GenerateData() override; // general pipeline function.
 
-  SizeType      m_Size;
+  SizeType      m_Size{};
   int           m_NumberOfSeeds{ 200 };
   SizeValueType m_MinRegion{ 20 };
   int           m_Steps{ 0 };
@@ -245,8 +245,8 @@ protected:
   int           m_NumberOfSeedsToAdded{ 0 };
   int           m_NumberOfBoundary{ 0 };
 
-  std::vector<SizeValueType> m_NumberOfPixels;
-  std::vector<unsigned char> m_Label;
+  std::vector<SizeValueType> m_NumberOfPixels{};
+  std::vector<unsigned char> m_Label{};
 
   double m_MeanDeviation{ 0.8 };
   bool   m_UseBackgroundInAPrior{ false };
@@ -254,11 +254,11 @@ protected:
                                     // output the object.
   bool m_InteractiveSegmentation{ false };
 
-  typename VoronoiDiagram::Pointer m_WorkingVD;
+  typename VoronoiDiagram::Pointer m_WorkingVD{};
 
-  typename VoronoiDiagramGenerator::Pointer m_VDGenerator;
+  typename VoronoiDiagramGenerator::Pointer m_VDGenerator{};
 
-  std::vector<PointType> m_SeedsToAdded;
+  std::vector<PointType> m_SeedsToAdded{};
 
   // private methods:
   // Classify all the voronoi cells as interior , exterior or boundary.
@@ -286,7 +286,7 @@ protected:
   void
   drawLine(PointType p1, PointType p2);
 
-  // Draw the intermedia Voronoi Diagram structure.
+  // Draw the intermediate Voronoi Diagram structure.
   void
   drawVDline(VDImagePointer result, PointType p1, PointType p2, unsigned char color);
 };

@@ -53,12 +53,12 @@ public:
   {
     if (object == nullptr)
     {
-      itkExceptionMacro(<< "Command update on null object");
+      itkExceptionMacro("Command update on null object");
     }
     std::cout << "Observing from class " << object->GetNameOfClass();
     if (!object->GetObjectName().empty())
     {
-      std::cout << " \"" << object->GetObjectName() << "\"";
+      std::cout << " \"" << object->GetObjectName() << '"';
     }
     std::cout << std::endl;
     const auto * filter = static_cast<const TFilter *>(object);
@@ -105,7 +105,7 @@ public:
     {
       for (itk::SizeValueType i = 0; i < gradient.GetSize(); i += (gradient.GetSize() / 16))
       {
-        std::cout << gradient[i] << " ";
+        std::cout << gradient[i] << ' ';
       }
     }
     std::cout << std::endl;

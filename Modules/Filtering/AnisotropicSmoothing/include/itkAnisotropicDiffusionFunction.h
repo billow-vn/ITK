@@ -148,7 +148,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(AnisotropicDiffusionFunction, FiniteDifferenceFunction);
+  itkOverrideGetNameOfClassMacro(AnisotropicDiffusionFunction);
 
   /** Inherit some parameters from the superclass type */
   using typename Superclass::ImageType;
@@ -253,9 +253,9 @@ protected:
   }
 
 private:
-  double       m_AverageGradientMagnitudeSquared;
-  double       m_ConductanceParameter;
-  TimeStepType m_TimeStep;
+  double       m_AverageGradientMagnitudeSquared{};
+  double       m_ConductanceParameter{};
+  TimeStepType m_TimeStep{};
 };
 } // end namespace itk
 

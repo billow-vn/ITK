@@ -80,7 +80,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SparseImage, Image);
+  itkOverrideGetNameOfClassMacro(SparseImage);
 
   /** Dimension of the image. */
   static constexpr unsigned int ImageDimension = Superclass::ImageDimension;
@@ -91,7 +91,7 @@ public:
   /** Types derived from the Superclass */
   using typename Superclass::IndexType;
 
-  /** Tyepdef for the functor used to access a neighborhood of pixel
+  /** Typedef for the functor used to access a neighborhood of pixel
    * pointers. */
   using NeighborhoodAccessorFunctorType = NeighborhoodAccessorFunctor<Self>;
 
@@ -143,7 +143,7 @@ public:
   Initialize() override;
 
 protected:
-  SparseImage();
+  SparseImage() = default;
   ~SparseImage() override = default;
 
   void
@@ -151,9 +151,9 @@ protected:
 
 private:
   /** The variables for storing the node variables. */
-  typename NodeListType::Pointer m_NodeList;
+  typename NodeListType::Pointer m_NodeList{ NodeListType::New() };
 
-  typename NodeStoreType::Pointer m_NodeStore;
+  typename NodeStoreType::Pointer m_NodeStore{ NodeStoreType::New() };
 };
 } // end namespace itk
 

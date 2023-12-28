@@ -146,7 +146,7 @@ Solver<VDimension>::GetOutput(unsigned int idx) -> FEMObjectType *
 
   if (out == nullptr)
   {
-    itkWarningMacro(<< "dynamic_cast to output type failed");
+    itkWarningMacro("dynamic_cast to output type failed");
   }
   return out;
 }
@@ -547,7 +547,7 @@ Solver<VDimension>::RunSolver()
     throw FEMExceptionSolution(__FILE__, __LINE__, "FEMObject::Solve()", "Master force vector was not initialized!");
   }
   timer.Stop();
-  itkDebugMacro(<< "Assemble Matrix took " << timer.GetMean() << " seconds.\n");
+  itkDebugMacro("Assemble Matrix took " << timer.GetMean() << " seconds.\n");
 
   itk::TimeProbe timer1;
   timer1.Start();
@@ -559,7 +559,7 @@ Solver<VDimension>::RunSolver()
   this->GetOutput()->DeepCopy(this->GetInput());
   this->UpdateDisplacements();
   timer1.Stop();
-  itkDebugMacro(<< "FE Solution took " << timer1.GetMean() << " seconds.\n");
+  itkDebugMacro("FE Solution took " << timer1.GetMean() << " seconds.\n");
 }
 
 template <unsigned int VDimension>
@@ -612,7 +612,7 @@ template <unsigned int VDimension>
 void
 Solver<VDimension>::ApplyBC(int dim, unsigned int matrix)
 {
-  // Vector with index 1 is used to store force correctios for BCs
+  // Vector with index 1 is used to store force corrections for BCs
   this->m_LinearSystem->DestroyVector(1);
 
   // Step over all Loads
@@ -625,7 +625,7 @@ Solver<VDimension>::ApplyBC(int dim, unsigned int matrix)
     // Apply boundary conditions in form of MFC loads.
     //
     // We add the multi freedom constraints contribution to the master
-    // stiffness matrix using the lagrange multipliers. Basically we only
+    // stiffness matrix using the Lagrange multipliers. Basically we only
     // change the last couple of rows and columns in K.
     if (LoadBCMFC::Pointer c = dynamic_cast<LoadBCMFC *>(l0.GetPointer()))
     {

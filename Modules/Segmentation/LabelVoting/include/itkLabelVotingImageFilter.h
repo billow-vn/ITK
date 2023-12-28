@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class LabelVotingImageFilter
+ * \class LabelVotingImageFilter
  *
  * \brief This filter performs pixelwise voting among an arbitrary number
  * of input images, where each of them represents a segmentation of the same
@@ -88,7 +88,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(LabelVotingImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelVotingImageFilter);
 
   /** Extract some information from the image types. Dimensionality
    * of the two images is assumed to be the same. */
@@ -178,7 +178,7 @@ protected:
   ComputeMaximumInputValue();
 
 private:
-  OutputPixelType m_LabelForUndecidedPixels;
+  OutputPixelType m_LabelForUndecidedPixels{};
   bool            m_HasLabelForUndecidedPixels{ false };
   size_t          m_TotalLabelCount{ 0 };
 };

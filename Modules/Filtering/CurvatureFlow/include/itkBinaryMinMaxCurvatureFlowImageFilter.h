@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class BinaryMinMaxCurvatureFlowImageFilter
+ * \class BinaryMinMaxCurvatureFlowImageFilter
  * \brief Denoise a binary image using min/max curvature flow.
  *
  * BinaryMinMaxCurvatureFlowImageFilter implements a curvature driven image
@@ -94,7 +94,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryMinMaxCurvatureFlowImageFilter, MinMaxCurvatureFlowImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryMinMaxCurvatureFlowImageFilter);
 
   /** Inherit type alias from Superclass. */
   using typename Superclass::FiniteDifferenceFunctionType;
@@ -131,7 +131,7 @@ protected:
   InitializeIteration() override;
 
 private:
-  double m_Threshold;
+  double m_Threshold{};
 };
 } // namespace itk
 

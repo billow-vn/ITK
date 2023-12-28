@@ -42,7 +42,7 @@ UpdateMalcolmSparseLevelSet<VDimension, TEquationContainer>::Update()
 {
   if (this->m_InputLevelSet.IsNull())
   {
-    itkGenericExceptionMacro(<< "m_InputLevelSet is nullptr");
+    itkGenericExceptionMacro("m_InputLevelSet is nullptr");
   }
 
   this->m_Offset = this->m_InputLevelSet->GetDomainOffset();
@@ -141,7 +141,7 @@ UpdateMalcolmSparseLevelSet<VDimension, TEquationContainer>::FillUpdateContainer
 
     const LevelSetOutputRealType update = termContainer->Evaluate(inputIndex);
 
-    LevelSetOutputType value = NumericTraits<LevelSetOutputType>::ZeroValue();
+    LevelSetOutputType value{};
 
     if (update > NumericTraits<LevelSetOutputRealType>::ZeroValue())
     {

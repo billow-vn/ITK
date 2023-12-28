@@ -27,7 +27,7 @@ namespace itk
 {
 
 /**
- *\class FFTPadImageFilter
+ * \class FFTPadImageFilter
  * \brief Pad an image to make it suitable for an FFT transformation
  *
  * FFT filters usually requires a specific image size. The size is decomposed
@@ -78,7 +78,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(FFTPadImageFilter, PadImageFilterBase);
+  itkOverrideGetNameOfClassMacro(FFTPadImageFilter);
 
   /**
    * Set/Get the greatest prime factor allowed on the size of the padded image.
@@ -109,9 +109,9 @@ protected:
 
 
 private:
-  SizeValueType m_SizeGreatestPrimeFactor;
+  SizeValueType m_SizeGreatestPrimeFactor{};
 
-  DefaultBoundaryConditionType m_DefaultBoundaryCondition;
+  DefaultBoundaryConditionType m_DefaultBoundaryCondition{};
 
 }; // end of class
 

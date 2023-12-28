@@ -25,16 +25,17 @@
 
 namespace itk
 {
-/** Print self method */
+
 template <typename TInputImage, typename TOutput>
 void
 NeighborhoodOperatorImageFunction<TInputImage, TOutput>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  this->Superclass::PrintSelf(os, indent);
-  os << indent << "Applying Operator Function:" << std::endl;
+  Superclass::PrintSelf(os, indent);
+
+  os << indent << "Operator: " << static_cast<typename NumericTraits<NeighborhoodType>::PrintType>(m_Operator)
+     << std::endl;
 }
 
-/** Evaluate the function at the specified point */
 template <typename TInputImage, typename TOutput>
 TOutput
 NeighborhoodOperatorImageFunction<TInputImage, TOutput>::EvaluateAtIndex(const IndexType & index) const

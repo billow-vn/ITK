@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class AttributeOpeningLabelMapFilter
+ * \class AttributeOpeningLabelMapFilter
  * \brief remove the objects according to the value of their attribute
  *
  * AttributeOpeningLabelMapFilter removes the objects in a label collection image
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributeOpeningLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(AttributeOpeningLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -113,8 +113,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  AttributeValueType m_Lambda;
-  bool               m_ReverseOrdering;
+  AttributeValueType m_Lambda{};
+  bool               m_ReverseOrdering{};
 
 }; // end of class
 

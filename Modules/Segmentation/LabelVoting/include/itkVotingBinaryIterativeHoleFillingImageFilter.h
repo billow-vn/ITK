@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class VotingBinaryIterativeHoleFillingImageFilter
+ * \class VotingBinaryIterativeHoleFillingImageFilter
  * \brief Fills in holes and cavities by iteratively applying a voting operation.
  *
  * This filter uses internally the VotingBinaryHoleFillingImageFilter, and runs
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VotingBinaryIterativeHoleFillingImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VotingBinaryIterativeHoleFillingImageFilter);
 
   /** Type of the internal Voting filter that is going to be executed
     iteratively */
@@ -118,7 +118,7 @@ public:
   /** Majority threshold. It is the number of pixels over 50% that will decide
    * whether an OFF pixel will become ON or not. For example, if the
    * neighborhood of a pixel has 124 pixels (excluding itself), the 50% will be
-   * 62, and if you set upd a Majority threshold of 5, that means that the
+   * 62, and if you set up a Majority threshold of 5, that means that the
    * filter will require 67 or more neighbor pixels to be ON in order to switch
    * the current OFF pixel to ON. The default value is 1. */
   itkGetConstReferenceMacro(MajorityThreshold, unsigned int);
@@ -147,15 +147,15 @@ protected:
   GenerateData() override;
 
 private:
-  InputSizeType m_Radius;
+  InputSizeType m_Radius{};
 
-  InputPixelType m_ForegroundValue;
-  InputPixelType m_BackgroundValue;
+  InputPixelType m_ForegroundValue{};
+  InputPixelType m_BackgroundValue{};
 
-  unsigned int m_MaximumNumberOfIterations;
-  unsigned int m_CurrentNumberOfIterations;
-  unsigned int m_MajorityThreshold;
-  unsigned int m_NumberOfPixelsChanged;
+  unsigned int m_MaximumNumberOfIterations{};
+  unsigned int m_CurrentNumberOfIterations{};
+  unsigned int m_MajorityThreshold{};
+  unsigned int m_NumberOfPixelsChanged{};
 };
 } // end namespace itk
 

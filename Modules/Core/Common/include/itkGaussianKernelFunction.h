@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianKernelFunction, KernelFunctionBase);
+  itkOverrideGetNameOfClassMacro(GaussianKernelFunction);
 
   /** Evaluate the function. */
   TRealValueType
@@ -73,7 +73,7 @@ protected:
   }
 
 private:
-  const TRealValueType m_Factor;
+  const TRealValueType m_Factor{};
 };
 } // end namespace itk
 

@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class ImageSpatialObject
+ * \class ImageSpatialObject
  * \brief Implementation of an image as spatial object.
  *
  * This class combines functionalities from a spatial object,
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(ImageSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -87,7 +87,11 @@ public:
   using Superclass::IsInsideInObjectSpace;
 
   /** Returns the value of the image at the requested point.
-   *  Returns true if that value is valid */
+   *
+   * Returns true if that value is valid.
+   *
+   * The value returned is always of type double; for RGB Images the value returned is the value of the first channel.
+   */
   bool
   ValueAtInObjectSpace(const PointType &   point,
                        double &            value,
@@ -115,7 +119,7 @@ public:
   itkLegacyMacro(const char * GetPixelTypeName()) { return m_PixelType.c_str(); }
 #endif
 
-  /** Set/Get the interpolator */
+  /** Set/Get the interpolator. */
   void
   SetInterpolator(InterpolatorType * interpolator);
   itkGetConstMacro(Interpolator, InterpolatorType *);
@@ -135,15 +139,15 @@ protected:
   InternalClone() const override;
 
 private:
-  ImagePointer m_Image;
+  ImagePointer m_Image{};
 
-  IndexType m_SliceNumber;
+  IndexType m_SliceNumber{};
 
 #if !defined(ITK_LEGACY_REMOVE)
-  std::string m_PixelType;
+  std::string m_PixelType{};
 #endif
 
-  typename InterpolatorType::Pointer m_Interpolator;
+  typename InterpolatorType::Pointer m_Interpolator{};
 
 #if !defined(ITK_LEGACY_REMOVE)
   template <typename T>

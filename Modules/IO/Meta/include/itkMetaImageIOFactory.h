@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class MetaImageIOFactory
+ * \class MetaImageIOFactory
  * \brief Create instances of MetaImageIO objects using an object factory.
  * \ingroup ITKIOMeta
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(MetaImageIOFactory);
 
   /** Register one factory of this type  */
   static void

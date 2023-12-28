@@ -28,7 +28,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class ScalarImageToRunLengthFeaturesFilter
+ * \class ScalarImageToRunLengthFeaturesFilter
  *  \brief This class computes run length descriptions from an image.
  *
  * By default, run length features are computed for each spatial
@@ -84,7 +84,6 @@ namespace Statistics
  *
  * IJ article: https://www.insight-journal.org/browse/publication/231
  *
- * \sa ScalarImageToRunLengthFeaturesFilter
  * \sa ScalarImageToRunLengthMatrixFilter
  * \sa HistogramToRunLengthFeaturesFilter
  *
@@ -103,7 +102,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarImageToRunLengthFeaturesFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ScalarImageToRunLengthFeaturesFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -221,13 +220,13 @@ protected:
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
 
 private:
-  typename RunLengthMatrixFilterType::Pointer m_RunLengthMatrixGenerator;
+  typename RunLengthMatrixFilterType::Pointer m_RunLengthMatrixGenerator{};
 
-  FeatureValueVectorPointer     m_FeatureMeans;
-  FeatureValueVectorPointer     m_FeatureStandardDeviations;
-  FeatureNameVectorConstPointer m_RequestedFeatures;
-  OffsetVectorConstPointer      m_Offsets;
-  bool                          m_FastCalculations;
+  FeatureValueVectorPointer     m_FeatureMeans{};
+  FeatureValueVectorPointer     m_FeatureStandardDeviations{};
+  FeatureNameVectorConstPointer m_RequestedFeatures{};
+  OffsetVectorConstPointer      m_Offsets{};
+  bool                          m_FastCalculations{};
 };
 } // end of namespace Statistics
 } // end of namespace itk

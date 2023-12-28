@@ -27,7 +27,7 @@ namespace itk
  * a seed pixel) where the bright object is surrounded by a darker
  * object.
  *
- * GrayscaleConnectedOpeningImagefilter is useful for enhancing bright
+ * GrayscaleConnectedOpeningImageFilter is useful for enhancing bright
  * objects that are surrounded by dark borders. This filter makes it
  * easier to threshold the image and extract just the object of
  * interest.
@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GrayscaleConnectedOpeningImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GrayscaleConnectedOpeningImageFilter);
 
   /** Set/Get the seed pixel for the segmentation */
   itkSetMacro(Seed, InputImageIndexType);
@@ -122,9 +122,9 @@ protected:
 
 private:
   unsigned long       m_NumberOfIterationsUsed{ 1 };
-  InputImageIndexType m_Seed;
+  InputImageIndexType m_Seed{};
 
-  bool m_FullyConnected;
+  bool m_FullyConnected{};
 }; // end of class
 } // end namespace itk
 

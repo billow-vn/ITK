@@ -78,7 +78,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::AddTerm(const Te
       }
       else
       {
-        itkGenericExceptionMacro(<< "m_Input and iTerm->GetInput are nullptr");
+        itkGenericExceptionMacro("m_Input and iTerm->GetInput are nullptr");
       }
     }
     iTerm->SetCurrentLevelSetId(this->m_CurrentLevelSetId);
@@ -91,7 +91,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::AddTerm(const Te
     {
       if (!iTerm->GetLevelSetContainer())
       {
-        itkGenericExceptionMacro(<< "m_LevelSetContainer and iTerm->GetLevelSetContainer() are nullptr");
+        itkGenericExceptionMacro("m_LevelSetContainer and iTerm->GetLevelSetContainer() are nullptr");
       }
     }
 
@@ -114,7 +114,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::AddTerm(const Te
   }
   else
   {
-    itkGenericExceptionMacro(<< "Term supplied is null");
+    itkGenericExceptionMacro("Term supplied is null");
   }
 }
 
@@ -133,7 +133,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::PushTerm(TermTyp
       }
       else
       {
-        itkGenericExceptionMacro(<< "m_Input and iTerm->GetInput are nullptr");
+        itkGenericExceptionMacro("m_Input and iTerm->GetInput are nullptr");
       }
     }
 
@@ -147,7 +147,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::PushTerm(TermTyp
     {
       if (!iTerm->GetLevelSetContainer())
       {
-        itkGenericExceptionMacro(<< "m_LevelSetContainer and iTerm->GetLevelSetContainer() are nullptr");
+        itkGenericExceptionMacro("m_LevelSetContainer and iTerm->GetLevelSetContainer() are nullptr");
       }
     }
 
@@ -173,7 +173,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::PushTerm(TermTyp
   }
   else
   {
-    itkGenericExceptionMacro(<< "Term supplied is null");
+    itkGenericExceptionMacro("Term supplied is null");
   }
 }
 
@@ -186,7 +186,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::GetTerm(const st
 
   if (it == m_Container.end())
   {
-    itkGenericExceptionMacro(<< "the term " << iName.c_str() << " is not present in the container");
+    itkGenericExceptionMacro("the term " << iName.c_str() << " is not present in the container");
   }
 
   return it->second;
@@ -201,7 +201,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::GetTerm(const Te
 
   if (it == m_Container.end())
   {
-    itkGenericExceptionMacro(<< "the term " << iId << " is not present in the container");
+    itkGenericExceptionMacro("the term " << iId << " is not present in the container");
   }
 
   return it->second;
@@ -265,7 +265,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::Evaluate(const L
 
   auto cfl_it = m_TermContribution.begin();
 
-  LevelSetOutputRealType oValue = NumericTraits<LevelSetOutputRealType>::ZeroValue();
+  LevelSetOutputRealType oValue{};
 
   while (term_it != term_end)
   {
@@ -290,16 +290,17 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::Evaluate(const L
 
 // ----------------------------------------------------------------------------
 template <typename TInputImage, typename TLevelSetContainer>
-typename LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::LevelSetOutputRealType
+auto
 LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::Evaluate(const LevelSetInputIndexType & iP,
                                                                          const LevelSetDataType &       iData)
+  -> LevelSetOutputRealType
 {
   auto term_it = m_Container.begin();
   auto term_end = m_Container.end();
 
   auto cfl_it = m_TermContribution.begin();
 
-  LevelSetOutputRealType oValue = NumericTraits<LevelSetOutputRealType>::ZeroValue();
+  LevelSetOutputRealType oValue{};
 
   while (term_it != term_end)
   {
@@ -351,7 +352,7 @@ LevelSetEquationTermContainer<TInputImage, TLevelSetContainer>::ComputeCFLContri
 
   auto cfl_it = m_TermContribution.begin();
 
-  LevelSetOutputRealType oValue = NumericTraits<LevelSetOutputRealType>::ZeroValue();
+  LevelSetOutputRealType oValue{};
 
   while (term_it != term_end)
   {

@@ -21,6 +21,7 @@
 #include "itkOpenCVVideoCapture.h"
 #include "itkVideoFileReader.h"
 #include "itkOpenCVVideoIOFactory.h"
+#include "itkTestingMacros.h"
 
 #include "opencv2/core/version.hpp"
 #if !defined(CV_VERSION_EPOCH)
@@ -39,27 +40,22 @@ using RGBFrameType = itk::Image<RGBPixelType, 2>;
 using RGBVideoStreamType = itk::VideoStream<RGBFrameType>;
 using rgbReaderType = itk::VideoFileReader<RGBVideoStreamType>;
 
-//
-// Main test
-//
+
 int
 itkOpenCVVideoCaptureTest(int argc, char * argv[])
 {
-  //
-  // Check arguments
-  //
+
   if (argc != 6)
   {
-    std::cerr << "Usage: " << argv[0] << " input_video scalar_output_video RGB_output_video "
-              << "width height" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv)
+              << " inputVideo scalarOutputVideo RGBOutputVideo width height" << std::endl;
     return EXIT_FAILURE;
   }
 
   itk::ObjectFactoryBase::RegisterFactory(itk::OpenCVVideoIOFactory::New());
 
-  //
   // Test with scalars
-  //
 
   // Set up an itk reader
   itk::ObjectFactoryBase::RegisterFactory(itk::OpenCVVideoIOFactory::New());
@@ -91,9 +87,9 @@ itkOpenCVVideoCaptureTest(int argc, char * argv[])
   if (static_cast<int>(scalarCap->get(CV_CAP_PROP_FRAME_WIDTH)) != std::stoi(argv[4]) ||
       static_cast<int>(scalarCap->get(CV_CAP_PROP_FRAME_HEIGHT)) != std::stoi(argv[5]))
   {
-    std::cerr << "Frame dimensions not reporting correctly. Got [" << scalarCap->get(CV_CAP_PROP_FRAME_WIDTH) << ","
-              << scalarCap->get(CV_CAP_PROP_FRAME_HEIGHT) << "] Expected: [" << std::stoi(argv[4]) << ","
-              << std::stoi(argv[5]) << "]" << std::endl;
+    std::cerr << "Frame dimensions not reporting correctly. Got [" << scalarCap->get(CV_CAP_PROP_FRAME_WIDTH) << ','
+              << scalarCap->get(CV_CAP_PROP_FRAME_HEIGHT) << "] Expected: [" << std::stoi(argv[4]) << ','
+              << std::stoi(argv[5]) << ']' << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -115,9 +111,7 @@ itkOpenCVVideoCaptureTest(int argc, char * argv[])
   // Clean up
   delete scalarCap;
 
-  //
   // Test with RGB
-  //
 
   // Set up an itk reader
   itk::ObjectFactoryBase::RegisterFactory(itk::OpenCVVideoIOFactory::New());
@@ -159,5 +153,7 @@ itkOpenCVVideoCaptureTest(int argc, char * argv[])
   // Clean up
   delete rgbCap;
 
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

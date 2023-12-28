@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class IsoDataThresholdImageFilter
+ * \class IsoDataThresholdImageFilter
  * \brief Threshold an image using the IsoData Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(IsoDataThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(IsoDataThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

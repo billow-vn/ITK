@@ -37,7 +37,6 @@ namespace itk
  * This code was contributed in the Insight Journal paper:
  * "Robust Automatic Threshold Selection"
  * by Lehmann G.
- * https://hdl.handle.net/1926/370
  * https://www.insight-journal.org/browse/publication/134
  *
  *
@@ -63,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RobustAutomaticThresholdImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(RobustAutomaticThresholdImageFilter);
 
   /** Standard image type within this class. */
   using InputImageType = TInputImage;
@@ -162,9 +161,9 @@ protected:
 
 private:
   double          m_Pow{ 1 };
-  InputPixelType  m_Threshold;
-  OutputPixelType m_InsideValue;
-  OutputPixelType m_OutsideValue;
+  InputPixelType  m_Threshold{};
+  OutputPixelType m_InsideValue{};
+  OutputPixelType m_OutsideValue{};
 };
 } // end namespace itk
 

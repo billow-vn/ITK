@@ -87,8 +87,8 @@ GrayscaleConnectedOpeningImageFilter<TInputImage, TOutputImage>::GenerateData()
 
   if (minValue == seedValue)
   {
-    itkWarningMacro(<< "GrayscaleConnectedClosingImageFilter: pixel value at seed point matches minimum value in "
-                       "image.  Resulting image will have a constant value.");
+    itkWarningMacro("GrayscaleConnectedClosingImageFilter: pixel value at seed point matches minimum value in "
+                    "image.  Resulting image will have a constant value.");
     outputImage->FillBuffer(minValue);
     return;
   }
@@ -143,7 +143,7 @@ GrayscaleConnectedOpeningImageFilter<TInputImage, TOutputImage>::PrintSelf(std::
 
   os << indent << "Seed point: " << m_Seed << std::endl;
   os << indent << "Number of iterations used to produce current output: " << m_NumberOfIterationsUsed << std::endl;
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 #endif

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class LabelMapToBinaryImageFilter
+ * \class LabelMapToBinaryImageFilter
  * \brief Convert a LabelMap to a binary image.
  *
  * LabelMapToBinaryImageFilter to a binary image. All the objects in the image
@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToBinaryImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapToBinaryImageFilter);
 
   /**
    * Set/Get the value used as "background" in the output image.
@@ -155,8 +155,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
 }; // end of class
 } // end namespace itk
 

@@ -24,7 +24,7 @@
 
 namespace itk
 {
-/**\class ObjectToObjectMetricBaseTemplateEnums
+/** \class ObjectToObjectMetricBaseTemplateEnums
  *\brief This class contains all the enum classes used by the ObjectToObjectMetricBaseTemplate class.
  * \ingroup ITKOptimizersv4
  */
@@ -32,7 +32,7 @@ class ObjectToObjectMetricBaseTemplateEnums
 {
 public:
   /**
-   *\class GradientSource
+   * \class GradientSource
    * \ingroup ITKOptimizersv4
    * Source of the gradient(s) used by the metric
    * (e.g. image gradients, in the case of
@@ -45,7 +45,7 @@ public:
   };
 
   /**
-   *\class MetricCategory
+   * \class MetricCategory
    * \ingroup ITKOptimizersv4
    */
   enum class MetricCategory : uint8_t
@@ -63,7 +63,7 @@ extern ITKOptimizersv4_EXPORT std::ostream &
 extern ITKOptimizersv4_EXPORT std::ostream &
                               operator<<(std::ostream & out, const ObjectToObjectMetricBaseTemplateEnums::MetricCategory value);
 /**
- *\class ObjectToObjectMetricBaseTemplate
+ * \class ObjectToObjectMetricBaseTemplate
  * \brief Base class for all object-to-object similarity metrics added in ITKv4.
  *
  * This is the abstract base class for a hierarchy of similarity metrics
@@ -99,7 +99,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ObjectToObjectMetricBaseTemplate, SingleValuedCostFunctionv4Template);
+  itkOverrideGetNameOfClassMacro(ObjectToObjectMetricBaseTemplate);
 
   /** Type used for representing object components  */
   using CoordinateRepresentationType = TInternalComputationValueType;
@@ -253,13 +253,13 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Fixed and Moving Objects */
-  ObjectConstPointer m_FixedObject;
-  ObjectConstPointer m_MovingObject;
+  ObjectConstPointer m_FixedObject{};
+  ObjectConstPointer m_MovingObject{};
 
-  GradientSourceEnum m_GradientSource;
+  GradientSourceEnum m_GradientSource{};
 
   /** Metric value, stored after evaluating */
-  mutable MeasureType m_Value;
+  mutable MeasureType m_Value{};
 };
 
 /** This helps to meet backward compatibility */

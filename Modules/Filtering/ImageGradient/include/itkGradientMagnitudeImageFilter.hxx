@@ -41,7 +41,8 @@ void
 GradientMagnitudeImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageSpacing = " << m_UseImageSpacing << std::endl;
+
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -122,7 +123,7 @@ GradientMagnitudeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerate
     {
       if (this->GetInput()->GetSpacing()[i] == 0.0)
       {
-        itkExceptionMacro(<< "Image spacing cannot be zero.");
+        itkExceptionMacro("Image spacing cannot be zero.");
       }
       else
       {
@@ -136,17 +137,15 @@ GradientMagnitudeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerate
   const auto radius = Size<ImageDimension>::Filled(1);
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>                        bC;
-  faceList = bC(input, outputRegionForThread, radius);
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList =
+    bC(input, outputRegionForThread, radius);
 
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
-  fit = faceList.begin();
 
   TotalProgressReporter progress(this, output->GetRequestedRegion().GetNumberOfPixels());
 
   // Process non-boundary face
-  nit = ConstNeighborhoodIterator<TInputImage>(radius, input, *fit);
+  nit = ConstNeighborhoodIterator<TInputImage>(radius, input, faceList.front());
 
   std::slice          x_slice[ImageDimension];
   const SizeValueType center = nit.Size() / 2;
@@ -157,16 +156,16 @@ GradientMagnitudeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerate
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    bit = ConstNeighborhoodIterator<InputImageType>(radius, input, *fit);
-    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    bit = ConstNeighborhoodIterator<InputImageType>(radius, input, face);
+    it = ImageRegionIterator<OutputImageType>(output, face);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
     while (!bit.IsAtEnd())
     {
-      RealType a = NumericTraits<RealType>::ZeroValue();
+      RealType a{};
       for (i = 0; i < ImageDimension; ++i)
       {
         const RealType g = SIP(x_slice[i], bit, op[i]);

@@ -106,7 +106,6 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
   m_RadiusImage->Allocate(true); // initialize buffer to zero
 
   ImageRegionConstIteratorWithIndex<InputImageType> image_it(inputImage, inputImage->GetRequestedRegion());
-  image_it.GoToBegin();
 
   const ImageRegion<2> & region = outputImage->GetRequestedRegion();
 
@@ -164,8 +163,6 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
   // Compute the average radius
   ImageRegionConstIterator<OutputImageType> output_it(outputImage, outputImage->GetLargestPossibleRegion());
   ImageRegionIterator<RadiusImageType>      radius_it(m_RadiusImage, m_RadiusImage->GetLargestPossibleRegion());
-  output_it.GoToBegin();
-  radius_it.GoToBegin();
   while (!output_it.IsAtEnd())
   {
     if (output_it.Get() > 1)
@@ -193,7 +190,7 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
 
   if (m_RadiusImage.IsNull())
   {
-    itkExceptionMacro(<< "Update() must be called before GetCircles().");
+    itkExceptionMacro("Update() must be called before GetCircles().");
   }
 
   m_CirclesList.clear();
@@ -296,7 +293,7 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
   os << indent << "Disc Radius Ratio: " << m_DiscRadiusRatio << std::endl;
   os << indent << "Accumulator blur variance: " << m_Variance << std::endl;
   os << indent << "Sweep angle : " << m_SweepAngle << std::endl;
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 
   itkPrintSelfObjectMacro(RadiusImage);
 
@@ -305,7 +302,7 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
   auto         it = m_CirclesList.begin();
   while (it != m_CirclesList.end())
   {
-    os << indent << "[" << i << "]: " << *it << std::endl;
+    os << indent << '[' << i << "]: " << *it << std::endl;
     ++it;
     ++i;
   }

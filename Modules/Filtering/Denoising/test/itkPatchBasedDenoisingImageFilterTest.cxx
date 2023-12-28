@@ -218,6 +218,8 @@ doDenoising(const std::string & inputFileName,
 
     ITK_TRY_EXPECT_EXCEPTION(filter->Update());
 
+    std::cout << "NumIndependentComponents: " << filter->GetNumIndependentComponents() << std::endl;
+
     // Restore the original pixel value
     inputImage->SetPixel(pixelIndex, originalPixelValue);
   }
@@ -267,7 +269,7 @@ doDenoising(const std::string & inputFileName,
       {
         std::cout.precision(static_cast<unsigned int>(itk::Math::abs(std::log10(tolerance))));
         std::cout << "Error in GetKernelBandwidthSigma() "
-                  << "at index: [" << i << "]" << std::endl;
+                  << "at index: [" << i << ']' << std::endl;
         std::cout << "Expected value: " << expectedValue << ", but got: " << resultValue << std::endl;
         std::cout << "Test failed!" << std::endl;
         return EXIT_FAILURE;
@@ -384,7 +386,7 @@ itkPatchBasedDenoisingImageFilterTest(int argc, char * argv[])
       std::cerr << noiseModel << " is not a valid noise model choice. Please choose one of: ";
       for (const auto & modelChoice : modelChoices)
       {
-        std::cerr << modelChoice << " " << std::endl;
+        std::cerr << modelChoice << ' ' << std::endl;
       }
       return EXIT_FAILURE;
     }

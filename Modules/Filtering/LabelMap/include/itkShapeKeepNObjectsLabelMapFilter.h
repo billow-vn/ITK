@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ShapeKeepNObjectsLabelMapFilter
+ * \class ShapeKeepNObjectsLabelMapFilter
  * \brief Keep N objects according to their shape attributes.
  *
  * The ShapeKeepNObjectsLabelMapFilter keeps N objects in a label collection image with the
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShapeKeepNObjectsLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ShapeKeepNObjectsLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -176,10 +176,10 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  bool m_ReverseOrdering;
+  bool m_ReverseOrdering{};
 
-  SizeValueType m_NumberOfObjects;
-  AttributeType m_Attribute;
+  SizeValueType m_NumberOfObjects{};
+  AttributeType m_Attribute{};
 }; // end of class
 } // end namespace itk
 

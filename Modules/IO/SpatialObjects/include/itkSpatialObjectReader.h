@@ -46,7 +46,7 @@ public:
   using GroupType = GroupSpatialObject<VDimension>;
   using GroupPointer = typename GroupType::Pointer;
 
-  /** base type for MetaConverters -- bidirections conversion btw
+  /** base type for MetaConverters -- bidirectional conversion btw
    *  SpatialObject & MetaObject
    */
   using MetaConverterBaseType = MetaConverterBase<VDimension>;
@@ -57,7 +57,7 @@ public:
 
   /** Run-time type information (and related methods). */
   using Superclass = Object;
-  itkTypeMacro(SpatialObjectReader, Object);
+  itkOverrideGetNameOfClassMacro(SpatialObjectReader);
 
   /** Load a scene file. */
   void
@@ -117,17 +117,17 @@ public:
                         MetaConverterBaseType * converter);
 
 protected:
-  std::string m_FileName;
+  std::string m_FileName{};
 
   SpatialObjectReader();
   ~SpatialObjectReader() override = default;
 
 private:
-  GroupPointer m_Group;
+  GroupPointer m_Group{};
 
-  SpatialObjectPointer m_SpatialObject;
+  SpatialObjectPointer m_SpatialObject{};
 
-  typename MetaSceneConverterType::Pointer m_MetaToSpatialConverter;
+  typename MetaSceneConverterType::Pointer m_MetaToSpatialConverter{};
 };
 } // namespace itk
 

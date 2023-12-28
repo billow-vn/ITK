@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ApproximateSignedDistanceMapImageFilter
+ * \class ApproximateSignedDistanceMapImageFilter
  * \brief Create a map of the approximate signed distance from the boundaries of
  * a binary image.
  *
@@ -85,7 +85,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ApproximateSignedDistanceMapImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ApproximateSignedDistanceMapImageFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -141,12 +141,12 @@ protected:
 private:
   using IsoContourType = IsoContourDistanceImageFilter<InputImageType, OutputImageType>;
   using ChamferType = FastChamferDistanceImageFilter<OutputImageType, OutputImageType>;
-  typename IsoContourType::Pointer m_IsoContourFilter;
+  typename IsoContourType::Pointer m_IsoContourFilter{};
 
-  typename ChamferType::Pointer m_ChamferFilter;
+  typename ChamferType::Pointer m_ChamferFilter{};
 
-  InputPixelType m_InsideValue;
-  InputPixelType m_OutsideValue;
+  InputPixelType m_InsideValue{};
+  InputPixelType m_OutsideValue{};
 };
 } // end of namespace itk
 

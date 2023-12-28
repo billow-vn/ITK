@@ -103,7 +103,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MovingHistogramImageFilterBase, KernelImageFilter);
+  itkOverrideGetNameOfClassMacro(MovingHistogramImageFilterBase);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -153,15 +153,15 @@ protected:
                   int &           LineDirection);
 
   // store the added and removed pixel offset in a list
-  OffsetMapType m_AddedOffsets;
-  OffsetMapType m_RemovedOffsets;
+  OffsetMapType m_AddedOffsets{};
+  OffsetMapType m_RemovedOffsets{};
 
   // store the offset of the kernel to initialize the histogram
-  OffsetListType m_KernelOffsets;
+  OffsetListType m_KernelOffsets{};
 
-  FixedArray<int, Self::ImageDimension> m_Axes;
+  FixedArray<int, Self::ImageDimension> m_Axes{};
 
-  SizeValueType m_PixelsPerTranslation;
+  SizeValueType m_PixelsPerTranslation{};
 
 private:
   class DirectionCost

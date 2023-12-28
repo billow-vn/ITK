@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VectorCastImageFilter
+ * \class VectorCastImageFilter
  *
  * \brief Casts input vector pixels to output vector pixel type.
  *
@@ -99,7 +99,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(VectorCastImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorCastImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

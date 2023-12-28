@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class MRCImageIO
+ * \class MRCImageIO
  *
  *  \brief An ImageIO class to read the MRC file format.
  * The MRC file format frequently has the extension ".mrc" or
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MRCImageIO, StreamingImageIOBase);
+  itkOverrideGetNameOfClassMacro(MRCImageIO);
 
   // we don't use this method
   void
@@ -146,7 +146,7 @@ private:
   virtual void
   WriteImageInformation(const void * buffer);
 
-  MRCHeaderObject::Pointer m_MRCHeader;
+  MRCHeaderObject::Pointer m_MRCHeader{};
 };
 } // namespace itk
 

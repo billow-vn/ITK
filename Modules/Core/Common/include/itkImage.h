@@ -38,7 +38,7 @@ namespace itk
  * variables), and a dimension (number of independent variables).  The
  * container for the pixel data is the ImportImageContainer.
  *
- * Within the pixel container, images are modelled as arrays, defined by a
+ * Within the pixel container, images are modeled as arrays, defined by a
  * start index and a size.
  *
  * The superclass of Image, ImageBase, defines the geometry of the
@@ -101,7 +101,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Image, ImageBase);
+  itkOverrideGetNameOfClassMacro(Image);
 
   /** Pixel type alias support. Used to declare pixel type in filters
    * or other operations. */
@@ -326,7 +326,7 @@ public:
    * `itk::Image` for non-EqualityComparable pixel types.
    */
   template <typename TEqualityComparable>
-  friend std::enable_if_t<std::is_same<TEqualityComparable, TPixel>::value, bool>
+  friend std::enable_if_t<std::is_same_v<TEqualityComparable, TPixel>, bool>
   operator==(const Image<TEqualityComparable, VImageDimension> & lhs,
              const Image<TEqualityComparable, VImageDimension> & rhs)
   {
@@ -366,7 +366,7 @@ public:
 
   /** Returns (image1 != image2). */
   template <typename TEqualityComparable>
-  friend std::enable_if_t<std::is_same<TEqualityComparable, TPixel>::value, bool>
+  friend std::enable_if_t<std::is_same_v<TEqualityComparable, TPixel>, bool>
   operator!=(const Image<TEqualityComparable, VImageDimension> & lhs,
              const Image<TEqualityComparable, VImageDimension> & rhs)
   {
@@ -374,7 +374,7 @@ public:
   }
 
 protected:
-  Image();
+  Image() = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
   void
@@ -393,7 +393,7 @@ protected:
 
 private:
   /** Memory for the current buffer. */
-  PixelContainerPointer m_Buffer;
+  PixelContainerPointer m_Buffer{ PixelContainer::New() };
 };
 } // end namespace itk
 

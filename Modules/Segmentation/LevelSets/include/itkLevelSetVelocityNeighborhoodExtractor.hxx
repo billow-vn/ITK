@@ -51,7 +51,7 @@ LevelSetVelocityNeighborhoodExtractor<TLevelSet, TAuxValue, VAuxDimension>::Prin
   {
     os << m_AuxImage[j].GetPointer() << ", ";
   }
-  os << m_AuxImage[j].GetPointer() << "]" << std::endl;
+  os << m_AuxImage[j].GetPointer() << ']' << std::endl;
   os << indent << "AuxInsideValues: " << m_AuxInsideValues.GetPointer() << std::endl;
   os << indent << "AuxOutsideValues: " << m_AuxOutsideValues.GetPointer() << std::endl;
 }
@@ -116,7 +116,7 @@ LevelSetVelocityNeighborhoodExtractor<TLevelSet, TAuxValue, VAuxDimension>::Calc
     numer[k] = 0.0;
   }
 
-  // The extend velcoity value is a weighted value of
+  // The extend velocity value is a weighted value of
   // the speed values at point used in the computation
   // of the distance by the superclass.
   //

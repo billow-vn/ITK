@@ -92,7 +92,7 @@ AnchorOpenCloseLine<TInputPix, TCompare>::DoLine(std::vector<InputImagePixelType
     {
       Extreme = buffer[i];
     }
-    //    std::cout << i << " " << static_cast<int>(Extreme) << " " << static_cast<int>(buffer[i]) <<
+    //    std::cout << i << ' ' << static_cast<int>(Extreme) << ' ' << static_cast<int>(buffer[i]) <<
     // std::endl;
     buffer[i] = Extreme;
   }
@@ -104,7 +104,7 @@ AnchorOpenCloseLine<TInputPix, TCompare>::DoLine(std::vector<InputImagePixelType
     {
       Extreme = buffer[i];
     }
-    //    std::cout << static_cast<int>(Extreme) << " " << static_cast<int>(buffer[i]) << std::endl;
+    //    std::cout << static_cast<int>(Extreme) << ' ' << static_cast<int>(buffer[i]) << std::endl;
     buffer[i] = Extreme;
   }
 }
@@ -117,7 +117,7 @@ AnchorOpenCloseLine<TInputPix, TCompare>::StartLine(std::vector<InputImagePixelT
                                                     unsigned int &                     outRightP)
 {
   // This returns true to indicate return to startLine label in pseudo
-  // code, and false to indicate finshLine
+  // code, and false to indicate finishLine
   Extreme = buffer[outLeftP];
   unsigned int currentP = outLeftP + 1;
   unsigned int sentinel, endP;

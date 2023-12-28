@@ -107,7 +107,7 @@ public:
   static constexpr unsigned int ImageDimension = TFixedImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TimeVaryingBSplineVelocityFieldImageRegistrationMethod, ImageRegistrationMethodv4);
+  itkOverrideGetNameOfClassMacro(TimeVaryingBSplineVelocityFieldImageRegistrationMethod);
 
   /** Input type alias for the images and transforms. */
   using FixedImageType = TFixedImage;
@@ -215,7 +215,10 @@ protected:
   void
   GenerateData() override;
 
-  /** Handle optimization internally */
+  /** Start the optimization at each level.
+   *
+   * Performs a basic gradient descent operation.
+   */
   virtual void
   StartOptimization();
 
@@ -236,18 +239,18 @@ protected:
                                                   const FixedImageMasksContainerType);
 
 private:
-  DisplacementFieldTransformPointer m_IdentityDisplacementFieldTransform;
+  DisplacementFieldTransformPointer m_IdentityDisplacementFieldTransform{};
 
-  RealType m_LearningRate;
+  RealType m_LearningRate{};
 
-  RealType     m_ConvergenceThreshold;
+  RealType     m_ConvergenceThreshold{};
   unsigned int m_ConvergenceWindowSize{ 10 };
 
-  NumberOfIterationsArrayType m_NumberOfIterationsPerLevel;
+  NumberOfIterationsArrayType m_NumberOfIterationsPerLevel{};
 
   SizeValueType m_NumberOfTimePointSamples{ 4 };
 
-  WeightsElementType m_BoundaryWeight;
+  WeightsElementType m_BoundaryWeight{};
 };
 } // end namespace itk
 

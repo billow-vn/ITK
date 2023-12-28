@@ -79,8 +79,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::SetThreadData(int thr
   }
   else
   {
-    itkExceptionMacro(<< "Invalid thread id " << threadId << " or SetThreadData called before m_ThreadData (size="
-                      << m_ThreadData.size() << ") was initialized.");
+    itkExceptionMacro("Invalid thread id " << threadId << " or SetThreadData called before m_ThreadData (size="
+                                           << m_ThreadData.size() << ") was initialized.");
   }
 }
 
@@ -94,8 +94,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::GetThreadData(int thr
   }
   else
   {
-    itkExceptionMacro(<< "Invalid thread id " << threadId << " or GetThreadData called before m_ThreadData (size="
-                      << m_ThreadData.size() << ") was initialized.");
+    itkExceptionMacro("Invalid thread id " << threadId << " or GetThreadData called before m_ThreadData (size="
+                                           << m_ThreadData.size() << ") was initialized.");
   }
 }
 
@@ -122,7 +122,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::CopyInputToOutput()
 {
   if (!this->m_InputImage || !this->m_OutputImage)
   {
-    itkExceptionMacro(<< "Input or Output image is nullptr.");
+    itkExceptionMacro("Input or Output image is nullptr.");
   }
 
   InputImageRegionConstIteratorType inputIt(this->m_InputImage, this->m_InputImage->GetRequestedRegion());
@@ -171,14 +171,15 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::GenerateInputRequeste
   // Pad the input requested region by the operator radius
   inputRequestedRegion.PadByRadius(voxelNeighborhoodSize);
 
-  itkDebugMacro(<< "Padding inputRequestedRegion by " << voxelNeighborhoodSize << "\n"
-                << "inputRequestedRegion: " << inputRequestedRegion << "\n"
+  itkDebugMacro("Padding inputRequestedRegion by "
+                << voxelNeighborhoodSize << '\n'
+                << "inputRequestedRegion: " << inputRequestedRegion << '\n'
                 << "largestPossibleRegion: " << inputPtr->GetLargestPossibleRegion());
 
   // Crop the input requested region at the input's largest possible region
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
   {
-    itkDebugMacro(<< "Cropped inputRequestedRegion to: " << inputRequestedRegion);
+    itkDebugMacro("Cropped inputRequestedRegion to: " << inputRequestedRegion);
     inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
   }
@@ -228,7 +229,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::Initialize()
   {
     // The image needs to be at least as big as a single patch
     // throw an exception when this isn't the case
-    itkExceptionMacro(<< "Patch is larger than the entire image (in at least one dimension)."
+    itkExceptionMacro("Patch is larger than the entire image (in at least one dimension)."
                       << "\nImage region: " << largestRegion << "\nPatch length (2*radius + 1): "
                       << this->GetPatchDiameterInVoxels() << "\nUse a smaller patch for this image.\n");
   }
@@ -245,9 +246,9 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::Initialize()
   // For automatic sigma estimation, can't use more than 100% of pixels.
   m_SigmaUpdateDecimationFactor = std::max(m_SigmaUpdateDecimationFactor, 1u);
 
-  itkDebugMacro(<< "m_KernelBandwidthFractionPixelsForEstimation: " << m_KernelBandwidthFractionPixelsForEstimation
-                << ", "
-                << "m_SigmaUpdateDecimationFactor: " << m_SigmaUpdateDecimationFactor);
+  itkDebugMacro("m_KernelBandwidthFractionPixelsForEstimation: " << m_KernelBandwidthFractionPixelsForEstimation << ", "
+                                                                 << "m_SigmaUpdateDecimationFactor: "
+                                                                 << m_SigmaUpdateDecimationFactor);
 
   // Get the number of components per pixel in the input image.
   m_NumPixelComponents = this->GetInput()->GetNumberOfComponentsPerPixel();
@@ -336,13 +337,14 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::Initialize()
       // Check that the set kernel sigma is valid
       if (m_KernelBandwidthSigma[ic] <= m_MinSigma)
       {
-        itkExceptionMacro(<< "Gaussian kernel sigma (" << m_KernelBandwidthSigma[ic] << ") must be larger than "
-                          << m_MinSigma);
+        itkExceptionMacro("Gaussian kernel sigma (" << m_KernelBandwidthSigma[ic] << ") must be larger than "
+                                                    << m_MinSigma);
       }
     }
   }
 
-  itkDebugMacro(<< "Image Intensity range: [" << m_ImageMin << "," << m_ImageMax << "], "
+  itkDebugMacro("Image Intensity range: ["
+                << m_ImageMin << ',' << m_ImageMax << "], "
                 << "IntensityRescaleInvFactor: " << m_IntensityRescaleInvFactor << " , "
                 << "KernelBandwidthMultiplicationFactor: " << m_KernelBandwidthMultiplicationFactor << " , "
                 << "KernelBandwidthSigma initialized to: " << m_KernelBandwidthSigma);
@@ -388,7 +390,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::EnforceConstraints()
   {
     if (m_ImageMax[ic] <= m_ImageMin[ic])
     {
-      itkExceptionMacro(<< "Each image component must be nonconstant.  "
+      itkExceptionMacro("Each image component must be nonconstant.  "
                         << "Component " << ic << " has the constant value " << m_ImageMax[ic] << ".\n");
     }
   }
@@ -401,7 +403,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::EnforceConstraints()
     {
       if (m_ImageMin[ic] < NumericTraits<PixelValueType>::ZeroValue())
       {
-        itkExceptionMacro(<< "When using POISSON or RICIAN noise models, "
+        itkExceptionMacro("When using POISSON or RICIAN noise models, "
                           << "all components of all pixels in the image must "
                           << "be >= 0.  The smallest value for component " << ic << " in the image is "
                           << m_ImageMin[ic] << ".\n");
@@ -415,7 +417,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::EnforceConstraints()
   {
     if (this->GetNoiseModelFidelityWeight() > 0)
     {
-      itkWarningMacro(<< "Noise model is undefined for RIEMANNIAN case, "
+      itkWarningMacro("Noise model is undefined for RIEMANNIAN case, "
                       << "disabling noise model by setting fidelity weight "
                       << "to zero.");
       this->SetNoiseModelFidelityWeight(0.0);
@@ -485,9 +487,9 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::InitializePatchWeight
   typename WeightsImageType::IndexType centerIndex;
   centerIndex.Fill(patchRadius);
 
-  ImageRegionIteratorWithIndex<WeightsImageType> pwIt(physicalWeightsImage, physicalRegion);
-  unsigned int                                   pos = 0;
-  for (pwIt.GoToBegin(); !pwIt.IsAtEnd(); ++pwIt)
+  unsigned int pos = 0;
+  for (ImageRegionIteratorWithIndex<WeightsImageType> pwIt(physicalWeightsImage, physicalRegion); !pwIt.IsAtEnd();
+       ++pwIt)
   {
     typename WeightsImageType::IndexType curIndex;
     curIndex = pwIt.GetIndex();
@@ -521,7 +523,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::InitializePatchWeight
       const unsigned int interval = (patchRadius + 1) - discRadius;
       const float        weight = (-2.0 / pow(interval, 3.0)) * pow((patchRadius + 1) - distanceFromCenter, 3.0f) +
                            (3.0 / pow(interval, 2.0)) * pow((patchRadius + 1) - distanceFromCenter, 2.0f);
-      pwIt.Set(std::max(static_cast<float>(0), std::min(static_cast<float>(1), weight)));
+      pwIt.Set(std::clamp(weight, 0.0f, 1.0f));
     }
   }
 
@@ -569,8 +571,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::InitializePatchWeight
   {
     if (centerWeight <= 0.0)
     {
-      itkExceptionMacro(<< "Center pixel's weight (" << patchWeights[(this->GetPatchLengthInVoxels() - 1) / 2]
-                        << ") must be greater than 0.0 ");
+      itkExceptionMacro("Center pixel's weight (" << patchWeights[(this->GetPatchLengthInVoxels() - 1) / 2]
+                                                  << ") must be greater than 0.0 ");
     }
 
     // Normalize to the center weight to guarantee that the center weight == 1.0
@@ -687,7 +689,7 @@ typename PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadDataSt
 
   if (m_NumIndependentComponents != 1)
   {
-    itkWarningMacro(<< "ThreadedRiemannianMinMax calculation assumes that "
+    itkWarningMacro("ThreadedRiemannianMinMax calculation assumes that "
                     << "there is exactly 1 independent component, but "
                     << "num independent components = " << m_NumIndependentComponents << " instead.\n");
   }
@@ -752,11 +754,11 @@ typename PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadDataSt
     threadData.minNorm[0] = std::sqrt(minNorm[0]);
     threadData.maxNorm[0] = std::sqrt(maxNorm[0]);
 
-    itkDebugMacro(<< "threadData minNorm: " << minNorm[0] << ", maxNorm: " << maxNorm[0]);
+    itkDebugMacro("threadData minNorm: " << minNorm[0] << ", maxNorm: " << maxNorm[0]);
   }
   else
   {
-    itkDebugMacro(<< "no pixels in this region");
+    itkDebugMacro("no pixels in this region");
   }
   return threadData;
 }
@@ -791,7 +793,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ResolveRiemannianMinM
     }
   }
 
-  itkDebugMacro(<< "image min resolved to: " << m_ImageMin << ", image max resolved to: " << m_ImageMax);
+  itkDebugMacro("image min resolved to: " << m_ImageMin << ", image max resolved to: " << m_ImageMax);
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -1156,10 +1158,10 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::AddEuclideanUpdate(co
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::RealType
+auto
 PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::AddExponentialMapUpdate(
   const DiffusionTensor3D<RealValueType> & spdMatrix,
-  const DiffusionTensor3D<RealValueType> & symMatrix)
+  const DiffusionTensor3D<RealValueType> & symMatrix) -> RealType
 {
   using RealEigenValuesArrayType = typename RealType::EigenValuesArrayType;
   using RealEigenVectorsMatrixType = typename RealType::EigenVectorsMatrixType;
@@ -1505,16 +1507,16 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ComputeSigmaUpdateThr
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadDataStruct
+auto
 PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadedComputeSigmaUpdate(
   const InputImageRegionType & regionToProcess,
   const int                    itkNotUsed(threadId),
-  ThreadDataStruct             threadData)
+  ThreadDataStruct             threadData) -> ThreadDataStruct
 {
   // Create two images to list adaptors, one for the iteration over the region
   // the other for querying to find the patches set the region of interest for
   // the second to only include patches with at least as many in-bounds
-  // neighborsin the same areas of the patch as the query patch
+  // neighbors in the same areas of the patch as the query patch
   // initialize accumulators
   // for each element in the region
   //   set region of interest
@@ -1649,7 +1651,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadedComputeSigmaU
     else
     {
       InputImagePatchIterator queryIt = sampler->GetSample()->GetMeasurementVector(currentPatchId)[0];
-      itkDebugMacro(<< "unexpected index for current patch, search results are empty."
+      itkDebugMacro("unexpected index for current patch, search results are empty."
                     << "\ncurrent patch id: " << currentPatchId << "\ncurrent patch index: " << nIndex
                     << "\nindex calculated by searcher: " << queryIt.GetIndex(queryIt.GetCenterNeighborhoodIndex())
                     << "\npatch accessed by searcher: ");
@@ -1831,7 +1833,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ResolveSigmaUpdate() 
       continue;
     }
 
-    itkDebugMacro(<< "Resolving sigma update for pixel component " << ic);
+    itkDebugMacro("Resolving sigma update for pixel component " << ic);
 
     // Accumulate the first and second derivatives from all the threads
     const RealValueType kernelSigma = m_KernelBandwidthSigma[ic];
@@ -1849,15 +1851,15 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ResolveSigmaUpdate() 
     firstDerivative /= static_cast<RealValueType>(m_TotalNumberPixels);
     secondDerivative /= static_cast<RealValueType>(m_TotalNumberPixels);
 
-    itkDebugMacro(<< "first deriv: " << firstDerivative << ", second deriv: " << secondDerivative
-                  << ", old sigma: " << kernelSigma);
+    itkDebugMacro("first deriv: " << firstDerivative << ", second deriv: " << secondDerivative
+                                  << ", old sigma: " << kernelSigma);
 
     // If second derivative is zero or negative, compute update using gradient
     // descent
     if ((Math::ExactlyEquals(itk::Math::abs(secondDerivative), NumericTraits<RealValueType>::ZeroValue())) ||
         (secondDerivative < 0))
     {
-      itkDebugMacro(<< "** Second derivative NOT POSITIVE");
+      itkDebugMacro("** Second derivative NOT POSITIVE");
       sigmaUpdate[ic] = -itk::Math::sgn(firstDerivative) * kernelSigma * 0.3;
     }
     else
@@ -1866,30 +1868,30 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ResolveSigmaUpdate() 
       sigmaUpdate[ic] = -firstDerivative / secondDerivative;
     }
 
-    itkDebugMacro(<< "update: " << sigmaUpdate[ic]);
+    itkDebugMacro("update: " << sigmaUpdate[ic]);
 
     // Avoid very large updates to prevent instabilities in Newton-Raphson
     if (itk::Math::abs(sigmaUpdate[ic]) > kernelSigma * 0.3)
     {
-      itkDebugMacro(<< "** Restricting large updates \n");
+      itkDebugMacro("** Restricting large updates \n");
       sigmaUpdate[ic] = itk::Math::sgn(sigmaUpdate[ic]) * kernelSigma * 0.3;
 
-      itkDebugMacro(<< "update: " << sigmaUpdate[ic]);
+      itkDebugMacro("update: " << sigmaUpdate[ic]);
     }
 
     // keep the updated sigma from being too close to zero
     if (kernelSigma + sigmaUpdate[ic] < m_MinSigma)
     {
-      itkDebugMacro(<< "** TOO SMALL SIGMA: adjusting sigma");
+      itkDebugMacro("** TOO SMALL SIGMA: adjusting sigma");
       m_KernelBandwidthSigma[ic] = (kernelSigma + m_MinSigma) / 2.0;
 
-      itkDebugMacro(<< "new sigma: " << m_KernelBandwidthSigma[ic]);
+      itkDebugMacro("new sigma: " << m_KernelBandwidthSigma[ic]);
     }
     else
     {
       m_KernelBandwidthSigma[ic] = kernelSigma + sigmaUpdate[ic];
 
-      itkDebugMacro(<< "new sigma: " << m_KernelBandwidthSigma[ic]);
+      itkDebugMacro("new sigma: " << m_KernelBandwidthSigma[ic]);
     }
   } // end for each independent pixel component
 
@@ -1905,7 +1907,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ComputeImageUpdate()
 
   str.Filter = this;
 
-  // Compute smoothing updated for intensites at each pixel
+  // Compute smoothing updated for intensities at each pixel
   // based on gradient of the joint entropy
   this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
   this->GetMultiThreader()->SetSingleMethod(this->ComputeImageUpdateThreaderCallback, &str);
@@ -1941,11 +1943,11 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ComputeImageUpdateThr
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadDataStruct
+auto
 PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadedComputeImageUpdate(
   const InputImageRegionType & regionToProcess,
   const int                    threadId,
-  ThreadDataStruct             threadData)
+  ThreadDataStruct             threadData) -> ThreadDataStruct
 {
   // Create two images to list adaptors, one for the iteration over the region
   // the other for querying to find the patches set the region of interest for
@@ -2092,7 +2094,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadedComputeImageU
           }
           default:
           {
-            itkExceptionMacro(<< "Unexpected noise model " << this->GetNoiseModel() << " specified.");
+            itkExceptionMacro("Unexpected noise model " << this->GetNoiseModel() << " specified.");
             break;
           }
         }
@@ -2121,12 +2123,12 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ThreadedComputeImageU
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::RealType
+auto
 PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ComputeGradientJointEntropy(
   InstanceIdentifier                  id,
   typename ListAdaptorType::Pointer & inList,
   BaseSamplerPointer &                sampler,
-  ThreadDataStruct &                  threadData)
+  ThreadDataStruct &                  threadData) -> RealType
 {
   using IndexType = typename OutputImageType::IndexType;
 
@@ -2336,11 +2338,11 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ComputeGradientJointE
       {
         squaredNorm[ic] += centerPatchSquaredNorm[ic];
       }
-    } // end if entire patch is inbounds
+    } // end if entire patch is in bounds
 
     useCachedComputations = true;
 
-    RealValueType gaussianJointEntropy = NumericTraits<RealValueType>::ZeroValue();
+    RealValueType gaussianJointEntropy{};
     for (unsigned int ic = 0; ic < m_NumIndependentComponents; ++ic)
     {
       RealValueType kernelSigma = m_KernelBandwidthSigma[ic];

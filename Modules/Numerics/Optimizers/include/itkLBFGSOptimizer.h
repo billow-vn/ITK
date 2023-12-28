@@ -21,6 +21,7 @@
 #include "itkSingleValuedNonLinearVnlOptimizer.h"
 #include "vnl/algo/vnl_lbfgs.h"
 #include "ITKOptimizersExport.h"
+#include <memory> // For unique_ptr.
 
 namespace itk
 {
@@ -97,7 +98,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LBFGSOptimizer, SingleValuedNonLinearVnlOptimizer);
+  itkOverrideGetNameOfClassMacro(LBFGSOptimizer);
 
   /** InternalParameters type alias. */
   using InternalParametersType = vnl_vector<double>;
@@ -154,7 +155,7 @@ public:
   itkGetMacro(LineSearchAccuracy, double);
 
   /** Set/Get the default step size. This is a positive real number
-   * with a default value of 1.0 which determines the stpe size in the line
+   * with a default value of 1.0 which determines the step size in the line
    * search.
    */
   virtual void
@@ -179,15 +180,15 @@ protected:
   using CostFunctionAdaptorType = Superclass::CostFunctionAdaptorType;
 
 private:
-  bool                       m_OptimizerInitialized;
-  InternalOptimizerType *    m_VnlOptimizer;
-  mutable std::ostringstream m_StopConditionDescription;
+  bool                                   m_OptimizerInitialized{};
+  std::unique_ptr<InternalOptimizerType> m_VnlOptimizer;
+  mutable std::ostringstream             m_StopConditionDescription{};
 
-  bool         m_Trace;
-  unsigned int m_MaximumNumberOfFunctionEvaluations;
-  double       m_GradientConvergenceTolerance;
-  double       m_LineSearchAccuracy;
-  double       m_DefaultStepLength;
+  bool         m_Trace{};
+  unsigned int m_MaximumNumberOfFunctionEvaluations{};
+  double       m_GradientConvergenceTolerance{};
+  double       m_LineSearchAccuracy{};
+  double       m_DefaultStepLength{};
 };
 } // end namespace itk
 

@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class BayesianClassifierImageFilter
+ * \class BayesianClassifierImageFilter
  *
  * \brief Performs Bayesian Classification on an image.
  *
@@ -98,7 +98,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BayesianClassifierImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BayesianClassifierImageFilter);
 
   /** Input and Output image types. */
   using typename Superclass::InputImageType;
@@ -228,7 +228,7 @@ private:
 
   bool m_UserProvidedSmoothingFilter{ false };
 
-  SmoothingFilterPointer m_SmoothingFilter;
+  SmoothingFilterPointer m_SmoothingFilter{};
 
   unsigned int m_NumberOfSmoothingIterations{ 0 };
 };

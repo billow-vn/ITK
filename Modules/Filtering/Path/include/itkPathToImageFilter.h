@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class PathToImageFilter
+ * \class PathToImageFilter
  * \brief Base class for filters that take a Path as input and produce an image as output.
  * Base class for filters that take a Path as input and produce an image as
  * output. By default, if the user does not specify the size of the output
@@ -49,7 +49,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathToImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(PathToImageFilter);
 
   /** Some convenient type alias. */
   using typename Superclass::OutputImageRegionType;
@@ -64,7 +64,7 @@ public:
   /** ImageDimension constants */
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
-  /** Set/Get the path input of this process object.  */
+  /** Set/Get the input path. */
   using Superclass::SetInput;
   virtual void
   SetInput(const InputPathType * input);
@@ -125,11 +125,11 @@ protected:
   void
   GenerateData() override;
 
-  SizeType  m_Size;
-  double    m_Spacing[OutputImageDimension];
-  double    m_Origin[OutputImageDimension];
-  ValueType m_PathValue;
-  ValueType m_BackgroundValue;
+  SizeType  m_Size{};
+  double    m_Spacing[OutputImageDimension]{};
+  double    m_Origin[OutputImageDimension]{};
+  ValueType m_PathValue{};
+  ValueType m_BackgroundValue{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

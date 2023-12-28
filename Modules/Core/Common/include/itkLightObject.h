@@ -49,7 +49,7 @@ namespace itk
  * \ingroup ITKCommon
  *
  * \sphinx
- * \sphinx{Core/Common/GetNameOfClass, Get Name Of Class}
+ * \sphinxexample{Core/Common/GetNameOfClass,Get Name Of Class}
  * \endsphinx
  */
 class ITKCommon_EXPORT LightObject
@@ -90,8 +90,7 @@ public:
   /** Return the name of this class as a string. Used by the object factory
    * (implemented in New()) to instantiate objects of a named type. Also
    * used for debugging and other output information.  */
-  virtual const char *
-  GetNameOfClass() const;
+  itkVirtualGetNameOfClassMacro(LightObject);
 
 #ifdef _WIN32
   /** Used to avoid dll boundary problems.  */
@@ -161,7 +160,7 @@ protected:
   InternalClone() const;
 
   /** Number of uses of this object by other objects. */
-  mutable std::atomic<int> m_ReferenceCount;
+  mutable std::atomic<int> m_ReferenceCount{};
 };
 
 /**

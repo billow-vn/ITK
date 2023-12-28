@@ -24,10 +24,10 @@ namespace itk
 {
 
 /**
- *\class BinaryGrindPeakImageFilter
+ * \class BinaryGrindPeakImageFilter
  * \brief Remove the objects not connected to the boundary of the image.
  *
- * BinaryGrindPeakImageFilter ginds peaks in a grayscale image.
+ * BinaryGrindPeakImageFilter grinds peaks in a grayscale image.
  *
  * Geodesic morphology and the grind peak algorithm is described in
  * Chapter 6 of Pierre Soille's book "Morphological Image Analysis:
@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryGrindPeakImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryGrindPeakImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -128,9 +128,9 @@ protected:
   GenerateData() override;
 
 private:
-  InputImagePixelType m_ForegroundValue;
+  InputImagePixelType m_ForegroundValue{};
 
-  InputImagePixelType m_BackgroundValue;
+  InputImagePixelType m_BackgroundValue{};
 
   bool m_FullyConnected{ false };
 

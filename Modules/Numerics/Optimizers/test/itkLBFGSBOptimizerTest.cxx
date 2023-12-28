@@ -49,7 +49,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(LBFGSBCostFunction, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(LBFGSBCostFunction);
 
   enum
   {
@@ -98,9 +98,9 @@ public:
     derivative = DerivativeType(SpaceDimension);
     derivative[0] = 3 * x + 2 * y - 2;
     derivative[1] = 2 * x + 6 * y + 8;
-    std::cout << "(";
+    std::cout << '(';
     std::cout << derivative[0] << " , ";
-    std::cout << derivative[1] << ")" << std::endl;
+    std::cout << derivative[1] << ')' << std::endl;
   }
 
 
@@ -179,8 +179,6 @@ itkLBFGSBOptimizerTest(int, char *[])
 
   itk::OutputWindow::SetInstance(itk::TextOutput::New().GetPointer());
 
-  std::cout << "LBFGSB Optimizer Test \n \n";
-
   using OptimizerType = itk::LBFGSBOptimizer;
 
   // Declaration of an itkOptimizer
@@ -217,6 +215,8 @@ itkLBFGSBOptimizerTest(int, char *[])
   unsigned int maximumNumberOfCorrections = 5;
   itkOptimizer->SetMaximumNumberOfCorrections(maximumNumberOfCorrections);
   ITK_TEST_SET_GET_VALUE(maximumNumberOfCorrections, itkOptimizer->GetMaximumNumberOfCorrections());
+
+  ITK_TEST_EXPECT_TRUE(!itkOptimizer->CanUseScales());
 
   constexpr unsigned int        SpaceDimension = 2;
   OptimizerType::ParametersType initialValue(SpaceDimension);
@@ -270,7 +270,7 @@ itkLBFGSBOptimizerTest(int, char *[])
 
   const OptimizerType::ParametersType & finalPosition = itkOptimizer->GetCurrentPosition();
 
-  std::cout << "Solution        = (" << finalPosition[0] << "," << finalPosition[1] << ")" << std::endl;
+  std::cout << "Solution        = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
   std::cout << "Final Function Value = " << itkOptimizer->GetValue() << std::endl;
 
   std::cout << "Infinity Norm of Projected Gradient = " << itkOptimizer->GetInfinityNormOfProjectedGradient()

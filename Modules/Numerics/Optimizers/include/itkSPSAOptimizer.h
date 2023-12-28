@@ -24,7 +24,7 @@
 
 namespace itk
 {
-/**\class SPSAOptimizerEnums
+/** \class SPSAOptimizerEnums
  * \brief Contains all enum classes used by SPSAOptimizer class.
  * \ingroup ITKOptimizers
  */
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SPSAOptimizer, SingleValuedNonLinearOptimizer);
+  itkOverrideGetNameOfClassMacro(SPSAOptimizer);
 
   using StopConditionSPSAOptimizerEnum = SPSAOptimizerEnums::StopConditionSPSAOptimizer;
 #if !defined(ITK_LEGACY_REMOVE)
@@ -263,22 +263,22 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Variables updated during optimization */
-  DerivativeType m_Gradient;
+  DerivativeType m_Gradient{};
 
-  double m_LearningRate;
+  double m_LearningRate{};
 
-  DerivativeType m_Delta;
+  DerivativeType m_Delta{};
 
   bool m_Stop{ false };
 
-  StopConditionSPSAOptimizerEnum m_StopCondition;
+  StopConditionSPSAOptimizerEnum m_StopCondition{};
 
-  double m_StateOfConvergence;
+  double m_StateOfConvergence{};
 
-  SizeValueType m_CurrentIteration;
+  SizeValueType m_CurrentIteration{};
 
   /** Random number generator */
-  Statistics::MersenneTwisterRandomVariateGenerator::Pointer m_Generator;
+  Statistics::MersenneTwisterRandomVariateGenerator::Pointer m_Generator{};
 
   /** Method to compute the learning rate at iteration k (a_k). */
   virtual double
@@ -291,7 +291,12 @@ protected:
   virtual double
   Compute_c(SizeValueType k) const;
 
-  /** Method to generate a perturbation vector. Takes scales into account. */
+  /** Generate a perturbation vector delta.
+   *
+   * The elements are drawn from a Bernoulli distribution (+-1).
+   *
+   * Takes scales into account.
+   */
   virtual void
   GenerateDelta(const unsigned int spaceDimension);
 
@@ -304,20 +309,20 @@ protected:
 
 private:
   /** Settings.*/
-  SizeValueType m_MinimumNumberOfIterations;
-  SizeValueType m_MaximumNumberOfIterations;
-  double        m_StateOfConvergenceDecayRate;
-  double        m_Tolerance;
-  bool          m_Maximize;
-  double        m_GradientMagnitude;
-  SizeValueType m_NumberOfPerturbations;
+  SizeValueType m_MinimumNumberOfIterations{};
+  SizeValueType m_MaximumNumberOfIterations{};
+  double        m_StateOfConvergenceDecayRate{};
+  double        m_Tolerance{};
+  bool          m_Maximize{};
+  double        m_GradientMagnitude{};
+  SizeValueType m_NumberOfPerturbations{};
 
   /** Parameters, as described by Spall.*/
-  double m_Sa;
-  double m_Sc;
-  double m_A;
-  double m_Alpha;
-  double m_Gamma;
+  double m_Sa{};
+  double m_Sc{};
+  double m_A{};
+  double m_Alpha{};
+  double m_Gamma{};
 }; // end class SPSAOptimizer
 
 // Define how to print enumeration

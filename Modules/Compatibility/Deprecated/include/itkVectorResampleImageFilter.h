@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class VectorResampleImageFilter
+ * \class VectorResampleImageFilter
  * \brief Resample an image via a coordinate transform
  *
  * VectorResampleImageFilter resamples an existing image through some coordinate
@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorResampleImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorResampleImageFilter);
 
   /** Number of dimensions. */
   static constexpr unsigned int ImageDimension = TOutputImage::ImageDimension;
@@ -233,14 +233,14 @@ protected:
 
 
 private:
-  SizeType                m_Size;
-  TransformPointerType    m_Transform;
-  InterpolatorPointerType m_Interpolator;
-  PixelType               m_DefaultPixelValue;
-  SpacingType             m_OutputSpacing;
-  OriginPointType         m_OutputOrigin;
-  DirectionType           m_OutputDirection;
-  IndexType               m_OutputStartIndex;
+  SizeType                m_Size{};
+  TransformPointerType    m_Transform{};
+  InterpolatorPointerType m_Interpolator{};
+  PixelType               m_DefaultPixelValue{};
+  SpacingType             m_OutputSpacing{};
+  OriginPointType         m_OutputOrigin{};
+  DirectionType           m_OutputDirection{};
+  IndexType               m_OutputStartIndex{};
 };
 } // end namespace itk
 

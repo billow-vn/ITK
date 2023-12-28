@@ -61,7 +61,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScatterMatrixImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(ScatterMatrixImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -69,7 +69,7 @@ public:
   /** InputImageType type alias support */
   using InputImageType = TInputImage;
 
-  /** OutputType typdef support. */
+  /** OutputType typedef support. */
   using typename Superclass::OutputType;
 
   /** Index type alias support */
@@ -87,7 +87,7 @@ public:
   /** Datatype used for the covariance matrix */
   using RealType = vnl_matrix<typename NumericTraits<typename InputImageType::PixelType::ValueType>::RealType>;
 
-  /** Evalulate the function at specified index */
+  /** Evaluate the function at specified index */
   RealType
   EvaluateAtIndex(const IndexType & index) const override;
 
@@ -122,7 +122,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int m_NeighborhoodRadius;
+  unsigned int m_NeighborhoodRadius{};
 };
 } // end namespace itk
 

@@ -22,7 +22,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 GaussianSpatialObject<TDimension>::GaussianSpatialObject()
 {
@@ -47,8 +47,6 @@ GaussianSpatialObject<TDimension>::Clear()
   this->Modified();
 }
 
-/** The z-score is the root mean square of the z-scores along
- *  each principal axis. */
 template <unsigned int TDimension>
 auto
 GaussianSpatialObject<TDimension>::SquaredZScoreInObjectSpace(const PointType & point) const -> ScalarType
@@ -61,8 +59,6 @@ GaussianSpatialObject<TDimension>::SquaredZScoreInObjectSpace(const PointType & 
   return r / (m_SigmaInObjectSpace * m_SigmaInObjectSpace);
 }
 
-/** The z-score is the root mean square of the z-scores along
- *  each principal axis. */
 template <unsigned int TDimension>
 auto
 GaussianSpatialObject<TDimension>::SquaredZScoreInWorldSpace(const PointType & point) const -> ScalarType
@@ -72,10 +68,6 @@ GaussianSpatialObject<TDimension>::SquaredZScoreInWorldSpace(const PointType & p
   return this->SquaredZScoreInObjectSpace(transformedPoint);
 }
 
-
-/** Test whether a point is inside or outside the object.
- *  For computational speed purposes, it is faster if the method does not
- *  check the name of the class and the current depth. */
 template <unsigned int TDimension>
 bool
 GaussianSpatialObject<TDimension>::IsInsideInObjectSpace(const PointType & point) const
@@ -102,8 +94,6 @@ GaussianSpatialObject<TDimension>::IsInsideInObjectSpace(const PointType & point
   return false;
 }
 
-/** Compute the bounds of the Gaussian (as determined by the
- *  specified radius). */
 template <unsigned int TDimension>
 void
 GaussianSpatialObject<TDimension>::ComputeMyBoundingBox()
@@ -124,7 +114,6 @@ GaussianSpatialObject<TDimension>::ComputeMyBoundingBox()
   this->GetModifiableMyBoundingBoxInObjectSpace()->ComputeBoundingBox();
 }
 
-/** Returns the value at one point. */
 template <unsigned int TDimension>
 bool
 GaussianSpatialObject<TDimension>::ValueAtInObjectSpace(const PointType &   point,
@@ -155,8 +144,6 @@ GaussianSpatialObject<TDimension>::ValueAtInObjectSpace(const PointType &   poin
   return false;
 }
 
-/** Returns the sigma=m_Radius level set of the Gaussian function, as an
- * EllipseSpatialObject. */
 template <unsigned int TDimension>
 typename EllipseSpatialObject<TDimension>::Pointer
 GaussianSpatialObject<TDimension>::GetEllipsoid() const
@@ -176,7 +163,6 @@ GaussianSpatialObject<TDimension>::GetEllipsoid() const
   return ellipse;
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 GaussianSpatialObject<TDimension>::InternalClone() const
@@ -188,7 +174,7 @@ GaussianSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
   rval->SetMaximum(this->GetMaximum());
   rval->SetRadiusInObjectSpace(this->GetRadiusInObjectSpace());
@@ -198,16 +184,15 @@ GaussianSpatialObject<TDimension>::InternalClone() const
   return loPtr;
 }
 
-/** Print Self function. */
 template <unsigned int TDimension>
 void
 GaussianSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "Maximum: " << m_Maximum << std::endl;
-  os << "Radius: " << m_RadiusInObjectSpace << std::endl;
-  os << "Sigma: " << m_SigmaInObjectSpace << std::endl;
-  os << "Center: " << m_CenterInObjectSpace << std::endl;
+  os << indent << "Maximum: " << m_Maximum << std::endl;
+  os << indent << "Radius: " << m_RadiusInObjectSpace << std::endl;
+  os << indent << "Sigma: " << m_SigmaInObjectSpace << std::endl;
+  os << indent << "Center: " << m_CenterInObjectSpace << std::endl;
 }
 } // end namespace itk
 

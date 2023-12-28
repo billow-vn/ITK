@@ -97,13 +97,13 @@ ActualTest(std::string inputFileName,
 {
 
   std::cout << "Writing Combination: ";
-  std::cout << streamWriting << " ";
-  std::cout << pasteWriting << " " << compressWriting << std::endl;
+  std::cout << streamWriting << ' ';
+  std::cout << pasteWriting << ' ' << compressWriting << std::endl;
 
   std::ostringstream outputFileNameStream;
   outputFileNameStream << outputFileNameBase << streamWriting;
   outputFileNameStream << pasteWriting << compressWriting;
-  outputFileNameStream << "." << outputFileNameExtension;
+  outputFileNameStream << '.' << outputFileNameExtension;
   std::string outputFileName = outputFileNameStream.str();
 
   std::cout << "Writing to File: " << outputFileName << std::endl;
@@ -256,10 +256,14 @@ itkImageFileWriterStreamingPastingCompressingTest1(int argc, char * argv[])
     {
       expectException[i] = 0;
       if (std::stoi(argv[i + expectedExceptionOffset]) == 1)
+      {
         expectException[i] = 1;
+      }
     }
     else
+    {
       expectException[i] = -1;
+    }
   }
 
   i = 0;

@@ -31,7 +31,7 @@
 namespace itk
 {
 /**
- *\class GradientRecursiveGaussianImageFilter
+ * \class GradientRecursiveGaussianImageFilter
  * \brief Computes the gradient of an image by convolution
  *        with the first derivative of a Gaussian.
  *
@@ -127,9 +127,9 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GradientRecursiveGaussianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GradientRecursiveGaussianImageFilter);
 
-  /** Set Sigma value. Sigma is measured in the units of image spacing. */
+  /** Set/Get the Sigma value. Sigma is measured in the units of image spacing. */
   void
   SetSigmaArray(const SigmaArrayType & sigma);
   void
@@ -137,6 +137,8 @@ public:
 
   SigmaArrayType
   GetSigmaArray() const;
+
+  /** Get the value of Sigma along the first dimension. */
   ScalarRealType
   GetSigma() const;
 
@@ -245,18 +247,18 @@ private:
   }
 
 
-  std::vector<GaussianFilterPointer> m_SmoothingFilters;
-  DerivativeFilterPointer            m_DerivativeFilter;
-  OutputImageAdaptorPointer          m_ImageAdaptor;
+  std::vector<GaussianFilterPointer> m_SmoothingFilters{};
+  DerivativeFilterPointer            m_DerivativeFilter{};
+  OutputImageAdaptorPointer          m_ImageAdaptor{};
 
   /** Normalize the image across scale space */
-  bool m_NormalizeAcrossScale;
+  bool m_NormalizeAcrossScale{};
 
   /** Take into account image orientation when computing the Gradient */
-  bool m_UseImageDirection;
+  bool m_UseImageDirection{};
 
   /** Standard deviation of the gaussian */
-  SigmaArrayType m_Sigma;
+  SigmaArrayType m_Sigma{};
 };
 } // end namespace itk
 

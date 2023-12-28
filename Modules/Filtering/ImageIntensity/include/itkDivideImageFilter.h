@@ -27,7 +27,7 @@ namespace itk
 {
 
 /**
- *\class DivideImageFilter
+ * \class DivideImageFilter
  * \brief Pixel-wise division of two images.
  *
  * This class is templated over the types of the two
@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(DivideImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(DivideImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -107,7 +107,7 @@ protected:
     if (input != nullptr &&
         itk::Math::AlmostEquals(input->Get(), itk::NumericTraits<typename TInputImage2::PixelType>::ZeroValue()))
     {
-      itkGenericExceptionMacro(<< "The constant value used as denominator should not be set to zero");
+      itkGenericExceptionMacro("The constant value used as denominator should not be set to zero");
     }
   }
 };

@@ -43,7 +43,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(ConjugateGradientLineSearchOptimizerv4TestMetric, ObjectToObjectMetricBase);
+  itkOverrideGetNameOfClassMacro(ConjugateGradientLineSearchOptimizerv4TestMetric);
 
   enum
   {
@@ -77,13 +77,15 @@ public:
   GetValueAndDerivative(MeasureType & value, DerivativeType & derivative) const override
   {
     if (derivative.Size() != 2)
+    {
       derivative.SetSize(2);
+    }
 
     double x = m_Parameters[0];
     double y = m_Parameters[1];
 
     std::cout << "GetValueAndDerivative( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = " << std::endl;
 
     value = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -176,8 +178,8 @@ ConjugateGradientLineSearchOptimizerv4RunTest(itk::ConjugateGradientLineSearchOp
   using ParametersType = ConjugateGradientLineSearchOptimizerv4TestMetric::ParametersType;
   ParametersType finalPosition = itkOptimizer->GetMetric()->GetParameters();
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ')' << std::endl;
 
   //
   // check results to see if it is within range

@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class MomentsThresholdCalculator
+ * \class MomentsThresholdCalculator
  * \brief Computes the Moments's threshold for an image.
  *
  *  W. Tsai, "Moment-preserving thresholding: a new approach," Computer Vision,
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MomentsThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(MomentsThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

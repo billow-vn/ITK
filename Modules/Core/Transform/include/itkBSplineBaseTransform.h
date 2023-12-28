@@ -43,7 +43,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineBaseTransform, Transform);
+  itkOverrideGetNameOfClassMacro(BSplineBaseTransform);
 
   /** Dimension of the domain space. */
   static constexpr unsigned int SpaceDimension = VDimension;
@@ -266,7 +266,7 @@ public:
   OutputVectorType
   TransformVector(const InputVectorType &) const override
   {
-    itkExceptionMacro(<< "Method not applicable for deformable transform.");
+    itkExceptionMacro("Method not applicable for deformable transform.");
   }
 
   /** Method to transform a vnl_vector -
@@ -274,7 +274,7 @@ public:
   OutputVnlVectorType
   TransformVector(const InputVnlVectorType &) const override
   {
-    itkExceptionMacro(<< "Method not applicable for deformable transform. ");
+    itkExceptionMacro("Method not applicable for deformable transform. ");
   }
 
   /** Method to transform a CovariantVector -
@@ -283,7 +283,7 @@ public:
   OutputCovariantVectorType
   TransformCovariantVector(const InputCovariantVectorType &) const override
   {
-    itkExceptionMacro(<< "Method not applicable for deformable transform. ");
+    itkExceptionMacro("Method not applicable for deformable transform. ");
   }
 
   /** Get Jacobian at a point. A very specialized function just for BSplines */
@@ -298,8 +298,8 @@ public:
   void
   ComputeJacobianWithRespectToPosition(const InputPointType &, JacobianPositionType &) const override
   {
-    itkExceptionMacro(<< "ComputeJacobianWithRespectToPosition not yet implemented "
-                         "for "
+    itkExceptionMacro("ComputeJacobianWithRespectToPosition not yet implemented "
+                      "for "
                       << this->GetNameOfClass());
   }
   using Superclass::ComputeJacobianWithRespectToPosition;
@@ -338,7 +338,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  BSplineBaseTransform();
+  BSplineBaseTransform() = default;
   ~BSplineBaseTransform() override = default;
 
   /** Get/Set to allow subclasses to access and manipulate the weights function. */
@@ -392,13 +392,13 @@ protected:
    *  in each dimension wrapped from the flat parameters in
    *  m_InternalParametersBuffer
    */
-  CoefficientImageArray m_CoefficientImages;
+  CoefficientImageArray m_CoefficientImages{ Self::ArrayOfImagePointerGeneratorHelper() };
 
   /** Internal parameters buffer. */
-  ParametersType m_InternalParametersBuffer;
+  ParametersType m_InternalParametersBuffer{};
 
   /** Pointer to function used to compute Bspline interpolation weights. */
-  typename WeightsFunctionType::Pointer m_WeightsFunction;
+  typename WeightsFunctionType::Pointer m_WeightsFunction{ WeightsFunctionType::New() };
 
 private:
   static CoefficientImageArray

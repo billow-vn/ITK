@@ -74,9 +74,13 @@ FillWithCircle(TImage *                   image,
       distance += itk::Math::sqr(static_cast<double>(index[j]) - center[j]);
     }
     if (distance <= r2)
+    {
       it.Set(foregnd);
+    }
     else
+    {
       it.Set(backgnd);
+    }
     ++it;
   }
 }
@@ -234,8 +238,7 @@ itkCurvatureRegistrationFilterTest(int, char *[])
     ++ofs;
   }
 
-  std::cout << "Number of pixels different: " << numPixelsDifferent;
-  std::cout << std::endl;
+  std::cout << "Number of pixels different: " << numPixelsDifferent << std::endl;
 
   if (numPixelsDifferent > 10)
   {

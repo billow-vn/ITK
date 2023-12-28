@@ -29,7 +29,7 @@ namespace itk
 {
 
 /**
- *\class MetaImageMaskConverter
+ * \class MetaImageMaskConverter
  *  \brief converts between MetaObject<->SpatialObject
  *  \sa MetaConverterBase
  *  \ingroup ITKSpatialObjects
@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaImageMaskConverter, MetaImageConverter);
+  itkOverrideGetNameOfClassMacro(MetaImageMaskConverter);
 
 protected:
   const char *

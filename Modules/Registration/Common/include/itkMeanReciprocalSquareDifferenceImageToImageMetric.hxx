@@ -22,9 +22,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedImage, typename TMovingImage>
 MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage,
                                                  TMovingImage>::MeanReciprocalSquareDifferenceImageToImageMetric()
@@ -33,32 +31,27 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage,
   m_Delta = 0.00011;
 }
 
-/**
- * PrintSelf
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::PrintSelf(std::ostream & os,
                                                                                        Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "Lambda factor = " << m_Lambda << std::endl;
-  os << "Delta  value  = " << m_Delta << std::endl;
+
+  os << indent << "Lambda: " << m_Lambda << std::endl;
+  os << indent << "Delta: " << m_Delta << std::endl;
 }
 
-/*
- * Get the match Measure
- */
 template <typename TFixedImage, typename TMovingImage>
-typename MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetValue(
-  const TransformParametersType & parameters) const
+  const TransformParametersType & parameters) const -> MeasureType
 {
   FixedImageConstPointer fixedImage = this->m_FixedImage;
 
   if (!fixedImage)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   double MovingValue;
@@ -70,7 +63,7 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::Get
 
   typename FixedImageType::IndexType index;
 
-  MeasureType measure = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType measure{};
 
   this->m_NumberOfPixelsCounted = 0;
 
@@ -113,9 +106,6 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::Get
   return measure;
 }
 
-/**
- * Get the Derivative Measure
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetDerivative(
@@ -140,9 +130,6 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::Get
   }
 }
 
-/**
- * Get both the match Measure and theDerivative Measure
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetValueAndDerivative(

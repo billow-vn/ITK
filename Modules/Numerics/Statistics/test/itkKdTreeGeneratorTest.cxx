@@ -18,6 +18,7 @@
 
 #include "itkListSample.h"
 #include "itkKdTreeGenerator.h"
+#include "itkTestingMacros.h"
 
 int
 itkKdTreeGeneratorTest(int, char *[])
@@ -44,10 +45,16 @@ itkKdTreeGeneratorTest(int, char *[])
     using TreeGeneratorType = itk::Statistics::KdTreeGenerator<SampleType>;
     auto treeGenerator = TreeGeneratorType::New();
 
-    std::cout << "KdTreeGenerator class name: " << treeGenerator->GetNameOfClass() << std::endl;
+    ITK_EXERCISE_BASIC_OBJECT_METHODS(treeGenerator, KdTreeGenerator, Object);
+
 
     treeGenerator->SetSample(sample);
-    treeGenerator->SetBucketSize(16);
+    ITK_TEST_SET_GET_VALUE(sample, treeGenerator->GetSourceSample());
+
+    unsigned int bucketSize = 16;
+    treeGenerator->SetBucketSize(bucketSize);
+    ITK_TEST_SET_GET_VALUE(bucketSize, treeGenerator->GetBucketSize());
+
     treeGenerator->Update();
 
     using TreeType = TreeGeneratorType::KdTreeType;
@@ -94,12 +101,12 @@ itkKdTreeGeneratorTest(int, char *[])
     tree->Search(queryPoint, numberOfNeighbors, neighbors);
 
     std::cout << "kd-tree knn search result:" << std::endl
-              << "query point = [" << queryPoint << "]" << std::endl
+              << "query point = [" << queryPoint << ']' << std::endl
               << "k = " << numberOfNeighbors << std::endl;
     std::cout << "measurement vector : distance" << std::endl;
     for (unsigned int i = 0; i < numberOfNeighbors; ++i)
     {
-      std::cout << "[" << tree->GetMeasurementVector(neighbors[i])
+      std::cout << '[' << tree->GetMeasurementVector(neighbors[i])
                 << "] : " << distanceMetric->Evaluate(tree->GetMeasurementVector(neighbors[i])) << std::endl;
     }
 
@@ -108,12 +115,12 @@ itkKdTreeGeneratorTest(int, char *[])
     tree->Search(queryPoint, radius, neighbors);
 
     std::cout << "kd-tree radius search result:" << std::endl
-              << "query point = [" << queryPoint << "]" << std::endl
+              << "query point = [" << queryPoint << ']' << std::endl
               << "search radius = " << radius << std::endl;
     std::cout << "measurement vector : distance" << std::endl;
     for (const auto neighbor : neighbors)
     {
-      std::cout << "[" << tree->GetMeasurementVector(neighbor)
+      std::cout << '[' << tree->GetMeasurementVector(neighbor)
                 << "] : " << distanceMetric->Evaluate(tree->GetMeasurementVector(neighbor)) << std::endl;
     }
   }
@@ -185,12 +192,12 @@ itkKdTreeGeneratorTest(int, char *[])
     tree->Search(queryPoint, numberOfNeighbors, neighbors);
 
     std::cout << "kd-tree knn search result:" << std::endl
-              << "query point = [" << queryPoint << "]" << std::endl
+              << "query point = [" << queryPoint << ']' << std::endl
               << "k = " << numberOfNeighbors << std::endl;
     std::cout << "measurement vector : distance" << std::endl;
     for (unsigned int i = 0; i < numberOfNeighbors; ++i)
     {
-      std::cout << "[" << tree->GetMeasurementVector(neighbors[i])
+      std::cout << '[' << tree->GetMeasurementVector(neighbors[i])
                 << "] : " << distanceMetric->Evaluate(tree->GetMeasurementVector(neighbors[i])) << std::endl;
     }
 
@@ -199,12 +206,12 @@ itkKdTreeGeneratorTest(int, char *[])
     tree->Search(queryPoint, radius, neighbors);
 
     std::cout << "kd-tree radius search result:" << std::endl
-              << "query point = [" << queryPoint << "]" << std::endl
+              << "query point = [" << queryPoint << ']' << std::endl
               << "search radius = " << radius << std::endl;
     std::cout << "measurement vector : distance" << std::endl;
     for (const auto neighbor : neighbors)
     {
-      std::cout << "[" << tree->GetMeasurementVector(neighbor)
+      std::cout << '[' << tree->GetMeasurementVector(neighbor)
                 << "] : " << distanceMetric->Evaluate(tree->GetMeasurementVector(neighbor)) << std::endl;
     }
   }

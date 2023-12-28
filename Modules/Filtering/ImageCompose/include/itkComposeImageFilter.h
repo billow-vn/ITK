@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class ComposeImageFilter
+ * \class ComposeImageFilter
  * \brief ComposeImageFilter combine several scalar images into a multicomponent image
  *
  * ComposeImageFilter combine several scalar images into an itk::Image of
@@ -68,7 +68,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
   using Superclass = ImageToImageFilter<TInputImage, TOutputImage>;
   itkNewMacro(Self);
-  itkTypeMacro(ComposeImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ComposeImageFilter);
 
   static constexpr unsigned int Dimension = TInputImage::ImageDimension;
 

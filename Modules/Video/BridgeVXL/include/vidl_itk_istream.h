@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class vidl_itk_istream
+ * \class vidl_itk_istream
  * \brief implementation of VXL's vidl_istream using an itk VideoStream
  *
  * This implementation of VXL's vidl_istream can be placed at the end of an ITK
@@ -59,7 +59,7 @@ public:
   /** Destructor */
   virtual ~vidl_itk_istream() {}
 
-  /** ITK's type info */
+  /** Runtime information support. */
   // Cannot use as we do not derive from ITK Object with GetNameOfClass itkTypeMacro(vidl_itk_istream, vidl_istream);
   const char *
   GetNameOfClass() const
@@ -103,7 +103,7 @@ public:
   virtual bool
   is_seekable() const;
 
-  /** Return the nuber of frames. Returns -1 if non-seekable */
+  /** Return the number of frames. Returns -1 if non-seekable */
   virtual int
   num_frames() const;
 

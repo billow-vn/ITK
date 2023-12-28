@@ -97,7 +97,7 @@ public:
   GenerateWisdomFilename(const std::string & baseCacheDirectory) const override;
 
 private:
-  std::string m_WisdomFilename;
+  std::string m_WisdomFilename{};
 };
 
 class ITKFFT_EXPORT SimpleWisdomFilenameGenerator : public WisdomFilenameGeneratorBase
@@ -213,7 +213,7 @@ public:
   using MutexType = std::mutex;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWGlobalConfiguration, Object);
+  itkOverrideGetNameOfClassMacro(FFTWGlobalConfiguration);
 
   /** Get the mutex that protects calls to FFTW functions. */
   static std::mutex &
@@ -367,7 +367,7 @@ private:
 
   static FFTWGlobalConfigurationGlobals * m_PimplGlobals;
 
-  std::mutex  m_Lock;
+  std::mutex  m_Mutex;
   bool        m_NewWisdomAvailable{ false };
   int         m_PlanRigor{ 0 };
   bool        m_WriteWisdomCache{ false };

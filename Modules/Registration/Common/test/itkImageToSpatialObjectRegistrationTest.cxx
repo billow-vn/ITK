@@ -40,7 +40,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  itkTypeMacro(IterationCallback, Superclass);
+  itkOverrideGetNameOfClassMacro(IterationCallback);
   itkNewMacro(Self);
 
   /** Type defining the optimizer */
@@ -73,7 +73,7 @@ public:
     }
     else if (typeid(event) == typeid(itk::IterationEvent))
     {
-      std::cout << "#" << m_Optimizer->GetCurrentIteration()
+      std::cout << '#' << m_Optimizer->GetCurrentIteration()
                 << " Current parameters = " << m_Optimizer->GetCurrentPosition() << std::endl;
     }
     else if (typeid(event) == typeid(itk::EndEvent))
@@ -113,7 +113,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SimpleImageToSpatialObjectMetric, ImageToSpatialObjectMetric);
+  itkOverrideGetNameOfClassMacro(SimpleImageToSpatialObjectMetric);
 
   enum
   {
@@ -205,7 +205,6 @@ private:
 } // end namespace itk
 
 
-/** test */
 int
 itkImageToSpatialObjectRegistrationTest(int, char *[])
 {
@@ -294,81 +293,28 @@ itkImageToSpatialObjectRegistrationTest(int, char *[])
   std::cout << "Number of Parameters  : " << metric->GetNumberOfParameters() << std::endl;
   ITK_TEST_EXPECT_EQUAL(metric->GetNumberOfParameters(), 3);
 
-  bool catching;
-  try
-  {
-    catching = false;
-    registration->Update();
-  }
-  catch (...)
-  {
-    catching = true;
-  }
-
-  if (!catching)
-  {
-    std::cout << "Test failed!" << std::endl;
-    return EXIT_FAILURE;
-  }
+  // Test exception
+  ITK_TRY_EXPECT_EXCEPTION(registration->Update());
 
   registration->SetFixedImage(image);
   ITK_TEST_SET_GET_VALUE(image, registration->GetFixedImage());
 
-  try
-  {
-    catching = false;
-    registration->Update();
-  }
-  catch (...)
-  {
-    catching = true;
-  }
-
-  if (!catching)
-  {
-    std::cout << "Test failed!" << std::endl;
-    return EXIT_FAILURE;
-  }
+  // Test exception
+  ITK_TRY_EXPECT_EXCEPTION(registration->Update());
 
   registration->SetMovingSpatialObject(group);
   ITK_TEST_SET_GET_VALUE(group, registration->GetMovingSpatialObject());
 
-  try
-  {
-    catching = false;
-    registration->Update();
-  }
-  catch (...)
-  {
-    catching = true;
-  }
-
-  if (!catching)
-  {
-    std::cout << "Test failed!" << std::endl;
-    return EXIT_FAILURE;
-  }
+  // Test exception
+  ITK_TRY_EXPECT_EXCEPTION(registration->Update());
 
   registration->SetMetric(metric);
   ITK_TEST_SET_GET_VALUE(metric, registration->GetMetric());
 
-  try
-  {
-    catching = false;
-    registration->Update();
-  }
-  catch (...)
-  {
-    catching = true;
-  }
+  // Test exception
+  ITK_TRY_EXPECT_EXCEPTION(registration->Update());
 
-  if (!catching)
-  {
-    std::cout << "Test failed!" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  /** Setup the optimizer */
+  // Setup the optimizer
   TransformType::ParametersType m_ParametersScale;
   m_ParametersScale.set_size(3);
 
@@ -410,42 +356,14 @@ itkImageToSpatialObjectRegistrationTest(int, char *[])
   registration->SetOptimizer(optimizer);
   ITK_TEST_SET_GET_VALUE(optimizer, registration->GetOptimizer());
 
-  try
-  {
-    catching = false;
-    registration->Update();
-  }
-  catch (...)
-  {
-    catching = true;
-  }
-
-  if (!catching)
-  {
-    std::cout << "Test failed!" << std::endl;
-    return EXIT_FAILURE;
-  }
-
+  // Test exception
+  ITK_TRY_EXPECT_EXCEPTION(registration->Update());
 
   registration->SetTransform(transform);
   ITK_TEST_SET_GET_VALUE(transform, registration->GetTransform());
 
-
-  try
-  {
-    catching = false;
-    registration->Update();
-  }
-  catch (...)
-  {
-    catching = true;
-  }
-
-  if (!catching)
-  {
-    std::cout << "Test failed!" << std::endl;
-    return EXIT_FAILURE;
-  }
+  // Test exception
+  ITK_TRY_EXPECT_EXCEPTION(registration->Update());
 
   registration->SetInterpolator(interpolator);
   ITK_TEST_SET_GET_VALUE(interpolator, registration->GetInterpolator());
@@ -465,6 +383,6 @@ itkImageToSpatialObjectRegistrationTest(int, char *[])
     }
   }
 
-  std::cout << "Test Succeed!" << std::endl;
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

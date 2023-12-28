@@ -116,8 +116,8 @@ private:
   public:
     // This constant tells whether the policy has a PixelAccessParameterType:
     static constexpr bool HasPixelAccessParameterType =
-      !std::is_same<decltype(Test<TImageNeighborhoodPixelAccessPolicy>(nullptr)),
-                    decltype(Test<TImageNeighborhoodPixelAccessPolicy>())>::value;
+      !std::is_same_v<decltype(Test<TImageNeighborhoodPixelAccessPolicy>(nullptr)),
+                      decltype(Test<TImageNeighborhoodPixelAccessPolicy>())>;
   };
 
 
@@ -296,7 +296,7 @@ private:
     // Image type class that is either 'const' or non-const qualified, depending on QualifiedIterator and TImage.
     using QualifiedImageType = std::conditional_t<VIsConst, const ImageType, ImageType>;
 
-    static constexpr bool IsImageTypeConst = std::is_const<QualifiedImageType>::value;
+    static constexpr bool IsImageTypeConst = std::is_const_v<QualifiedImageType>;
 
     using QualifiedInternalPixelType = std::conditional_t<IsImageTypeConst, const InternalPixelType, InternalPixelType>;
 
@@ -358,9 +358,9 @@ private:
     TImageNeighborhoodPixelAccessPolicy
     CreatePixelAccessPolicy(const TPixelAccessParameter pixelAccessParameter) const
     {
-      static_assert(std::is_same<TPixelAccessParameter, OptionalPixelAccessParameterType>::value,
+      static_assert(std::is_same_v<TPixelAccessParameter, OptionalPixelAccessParameterType>,
                     "This helper function should only be used for OptionalPixelAccessParameterType!");
-      static_assert(!std::is_same<TPixelAccessParameter, EmptyPixelAccessParameter>::value,
+      static_assert(!std::is_same_v<TPixelAccessParameter, EmptyPixelAccessParameter>,
                     "EmptyPixelAccessParameter indicates that there is no pixel access parameter specified!");
       return TImageNeighborhoodPixelAccessPolicy{
         m_ImageSize, m_OffsetTable, m_NeighborhoodAccessor, m_RelativeLocation + *m_CurrentOffset, pixelAccessParameter
@@ -380,17 +380,15 @@ private:
      * the guarantee added to the C++14 Standard: "value-initialized iterators
      * may be compared and shall compare equal to other value-initialized
      * iterators of the same type."
-     * \note `QualifiedIterator<VIsConst>` follows the C++ "Rule of Zero" when
-     * VIsConst is true: The other five "special member functions" of the class
-     * are then implicitly defaulted. When VIsConst is false, its
-     * copy-constructor is provided explicitly, but it still behaves the same as
-     * a default implementation.
+     *
+     * \note The other five "special member functions" are defaulted implicitly,
+     * following the C++ "Rule of Zero".
      */
     QualifiedIterator() = default;
 
-    /** Constructor that allows implicit conversion from non-const to const
-     * iterator. Also serves as copy-constructor of a non-const iterator.  */
-    QualifiedIterator(const QualifiedIterator<false> & arg) noexcept
+    /** Constructor for implicit conversion from non-const to const iterator.  */
+    template <bool VIsArgumentConst, typename = std::enable_if_t<VIsConst && !VIsArgumentConst>>
+    QualifiedIterator(const QualifiedIterator<VIsArgumentConst> & arg) noexcept
       : m_ImageBufferPointer{ arg.m_ImageBufferPointer }
       ,
       // Note: Use parentheses instead of curly braces to initialize data members,
@@ -569,14 +567,9 @@ private:
 
     /** Returns it[n] for iterator 'it' and integer value 'n'. */
     reference operator[](const difference_type n) const noexcept { return *(*this + n); }
-
-
-    /** Explicitly-defaulted assignment operator. */
-    QualifiedIterator &
-    operator=(const QualifiedIterator &) noexcept = default;
   };
 
-  static constexpr bool IsImageTypeConst = std::is_const<TImage>::value;
+  static constexpr bool IsImageTypeConst = std::is_const_v<TImage>;
 
   using QualifiedInternalPixelType = std::conditional_t<IsImageTypeConst, const InternalPixelType, InternalPixelType>;
 
@@ -693,8 +686,8 @@ public:
                                const OptionalPixelAccessParameterType optionalPixelAccessParameter = {})
     : ShapedImageNeighborhoodRange{ image,
                                     location,
-                                    shapeOffsets.data(),
-                                    shapeOffsets.size(),
+                                    std::data(shapeOffsets),
+                                    std::size(shapeOffsets),
                                     optionalPixelAccessParameter }
   {}
 

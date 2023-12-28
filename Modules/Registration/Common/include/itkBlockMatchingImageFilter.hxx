@@ -22,6 +22,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include <limits>
 #include "itkMultiThreaderBase.h"
+#include "itkMakeUniqueForOverwrite.h"
 
 
 namespace itk
@@ -63,9 +64,33 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
   Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Number of work units: " << this->GetNumberOfWorkUnits() << std::endl
-     << indent << "m_BlockRadius: " << m_BlockRadius << std::endl
-     << indent << "m_SearchRadius: " << m_SearchRadius << std::endl;
+
+  os << indent << "BlockRadius: " << static_cast<typename NumericTraits<ImageSizeType>::PrintType>(m_BlockRadius)
+     << std::endl;
+  os << indent << "SearchRadius: " << static_cast<typename NumericTraits<ImageSizeType>::PrintType>(m_SearchRadius)
+     << std::endl;
+  os << indent << "PointsCount: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_PointsCount)
+     << std::endl;
+
+  os << indent << "DisplacementsVectorsArray: ";
+  if (m_DisplacementsVectorsArray != nullptr)
+  {
+    os << *m_DisplacementsVectorsArray.get() << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "SimilaritiesValuesArray: ";
+  if (m_SimilaritiesValuesArray != nullptr)
+  {
+    os << *m_SimilaritiesValuesArray.get() << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
 }
 
 template <typename TFixedImage,
@@ -143,7 +168,7 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
     }
     break;
   }
-  itkExceptionMacro(<< "Bad output index " << idx);
+  itkExceptionMacro("Bad output index " << idx);
 }
 
 
@@ -165,11 +190,11 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
 
   if (this->m_PointsCount < 1)
   {
-    itkExceptionMacro("Invalid number of feature points: " << this->m_PointsCount << ".");
+    itkExceptionMacro("Invalid number of feature points: " << this->m_PointsCount << '.');
   }
 
-  this->m_DisplacementsVectorsArray = new DisplacementsVector[this->m_PointsCount];
-  this->m_SimilaritiesValuesArray = new SimilaritiesValue[this->m_PointsCount];
+  this->m_DisplacementsVectorsArray = make_unique_for_overwrite<DisplacementsVector[]>(this->m_PointsCount);
+  this->m_SimilaritiesValuesArray = make_unique_for_overwrite<SimilaritiesValue[]>(this->m_PointsCount);
 }
 
 template <typename TFixedImage,
@@ -223,13 +248,10 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
   }
 
   // clean up
-  delete[] m_DisplacementsVectorsArray;
-  delete[] m_SimilaritiesValuesArray;
+  m_DisplacementsVectorsArray.reset();
+  m_SimilaritiesValuesArray.reset();
 }
 
-// Callback routine used by the threading library. This routine just calls
-// the ThreadedGenerateData method after setting the correct region for this
-// thread.
 template <typename TFixedImage,
           typename TMovingImage,
           typename TFeatures,
@@ -294,7 +316,7 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
     const auto                       movingIndex = movingImage->TransformPhysicalPointToIndex(originalLocation);
 
     // the block is selected for a minimum similarity metric
-    SimilaritiesValue similarity = NumericTraits<SimilaritiesValue>::ZeroValue();
+    SimilaritiesValue similarity{};
 
     // New point location
     DisplacementsVector displacement;
@@ -314,11 +336,11 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
     // iterate over neighborhoods in region window
     for (windowIterator.GoToBegin(); !windowIterator.IsAtEnd(); ++windowIterator)
     {
-      SimilaritiesValue fixedSum = NumericTraits<SimilaritiesValue>::ZeroValue();
-      SimilaritiesValue fixedSumOfSquares = NumericTraits<SimilaritiesValue>::ZeroValue();
-      SimilaritiesValue movingSum = NumericTraits<SimilaritiesValue>::ZeroValue();
-      SimilaritiesValue movingSumOfSquares = NumericTraits<SimilaritiesValue>::ZeroValue();
-      SimilaritiesValue covariance = NumericTraits<SimilaritiesValue>::ZeroValue();
+      SimilaritiesValue fixedSum{};
+      SimilaritiesValue fixedSumOfSquares{};
+      SimilaritiesValue movingSum{};
+      SimilaritiesValue movingSumOfSquares{};
+      SimilaritiesValue covariance{};
 
       // iterate over voxels in blockRadius
       for (SizeValueType i = 0; i < numberOfVoxelInBlock; ++i) // windowIterator.Size() == numberOfVoxelInBlock
@@ -337,7 +359,7 @@ BlockMatchingImageFilter<TFixedImage, TMovingImage, TFeatures, TDisplacements, T
       const SimilaritiesValue movingVariance = movingSumOfSquares - numberOfVoxelInBlock * movingMean * movingMean;
       covariance -= numberOfVoxelInBlock * fixedMean * movingMean;
 
-      SimilaritiesValue sim = NumericTraits<SimilaritiesValue>::ZeroValue();
+      SimilaritiesValue sim{};
       if ((fixedVariance * movingVariance) != 0.0)
       {
         sim = (covariance * covariance) / (fixedVariance * movingVariance);

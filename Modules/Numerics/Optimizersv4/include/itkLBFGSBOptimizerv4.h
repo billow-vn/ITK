@@ -26,7 +26,7 @@ namespace itk
 {
 /* Necessary forward declaration */
 /**
- *\class LBFGSBOptimizerHelperv4
+ * \class LBFGSBOptimizerHelperv4
  * \brief Wrapper helper around vnl_lbfgsb.
  *
  * This class is used to translate iteration events, etc, from
@@ -38,12 +38,12 @@ namespace itk
 class ITK_FORWARD_EXPORT LBFGSBOptimizerHelperv4;
 
 /**
- *\class LBFGSBOptimizerv4
+ * \class LBFGSBOptimizerv4
  * \brief Limited memory Broyden Fletcher Goldfarb Shannon minimization with simple bounds.
  *
  * This class is a wrapper for converted Fortran code for performing limited
  * memory Broyden Fletcher Goldfarb Shannon minimization with simple bounds.
- * The algorithm mininizes a nonlinear function f(x) of n variables subject to
+ * The algorithm minimizes a nonlinear function f(x) of n variables subject to
  * simple bound constraints of l <= x <= u.
  *
  * See also the documentation in Numerics/lbfgsb.c
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LBFGSBOptimizerv4, LBFGSOptimizerBasev4);
+  itkOverrideGetNameOfClassMacro(LBFGSBOptimizerv4);
 
   enum BoundSelectionValues
   {
@@ -170,6 +170,13 @@ public:
    * function. */
   itkGetConstReferenceMacro(InfinityNormOfProjectedGradient, double);
 
+  /** Returns false unconditionally because LBFGSBOptimizerv4 does not support using scales. */
+  bool
+  CanUseScales() const override
+  {
+    return false;
+  }
+
 protected:
   LBFGSBOptimizerv4();
   ~LBFGSBOptimizerv4() override;
@@ -186,10 +193,10 @@ protected:
 private:
   unsigned int m_MaximumNumberOfCorrections{ 5 };
 
-  ParametersType     m_InitialPosition;
-  BoundValueType     m_LowerBound;
-  BoundValueType     m_UpperBound;
-  BoundSelectionType m_BoundSelection;
+  ParametersType     m_InitialPosition{};
+  BoundValueType     m_LowerBound{};
+  BoundValueType     m_UpperBound{};
+  BoundSelectionType m_BoundSelection{};
 };
 } // end namespace itk
 #endif

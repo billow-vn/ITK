@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class FullToHalfHermitianImageFilter
+ * \class FullToHalfHermitianImageFilter
  *
  * \brief Reduces the size of a full complex image produced from a
  * forward discrete Fourier transform of a real image to only the
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FullToHalfHermitianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(FullToHalfHermitianImageFilter);
 
   /** Extract the dimensionality of the input and output images. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;

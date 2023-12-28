@@ -96,7 +96,7 @@ public:
 
   using InterpolatorPointer = typename InterpolatorType::Pointer;
 
-  /** Typede of the vector type to return derivatives */
+  /** Typedef of the vector type to return derivatives */
   using VectorType = vnl_vector_fixed<double, Self::ObjectDimension>;
 
   /**  Type of the match measure */
@@ -122,7 +122,7 @@ public:
   using ParametersType = Superclass::ParametersType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToSpatialObjectMetric, Object);
+  itkOverrideGetNameOfClassMacro(ImageToSpatialObjectMetric);
 
   /** Get/Set the FixedImage. */
   itkSetConstObjectMacro(FixedImage, FixedImageType);
@@ -144,16 +144,16 @@ public:
                         MeasureType &          Value,
                         DerivativeType &       Derivative) const override = 0;
 
-  /** Return the number of parameters required by the Transform */
+  /** Return the number of parameters required by the Transform. */
   unsigned int
   GetNumberOfParameters() const override;
 
-  /** Initialize the metric */
+  /** Initialize the metric. */
   virtual void
   Initialize();
 
   /** Get the last transformation parameters visited by
-   * the optimizer. This function overload the superclass's one */
+   * the optimizer. This function overload the superclass's one. */
   itkGetConstReferenceMacro(LastTransformParameters, ParametersType);
 
   /** Set/Get the Transform. */
@@ -167,13 +167,13 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   MeasureType              m_MatchMeasure{ 0 };
-  DerivativeType           m_MatchMeasureDerivatives;
-  mutable TransformPointer m_Transform;
-  InterpolatorPointer      m_Interpolator;
+  DerivativeType           m_MatchMeasureDerivatives{};
+  mutable TransformPointer m_Transform{};
+  InterpolatorPointer      m_Interpolator{};
 
-  MovingSpatialObjectConstPointer m_MovingSpatialObject;
-  FixedImageConstPointer          m_FixedImage;
-  ParametersType                  m_LastTransformParameters;
+  MovingSpatialObjectConstPointer m_MovingSpatialObject{};
+  FixedImageConstPointer          m_FixedImage{};
+  ParametersType                  m_LastTransformParameters{};
 };
 } // end namespace itk
 

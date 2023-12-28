@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(ArrowSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(ArrowSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -93,14 +93,13 @@ public:
   GetLengthInWorldSpace() const;
 
 protected:
-  /** Compute the Object bounding box */
+  /** Compute the Object bounding box. */
   void
   ComputeMyBoundingBox() override;
 
   ArrowSpatialObject();
   ~ArrowSpatialObject() override = default;
 
-  /** Method to print the object.*/
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
@@ -108,9 +107,9 @@ protected:
   InternalClone() const override;
 
 private:
-  VectorType m_DirectionInObjectSpace;
-  PointType  m_PositionInObjectSpace;
-  double     m_LengthInObjectSpace;
+  VectorType m_DirectionInObjectSpace{};
+  PointType  m_PositionInObjectSpace{};
+  double     m_LengthInObjectSpace{};
 };
 
 } // end namespace itk

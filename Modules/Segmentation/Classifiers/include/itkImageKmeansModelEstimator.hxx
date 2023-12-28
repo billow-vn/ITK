@@ -74,25 +74,25 @@ template <typename TInputImage, typename TMembershipFunction>
 void
 ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::PrintKmeansAlgorithmResults()
 {
-  itkDebugMacro(<< "                                    ");
-  itkDebugMacro(<< "Results of the clustering algorithms");
-  itkDebugMacro(<< "====================================");
+  itkDebugMacro("                                    ");
+  itkDebugMacro("Results of the clustering algorithms");
+  itkDebugMacro("====================================");
 
-  itkDebugMacro(<< "                                    ");
-  itkDebugMacro(<< "Means of the clustered vector       ");
-  itkDebugMacro(<< "++++++++++++++++++++++++++++++++++++");
+  itkDebugMacro("                                    ");
+  itkDebugMacro("Means of the clustered vector       ");
+  itkDebugMacro("++++++++++++++++++++++++++++++++++++");
 
   itkDebugMacro(<< m_Centroid);
 
-  itkDebugMacro(<< "                                    ");
-  itkDebugMacro(<< "Distortion measures                 ");
-  itkDebugMacro(<< "+++++++++++++++++++++++++++++++++++ ");
+  itkDebugMacro("                                    ");
+  itkDebugMacro("Distortion measures                 ");
+  itkDebugMacro("+++++++++++++++++++++++++++++++++++ ");
 
   itkDebugMacro(<< m_CodewordDistortion);
 
-  itkDebugMacro(<< "                                    ");
-  itkDebugMacro(<< "Histogram of the vector             ");
-  itkDebugMacro(<< "+++++++++++++++++++++++++++++++++++ ");
+  itkDebugMacro("                                    ");
+  itkDebugMacro("Histogram of the vector             ");
+  itkDebugMacro("+++++++++++++++++++++++++++++++++++ ");
 
   itkDebugMacro(<< m_CodewordHistogram);
 }
@@ -142,7 +142,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::Allocate()
     // Check the validity of the n
     if (this->GetNumberOfModels() <= 0)
     {
-      itkExceptionMacro(<< "Number of models is less than 0.");
+      itkExceptionMacro("Number of models is less than 0.");
     }
 
     m_NumberOfCodewords = this->GetNumberOfModels();
@@ -202,7 +202,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::Reallocate(int oldS
         m_Codebook[r][c] = 0;
       }
     }
-  } // If oldsize is smaller than the new size
+  } // If oldSize is smaller than the new size
   else
   {
     for (int r = 0; r < newSize; ++r)
@@ -252,7 +252,7 @@ void
 ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::EstimateKmeansModelParameters()
 {
   // If a codebook is provided by the user then call the
-  // Kmenas algorithm directly that is based on the
+  // Kmeans algorithm directly that is based on the
   // Generalized Lloyd algorithm (GLA) if a valid codebook
   // is provided or m_NumberOfModels is set to 0, else
   // Linde-Buzo-Gray algorithm is used for clustering
@@ -297,7 +297,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::WithCodebookUseGLA(
     // Check for lack of convergence
     if (olddistortion < distortion)
     {
-      itkExceptionMacro(<< "Distortion is increasing, not decreasing");
+      itkExceptionMacro("Distortion is increasing, not decreasing");
     }
 
     // Find number of empty cells
@@ -342,14 +342,14 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::WithCodebookUseGLA(
       // If there have been too many attempts to fill cells, stop iterations
       if (pass == m_MaxSplitAttempts)
       {
-        itkWarningMacro(<< "Unable to fill all empty cells");
+        itkWarningMacro("Unable to fill all empty cells");
         m_OutputNumberOfEmptyCells = emptycells;
         m_OutputDistortion = distortion;
         return GLA_CONVERGED;
       }
 
       // Try getting new codewords, send a warning to user
-      itkDebugMacro(<< "Attempting to fill empty cells in the codebook");
+      itkDebugMacro("Attempting to fill empty cells in the codebook");
 
       // Consolidate the highest distortion codewords into the beginning
       // of the array.  Take care to protect zero distortion codewords
@@ -369,7 +369,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::WithCodebookUseGLA(
         }
 
         // Put highest distortion centroid into nth codebook row,
-        // and erase the set of hightest centroid stats to 0 so
+        // and erase the set of highest centroid stats to 0 so
         // it will not be used again.
 
         // Find centroid, reinitialize
@@ -390,7 +390,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::WithCodebookUseGLA(
       ++pass;
     }
   } while (pass <= m_MaxSplitAttempts);
-  itkExceptionMacro(<< "Lack of convergence");
+  itkExceptionMacro("Lack of convergence");
 }
 
 template <typename TInputImage, typename TMembershipFunction>
@@ -399,9 +399,8 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::NearestNeighborSear
 {
   // itkDebugMacro(<<"Start nearest_neighbor_search_basic()");
 
-  double     bestdistortion, tempdistortion, diff;
-  int        bestcodeword;
-  const auto tempVec = make_unique_for_overwrite<double[]>(m_VectorDimension);
+  double bestdistortion, tempdistortion, diff;
+  int    bestcodeword;
 
   // unused: double *centroidVecTemp = ( double * ) new double[m_VectorDimension];
 
@@ -515,7 +514,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::NearestNeighborSear
   // Check for bizarre errors
   if (*distortion < 0.0)
   {
-    itkExceptionMacro(<< "Computational overflow");
+    itkExceptionMacro("Computational overflow");
   }
 }
 
@@ -651,7 +650,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>::WithoutCodebookUseL
   const SizeValueType codebookSize = m_Codebook.rows();
   if (m_NumberOfCodewords != codebookSize)
   {
-    itkDebugMacro(<< "Returning fewer codewords than requested");
+    itkDebugMacro("Returning fewer codewords than requested");
   }
 
   // itkDebugMacro(<<"Done with local function LBG ()");

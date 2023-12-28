@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class PathToPathFilter
+ * \class PathToPathFilter
  * \brief Base class for filters that take a path as input and produce a path as output.
  *
  * PathToPathFilter is the base class for all process objects that output
@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathToPathFilter, PathSource);
+  itkOverrideGetNameOfClassMacro(PathToPathFilter);
 
   /** Some convenient type alias. */
   using InputPathType = TInputPath;

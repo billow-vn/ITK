@@ -52,7 +52,7 @@ private:
 /**
  * Constructor
  */
-LBFGSBOptimizer ::LBFGSBOptimizer()
+LBFGSBOptimizer::LBFGSBOptimizer()
 
 {
   m_LowerBound = InternalBoundValueType(0);
@@ -63,10 +63,7 @@ LBFGSBOptimizer ::LBFGSBOptimizer()
 /**
  * Destructor
  */
-LBFGSBOptimizer::~LBFGSBOptimizer()
-{
-  delete m_VnlOptimizer;
-}
+LBFGSBOptimizer::~LBFGSBOptimizer() = default;
 
 /**
  * PrintSelf
@@ -266,14 +263,9 @@ LBFGSBOptimizer::SetCostFunction(SingleValuedCostFunction * costFunction)
 
   adaptor->SetCostFunction(costFunction);
 
-  if (m_OptimizerInitialized)
-  {
-    delete m_VnlOptimizer;
-  }
-
   this->SetCostFunctionAdaptor(adaptor);
 
-  m_VnlOptimizer = new InternalOptimizerType(*adaptor, this);
+  m_VnlOptimizer = std::make_unique<InternalOptimizerType>(*adaptor, this);
 
   // set the optimizer parameters
   m_VnlOptimizer->set_lower_bound(m_LowerBound);
@@ -301,22 +293,22 @@ LBFGSBOptimizer::StartOptimization()
 
   if (this->GetInitialPosition().Size() < numberOfParameters)
   {
-    itkExceptionMacro(<< "InitialPosition array does not have sufficient number of elements");
+    itkExceptionMacro("InitialPosition array does not have sufficient number of elements");
   }
 
   if (m_LowerBound.size() < numberOfParameters)
   {
-    itkExceptionMacro(<< "LowerBound array does not have sufficient number of elements");
+    itkExceptionMacro("LowerBound array does not have sufficient number of elements");
   }
 
   if (m_UpperBound.size() < numberOfParameters)
   {
-    itkExceptionMacro(<< "UppperBound array does not have sufficient number of elements");
+    itkExceptionMacro("UppperBound array does not have sufficient number of elements");
   }
 
   if (m_BoundSelection.size() < numberOfParameters)
   {
-    itkExceptionMacro(<< "BoundSelection array does not have sufficient number of elements");
+    itkExceptionMacro("BoundSelection array does not have sufficient number of elements");
   }
 
   if (this->GetMaximize())
@@ -342,7 +334,7 @@ LBFGSBOptimizer::StartOptimization()
   {
     // set current position to initial position and throw an exception
     this->SetCurrentPosition(this->GetInitialPosition());
-    itkExceptionMacro(<< "Error occurred in optimization");
+    itkExceptionMacro("Error occurred in optimization");
   }
 
   this->SetCurrentPosition(parameters);
@@ -356,14 +348,14 @@ LBFGSBOptimizer::StartOptimization()
  */
 
 /** Create with a reference to the ITK object */
-LBFGSBOptimizerHelper ::LBFGSBOptimizerHelper(vnl_cost_function & f, LBFGSBOptimizer * const itkObj)
+LBFGSBOptimizerHelper::LBFGSBOptimizerHelper(vnl_cost_function & f, LBFGSBOptimizer * const itkObj)
   : vnl_lbfgsb(f)
   , m_ItkObj(itkObj)
 {}
 
 /** Handle new iteration event */
 bool
-LBFGSBOptimizerHelper ::report_iter()
+LBFGSBOptimizerHelper::report_iter()
 {
   Superclass::report_iter();
 
@@ -396,8 +388,15 @@ LBFGSBOptimizer::GetStopConditionDescription() const
     switch (m_VnlOptimizer->get_failure_code())
     {
       case vnl_nonlinear_minimizer::ERROR_FAILURE:
-        stopConditionDescription << "Failure";
+        stopConditionDescription << "Unspecified Failure";
         break;
+#if VXL_VERSION_MAJOR >= 4
+      case vnl_nonlinear_minimizer::ABNORMAL_TERMINATION_IN_LNSRCH:
+        stopConditionDescription << "Abnormal termination in line search.  Often caused by "
+                                 << "rounding errors dominating computation.  This can occur if the function is a very "
+                                 << "flat surface, or has oscillations.";
+        break;
+#endif
       case vnl_nonlinear_minimizer::ERROR_DODGY_INPUT:
         stopConditionDescription << "Dodgy input";
         break;
@@ -432,6 +431,7 @@ LBFGSBOptimizer::GetStopConditionDescription() const
         stopConditionDescription << "Gradient tolerance too small";
         break;
       case vnl_nonlinear_minimizer::FAILED_USER_REQUEST:
+        stopConditionDescription << "Failed user requeset";
         break;
     }
   }

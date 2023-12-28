@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class VideoToVideoFilter
+ * \class VideoToVideoFilter
  * \brief Base class for filters that use a VideoStream as input and output
  *
  * VideoToVideoFilter is the base class for all process objects that output
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VideoToVideoFilter, VideoSource);
+  itkOverrideGetNameOfClassMacro(VideoToVideoFilter);
 
   /** Set the input VideoStream for this temporal process object */
   using Superclass::SetInput;
@@ -83,7 +83,7 @@ public:
   virtual void
   SetInput(unsigned int idx, const InputVideoStreamType * videoStream);
 
-  /** Get the input VideoSream for this temporal process object */
+  /** Get the input VideoStream for this temporal process object */
   const InputVideoStreamType *
   GetInput() const;
 

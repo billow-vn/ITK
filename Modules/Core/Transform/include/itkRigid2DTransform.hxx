@@ -51,7 +51,9 @@ void
 Rigid2DTransform<TParametersValueType>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Angle       = " << m_Angle << std::endl;
+
+  os << indent << "Angle: " << static_cast<typename NumericTraits<TParametersValueType>::PrintType>(m_Angle)
+     << std::endl;
 }
 
 
@@ -221,7 +223,7 @@ template <typename TParametersValueType>
 void
 Rigid2DTransform<TParametersValueType>::SetParameters(const ParametersType & parameters)
 {
-  itkDebugMacro(<< "Setting parameters " << parameters);
+  itkDebugMacro("Setting parameters " << parameters);
 
   // Save parameters. Needed for proper operation of TransformUpdateParameters.
   if (&parameters != &(this->m_Parameters))
@@ -249,7 +251,7 @@ Rigid2DTransform<TParametersValueType>::SetParameters(const ParametersType & par
   // parameters and cannot know if the parameters have changed.
   this->Modified();
 
-  itkDebugMacro(<< "After setting parameters ");
+  itkDebugMacro("After setting parameters ");
 }
 
 
@@ -257,7 +259,7 @@ template <typename TParametersValueType>
 auto
 Rigid2DTransform<TParametersValueType>::GetParameters() const -> const ParametersType &
 {
-  itkDebugMacro(<< "Getting parameters ");
+  itkDebugMacro("Getting parameters ");
 
   // Get the angle
   this->m_Parameters[0] = this->GetAngle();
@@ -267,7 +269,7 @@ Rigid2DTransform<TParametersValueType>::GetParameters() const -> const Parameter
     this->m_Parameters[i + 1] = this->GetTranslation()[i];
   }
 
-  itkDebugMacro(<< "After getting parameters " << this->m_Parameters);
+  itkDebugMacro("After getting parameters " << this->m_Parameters);
 
   return this->m_Parameters;
 }

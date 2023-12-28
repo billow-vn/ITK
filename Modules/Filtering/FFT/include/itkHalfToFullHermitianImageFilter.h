@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class HalfToFullHermitianImageFilter
+ * \class HalfToFullHermitianImageFilter
  *
  * \brief Expands a half image produced from a real-to-complex
  * discrete Fourier transform (DFT) to the full complex image.
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HalfToFullHermitianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HalfToFullHermitianImageFilter);
 
   /** Extract the dimensionality of the input and output images. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;

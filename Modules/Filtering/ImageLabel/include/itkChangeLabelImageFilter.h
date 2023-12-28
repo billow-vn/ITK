@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class ChangeLabelImageFilter
+ * \class ChangeLabelImageFilter
  *
  * \brief Change Sets of Labels
  *
@@ -132,7 +132,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ChangeLabelImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(ChangeLabelImageFilter);
 
   /** Pixel types. */
   using InputPixelType = typename TInputImage::PixelType;

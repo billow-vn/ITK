@@ -26,7 +26,7 @@ namespace itk
 namespace watershed
 {
 /**
- *\class Relabeler
+ * \class Relabeler
  *
  * This filter implements the final step in the watershed segmentation
  * algorithm.  It is responsible for relabeling a segmented image according to
@@ -73,7 +73,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  itkTypeMacro(Relabeler, ProcessObject);
+  itkOverrideGetNameOfClassMacro(Relabeler);
 
   /** Expose the ImageDimension template parameter at run time */
   static constexpr unsigned int ImageDimension = TImageDimension;

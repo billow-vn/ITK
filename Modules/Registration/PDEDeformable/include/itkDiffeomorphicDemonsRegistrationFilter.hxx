@@ -22,9 +22,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   DiffeomorphicDemonsRegistrationFilter()
@@ -48,10 +46,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   m_Adder->InPlaceOn();
 }
 
-/**
- * Checks whether the DifferenceFunction is of type DemonsRegistrationFunction.
- * It throws and exception, if it is not.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 typename DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   DemonsRegistrationFunctionType *
@@ -61,16 +55,12 @@ typename DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDispl
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to SymmetricDemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to SymmetricDemonsRegistrationFunction");
   }
 
   return drfp;
 }
 
-/**
- * Checks whether the DifferenceFunction is of type DemonsRegistrationFunction.
- * It throws and exception, if it is not.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 const typename DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   DemonsRegistrationFunctionType *
@@ -81,15 +71,12 @@ const typename DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, 
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to SymmetricDemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to SymmetricDemonsRegistrationFunction");
   }
 
   return drfp;
 }
 
-/**
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::InitializeIteration()
@@ -103,9 +90,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   Superclass::InitializeIteration();
 }
 
-/*
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetMetric() const
@@ -115,9 +99,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   return drfp->GetMetric();
 }
 
-/**
- *  Get Intensity Difference Threshold
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetIntensityDifferenceThreshold()
@@ -128,9 +109,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   return drfp->GetIntensityDifferenceThreshold();
 }
 
-/**
- *  Set Intensity Difference Threshold
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SetIntensityDifferenceThreshold(
@@ -141,9 +119,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   drfp->SetIntensityDifferenceThreshold(threshold);
 }
 
-/**
- *  Get Maximum Update Step Length
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetMaximumUpdateStepLength() const
@@ -153,9 +128,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   return drfp->GetMaximumUpdateStepLength();
 }
 
-/**
- *  Set Maximum Update Step Length
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SetMaximumUpdateStepLength(
@@ -166,9 +138,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   drfp->SetMaximumUpdateStepLength(threshold);
 }
 
-/**
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 const double &
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetRMSChange() const
@@ -178,9 +147,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   return drfp->GetRMSChange();
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 auto
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetUseGradientType() const
@@ -191,9 +157,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   return drfp->GetUseGradientType();
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SetUseGradientType(
@@ -204,9 +167,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   drfp->SetUseGradientType(gtype);
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::AllocateUpdateBuffer()
@@ -224,16 +184,13 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
   upbuf->Allocate();
 }
 
-/**
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::ApplyUpdate(
   const TimeStepType & dt)
 {
   // If we smooth the update buffer before applying it, then the are
-  // approximating a viscuous problem as opposed to an elastic problem
+  // approximating a viscous problem as opposed to an elastic problem
   if (this->GetSmoothUpdateField())
   {
     this->SmoothUpdateField();
@@ -327,9 +284,7 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementFi
 
   this->SetRMSChange(drfp->GetRMSChange());
 
-  /**
-   * Smooth the deformation field
-   */
+  // Smooth the deformation field
   if (this->GetSmoothDisplacementField())
   {
     this->SmoothDisplacementField();

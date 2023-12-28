@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class GaussianMembershipFunction
+ * \class GaussianMembershipFunction
  * \brief GaussianMembershipFunction models class membership through a
  * multivariate Gaussian function.
  *
@@ -65,7 +65,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(GaussianMembershipFunction, MembershipFunctionBase);
+  itkOverrideGetNameOfClassMacro(GaussianMembershipFunction);
   itkNewMacro(Self);
 
   /** SmartPointer class for superclass */
@@ -97,7 +97,7 @@ public:
   /** Set the covariance matrix. Covariance matrix is a
    * VariableSizeMatrix of doubles. The inverse of the covariance
    * matrix and the normalization term for the multivariate Gaussian
-   * are calculated whenever the covaraince matrix is changed. */
+   * are calculated whenever the covariance matrix is changed. */
   void
   SetCovariance(const CovarianceMatrixType & cov);
 
@@ -126,19 +126,19 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  MeanVectorType       m_Mean;       // mean
-  CovarianceMatrixType m_Covariance; // covariance matrix
+  MeanVectorType       m_Mean{};       // mean
+  CovarianceMatrixType m_Covariance{}; // covariance matrix
 
   // inverse covariance matrix. automatically calculated
   // when covariance matrix is set.
-  CovarianceMatrixType m_InverseCovariance;
+  CovarianceMatrixType m_InverseCovariance{};
 
   // pre_factor (normalization term). automatically calculated
   // when covariance matrix is set.
-  double m_PreFactor;
+  double m_PreFactor{};
 
   /** Boolean to cache whether the covariance is singular or nearly singular */
-  bool m_CovarianceNonsingular;
+  bool m_CovarianceNonsingular{};
 };
 } // end of namespace Statistics
 } // end namespace itk

@@ -75,7 +75,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(FiniteDifferenceSparseImageFilter, FiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(FiniteDifferenceSparseImageFilter);
 
   /**Typedefs from the superclass */
   using typename Superclass::InputImageType;
@@ -171,7 +171,7 @@ protected:
   TimeStepType
   CalculateChange() override;
 
-  /** Multuthreaded implementation of CalculateChange */
+  /** Multithreaded implementation of CalculateChange */
   static ITK_THREAD_RETURN_FUNCTION_CALL_CONVENTION
   CalculateChangeThreaderCallback(void * arg);
 
@@ -203,14 +203,14 @@ protected:
 
 private:
   /** Flag to let the class know whether or not to call PrecalculateChange. */
-  bool m_PrecomputeFlag;
+  bool m_PrecomputeFlag{};
 
   /** The Sparse function type. */
-  SparseFunctionType * m_SparseFunction;
+  SparseFunctionType * m_SparseFunction{};
 
   /** A list of subregions of the active set of pixels in the sparse image
       which are passed to each thread for parallel processing. */
-  typename NodeListType::RegionListType m_RegionList;
+  typename NodeListType::RegionListType m_RegionList{};
 };
 } // end namespace itk
 

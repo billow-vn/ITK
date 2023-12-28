@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class PointSetToImageFilter
+ * \class PointSetToImageFilter
  * \brief Base class for filters that take a PointSet
  *        as input and produce an image as output.
  *  By default, if the user does not specify the size of the output image,
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetToImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(PointSetToImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageRegionType;
@@ -156,16 +156,16 @@ protected:
   void
   GenerateData() override;
 
-  SizeType m_Size;
+  SizeType m_Size{};
 
-  PointType m_Origin;
+  PointType m_Origin{};
 
-  SpacingType m_Spacing;
+  SpacingType m_Spacing{};
 
-  DirectionType m_Direction;
+  DirectionType m_Direction{};
 
-  ValueType m_InsideValue;
-  ValueType m_OutsideValue;
+  ValueType m_InsideValue{};
+  ValueType m_OutsideValue{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

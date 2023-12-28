@@ -27,7 +27,7 @@ namespace itk
  * iterator templated over image type that walks an image region and is
  * specialized to keep track of its index location.
  *
- * The "WithIndex" family of iteators was designed for algorithms that use both
+ * The "WithIndex" family of iterators was designed for algorithms that use both
  * the values and locations of image pixels in calculations. Unlike
  * ImageRegionIterator, which calculates an index only when requested,
  * ImageRegionIteratorWithIndex maintains its index location as a member
@@ -135,7 +135,7 @@ public:
   using Superclass = ImageConstIteratorWithIndex<TImage>;
 
   /**
-   * Index type alias support While these were already typdef'ed in the superclass
+   * Index type alias support While these were already typedef'ed in the superclass
    * they need to be redone here for this subclass to compile properly with gcc.
    */
   /** Types inherited from the Superclass */

@@ -43,7 +43,7 @@
 namespace itk
 {
 /**
- *\class MeshIOBase
+ * \class MeshIOBase
  * \brief Abstract superclass defines mesh IO interface.
  *
  * MeshIOBase is a class that reads and/or writes Mesh / QuadEdgeMesh data
@@ -59,7 +59,7 @@ namespace itk
  * to be registered (even at run time) without having to modify the
  * code in this class.
  *
- * \author Wanlin Zhu. Uviversity of New South Wales, Australia.
+ * \author Wanlin Zhu. University of New South Wales, Australia.
  *
  * \sa MeshFileWriter
  * \sa MeshFileReader
@@ -97,7 +97,7 @@ public:
   {};
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshIOBase, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(MeshIOBase);
 
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
@@ -706,7 +706,7 @@ protected:
     }
   }
 
-  /** Read cells from a data buffer, used when writting cells. This function
+  /** Read cells from a data buffer, used when writing cells. This function
     write all kind of cells as it is stored in cells container. It is used when
     cells container have only one kind of cells */
   template <typename TInput, typename TOutput>
@@ -715,8 +715,8 @@ protected:
   {
     if (input && output)
     {
-      SizeValueType inputIndex = NumericTraits<SizeValueType>::ZeroValue();
-      SizeValueType outputIndex = NumericTraits<SizeValueType>::ZeroValue();
+      SizeValueType inputIndex{};
+      SizeValueType outputIndex{};
       for (SizeValueType ii = 0; ii < m_NumberOfCells; ++ii)
       {
         ++inputIndex; // ignore the cell type
@@ -738,8 +738,8 @@ protected:
   {
     if (input && output)
     {
-      SizeValueType inputIndex = itk::NumericTraits<SizeValueType>::ZeroValue();
-      SizeValueType outputIndex = itk::NumericTraits<SizeValueType>::ZeroValue();
+      SizeValueType inputIndex{};
+      SizeValueType outputIndex{};
 
       for (SizeValueType ii = 0; ii < m_NumberOfCells; ++ii)
       {
@@ -761,7 +761,7 @@ protected:
     }
   }
 
-  /** Write cells to a data buffer, used when readding mesh, used for cellType
+  /** Write cells to a data buffer, used when reading a mesh. Used for cellType
     with constant number of points */
   template <typename TInput, typename TOutput>
   void
@@ -773,8 +773,8 @@ protected:
   {
     if (input && output)
     {
-      SizeValueType inputIndex = NumericTraits<SizeValueType>::ZeroValue();
-      SizeValueType outputIndex = NumericTraits<SizeValueType>::ZeroValue();
+      SizeValueType inputIndex{};
+      SizeValueType outputIndex{};
       for (SizeValueType ii = 0; ii < numberOfCells; ++ii)
       {
         output[outputIndex++] = static_cast<TOutput>(cellType);
@@ -795,8 +795,8 @@ protected:
   {
     if (input && output)
     {
-      SizeValueType inputIndex = NumericTraits<SizeValueType>::ZeroValue();
-      SizeValueType outputIndex = NumericTraits<SizeValueType>::ZeroValue();
+      SizeValueType inputIndex{};
+      SizeValueType outputIndex{};
       for (SizeValueType ii = 0; ii < numberOfCells; ++ii)
       {
         auto numberOfPoints = static_cast<unsigned int>(input[inputIndex++]);
@@ -824,7 +824,7 @@ protected:
   IOFileEnum      m_FileType{ IOFileEnum::ASCII };
 
   /** Filename to read */
-  std::string m_FileName;
+  std::string m_FileName{};
 
   /** Should we compress the data? */
   bool m_UseCompression{ false };
@@ -848,13 +848,13 @@ protected:
   unsigned int m_PointDimension{ 3 };
 
   /** The number of points and cells */
-  SizeValueType m_NumberOfPoints;
-  SizeValueType m_NumberOfCells;
-  SizeValueType m_NumberOfPointPixels;
-  SizeValueType m_NumberOfCellPixels;
+  SizeValueType m_NumberOfPoints{};
+  SizeValueType m_NumberOfCells{};
+  SizeValueType m_NumberOfPointPixels{};
+  SizeValueType m_NumberOfCellPixels{};
 
   /** The buffer size of cells */
-  SizeValueType m_CellBufferSize;
+  SizeValueType m_CellBufferSize{};
 
   /** Flags indicate whether read or write points, cells, point data and cell
     data */
@@ -864,8 +864,8 @@ protected:
   bool m_UpdateCellData{ false };
 
 private:
-  ArrayOfExtensionsType m_SupportedReadExtensions;
-  ArrayOfExtensionsType m_SupportedWriteExtensions;
+  ArrayOfExtensionsType m_SupportedReadExtensions{};
+  ArrayOfExtensionsType m_SupportedWriteExtensions{};
 };
 #define MESHIOBASE_TYPEMAP(type, ctype)             \
   template <>                                       \

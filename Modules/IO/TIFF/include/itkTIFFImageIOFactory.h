@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class TIFFImageIOFactory
+ * \class TIFFImageIOFactory
  * \brief Create instances of TIFFImageIO objects using an object factory.
  * \ingroup ITKIOTIFF
  */
@@ -56,7 +56,7 @@ public:
     return new TIFFImageIOFactory;
   }
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TIFFImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(TIFFImageIOFactory);
 
   /** Register one factory of this type  */
   static void

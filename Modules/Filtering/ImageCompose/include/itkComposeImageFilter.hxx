@@ -27,8 +27,7 @@ namespace itk
 template <typename TInputImage, typename TOutputImage>
 ComposeImageFilter<TInputImage, TOutputImage>::ComposeImageFilter()
 {
-  OutputPixelType p;
-  int             nbOfComponents = NumericTraits<OutputPixelType>::GetLength(p);
+  int nbOfComponents = NumericTraits<OutputPixelType>::GetLength({});
   nbOfComponents = std::max(1, nbOfComponents); // require at least one input
   this->SetNumberOfRequiredInputs(nbOfComponents);
   this->DynamicMultiThreadingOn();
@@ -91,7 +90,7 @@ ComposeImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
     auto * input = itkDynamicCastInDebugMode<InputImageType *>(this->ProcessObject::GetInput(i));
     if (!input)
     {
-      itkExceptionMacro(<< "Input " << i << " not set!");
+      itkExceptionMacro("Input " << i << " not set!");
     }
     if (i == 0)
     {
@@ -99,7 +98,7 @@ ComposeImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
     }
     else if (input->GetLargestPossibleRegion() != region)
     {
-      itkExceptionMacro(<< "All Inputs must have the same dimensions.");
+      itkExceptionMacro("All Inputs must have the same dimensions.");
     }
   }
 }
@@ -115,7 +114,6 @@ ComposeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(const
   TotalProgressReporter progress(this, outputImage->GetRequestedRegion().GetNumberOfPixels());
 
   ImageRegionIterator<OutputImageType> oit(outputImage, outputRegionForThread);
-  oit.GoToBegin();
 
   InputIteratorContainerType inputItContainer;
 

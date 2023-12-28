@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class BayesianClassifierInitializationImageFilter
+ * \class BayesianClassifierInitializationImageFilter
  *
  * \brief This filter is intended to be used as a helper class to
  * initialize the BayesianClassifierImageFilter.
@@ -97,7 +97,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BayesianClassifierInitializationImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BayesianClassifierInitializationImageFilter);
 
   /** Input image iterators */
   using InputImageIteratorType = ImageRegionConstIterator<InputImageType>;
@@ -174,7 +174,7 @@ private:
   bool         m_UserSuppliesMembershipFunctions{ false };
   unsigned int m_NumberOfClasses{ 0 };
 
-  typename MembershipFunctionContainerType::Pointer m_MembershipFunctionContainer;
+  typename MembershipFunctionContainerType::Pointer m_MembershipFunctionContainer{};
 };
 } // end namespace itk
 

@@ -128,16 +128,20 @@ itkResamplePhasedArray3DSpecialCoordinatesImageTest(int, char *[])
         if (itk::Math::NotAlmostEquals(value, (index[2] - 1) * 2))
         {
           std::cout << " (Error in resampled image: Pixel " << index << " = " << value << ", expecting "
-                    << (index[2] - 1) * 2 << ")" << std::endl;
+                    << (index[2] - 1) * 2 << ')' << std::endl;
           passed = false;
         }
       }
     }
   }
   if (!passed)
+  {
     std::cout << "Forward Sampling Failed!!!\n\n" << std::endl;
+  }
   else
+  {
     std::cout << "Forward Sampling Passed\n" << std::endl;
+  }
 
   // Create and configure an image to be a restored "copy" of the input
   InputImagePointerType image2;
@@ -177,16 +181,20 @@ itkResamplePhasedArray3DSpecialCoordinatesImageTest(int, char *[])
         if (itk::Math::NotAlmostEquals(value, index[2]))
         {
           std::cout << " (Error in resampled image: Pixel " << index << " = " << value << ", expecting " << index[2]
-                    << ")" << std::endl;
+                    << ')' << std::endl;
           passed = false;
         }
       }
     }
   }
   if (!passed)
+  {
     std::cout << "Resampling back to Phased Array coordinates Failed!!!\n\n" << std::endl;
+  }
   else
+  {
     std::cout << "Resampling back to Phased Array coordinates Passed\n" << std::endl;
+  }
 
   if (!passed)
   {

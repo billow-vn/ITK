@@ -64,8 +64,7 @@ itkMeanSampleFilterTest(int, char *[])
   try
   {
     filter->Update();
-    failureMeassage = "Exception should have been thrown since \
-                    Update() is invoked without setting an input ";
+    failureMeassage = "Exception should have been thrown since Update() is invoked without setting an input ";
     pass = false;
   }
   catch (const itk::ExceptionObject & excp)
@@ -76,8 +75,7 @@ itkMeanSampleFilterTest(int, char *[])
   if (filter->GetInput() != nullptr)
   {
     pass = false;
-    failureMeassage = "GetInput() should return nullptr if the input \
-                     has not been set";
+    failureMeassage = "GetInput() should return nullptr if the input has not been set";
   }
 
   filter->ResetPipeline();
@@ -100,7 +98,7 @@ itkMeanSampleFilterTest(int, char *[])
   mean[0] = 2.0;
   mean[1] = 2.0;
 
-  std::cout << meanOutput[0] << " " << mean[0] << " " << meanOutput[1] << " " << mean[1] << " " << std::endl;
+  std::cout << meanOutput[0] << ' ' << mean[0] << ' ' << meanOutput[1] << ' ' << mean[1] << ' ' << std::endl;
 
   FilterType::MeasurementVectorType::ValueType epsilon = 1e-6;
 

@@ -85,9 +85,9 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>::Scal
 }
 
 template <typename TImage, typename THistogramFrequencyContainer>
-typename ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>::DataObjectPointer
+auto
 ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>::MakeOutput(
-  DataObjectPointerArraySizeType itkNotUsed(idx))
+  DataObjectPointerArraySizeType itkNotUsed(idx)) -> DataObjectPointer
 {
   return FeatureValueVectorDataObjectType::New().GetPointer();
 }
@@ -142,11 +142,11 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>::Full
     }
   }
 
-  // Now get the mean and deviaton of each feature across the offsets.
+  // Now get the mean and deviation of each feature across the offsets.
   this->m_FeatureMeans->clear();
   this->m_FeatureStandardDeviations->clear();
   const auto tempFeatureMeans = make_unique_for_overwrite<double[]>(numFeatures);
-  const auto tempFeatureDevs = make_unique_for_overwrite<double[]>(numFeatures);
+  const auto tempFeatureDevs = std::make_unique<double[]>(numFeatures);
 
   /*Compute incremental mean and SD, a la Knuth, "The  Art of Computer
     Programming, Volume 2: Seminumerical Algorithms",  section 4.2.2.
@@ -162,7 +162,6 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>::Full
   for (featureNum = 0; featureNum < numFeatures; ++featureNum)
   {
     tempFeatureMeans[featureNum] = features[0][featureNum];
-    tempFeatureDevs[featureNum] = 0;
   }
   // Run through the recurrence (k = 2 ... N)
   for (offsetNum = 1; offsetNum < numOffsets; ++offsetNum)

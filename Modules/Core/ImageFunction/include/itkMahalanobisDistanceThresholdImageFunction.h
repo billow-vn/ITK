@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MahalanobisDistanceThresholdImageFunction
+ * \class MahalanobisDistanceThresholdImageFunction
  * \brief Returns true if the pixel value of a vector image has a
  * Mahalanobis distance below the value specified by the threshold.
  *
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MahalanobisDistanceThresholdImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(MahalanobisDistanceThresholdImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -164,19 +164,19 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_Threshold;
+  double m_Threshold{};
 
   // This is intended only for Image of Vector pixel type.
   using MahalanobisDistanceFunctionType = Statistics::MahalanobisDistanceMembershipFunction<PixelType>;
 
   using MahalanobisDistanceFunctionPointer = typename MahalanobisDistanceFunctionType::Pointer;
-  MahalanobisDistanceFunctionPointer m_MahalanobisDistanceMembershipFunction;
+  MahalanobisDistanceFunctionPointer m_MahalanobisDistanceMembershipFunction{};
 
   // Cached versions of the mean and covariance to manage the
   // difference in vector/matrix types between this class and the
   // membership function used internally.
-  MeanVectorType       m_Mean;
-  CovarianceMatrixType m_Covariance;
+  MeanVectorType       m_Mean{};
+  CovarianceMatrixType m_Covariance{};
 };
 } // end namespace itk
 

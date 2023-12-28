@@ -45,9 +45,11 @@ printnb(const TIteratorType & nb, bool full)
 
     while (it != nb.End())
     {
-      std::cout << **it << " ";
+      std::cout << **it << ' ';
       if ((count % sz) == 0)
+      {
         std::cout << std::endl;
+      }
       ++it;
       ++count;
     }
@@ -82,7 +84,9 @@ FillImage(itk::Image<itk::Index<VDimension>, VDimension> * img)
         loop[i] = 0;
       }
       else
+      {
         break;
+      }
     }
     ++it;
   }

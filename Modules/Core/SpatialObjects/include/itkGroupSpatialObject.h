@@ -51,15 +51,11 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(GroupSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(GroupSpatialObject);
 
 protected:
   GroupSpatialObject();
   ~GroupSpatialObject() override = default;
-
-  /** Method to print the object.*/
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   typename LightObject::Pointer
   InternalClone() const override;

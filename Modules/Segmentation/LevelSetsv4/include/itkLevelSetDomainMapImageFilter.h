@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetDomainMapImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LevelSetDomainMapImageFilter);
 
   using InputImageType = TInputImage;
   using InputImageConstPointer = typename InputImageType::ConstPointer;
@@ -77,7 +77,7 @@ public:
   using OutputIteratorType = ImageRegionIterator<OutputImageType>;
 
   /**
-   *\class LevelSetDomain
+   * \class LevelSetDomain
    * \brief Specifies an image region where an unique std::list of level sets Id's are defined.
    * \ingroup ITKLevelSetsv4 */
   class LevelSetDomain
@@ -135,10 +135,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  DomainMapType m_DomainMap;
+  DomainMapType m_DomainMap{};
 
-  const InputImageType * m_InputImage;
-  OutputImageType *      m_OutputImage;
+  const InputImageType * m_InputImage{};
+  OutputImageType *      m_OutputImage{};
 };
 
 } /* namespace itk */

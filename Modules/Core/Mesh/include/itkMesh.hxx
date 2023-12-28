@@ -171,7 +171,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>::CreateCell(int cellType, CellAutoPoin
       cellPointer.TakeOwnership(new OutputQuadraticTriangleCellType);
       break;
     default:
-      itkExceptionMacro(<< "Unknown mesh cell");
+      itkExceptionMacro("Unknown mesh cell");
   }
 
   return;
@@ -605,11 +605,12 @@ Mesh<TPixelType, VDimension, TMeshTraits>::GetCellBoundaryFeature(int           
  * though, and we are not sure how wide-spread this support is.
  */
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-typename Mesh<TPixelType, VDimension, TMeshTraits>::CellIdentifier
+auto
 Mesh<TPixelType, VDimension, TMeshTraits>::GetCellBoundaryFeatureNeighbors(int                        dimension,
                                                                            CellIdentifier             cellId,
                                                                            CellFeatureIdentifier      featureId,
                                                                            std::set<CellIdentifier> * cellSet)
+  -> CellIdentifier
 {
   /**
    * Sanity check on mesh status.
@@ -1017,7 +1018,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>::ReleaseCellsMemory()
       {
         // The user forgot to tell the mesh about how he allocated
         // the cells. No responsible guess can be made here. Call for help.
-        itkGenericExceptionMacro(<< "Cells Allocation Method was not specified. See SetCellsAllocationMethod()");
+        itkGenericExceptionMacro("Cells Allocation Method was not specified. See SetCellsAllocationMethod()");
         break;
       }
       case MeshEnums::MeshClassCellsAllocationMethod::CellsAllocatedAsStaticArray:
@@ -1049,7 +1050,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>::ReleaseCellsMemory()
         while (cell != end)
         {
           const CellType * cellToBeDeleted = cell->Value();
-          itkDebugMacro(<< "Mesh destructor deleting cell = " << cellToBeDeleted);
+          itkDebugMacro("Mesh destructor deleting cell = " << cellToBeDeleted);
           delete cellToBeDeleted;
           ++cell;
         }
@@ -1072,8 +1073,8 @@ Mesh<TPixelType, VDimension, TMeshTraits>::CopyInformation(const DataObject * da
   if (!mesh)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::Mesh::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(Self *).name());
+    itkExceptionMacro("itk::Mesh::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                  << typeid(Self *).name());
   }
 
   // Copy here specific elements of the Mesh
@@ -1090,8 +1091,8 @@ Mesh<TPixelType, VDimension, TMeshTraits>::Graft(const DataObject * data)
   if (!mesh)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::Mesh::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(Self *).name());
+    itkExceptionMacro("itk::Mesh::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                  << typeid(Self *).name());
   }
 
   this->ReleaseCellsMemory();

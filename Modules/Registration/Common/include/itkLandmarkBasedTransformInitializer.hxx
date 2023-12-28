@@ -20,6 +20,7 @@
 
 #include "itkMatrix.h"
 #include "itkSymmetricEigenAnalysis.h"
+#include "itkPrintHelper.h"
 
 #include <cmath>
 #include "vnl/algo/vnl_qr.h"
@@ -65,7 +66,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
     return;
   }
 
-  itkExceptionMacro(<< "Unsupported Transform Type " << this->m_Transform->GetNameOfClass());
+  itkExceptionMacro("Unsupported Transform Type " << this->m_Transform->GetNameOfClass());
 }
 
 template <typename TTransform, typename TFixedImage, typename TMovingImage>
@@ -76,7 +77,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   auto * transform = dynamic_cast<BSplineTransformType *>(this->m_Transform.GetPointer());
   if (transform == nullptr)
   {
-    itkExceptionMacro(<< "BSplineTransform Expected but transform is " << this->m_Transform->GetNameOfClass());
+    itkExceptionMacro("BSplineTransform Expected but transform is " << this->m_Transform->GetNameOfClass());
   }
   if (m_ReferenceImage.IsNull())
   {
@@ -101,7 +102,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   {
     if (this->m_LandmarkWeight.size() != numberOfLandMarks)
     {
-      itkExceptionMacro(<< "Size mismatch between number of landmarks pairs and weights");
+      itkExceptionMacro("Size mismatch between number of landmarks pairs and weights");
     }
     auto weightIt = this->m_LandmarkWeight.begin();
     for (unsigned int i = 0; weightIt != this->m_LandmarkWeight.end(); ++i, ++weightIt)
@@ -197,14 +198,14 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   auto * transform = dynamic_cast<AffineTransformType *>(this->m_Transform.GetPointer());
   if (transform == nullptr)
   {
-    itkExceptionMacro(<< "AffineTransform Expected but transform is " << this->m_Transform->GetNameOfClass());
+    itkExceptionMacro("AffineTransform Expected but transform is " << this->m_Transform->GetNameOfClass());
   }
 
   const auto numberOfLandmarks = static_cast<const unsigned int>(this->m_MovingLandmarks.size());
 
   if (numberOfLandmarks < LandmarkPointContainer::value_type::GetPointDimension() + 1)
   {
-    itkExceptionMacro(<< " insufficient number of landmarks, expected "
+    itkExceptionMacro(" insufficient number of landmarks, expected "
                       << LandmarkPointContainer::value_type::GetPointDimension() + 1 << " got " << numberOfLandmarks);
   }
 
@@ -218,7 +219,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   {
     if (this->m_LandmarkWeight.size() != numberOfLandmarks)
     {
-      itkExceptionMacro(<< " size mismatch between number of landmars pairs and weights");
+      itkExceptionMacro(" size mismatch between number of landmars pairs and weights");
     }
     auto weightIt = this->m_LandmarkWeight.begin();
     for (unsigned int i = 0; weightIt != this->m_LandmarkWeight.end(); ++i, ++weightIt)
@@ -229,7 +230,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   // Normalize weights.
   vnlWeight = vnlWeight / vnlWeight.fro_norm();
 
-  // Convert Point to Matrix for Matrix Muptiplication
+  // Convert Point to Matrix for Matrix Multiplication
 
   // q
   // dim+1=4 * numberOfLandmarks matrix
@@ -279,10 +280,10 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   //
   vnl_matrix<ParametersValueType> Q(ImageDimension + 1, ImageDimension + 1, 0.0F);
   for (unsigned int i = 0; i < numberOfLandmarks; ++i)
-  { // Iterate for the number of landmakrs.
+  { // Iterate for the number of landmarks.
     vnl_matrix<ParametersValueType> qTemp(ImageDimension + 1, 1);
 
-    // Convert vector to colume matrix.
+    // Convert vector to column matrix.
     for (unsigned int k = 0; k < ImageDimension + 1; ++k)
     {
       qTemp(k, 0) = q.get(k, i);
@@ -318,15 +319,13 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   vnl_matrix<ParametersValueType> transposeAffine = vnl_qr<ParametersValueType>(Q).solve(C);
   vnl_matrix<ParametersValueType> Affine = transposeAffine.transpose();
 
-  vnl_matrix<ParametersValueType> AffineRotation =
-    vnl_matrix<ParametersValueType>(Affine.get_n_columns(0, ImageDimension));
+  vnl_matrix<ParametersValueType> AffineRotation(Affine.get_n_columns(0, ImageDimension));
 
   // [Convert ITK Affine Transformation from vnl]
   //
   // Define Matrix Type.
-  itk::Matrix<ParametersValueType, ImageDimension, ImageDimension> mA =
-    itk::Matrix<ParametersValueType, ImageDimension, ImageDimension>(AffineRotation);
-  itk::Vector<ParametersValueType, ImageDimension> mT;
+  itk::Matrix<ParametersValueType, ImageDimension, ImageDimension> mA(AffineRotation);
+  itk::Vector<ParametersValueType, ImageDimension>                 mT;
   for (unsigned int t = 0; t < ImageDimension; ++t)
   {
     mT[t] = Affine(t, ImageDimension);
@@ -345,8 +344,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   auto * transform = dynamic_cast<VersorRigid3DTransformType *>(this->m_Transform.GetPointer());
   if (transform == nullptr)
   {
-    itkExceptionMacro(<< "VersorRigid3DTransformType Expected but transform is "
-                      << this->m_Transform->GetNameOfClass());
+    itkExceptionMacro("VersorRigid3DTransformType Expected but transform is " << this->m_Transform->GetNameOfClass());
   }
 
   // Sanity check
@@ -368,7 +366,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   //    Journal of the Optical Society of America A, 4:629-642
   //
   //    Original python implementation by David G. Gobbi
-  //    Readapted from the code in VTK: Hybrid/vtkLandmarkTransform
+  //    Adapted from the code in VTK: Hybrid/vtkLandmarkTransform
   // ----------------------------------------------------------------------------
 
   using VectorType = typename VersorRigid3DTransformType::OutputVectorType;
@@ -378,8 +376,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
 
   PointType3D movingCentroid = ComputeCentroid(this->m_MovingLandmarks);
 
-  itkDebugMacro(<< "fixed centroid  = " << fixedCentroid);
-  itkDebugMacro(<< "moving centroid  = " << movingCentroid);
+  itkDebugMacro("fixed centroid  = " << fixedCentroid);
+  itkDebugMacro("moving centroid  = " << movingCentroid);
 
   using VersorType = typename VersorRigid3DTransformType::VersorType;
 
@@ -420,8 +418,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
       }
 
       itkDebugStatement(++ii);
-      itkDebugMacro(<< "f_" << ii << " = " << fixedCentered);
-      itkDebugMacro(<< "m_" << ii << " = " << movingCentered);
+      itkDebugMacro("f_" << ii << " = " << fixedCentered);
+      itkDebugMacro("m_" << ii << " = " << movingCentered);
 
       ++movingItr;
       ++fixedItr;
@@ -433,9 +431,9 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
 
     CreateMatrix(N, M);
 
-    itkDebugMacro(<< "For Closed form solution: ");
-    itkDebugMacro(<< "M matrix " << M);
-    itkDebugMacro(<< "N matrix " << N);
+    itkDebugMacro("For Closed form solution: ");
+    itkDebugMacro("M matrix " << M);
+    itkDebugMacro("N matrix " << N);
 
     vnl_matrix<ParametersValueType> eigenVectors(4, 4);
     vnl_vector<ParametersValueType> eigenValues(4);
@@ -448,8 +446,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
 
     symmetricEigenSystem.ComputeEigenValuesAndVectors(N, eigenValues, eigenVectors);
 
-    itkDebugMacro(<< "EigenVectors " << eigenVectors);
-    itkDebugMacro(<< "EigenValues " << eigenValues);
+    itkDebugMacro("EigenVectors " << eigenVectors);
+    itkDebugMacro("EigenValues " << eigenValues);
 
     // By default eigen values are sorted in ascending order therefore the
     // maximum eigen value is the one in the fourth place = index 3. We need the
@@ -457,7 +455,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
     // eigenvector from the last row, index=3.
 
     versor.Set(eigenVectors[3][1], eigenVectors[3][2], eigenVectors[3][3], eigenVectors[3][0]);
-    itkDebugMacro(<< "Resulting versor" << versor);
+    itkDebugMacro("Resulting versor" << versor);
   }
 
 
@@ -478,7 +476,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   auto * transform = dynamic_cast<Similarity3DTransformType *>(this->m_Transform.GetPointer());
   if (transform == nullptr)
   {
-    itkExceptionMacro(<< "Similarity3DTransformType Expected but transform is " << this->m_Transform->GetNameOfClass());
+    itkExceptionMacro("Similarity3DTransformType Expected but transform is " << this->m_Transform->GetNameOfClass());
   }
 
   // Sanity check for dimension.
@@ -500,7 +498,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   //    Journal of the Optical Society of America A, 4:629-642
   //
   //    Original python implementation by David G. Gobbi
-  //    Readapted from the code in VTK: Hybrid/vtkLandmarkTransform
+  //    Adapted from the code in VTK: Hybrid/vtkLandmarkTransform
   // ----------------------------------------------------------------------------
 
   using VectorType = typename Similarity3DTransformType::OutputVectorType;
@@ -510,8 +508,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
 
   PointType3D movingCentroid = ComputeCentroid(this->m_MovingLandmarks);
 
-  itkDebugMacro(<< "fixed centroid  = " << fixedCentroid);
-  itkDebugMacro(<< "moving centroid  = " << movingCentroid);
+  itkDebugMacro("fixed centroid  = " << fixedCentroid);
+  itkDebugMacro("moving centroid  = " << movingCentroid);
 
   using VersorType = typename VersorRigid3DTransformType::VersorType;
 
@@ -561,8 +559,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
       }
 
       itkDebugStatement(++ii);
-      itkDebugMacro(<< "f_" << ii << " = " << fixedCentered);
-      itkDebugMacro(<< "m_" << ii << " = " << movingCentered);
+      itkDebugMacro("f_" << ii << " = " << fixedCentered);
+      itkDebugMacro("m_" << ii << " = " << movingCentered);
 
       ++movingItr;
       ++fixedItr;
@@ -573,9 +571,9 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
     itk::Matrix<ParametersValueType, 4, 4> N;
 
     CreateMatrix(N, M);
-    itkDebugMacro(<< "For Closed form solution: ");
-    itkDebugMacro(<< "M matrix " << M);
-    itkDebugMacro(<< "N matrix " << N);
+    itkDebugMacro("For Closed form solution: ");
+    itkDebugMacro("M matrix " << M);
+    itkDebugMacro("N matrix " << N);
 
     vnl_matrix<ParametersValueType> eigenVectors(4, 4);
     vnl_vector<ParametersValueType> eigenValues(4);
@@ -588,8 +586,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
 
     symmetricEigenSystem.ComputeEigenValuesAndVectors(N, eigenValues, eigenVectors);
 
-    itkDebugMacro(<< "EigenVectors " << eigenVectors);
-    itkDebugMacro(<< "EigenValues " << eigenValues);
+    itkDebugMacro("EigenVectors " << eigenVectors);
+    itkDebugMacro("EigenValues " << eigenValues);
 
     // By default eigen values are sorted in ascending order therefore the
     // maximum eigen value is the one  in the fourth place = index 3. We need the
@@ -597,7 +595,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
     // eigenvector from the last row, index=3.
 
     versor.Set(eigenVectors[3][1], eigenVectors[3][2], eigenVectors[3][3], eigenVectors[3][0]);
-    itkDebugMacro(<< "Resulting versor" << versor);
+    itkDebugMacro("Resulting versor" << versor);
   }
 
   transform->SetCenter(fixedCentroid);
@@ -627,12 +625,12 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
 
   if (transform == nullptr)
   {
-    itkExceptionMacro(<< "Rigid2DTransformType Expected but transform is " << this->m_Transform->GetNameOfClass());
+    itkExceptionMacro("Rigid2DTransformType Expected but transform is " << this->m_Transform->GetNameOfClass());
   }
   // Sanity check.
   if (ImageDimension != 2)
   {
-    itkExceptionMacro("Transform is Rigid2DTransfrom and Fixed image dimension is not 2");
+    itkExceptionMacro("Transform is Rigid2DTransform and Fixed image dimension is not 2");
   }
   if (MovingImageType::ImageDimension != 2)
   {
@@ -673,8 +671,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   movingCentroid[0] /= this->m_MovingLandmarks.size();
   movingCentroid[1] /= this->m_MovingLandmarks.size();
 
-  itkDebugMacro(<< "fixed centroid  = " << fixedCentroid);
-  itkDebugMacro(<< "moving centroid  = " << movingCentroid);
+  itkDebugMacro("fixed centroid  = " << fixedCentroid);
+  itkDebugMacro("moving centroid  = " << movingCentroid);
 
   double rotationAngle = 0.0;
 
@@ -715,14 +713,14 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
       s_cross += (movingCentered[1] * fixedCentered[0]) - (movingCentered[0] * fixedCentered[1]);
 
       itkDebugStatement(++ii);
-      itkDebugMacro(<< "f_" << ii << " = " << fixedCentered);
-      itkDebugMacro(<< "m_" << ii << " = " << movingCentered);
+      itkDebugMacro("f_" << ii << " = " << fixedCentered);
+      itkDebugMacro("m_" << ii << " = " << movingCentered);
 
       ++movingItr;
       ++fixedItr;
     }
 
-    itkDebugMacro(<< "Dot Product of landmarks: " << s_dot << " Cross Product: " << s_cross);
+    itkDebugMacro("Dot Product of landmarks: " << s_dot << " Cross Product: " << s_cross);
     if (itk::Math::abs(s_dot) > 0.00005)
     {
       rotationAngle = std::atan2(s_cross, s_dot);
@@ -734,7 +732,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   }
   else
   {
-    itkWarningMacro(<< "Less than 2 landmarks available. Rotation is not computed");
+    itkWarningMacro("Less than 2 landmarks available. Rotation is not computed");
   }
 
   auto t = Rigid2DTransformType::New();
@@ -745,9 +743,9 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Intern
   transform->SetAngle(rotationAngle);
 
   VectorType translation = transform->GetTranslation();
-  itkDebugMacro(<< "Initial transform translation: " << translation);
+  itkDebugMacro("Initial transform translation: " << translation);
   translation = movingCentroid - fixedCentroid;
-  itkDebugMacro(<< "translation computed as difference of centroids: " << translation);
+  itkDebugMacro("translation computed as difference of centroids: " << translation);
   transform->SetTranslation(translation);
 }
 
@@ -768,9 +766,9 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::Initia
 }
 
 template <typename TTransform, typename TFixedImage, typename TMovingImage>
-typename LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::PointType3D
+auto
 LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::ComputeCentroid(
-  const LandmarkPointContainer inputLandmarks)
+  const LandmarkPointContainer inputLandmarks) -> PointType3D
 {
   // Compute the centroids.
   PointType3D centroid;
@@ -819,32 +817,16 @@ void
 LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage>::PrintSelf(std::ostream & os,
                                                                                     Indent         indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  itkPrintSelfObjectMacro(Transform);
   itkPrintSelfObjectMacro(ReferenceImage);
+  itkPrintSelfObjectMacro(Transform);
 
-  os << indent << "Fixed Landmarks: " << std::endl;
-  auto fitr = this->m_FixedLandmarks.begin();
-  while (fitr != this->m_FixedLandmarks.end())
-  {
-    os << indent << *fitr << std::endl;
-    ++fitr;
-  }
-  os << indent << "Moving Landmarks: " << std::endl;
-  auto mitr = this->m_MovingLandmarks.begin();
-  while (mitr != this->m_MovingLandmarks.end())
-  {
-    os << indent << *mitr << std::endl;
-    ++mitr;
-  }
-  os << indent << "Landmark Weight: " << std::endl;
-  auto witr = this->m_LandmarkWeight.begin();
-  while (witr != this->m_LandmarkWeight.end())
-  {
-    os << indent << *witr << std::endl;
-    ++witr;
-  }
+  os << indent << "FixedLandmarks: " << m_FixedLandmarks << std::endl;
+  os << indent << "MovingLandmarks: " << m_MovingLandmarks << std::endl;
+  os << indent << "LandmarkWeight: " << m_LandmarkWeight << std::endl;
 
   os << indent << "BSplineNumberOfControlPoints: " << m_BSplineNumberOfControlPoints << std::endl;
 }

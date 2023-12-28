@@ -43,7 +43,7 @@ BoundingBox<TPointIdentifier, VPointDimension, TCoordRep, TPointsContainer>::Pri
   os << indent << "Bounding Box: ( ";
   for (unsigned int i = 0; i < PointDimension; ++i)
   {
-    os << m_Bounds[2 * i] << "," << m_Bounds[2 * i + 1] << " ";
+    os << m_Bounds[2 * i] << ',' << m_Bounds[2 * i + 1] << ' ';
   }
   os << " )" << std::endl;
 }
@@ -125,13 +125,6 @@ BoundingBox<TPointIdentifier, VPointDimension, TCoordRep, TPointsContainer>::Get
 }
 #endif
 
-/** */
-template <typename TPointIdentifier, unsigned int VPointDimension, typename TCoordRep, typename TPointsContainer>
-BoundingBox<TPointIdentifier, VPointDimension, TCoordRep, TPointsContainer>::BoundingBox()
-  : m_PointsContainer(nullptr)
-{
-  m_Bounds.Fill(NumericTraits<CoordRepType>::ZeroValue());
-}
 
 template <typename TPointIdentifier, unsigned int VPointDimension, typename TCoordRep, typename TPointsContainer>
 bool

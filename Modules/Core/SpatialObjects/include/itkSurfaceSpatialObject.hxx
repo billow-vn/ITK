@@ -23,7 +23,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension, typename TSurfacePointType>
 SurfaceSpatialObject<TDimension, TSurfacePointType>::SurfaceSpatialObject()
 {
@@ -48,7 +48,6 @@ SurfaceSpatialObject<TDimension, TSurfacePointType>::Clear()
   this->Modified();
 }
 
-/** InternalClone */
 template <unsigned int TDimension, typename TSurfacePointType>
 typename LightObject::Pointer
 SurfaceSpatialObject<TDimension, TSurfacePointType>::InternalClone() const
@@ -60,23 +59,13 @@ SurfaceSpatialObject<TDimension, TSurfacePointType>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   return loPtr;
 }
 
-/** Print the surface object */
-template <unsigned int TDimension, typename TSurfacePointType>
-void
-SurfaceSpatialObject<TDimension, TSurfacePointType>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  os << indent << "SurfaceSpatialObject(" << this << ")" << std::endl;
-  Superclass::PrintSelf(os, indent);
-}
-
 #if !defined(ITK_LEGACY_REMOVE)
-/** Approximate the normals of the surface */
 template <unsigned int TDimension, typename TSurfacePointType>
 bool
 SurfaceSpatialObject<TDimension, TSurfacePointType>::Approximate3DNormals()
@@ -85,7 +74,6 @@ SurfaceSpatialObject<TDimension, TSurfacePointType>::Approximate3DNormals()
 }
 #endif // LEGACY
 
-/** Approximate the normals of the surface in 2D or 3D */
 template <unsigned int TDimension, typename TSurfacePointType>
 bool
 SurfaceSpatialObject<TDimension, TSurfacePointType>::ComputeNormals()
@@ -196,9 +184,9 @@ SurfaceSpatialObject<TDimension, TSurfacePointType>::ComputeNormals()
 
       if ((identifier[0] == identifier[1]) || (identifier[1] == identifier[2]) || (identifier[0] == identifier[2]))
       {
-        std::cout << "Cannot find 3 distinct points!" << std::endl;
-        std::cout << identifier[0] << " : " << identifier[1] << " : " << identifier[2] << std::endl;
-        std::cout << max[0] << " : " << max[1] << " : " << max[2] << std::endl;
+        std::cout << "Cannot find 3 distinct points!" << std::endl
+                  << identifier[0] << " : " << identifier[1] << " : " << identifier[2] << std::endl
+                  << max[0] << " : " << max[1] << " : " << max[2] << std::endl;
         return false;
       }
 
@@ -250,9 +238,9 @@ SurfaceSpatialObject<TDimension, TSurfacePointType>::ComputeNormals()
 
     if (Math::AlmostEquals(absvec, 0.0))
     {
-      std::cout << "ComputeNormals Failed!" << std::endl;
-      std::cout << identifier[0] << " : " << identifier[1] << " : " << identifier[2] << std::endl;
-      std::cout << badId.size() << " : " << this->m_Points.size() - 1 << std::endl;
+      std::cout << "ComputeNormals Failed!" << std::endl
+                << identifier[0] << " : " << identifier[1] << " : " << identifier[2] << std::endl
+                << badId.size() << " : " << this->m_Points.size() - 1 << std::endl;
       return false;
     }
 

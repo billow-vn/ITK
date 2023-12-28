@@ -117,7 +117,7 @@ ImageSeriesReader<TOutputImage>::GenerateOutputInformation()
   const auto numberOfFiles = static_cast<int>(m_FileNames.size());
   if (numberOfFiles == 0)
   {
-    itkExceptionMacro(<< "At least one filename is required.");
+    itkExceptionMacro("At least one filename is required.");
   }
 
   const int firstFileName = (m_ReverseOrder ? numberOfFiles - 1 : 0);
@@ -341,14 +341,15 @@ ImageSeriesReader<TOutputImage>::GenerateData()
       // read the meta data information
       readerOutput->UpdateOutputInformation();
 
-      // propagate the requested region to determin what the region
+      // propagate the requested region to determine what the region
       // will actually be read
       readerOutput->PropagateRequestedRegion();
 
       // check that the size of each slice is the same
       if (readerOutput->GetLargestPossibleRegion().GetSize() != validSize)
       {
-        itkExceptionMacro(<< "Size mismatch! The size of  " << m_FileNames[iFileName].c_str() << " is "
+        itkExceptionMacro("Size mismatch! The size of  "
+                          << m_FileNames[iFileName].c_str() << " is "
                           << readerOutput->GetLargestPossibleRegion().GetSize()
                           << " and does not match the required size " << validSize << " from file "
                           << m_FileNames[m_ReverseOrder ? numberOfFiles - 1 : 0].c_str());
@@ -454,7 +455,7 @@ ImageSeriesReader<TOutputImage>::GenerateData()
 
       // report progress for read slices
       progress.CompletedPixel();
-    } // end !insidedRequestedRegion
+    } // end !insideRequestedRegion
 
     // Deep copy the MetaDataDictionary into the array
     if (reader->GetImageIO() && needToUpdateMetaDataDictionaryArray)
@@ -474,8 +475,7 @@ ImageSeriesReader<TOutputImage>::GenerateData()
   if (TOutputImage::ImageDimension != this->m_NumberOfDimensionsInImage &&
       maxSpacingDeviation > m_SpacingWarningRelThreshold * outputSpacing[this->m_NumberOfDimensionsInImage])
   {
-    itkWarningMacro(<< "Non uniform sampling or missing slices detected,  maximum nonuniformity:"
-                    << maxSpacingDeviation);
+    itkWarningMacro("Non uniform sampling or missing slices detected,  maximum nonuniformity:" << maxSpacingDeviation);
   }
   if (maxSpacingDeviation > 0.0)
   {

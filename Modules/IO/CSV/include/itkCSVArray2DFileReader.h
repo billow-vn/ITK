@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class CSVArray2DFileReader
+ * \class CSVArray2DFileReader
  * \brief Parses csv files and stores the data in a itkCSVArray2DDataObject.
  *
  * CSVArray2DFileReader is used for reading csv files. This reader should
@@ -91,7 +91,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(CSVArray2DFileReader, CSVFileReaderBase);
+  itkOverrideGetNameOfClassMacro(CSVArray2DFileReader);
 
   /** DataFrame Object types */
   using Array2DDataObjectType = typename itk::CSVArray2DDataObject<TData>;
@@ -130,7 +130,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  Array2DDataObjectPointer m_Array2DDataObject;
+  Array2DDataObjectPointer m_Array2DDataObject{};
 };
 
 } // end namespace itk

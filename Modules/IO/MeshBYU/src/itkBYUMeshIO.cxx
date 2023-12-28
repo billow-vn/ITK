@@ -22,7 +22,7 @@
 
 namespace itk
 {
-BYUMeshIO ::BYUMeshIO()
+BYUMeshIO::BYUMeshIO()
   : m_PartId(NumericTraits<SizeValueType>::max())
   , m_FirstCellId(NumericTraits<SizeValueType>::OneValue())
   , m_LastCellId(NumericTraits<SizeValueType>::max())
@@ -33,7 +33,7 @@ BYUMeshIO ::BYUMeshIO()
 BYUMeshIO::~BYUMeshIO() = default;
 
 bool
-BYUMeshIO ::CanReadFile(const char * fileName)
+BYUMeshIO::CanReadFile(const char * fileName)
 {
   if (!itksys::SystemTools::FileExists(fileName, true))
   {
@@ -49,7 +49,7 @@ BYUMeshIO ::CanReadFile(const char * fileName)
 }
 
 bool
-BYUMeshIO ::CanWriteFile(const char * fileName)
+BYUMeshIO::CanWriteFile(const char * fileName)
 {
   if (itksys::SystemTools::GetFilenameLastExtension(fileName) != ".byu")
   {
@@ -60,7 +60,7 @@ BYUMeshIO ::CanWriteFile(const char * fileName)
 }
 
 void
-BYUMeshIO ::ReadMeshInformation()
+BYUMeshIO::ReadMeshInformation()
 {
   // Define input file stream and attach it to input file
   std::ifstream inputFile;
@@ -71,7 +71,7 @@ BYUMeshIO ::ReadMeshInformation()
 
   if (!inputFile.is_open())
   {
-    itkExceptionMacro(<< "Unable to open input file " << this->m_FileName);
+    itkExceptionMacro("Unable to open input file " << this->m_FileName);
   }
 
   // Read the ASCII file information
@@ -178,7 +178,7 @@ BYUMeshIO ::ReadMeshInformation()
 }
 
 void
-BYUMeshIO ::ReadPoints(void * buffer)
+BYUMeshIO::ReadPoints(void * buffer)
 {
   // Define input file stream and attach it to input file
   std::ifstream inputFile;
@@ -189,7 +189,7 @@ BYUMeshIO ::ReadPoints(void * buffer)
 
   if (!inputFile.is_open())
   {
-    itkExceptionMacro(<< "Unable to open input file " << this->m_FileName);
+    itkExceptionMacro("Unable to open input file " << this->m_FileName);
   }
 
   // Set the position to points start
@@ -216,7 +216,7 @@ BYUMeshIO ::ReadPoints(void * buffer)
 }
 
 void
-BYUMeshIO ::ReadCells(void * buffer)
+BYUMeshIO::ReadCells(void * buffer)
 {
   // Define input file stream and attach it to input file
   std::ifstream inputFile;
@@ -225,7 +225,7 @@ BYUMeshIO ::ReadCells(void * buffer)
 
   if (!inputFile.is_open())
   {
-    itkExceptionMacro(<< "Unable to open input file " << this->m_FileName);
+    itkExceptionMacro("Unable to open input file " << this->m_FileName);
   }
 
   // Set the position to current position
@@ -235,7 +235,7 @@ BYUMeshIO ::ReadCells(void * buffer)
   inputFile.precision(12);
   auto *        data = static_cast<unsigned int *>(buffer);
   SizeValueType numPoints = 0;
-  SizeValueType id = itk::NumericTraits<SizeValueType>::ZeroValue();
+  SizeValueType id{};
   SizeValueType index = 2;
   int           ptId;
   m_FirstCellId -= 1;
@@ -270,15 +270,15 @@ BYUMeshIO ::ReadCells(void * buffer)
 }
 
 void
-BYUMeshIO ::ReadPointData(void * itkNotUsed(buffer))
+BYUMeshIO::ReadPointData(void * itkNotUsed(buffer))
 {}
 
 void
-BYUMeshIO ::ReadCellData(void * itkNotUsed(buffer))
+BYUMeshIO::ReadCellData(void * itkNotUsed(buffer))
 {}
 
 void
-BYUMeshIO ::WriteMeshInformation()
+BYUMeshIO::WriteMeshInformation()
 {
   // Check file name
   if (this->m_FileName.empty())
@@ -298,18 +298,15 @@ BYUMeshIO ::WriteMeshInformation()
 
   // Write BYU file header
   Indent indent(7);
-  outputFile << indent << 1;
-  outputFile << indent << this->m_NumberOfPoints;
-  outputFile << indent << this->m_NumberOfCells;
-  outputFile << indent << this->m_CellBufferSize - 2 * this->m_NumberOfCells << std::endl;
-  outputFile << indent << 1;
-  outputFile << indent << this->m_NumberOfCells << std::endl;
+  outputFile << indent << 1 << indent << this->m_NumberOfPoints << indent << this->m_NumberOfCells << indent
+             << this->m_CellBufferSize - 2 * this->m_NumberOfCells << std::endl
+             << indent << 1 << indent << this->m_NumberOfCells << std::endl;
 
   outputFile.close();
 }
 
 void
-BYUMeshIO ::WritePoints(void * buffer)
+BYUMeshIO::WritePoints(void * buffer)
 {
   // check file name
   if (this->m_FileName.empty())
@@ -409,7 +406,7 @@ BYUMeshIO ::WritePoints(void * buffer)
     }
     default:
     {
-      itkExceptionMacro(<< "Unknown point pixel component type" << std::endl);
+      itkExceptionMacro("Unknown point pixel component type" << std::endl);
     }
   }
 
@@ -417,7 +414,7 @@ BYUMeshIO ::WritePoints(void * buffer)
 }
 
 void
-BYUMeshIO ::WriteCells(void * buffer)
+BYUMeshIO::WriteCells(void * buffer)
 {
   // Check file name
   if (this->m_FileName.empty())
@@ -505,7 +502,7 @@ BYUMeshIO ::WriteCells(void * buffer)
     }
     default:
     {
-      itkExceptionMacro(<< "Unknown cell pixel component type" << std::endl);
+      itkExceptionMacro("Unknown cell pixel component type" << std::endl);
     }
   }
 
@@ -513,19 +510,19 @@ BYUMeshIO ::WriteCells(void * buffer)
 }
 
 void
-BYUMeshIO ::WritePointData(void * itkNotUsed(buffer))
+BYUMeshIO::WritePointData(void * itkNotUsed(buffer))
 {}
 
 void
-BYUMeshIO ::WriteCellData(void * itkNotUsed(buffer))
+BYUMeshIO::WriteCellData(void * itkNotUsed(buffer))
 {}
 
 void
-BYUMeshIO ::Write()
+BYUMeshIO::Write()
 {}
 
 void
-BYUMeshIO ::PrintSelf(std::ostream & os, Indent indent) const
+BYUMeshIO::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 

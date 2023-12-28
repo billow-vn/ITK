@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SliceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(SliceImageFilter);
 
   /** Typedef to images */
   using OutputImageType = TOutputImage;
@@ -157,9 +157,9 @@ protected:
   VerifyInputInformation() ITKv5_CONST override;
 
 private:
-  IndexType m_Start;
-  IndexType m_Stop;
-  ArrayType m_Step;
+  IndexType m_Start{};
+  IndexType m_Stop{};
+  ArrayType m_Step{};
 };
 } // end namespace itk
 

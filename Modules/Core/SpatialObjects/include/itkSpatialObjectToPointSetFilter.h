@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class SpatialObjectToPointSetFilter
+ * \class SpatialObjectToPointSetFilter
  * \brief Base class for filters that take a SpatialObject
  *        as input and produce a PointSet as output.
  *  The pointset created is in physical space.
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpatialObjectToPointSetFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(SpatialObjectToPointSetFilter);
 
   /** Some convenient type alias. */
   using PointBasedSpatialObjectType = TPointBasedSpatialObject;

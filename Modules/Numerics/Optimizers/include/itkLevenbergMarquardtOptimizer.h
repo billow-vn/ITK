@@ -21,6 +21,7 @@
 #include "itkMultipleValuedNonLinearVnlOptimizer.h"
 #include "vnl/algo/vnl_levenberg_marquardt.h"
 #include "ITKOptimizersExport.h"
+#include <memory> // For unique_ptr.
 
 namespace itk
 {
@@ -31,7 +32,7 @@ namespace itk
  * \ingroup ITKOptimizers
  *
  * \sphinx
- * \sphinxexample{Numerics/Optimizers/LevenbergMarquardtOptimization, Levenberg-Marquardt Optimiztion}
+ * \sphinxexample{Numerics/Optimizers/LevenbergMarquardtOptimization, Levenberg-Marquardt Optimization}
  * \endsphinx
  */
 class ITKOptimizers_EXPORT LevenbergMarquardtOptimizer : public MultipleValuedNonLinearVnlOptimizer
@@ -49,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LevenbergMarquardtOptimizer, MultipleValuedNonLinearVnlOptimizer);
+  itkOverrideGetNameOfClassMacro(LevenbergMarquardtOptimizer);
 
   /** InternalParameters type alias. */
   using InternalParametersType = vnl_vector<double>;
@@ -95,12 +96,12 @@ protected:
   using CostFunctionAdaptorType = Superclass::CostFunctionAdaptorType;
 
 private:
-  bool                    m_OptimizerInitialized;
-  InternalOptimizerType * m_VnlOptimizer;
-  unsigned int            m_NumberOfIterations;
-  double                  m_ValueTolerance;
-  double                  m_GradientTolerance;
-  double                  m_EpsilonFunction;
+  bool                                   m_OptimizerInitialized{};
+  std::unique_ptr<InternalOptimizerType> m_VnlOptimizer;
+  unsigned int                           m_NumberOfIterations{};
+  double                                 m_ValueTolerance{};
+  double                                 m_GradientTolerance{};
+  double                                 m_EpsilonFunction{};
 };
 } // end namespace itk
 

@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class SiemensVisionImageIOFactory
+ * \class SiemensVisionImageIOFactory
  * \brief Create instances of SiemensVisionImageIO objects using an object factory.
  * \ingroup ITKIOSiemens
  */
@@ -52,7 +52,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SiemensVisionImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(SiemensVisionImageIOFactory);
 
   /** Register one factory of this type  */
   static void

@@ -88,7 +88,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods)  */
-  itkTypeMacro(LaplacianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LaplacianImageFilter);
 
   /** Method for creation through the object factory.  */
   itkNewMacro(Self);
@@ -138,7 +138,7 @@ protected:
   PrintSelf(std::ostream &, Indent) const override;
 
 private:
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 };
 } // end namespace itk
 

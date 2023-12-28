@@ -21,14 +21,13 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 DTITubeSpatialObject<TDimension>::DTITubeSpatialObject()
 {
   this->SetTypeName("DTITubeSpatialObject");
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 DTITubeSpatialObject<TDimension>::InternalClone() const
@@ -40,20 +39,12 @@ DTITubeSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   return loPtr;
 }
 
-/** Print the object */
-template <unsigned int TDimension>
-void
-DTITubeSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  os << indent << "DTITubeSpatialObject(" << this << ")" << std::endl;
-  Superclass::PrintSelf(os, indent);
-}
 } // end namespace itk
 
 #endif // end itkDTITubeSpatialObject_hxx

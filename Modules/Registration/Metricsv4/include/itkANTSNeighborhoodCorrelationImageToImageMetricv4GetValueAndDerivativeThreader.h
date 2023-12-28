@@ -67,8 +67,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader,
-               ImageToImageMetricv4GetValueAndDerivativeThreader);
+  itkOverrideGetNameOfClassMacro(ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader);
 
   itkNewMacro(Self);
 
@@ -299,8 +298,8 @@ protected:
 private:
   /** Internal pointer to the metric object in use by this threader.
    *  This will avoid costly dynamic casting in tight loops. */
-  TNeighborhoodCorrelationMetric * m_ANTSAssociate;
-  std::once_flag                   m_ANTSAssociateOnceFlag;
+  TNeighborhoodCorrelationMetric * m_ANTSAssociate{};
+  std::once_flag                   m_ANTSAssociateOnceFlag{};
 };
 
 

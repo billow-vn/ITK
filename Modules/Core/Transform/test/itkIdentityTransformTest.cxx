@@ -35,6 +35,8 @@ itkIdentityTransformTest(int, char *[])
   using IdentityTransformType = itk::IdentityTransform<double>;
   auto transform = IdentityTransformType::New();
 
+  std::cout << "FixedParameters: " << transform->GetFixedParameters() << std::endl;
+
   std::cout << "Testing TransformPoint: ";
   IdentityTransformType::InputPointType  p(10);
   IdentityTransformType::OutputPointType r;
@@ -136,24 +138,12 @@ itkIdentityTransformTest(int, char *[])
     std::cout << " [ PASSED ] " << std::endl;
   }
 
-  // Test the Set/Get Parameters
-  std::cout << "Testing Set/GetParameters():";
   IdentityTransformType::ParametersType params(0);
   transform->SetParameters(params);
-  std::cout << " [ PASSED ] " << std::endl;
+  ITK_TEST_SET_GET_VALUE(params, transform->GetParameters());
 
-  // Test the GetNumberOfParameters() method
-  std::cout << "Testing GetNumberOfParameters():";
-  unsigned int numParams = transform->GetNumberOfParameters();
-  if (numParams != 0)
-  {
-    std::cerr << "Error with GetNumberOfParameters" << std::endl;
-    return EXIT_FAILURE;
-  }
-  else
-  {
-    std::cout << " [ PASSED ] " << std::endl;
-  }
+  // The number of parameters is 0 for the indentity transformation
+  ITK_TEST_SET_GET_VALUE(0, transform->GetNumberOfParameters());
 
   // Testing the Jacobian
   std::cout << "Testing Jacobian: ";

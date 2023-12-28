@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class UniformRandomSpatialNeighborSubsampler
+ * \class UniformRandomSpatialNeighborSubsampler
  * \brief A subsampler that uniformly randomly selects points
  * within the specified radius of the query point.
  *
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(UniformRandomSpatialNeighborSubsampler, SpatialNeighborSubsampler);
+  itkOverrideGetNameOfClassMacro(UniformRandomSpatialNeighborSubsampler);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -158,9 +158,9 @@ protected:
   virtual RandomIntType
   GetIntegerVariate(RandomIntType lowerBound, RandomIntType upperBound, RandomIntType itkNotUsed(mean));
 
-  SearchSizeType               m_NumberOfResultsRequested;
-  RandomGeneratorType::Pointer m_RandomNumberGenerator;
-  bool                         m_UseClockForSeed;
+  SearchSizeType               m_NumberOfResultsRequested{};
+  RandomGeneratorType::Pointer m_RandomNumberGenerator{};
+  bool                         m_UseClockForSeed{};
 }; // end of class UniformRandomSpatialNeighborSubsampler
 
 } // end of namespace Statistics

@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class VideoFileReader
+ * \class VideoFileReader
  * \brief Reader that creates a VideoStream
  *
  * This class is responsible for reading video information from files. It is a
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VideoFileReader, VideoSource);
+  itkOverrideGetNameOfClassMacro(VideoFileReader);
 
 
   /** Specify the file to read. This is forwarded to the IO instance. */
@@ -127,7 +127,7 @@ protected:
 
   /** Convert buffer for output */
   void
-  DoConvertBuffer(void * inputData, FrameOffsetType frameNumber);
+  DoConvertBuffer(const void * inputData, FrameOffsetType frameNumber);
 
   /** Set up the VideoIO using VideoIOFactory
    * Warning: this will overwrite any currently set VideoIO */
@@ -136,18 +136,18 @@ protected:
 
 private:
   /** The file to read */
-  std::string m_FileName;
+  std::string m_FileName{};
 
   /** VideoIOBase used to retrieve images. This may be changed if more
    * hierarchy is added to support general ImageSet sources. */
-  VideoIOBase::Pointer m_VideoIO;
+  VideoIOBase::Pointer m_VideoIO{};
 
   /** Flag to store whether or not the pixel type needs to be converted. */
-  bool m_PixelConversionNeeded;
+  bool m_PixelConversionNeeded{};
 
   /** Flag to indicate whether to report the last frame as the last IFrame. On
    * by default. */
-  bool m_IFrameSafe;
+  bool m_IFrameSafe{};
 };
 
 } // end namespace itk

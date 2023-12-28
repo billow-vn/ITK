@@ -20,9 +20,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   SymmetricForcesDemonsRegistrationFilter()
@@ -33,9 +31,6 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
   this->SetDifferenceFunction(static_cast<FiniteDifferenceFunctionType *>(drfp.GetPointer()));
 }
 
-/*
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::InitializeIteration()
@@ -45,7 +40,7 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
 
   if (!f)
   {
-    itkExceptionMacro(<< "FiniteDifferenceFunction not of type DemonsRegistrationFunctionType");
+    itkExceptionMacro("FiniteDifferenceFunction not of type DemonsRegistrationFunctionType");
   }
 
   f->SetDisplacementField(this->GetDisplacementField());
@@ -53,18 +48,13 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
   // call the superclass  implementation
   Superclass::InitializeIteration();
 
-  /*
-   * Smooth the deformation field
-   */
+  // Smooth the deformation field
   if (this->GetSmoothDisplacementField())
   {
     this->SmoothDisplacementField();
   }
 }
 
-/**
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetMetric() const
@@ -73,15 +63,12 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to SymmetricForcesDemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to SymmetricForcesDemonsRegistrationFunction");
   }
 
   return drfp->GetMetric();
 }
 
-/*
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
@@ -91,15 +78,12 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   return drfp->GetIntensityDifferenceThreshold();
 }
 
-/*
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SetIntensityDifferenceThreshold(
@@ -109,15 +93,12 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to SymmetricDemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to SymmetricDemonsRegistrationFunction");
   }
 
   drfp->SetIntensityDifferenceThreshold(threshold);
 }
 
-/*
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 const double &
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetRMSChange() const
@@ -126,22 +107,19 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to SymmetricForcesDemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to SymmetricForcesDemonsRegistrationFunction");
   }
 
   return drfp->GetRMSChange();
 }
 
-/*
- * Get the metric value from the difference function
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::ApplyUpdate(
   const TimeStepType & dt)
 {
   // If we smooth the update buffer before applying it, then the are
-  // approximating a viscuous problem as opposed to an elastic problem
+  // approximating a viscous problem as opposed to an elastic problem
   if (this->GetSmoothUpdateField())
   {
     this->SmoothUpdateField();
@@ -153,7 +131,7 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage, TMovingImage, TDisplacement
 
   if (!drfp)
   {
-    itkExceptionMacro(<< "Could not cast difference function to DemonsRegistrationFunction");
+    itkExceptionMacro("Could not cast difference function to DemonsRegistrationFunction");
   }
 
   this->SetRMSChange(drfp->GetRMSChange());

@@ -21,12 +21,11 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GradientRecursiveGaussianImageFilter()
 {
@@ -75,9 +74,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GradientRecursi
   this->SetSigma(1.0);
 }
 
-/**
- * Set value of Sigma along all dimensions.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigma(ScalarRealType sigma)
@@ -86,9 +82,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigma(Scalar
   this->SetSigmaArray(sigmas);
 }
 
-/**
- * Set value of Sigma array.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigmaArray(const SigmaArrayType & sigma)
@@ -108,9 +101,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigmaArray(c
   }
 }
 
-/**
- * Get the Sigma array.
- */
 template <typename TInputImage, typename TOutputImage>
 auto
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GetSigmaArray() const -> SigmaArrayType
@@ -118,9 +108,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GetSigmaArray()
   return m_Sigma;
 }
 
-/**
- * Get value of Sigma. Returns the sigma along the first dimension.
- */
 template <typename TInputImage, typename TOutputImage>
 auto
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GetSigma() const -> ScalarRealType
@@ -128,9 +115,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GetSigma() cons
   return m_Sigma[0];
 }
 
-/**
- * Set Normalize Across Scale Space
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNormalizeAcrossScale(bool normalize)
@@ -148,9 +132,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNormalizeAcr
   this->Modified();
 }
 
-//
-//
-//
 template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
@@ -168,9 +149,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateInputRe
   }
 }
 
-//
-//
-//
 template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::EnlargeOutputRequestedRegion(DataObject * output)
@@ -183,9 +161,6 @@ GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::EnlargeOutputRe
   }
 }
 
-/**
- * Compute filter for Gaussian kernel
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateData()
@@ -351,10 +326,18 @@ template <typename TInputImage, typename TOutputImage>
 void
 GradientRecursiveGaussianImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
-  os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
-  os << indent << "UseImageDirection :   " << (this->m_UseImageDirection ? "On" : "Off") << std::endl;
-  os << "Sigma: " << m_Sigma << std::endl;
+
+  os << indent << "SmoothingFilters: " << m_SmoothingFilters << std::endl;
+
+  itkPrintSelfObjectMacro(DerivativeFilter);
+  itkPrintSelfObjectMacro(ImageAdaptor);
+
+  os << indent << "NormalizeAcrossScale: " << (m_NormalizeAcrossScale ? "On" : "Off") << std::endl;
+  os << indent << "UseImageDirection: " << (m_UseImageDirection ? "On" : "Off") << std::endl;
+  os << indent << "Sigma: " << m_Sigma << std::endl;
 }
 
 } // end namespace itk

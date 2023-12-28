@@ -56,7 +56,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(VersorTransform, Rigid3DTransform);
+  itkOverrideGetNameOfClassMacro(VersorTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -112,7 +112,7 @@ public:
   const ParametersType &
   GetParameters() const override;
 
-  /** Set the rotational part of the transform */
+  /** Set the rotational part of the transform. */
   void
   SetRotation(const VersorType & versor);
 
@@ -162,7 +162,7 @@ protected:
 
 private:
   /** Versor containing the rotation */
-  VersorType m_Versor;
+  VersorType m_Versor{};
 }; // class VersorTransform
 } // namespace itk
 

@@ -322,7 +322,7 @@ public:
    * \post \c m_NumElements is 0
    * \post \c m_LetArrayManageMemory is true
    */
-  VariableLengthVector();
+  VariableLengthVector() = default;
 
   /** Constructor with size.
    * Size can only be changed by assignment, \c SetSize() or \c Reserve().
@@ -357,7 +357,7 @@ public:
    * If \c LetArrayManageMemory is true, then this class will free the
    * memory when this object is destroyed.
    *
-   * \warning This overload receives a non-modiable array, and yet it will let
+   * \warning This overload receives a non-modifiable array, and yet it will let
    * the end-user try to modify it through \c VariableLengthVector interface.
    * Use this constructor with care as this may lead to undefined behaviour.
    * Prefer using `VariableLengthVector<const TValue>` instead of
@@ -722,7 +722,7 @@ public:
    */
   ~VariableLengthVector();
 
-  /** Reserves memory of a certain length.
+  /** Reserves memory of a certain size of data.
    *
    * If the array already contains data, the existing data is copied over and
    * new space is allocated, if necessary. If the length to reserve is less
@@ -960,11 +960,11 @@ public:
 
   ITK_UNEQUAL_OPERATOR_MEMBER_FUNCTION(Self);
 
-  /** Returns vector's Euclidean Norm  */
+  /** Returns vector's Euclidean norm. */
   RealValueType
   GetNorm() const;
 
-  /** Returns vector's squared Euclidean Norm  */
+  /** Returns vector's squared Euclidean norm. */
   RealValueType
   GetSquaredNorm() const;
 
@@ -978,7 +978,7 @@ public:
 private:
   bool m_LetArrayManageMemory{ true }; // if true, the array is responsible
                                        // for memory of data
-  TValue *          m_Data;            // Array to hold data
+  TValue *          m_Data{};          // Array to hold data
   ElementIdentifier m_NumElements{ 0 };
 };
 
@@ -1204,7 +1204,7 @@ struct VariableLengthVectorExpression
   {
     // Not necessary actually as end-user/developer is not expected to
     // provide new BinaryOperations
-    static_assert(std::is_base_of<Details::op::BinaryOperationConcept, TBinaryOp>::value,
+    static_assert(std::is_base_of_v<Details::op::BinaryOperationConcept, TBinaryOp>,
                   "The Binary Operation shall inherit from BinaryOperationConcept");
   }
 
@@ -1322,7 +1322,7 @@ template <typename TExpr1, typename TExpr2, typename TBinaryOp>
 std::ostream &
 operator<<(std::ostream & os, VariableLengthVectorExpression<TExpr1, TExpr2, TBinaryOp> const & v)
 {
-  os << "[";
+  os << '[';
   if (v.Size() != 0)
   {
     os << v[0];
@@ -1331,7 +1331,7 @@ operator<<(std::ostream & os, VariableLengthVectorExpression<TExpr1, TExpr2, TBi
       os << ", " << v[i];
     }
   }
-  return os << "]";
+  return os << ']';
 }
 
 /** Returns vector's Euclidean Norm.
@@ -1377,7 +1377,7 @@ operator<<(std::ostream & os, const VariableLengthVector<TValue> & arr)
   const unsigned int length = arr.Size();
   const int          last = static_cast<unsigned int>(length) - 1;
 
-  os << "[";
+  os << '[';
   for (int i = 0; i < last; ++i)
   {
     os << arr[i] << ", ";
@@ -1386,7 +1386,7 @@ operator<<(std::ostream & os, const VariableLengthVector<TValue> & arr)
   {
     os << arr[last];
   }
-  os << "]";
+  os << ']';
   return os;
 }
 //@}

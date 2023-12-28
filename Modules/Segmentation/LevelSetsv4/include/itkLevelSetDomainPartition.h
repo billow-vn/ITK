@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class LevelSetDomainPartition
+ * \class LevelSetDomainPartition
  *
  * \brief Helper class used to share data in the ScalarChanAndVeseLevelSetFunction.
  * \ingroup ITKLevelSetsv4
@@ -45,7 +45,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkTypeMacro(LevelSetDomainPartition, LevelSetDomainPartitionBase);
+  itkOverrideGetNameOfClassMacro(LevelSetDomainPartition);
 
   using ImageType = TImage;
   using ImagePointer = typename ImageType::Pointer;

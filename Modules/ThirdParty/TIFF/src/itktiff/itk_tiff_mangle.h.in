@@ -9,31 +9,31 @@ ITK.
 
 The following command was used to obtain the symbol list on macOS:
 
-Mac: nm -g lib/libitktiff* 2> /dev/null | grep " [TDRS] " | awk '{ print substr($3, 2); }' | awk '{ sub(/itk_/, ""); print }' | sed 's/\(.*\)/#define \1\ itk_\1/' | sort
+Mac: nm -g lib/libitktiff* 2> /dev/null | grep " [TDRS] " | awk '{ print substr($3, 2); }' | awk '{ sub(/@MANGLE_PREFIX@_/, ""); print }' | sed 's/\(.*\)/#define \1\ @MANGLE_PREFIX@_\1/' | sort
 
 The following command was used to obtain the symbol list on Linux:
 
-Linux: nm -g lib/libitktiff* 2> /dev/null | grep " [TDRS] " | awk '{ print $3 }' | awk '{ sub(/itk_/, ""); print }' | sed 's/\(.*\)/#define \1\ itk_\1/' | sort
+Linux: nm -g lib/libitktiff* 2> /dev/null | grep " [TDRS] " | awk '{ print $3 }' | awk '{ sub(/@MANGLE_PREFIX@_/, ""); print }' | sed 's/\(.*\)/#define \1\ @MANGLE_PREFIX@_\1/' | sort
 
 Explanation:
 1) The nm command extracts all global/external symbols from the library.
 2) The grep command extracts all the public symbols from the library. (Text, Data, Read-only data, Small objects).
 3) The first awk command prints out only the third column which is the symbol name (the first 2 columns are location and type) (also removes the leading underscore on macOS).
-4) The second awk command prints remove any "itk_" prefix that exists already.
+4) The second awk command prints remove any "@MANGLE_PREFIX@_" prefix that exists already.
 5) The sed command mangles the symbols and formats the output in such a way to be copy and pasted below.
 6) The sort commands sorts the lines alphabetically.
 
 The following commands are used to generate the suggested symbols on Windows systems:
 
 dumpbin /symbols itktiff* > symbol_table.txt (Must be done from the Visual Studio Command Prompt)
-cat symbol_table.txt | grep "External" | grep -i "TIFF" | awk '{print $(NF) }' | awk '!/itk_/ { print }' | awk '{ if (a[$1]++ == 0) print $0; }' "$@" | sed 's \(.*\) \1\ itk_\1 ' | sed 's/^/#define /' (Must be done in git bash)
+cat symbol_table.txt | grep "External" | grep -i "TIFF" | awk '{print $(NF) }' | awk '!/@MANGLE_PREFIX@_/ { print }' | awk '{ if (a[$1]++ == 0) print $0; }' "$@" | sed 's \(.*\) \1\ @MANGLE_PREFIX@_\1 ' | sed 's/^/#define /' (Must be done in git bash)
 
 For the bash commands:
 The first command prints the symbol table
 The second command extracts all the external symbols
 The third command only extracts those symbols with TIFF in them (case-insensitive)
 The fourth command only prints out the last column (which is the symbol name)
-The fifth command only prints out those symbols which have not been mangled with itk_ already
+The fifth command only prints out those symbols which have not been mangled with @MANGLE_PREFIX@_ already
 The sixth command removes duplicates
 The seventh and eighth commmands mangles the symbols and formats the output in such a way to be easily copy and pasted below.
 

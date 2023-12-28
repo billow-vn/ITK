@@ -20,6 +20,9 @@
 
 #include "itkQuadraticEdgeCell.h"
 #include "itkQuadraticTriangleCellTopology.h"
+#include "itkMakeFilled.h"
+
+#include <array>
 
 namespace itk
 {
@@ -47,7 +50,7 @@ public:
   itkCellInheritedTypedefs(TCellInterface);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(QuadraticTriangleCell, CellInterface);
+  itkOverrideGetNameOfClassMacro(QuadraticTriangleCell);
 
   /** The type of boundary for this triangle's vertices. */
   using VertexType = VertexCell<TCellInterface>;
@@ -126,19 +129,14 @@ public:
                          ShapeFunctionsArrayType &        weights) const override;
 
 public:
-  QuadraticTriangleCell()
-  {
-    for (PointIdentifier i = 0; i < Self::NumberOfPoints; ++i)
-    {
-      m_PointIds[i] = NumericTraits<PointIdentifier>::max();
-    }
-  }
+  QuadraticTriangleCell() = default;
 
   ~QuadraticTriangleCell() override = default;
 
 protected:
   /** Store the number of points needed for a triangle. */
-  PointIdentifier m_PointIds[NumberOfPoints];
+  std::array<PointIdentifier, NumberOfPoints> m_PointIds{ MakeFilled<std::array<PointIdentifier, NumberOfPoints>>(
+    NumericTraits<PointIdentifier>::max()) };
 };
 } // end namespace itk
 

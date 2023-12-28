@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class SpatialObjectPoint
+ * \class SpatialObjectPoint
  * \brief Point used for spatial objects
  *
  * This class contains all the functions necessary to define a point
@@ -57,11 +57,8 @@ public:
   /** Default destructor. */
   virtual ~SpatialObjectPoint() = default;
 
-  virtual const char *
-  GetNameOfClass() const
-  {
-    return "SpatialObjectPoint";
-  };
+  /** Runtime information support. */
+  itkVirtualGetNameOfClassMacro(SpatialObjectPoint);
 
   using Self = SpatialObjectPoint;
 
@@ -148,11 +145,11 @@ public:
     return m_Color;
   }
 
-  /** Set the color */
+  /** Set the color of the point. */
   void
   SetColor(double r, double g, double b, double a = 1);
 
-  /** Set/Get red color of the point */
+  /** Set/Get red color of the point. */
   void
   SetRed(double r)
   {
@@ -235,22 +232,22 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const;
 
   /** A unique ID assigned to this SpatialObjectPoint */
-  int m_Id;
+  int m_Id{};
 
   /** Position of the point */
-  PointType m_PositionInObjectSpace;
+  PointType m_PositionInObjectSpace{};
 
   /** Color of the point */
-  ColorType m_Color;
+  ColorType m_Color{};
 
   /** Additional scalar properties of the point */
-  std::map<std::string, double> m_ScalarDictionary;
+  std::map<std::string, double> m_ScalarDictionary{};
 
 
   // The SpatialObjectPoint keeps a reference to its owning parent
   // spatial object for its spatial context. A WeakPointer is used to
   // avoid a memory leak.
-  WeakPointer<SpatialObjectType> m_SpatialObject;
+  WeakPointer<SpatialObjectType> m_SpatialObject{};
 };
 
 } // end of namespace itk

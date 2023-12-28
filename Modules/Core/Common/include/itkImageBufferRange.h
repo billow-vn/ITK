@@ -23,7 +23,7 @@
 #include <cstddef>  // For ptrdiff_t.
 #include <iterator> // For random_access_iterator_tag.
 #include <limits>
-#include <type_traits> // For conditional, is_same, and is_const.
+#include <type_traits> // For conditional, enable_if, is_same, and is_const.
 
 #include "itkMacro.h" // For itkNotUsed.
 #include "itkDefaultPixelAccessor.h"
@@ -44,7 +44,7 @@ namespace itk
  *
  * The following example adds 42 to each pixel, using a range-based for loop:
    \code
-   ImageBufferRange<ImageType> range{ *image };
+   ImageBufferRange range{ *image };
 
    for (auto&& pixel : range)
    {
@@ -73,7 +73,6 @@ template <typename TImage>
 class ImageBufferRange final
 {
 private:
-  using ImageType = TImage;
   using PixelType = typename TImage::PixelType;
   using InternalPixelType = typename TImage::InternalPixelType;
   using AccessorFunctorType = typename TImage::AccessorFunctorType;
@@ -83,9 +82,9 @@ private:
   // otherwise iterator::operator*() returns a proxy, which internally uses the
   // AccessorFunctor of the image to access the pixel indirectly.
   static constexpr bool SupportsDirectPixelAccess =
-    std::is_same<PixelType, InternalPixelType>::value &&
-    std::is_same<typename TImage::AccessorType, DefaultPixelAccessor<PixelType>>::value &&
-    std::is_same<AccessorFunctorType, DefaultPixelAccessorFunctor<std::remove_const_t<TImage>>>::value;
+    std::is_same_v<PixelType, InternalPixelType> &&
+    std::is_same_v<typename TImage::AccessorType, DefaultPixelAccessor<PixelType>> &&
+    std::is_same_v<AccessorFunctorType, DefaultPixelAccessorFunctor<std::remove_const_t<TImage>>>;
 
   // Tells whether or not this range is using a pointer as iterator.
   static constexpr bool UsingPointerAsIterator = SupportsDirectPixelAccess;
@@ -237,9 +236,9 @@ private:
     friend class ImageBufferRange;
 
     // Image type class that is either 'const' or non-const qualified, depending on QualifiedIterator and TImage.
-    using QualifiedImageType = std::conditional_t<VIsConst, const ImageType, ImageType>;
+    using QualifiedImageType = std::conditional_t<VIsConst, const TImage, TImage>;
 
-    static constexpr bool IsImageTypeConst = std::is_const<QualifiedImageType>::value;
+    static constexpr bool IsImageTypeConst = std::is_const_v<QualifiedImageType>;
 
     using QualifiedInternalPixelType = std::conditional_t<IsImageTypeConst, const InternalPixelType, InternalPixelType>;
 
@@ -251,8 +250,6 @@ private:
     class PixelReferenceWrapper final
     {
     public:
-      QualifiedPixelType & m_Pixel;
-
       // Wraps the pixel reference that is specified by the first argument.
       // Note: the second parameter is unused, but it is there just to support
       // the use case of iterator::operator*(), which uses either
@@ -266,6 +263,9 @@ private:
 
       // Converts implicitly to a reference to the pixel.
       operator QualifiedPixelType &() const noexcept { return m_Pixel; }
+
+    private:
+      QualifiedPixelType & m_Pixel;
     };
 
 
@@ -300,17 +300,15 @@ private:
      * the guarantee added to the C++14 Standard: "value-initialized iterators
      * may be compared and shall compare equal to other value-initialized
      * iterators of the same type."
-     * \note `QualifiedIterator<VIsConst>` follows the C++ "Rule of Zero" when
-     * VIsConst is true: The other five "special member functions" of the class
-     * are then implicitly defaulted. When VIsConst is false, its
-     * copy-constructor is provided explicitly, but it still behaves the same as
-     * a default implementation.
+     *
+     * \note The other five "special member functions" are defaulted implicitly,
+     * following the C++ "Rule of Zero".
      */
     QualifiedIterator() = default;
 
-    /** Constructor that allows implicit conversion from non-const to const
-     * iterator. Also serves as copy-constructor of a non-const iterator.  */
-    QualifiedIterator(const QualifiedIterator<false> & arg) noexcept
+    /** Constructor for implicit conversion from non-const to const iterator.  */
+    template <bool VIsArgumentConst, typename = std::enable_if_t<VIsConst && !VIsArgumentConst>>
+    QualifiedIterator(const QualifiedIterator<VIsArgumentConst> & arg) noexcept
       : // Note: Use parentheses instead of curly braces to initialize data members,
         // to avoid AppleClang 6.0.0.6000056 compilation error, "no viable conversion..."
       m_OptionalAccessorFunctor(arg.m_OptionalAccessorFunctor)
@@ -475,24 +473,19 @@ private:
 
     /** Returns it[n] for iterator 'it' and integer value 'n'. */
     reference operator[](const difference_type n) const noexcept { return *(*this + n); }
-
-
-    /** Explicitly-defaulted assignment operator. */
-    QualifiedIterator &
-    operator=(const QualifiedIterator &) noexcept = default;
   };
 
-  static constexpr bool IsImageTypeConst = std::is_const<TImage>::value;
+  static constexpr bool IsImageTypeConst = std::is_const_v<TImage>;
 
   using QualifiedInternalPixelType = std::conditional_t<IsImageTypeConst, const InternalPixelType, InternalPixelType>;
 
   class AccessorFunctorInitializer final
   {
   private:
-    ImageType & m_Image;
+    TImage & m_Image;
 
   public:
-    explicit AccessorFunctorInitializer(ImageType & image) noexcept
+    explicit AccessorFunctorInitializer(TImage & image) noexcept
       : m_Image(image)
     {}
 
@@ -502,7 +495,7 @@ private:
     {
       AccessorFunctorType result = {};
       result.SetPixelAccessor(m_Image.GetPixelAccessor());
-      result.SetBegin(m_Image.ImageType::GetBufferPointer());
+      result.SetBegin(m_Image.TImage::GetBufferPointer());
       return result;
     }
   };
@@ -563,13 +556,14 @@ public:
 
 
   /** Specifies a range of the pixels of an image.
+   * \note This constructor supports class template argument deduction (CTAD).
    */
-  explicit ImageBufferRange(ImageType & image)
+  explicit ImageBufferRange(TImage & image)
     : // Note: Use parentheses instead of curly braces to initialize data members,
       // to avoid AppleClang 6.0.0.6000056 compile errors, "no viable conversion..."
     m_OptionalAccessorFunctor(AccessorFunctorInitializer{ image })
-    , m_ImageBufferPointer{ image.ImageType::GetBufferPointer() }
-    , m_NumberOfPixels{ image.ImageType::GetBufferedRegion().GetNumberOfPixels() }
+    , m_ImageBufferPointer{ image.TImage::GetBufferPointer() }
+    , m_NumberOfPixels{ image.TImage::GetBufferedRegion().GetNumberOfPixels() }
   {}
 
 
@@ -662,6 +656,12 @@ public:
     return this->begin()[static_cast<ptrdiff_t>(n)];
   }
 };
+
+
+// Deduction guide to avoid compiler warnings (-wctad-maybe-unsupported) when using class template argument deduction.
+template <typename TImage>
+ImageBufferRange(TImage &)->ImageBufferRange<TImage>;
+
 
 /** Creates a range to iterate over the pixels of the specified image.
  * Returns an empty range when the specified argument is a nullptr (which

@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class MetaVesselTubeConverter
+ * \class MetaVesselTubeConverter
  *  \brief Converts between MetaObject<->SpatialObject
  *  \sa MetaConverterBase
  *  \ingroup ITKSpatialObjects
@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaVesselTubeConverter, MetaConverterBase);
+  itkOverrideGetNameOfClassMacro(MetaVesselTubeConverter);
 
   using typename Superclass::SpatialObjectType;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;

@@ -22,9 +22,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 CurvatureFlowImageFilter<TInputImage, TOutputImage>::CurvatureFlowImageFilter()
 {
@@ -37,21 +35,15 @@ CurvatureFlowImageFilter<TInputImage, TOutputImage>::CurvatureFlowImageFilter()
   this->SetDifferenceFunction(static_cast<FiniteDifferenceFunctionType *>(cffp.GetPointer()));
 }
 
-/**
- * Standard PrintSelf method.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 CurvatureFlowImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Time step: " << m_TimeStep;
-  os << std::endl;
+
+  os << indent << "TimeStep: " << static_cast<typename NumericTraits<TimeStepType>::PrintType>(m_TimeStep) << std::endl;
 }
 
-/**
- * Initialize the state of filter and equation before each iteration.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 CurvatureFlowImageFilter<TInputImage, TOutputImage>::InitializeIteration()
@@ -61,7 +53,7 @@ CurvatureFlowImageFilter<TInputImage, TOutputImage>::InitializeIteration()
 
   if (!f)
   {
-    itkExceptionMacro(<< "DifferenceFunction not of type CurvatureFlowFunction");
+    itkExceptionMacro("DifferenceFunction not of type CurvatureFlowFunction");
   }
 
   f->SetTimeStep(m_TimeStep);
@@ -77,9 +69,6 @@ CurvatureFlowImageFilter<TInputImage, TOutputImage>::InitializeIteration()
   }
 }
 
-/**
- * GenerateInputRequestedRegion
- */
 template <typename TInputImage, typename TOutputImage>
 void
 CurvatureFlowImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
@@ -101,9 +90,6 @@ CurvatureFlowImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegio
   inputPtr->SetRequestedRegion(outputPtr->GetRequestedRegion());
 }
 
-/**
- * EnlargeOutputRequestedRegion
- */
 template <typename TInputImage, typename TOutputImage>
 void
 CurvatureFlowImageFilter<TInputImage, TOutputImage>::EnlargeOutputRequestedRegion(DataObject * ptr)

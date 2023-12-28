@@ -64,7 +64,7 @@ BayesianClassifierInitializationImageFilter<TInputImage, TProbabilityPrecisionTy
 
   if (m_NumberOfClasses == 0)
   {
-    itkExceptionMacro(<< "Number of classes unspecified");
+    itkExceptionMacro("Number of classes unspecified");
   }
   outputPtr->SetVectorLength(m_NumberOfClasses);
 }
@@ -159,7 +159,7 @@ BayesianClassifierInitializationImageFilter<TInputImage, TProbabilityPrecisionTy
 
   // calculate the class covariances using the sumsOfSquares, sums, and
   // classCount information
-  itkDebugMacro(<< "Estimated parameters after Kmeans filter");
+  itkDebugMacro("Estimated parameters after Kmeans filter");
   for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
   {
     estimatedCovariances[i] =
@@ -169,9 +169,9 @@ BayesianClassifierInitializationImageFilter<TInputImage, TProbabilityPrecisionTy
     {
       estimatedCovariances[i] = 0.0000001;
     }
-    itkDebugMacro(<< "cluster[" << i << "]-- ");
-    itkDebugMacro(<< " estimated mean : " << estimatedMeans[i]);
-    itkDebugMacro(<< " estimated covariance : " << estimatedCovariances[i]);
+    itkDebugMacro("cluster[" << i << "]-- ");
+    itkDebugMacro(" estimated mean : " << estimatedMeans[i]);
+    itkDebugMacro(" estimated covariance : " << estimatedCovariances[i]);
   }
 
   // Create gaussian membership functions.
@@ -237,7 +237,7 @@ BayesianClassifierInitializationImageFilter<TInputImage, TProbabilityPrecisionTy
 
   if (m_MembershipFunctionContainer->Size() != m_NumberOfClasses)
   {
-    itkExceptionMacro(<< "Number of membership functions should be the same as the number of classes");
+    itkExceptionMacro("Number of membership functions should be the same as the number of classes");
   }
 
   this->AllocateOutputs();
@@ -273,7 +273,7 @@ BayesianClassifierInitializationImageFilter<TInputImage, TProbabilityPrecisionTy
   {
     if (membershipFunction->Size() != m_NumberOfClasses)
     {
-      itkExceptionMacro(<< "Number of membership functions should be the same as the number of classes");
+      itkExceptionMacro("Number of membership functions should be the same as the number of classes");
     }
   }
   else
@@ -292,19 +292,12 @@ BayesianClassifierInitializationImageFilter<TInputImage, TProbabilityPrecisionTy
                                                                                                Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+
+  os << indent << "UserSuppliesMembershipFunctions: " << (m_UserSuppliesMembershipFunctions ? "On" : "Off")
+     << std::endl;
   os << indent << "NumberOfClasses: " << m_NumberOfClasses << std::endl;
-  if (m_MembershipFunctionContainer)
-  {
-    os << indent << "Membership function container:" << m_MembershipFunctionContainer << std::endl;
-  }
-  if (m_UserSuppliesMembershipFunctions)
-  {
-    os << indent << "Membership functions provided" << std::endl;
-  }
-  else
-  {
-    os << indent << "Membership functions not provided" << std::endl;
-  }
+
+  itkPrintSelfObjectMacro(MembershipFunctionContainer);
 }
 } // end namespace itk
 

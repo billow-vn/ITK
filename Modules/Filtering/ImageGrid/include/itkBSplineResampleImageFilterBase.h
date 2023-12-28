@@ -39,7 +39,7 @@
 namespace itk
 {
 /**
- *\class BSplineResampleImageFilterBase
+ * \class BSplineResampleImageFilterBase
  *  \brief Uses the "l2" spline pyramid implementation of B-Spline Filters to
  *        up/down sample an image by a factor of 2.
  *
@@ -92,7 +92,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineResampleImageFilterBase, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BSplineResampleImageFilterBase);
 
   /** New macro for creation of through a Smart Pointer */
   //  Must be instantiated through another class. itkNewMacro( Self );
@@ -146,14 +146,22 @@ protected:
   virtual void
   InitializePyramidSplineFilter(int SplineOrder);
 
-  /** The basic operator for reducing a line of data by a factor of 2 */
+  /** Reduce the input data vector by a factor of 2 and writes the results to the location specified by the output
+   * Iterator.
+   *
+   * \p inTraverseSize is the size of the input vector.
+   */
   virtual void
   Reduce1DImage(const std::vector<double> & in,
                 OutputImageIterator &       out,
                 unsigned int                inTraverseSize,
                 ProgressReporter &          progress);
 
-  /** The basic operator for expanding a line of data by a factor of 2 */
+  /** Expand the input data vector by a factor of 2 and writes the results to the location specified by the output
+   * Iterator
+   *
+   * \p inTraverseSize is the size of the in vector.
+   */
   virtual void
   Expand1DImage(const std::vector<double> & in,
                 OutputImageIterator &       out,
@@ -165,20 +173,19 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  int m_SplineOrder; // User specified spline order
-  int m_GSize;       // downsampling filter size
-  int m_HSize;       // upsampling filter size
+  int m_SplineOrder{}; // User specified spline order
+  int m_GSize{};       // downsampling filter size
+  int m_HSize{};       // upsampling filter size
 
-  std::vector<double> m_G; // downsampling filter coefficients
-  std::vector<double> m_H; // upsampling filter coefficients
+  std::vector<double> m_G{}; // downsampling filter coefficients
+  std::vector<double> m_H{}; // upsampling filter coefficients
 
 private:
-  // Resizes m_Scratch Variable based on image sizes
+  /** Allocate scratch space based on image sizes. */
   void
   InitializeScratch(SizeType DataLength);
 
-  // Copies a line of data from the input to the m_Scratch for subsequent
-  // processing
+  /** Copy a line of data from the input to the m_Scratch for subsequent processing. */
   void
   CopyInputLineToScratch(ConstInputImageIterator & Iter);
 
@@ -188,8 +195,8 @@ private:
   void
   CopyLineToScratch(ConstInputImageIterator & Iter);
 
-  std::vector<double> m_Scratch; // temp storage for processing
-                                 // of Coefficients
+  std::vector<double> m_Scratch{}; // temp storage for processing
+                                   // of Coefficients
 };
 } // namespace itk
 

@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MaximumDecisionRule
+ * \class MaximumDecisionRule
  *  \brief A decision rule that returns the class label with the
  *  largest discriminant score.
  *
@@ -48,7 +48,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MaximumDecisionRule, DecisionRule);
+  itkOverrideGetNameOfClassMacro(MaximumDecisionRule);
 
   /** Standard New() method support */
   itkNewMacro(Self);

@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryClosingByReconstructionImageFilter, KernelImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryClosingByReconstructionImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TInputImage;
@@ -114,9 +114,9 @@ protected:
   GenerateData() override;
 
 private:
-  InputPixelType m_ForegroundValue;
+  InputPixelType m_ForegroundValue{};
 
-  bool m_FullyConnected;
+  bool m_FullyConnected{};
 
 }; // end of class
 

@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class Matrix
+ * \class Matrix
  * \brief A templated class holding a M x N size Matrix.
  *
  * This class contains a vnl_matrix_fixed in order
@@ -233,7 +233,7 @@ public:
   explicit Matrix(const TElement (&elements)[VRows][VColumns])
     : m_Matrix(&elements[0][0])
   {
-    static_assert(std::is_same<TElement, T>::value,
+    static_assert(std::is_same_v<TElement, T>,
                   "The type of an element should correspond with this itk::Matrix instantiation.");
   }
 
@@ -278,7 +278,7 @@ public:
   {
     if (vnl_determinant(m_Matrix) == NumericTraits<T>::ZeroValue())
     {
-      itkGenericExceptionMacro(<< "Singular matrix. Determinant is 0.");
+      itkGenericExceptionMacro("Singular matrix. Determinant is 0.");
     }
     vnl_matrix_inverse<T> inverse(m_Matrix.as_ref());
     return vnl_matrix_fixed<T, VColumns, VRows>{ inverse.as_matrix() };

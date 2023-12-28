@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class TileImageFilter
+ * \class TileImageFilter
  * \brief Tile multiple input images into a single output image.
  *
  * This filter will tile multiple images using a user-specified
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(TileImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(TileImageFilter);
 
   /** Image pixel value type alias. */
   using InputPixelType = typename TInputImage::PixelType;
@@ -87,7 +87,7 @@ public:
   static constexpr unsigned int InputImageDimension = TInputImage::ImageDimension;
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
   /**
-   *\class TileInfo
+   * \class TileInfo
    * Define a tile structure
    * \ingroup ITKImageGrid
    */
@@ -151,11 +151,11 @@ protected:
   VerifyInputInformation() ITKv5_CONST override;
 
 private:
-  typename TileImageType::Pointer m_TileImage;
+  typename TileImageType::Pointer m_TileImage{};
 
-  OutputPixelType m_DefaultPixelValue;
+  OutputPixelType m_DefaultPixelValue{};
 
-  LayoutArrayType m_Layout;
+  LayoutArrayType m_Layout{};
 }; // end of class
 } // end namespace itk
 

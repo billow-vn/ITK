@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class GradientMagnitudeRecursiveGaussianImageFilter
+ * \class GradientMagnitudeRecursiveGaussianImageFilter
  * \brief Computes the Magnitude of the Gradient of an image by convolution
  *        with the first derivative of a Gaussian.
  *
@@ -108,15 +108,16 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GradientMagnitudeRecursiveGaussianImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(GradientMagnitudeRecursiveGaussianImageFilter);
 
-  /** Set Sigma value. Sigma is measured in the units of image spacing.  */
+  /** Set/Get Sigma value. Sigma is measured in the units of image spacing.  */
   void
   SetSigma(RealType sigma);
   RealType
   GetSigma();
 
-  /** Define which normalization factor will be used for the Gaussian
+  /** Set/Get the normalization factor that will be used for the Gaussian.
+   *
    *  \sa  RecursiveGaussianImageFilter::SetNormalizeAcrossScale
    */
   void
@@ -162,13 +163,13 @@ private:
   using SqrSpacingFilterType = BinaryGeneratorImageFilter<RealImageType, RealImageType, RealImageType>;
   using SqrSpacingFilterPointer = typename SqrSpacingFilterType::Pointer;
 
-  GaussianFilterPointer   m_SmoothingFilters[ImageDimension - 1];
-  DerivativeFilterPointer m_DerivativeFilter;
-  SqrSpacingFilterPointer m_SqrSpacingFilter;
-  SqrtFilterPointer       m_SqrtFilter;
+  GaussianFilterPointer   m_SmoothingFilters[ImageDimension - 1]{};
+  DerivativeFilterPointer m_DerivativeFilter{};
+  SqrSpacingFilterPointer m_SqrSpacingFilter{};
+  SqrtFilterPointer       m_SqrtFilter{};
 
   /** Normalize the image across scale space */
-  bool m_NormalizeAcrossScale;
+  bool m_NormalizeAcrossScale{};
 };
 } // end namespace itk
 

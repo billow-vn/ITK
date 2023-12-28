@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class GaborImageSource
+ * \class GaborImageSource
  * \brief Generate an n-dimensional image of a Gabor filter.
  *
  * GaborImageSource generates an image of either the real
@@ -67,7 +67,7 @@ public:
   using SizeType = typename RegionType::SizeType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaborImageSource, GenerateImageSource);
+  itkOverrideGetNameOfClassMacro(GaborImageSource);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -113,9 +113,9 @@ private:
   /** Evaluate using a stretched gabor filter (ensure zero dc response) */
   double m_PhaseOffset{ 0.0 };
 
-  ArrayType m_Sigma;
+  ArrayType m_Sigma{};
 
-  ArrayType m_Mean;
+  ArrayType m_Mean{};
 };
 } // end namespace itk
 

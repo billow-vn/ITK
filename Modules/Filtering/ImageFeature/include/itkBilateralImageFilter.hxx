@@ -180,9 +180,9 @@ BilateralImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
   m_GaussianKernel.SetRadius(radius);
 
   KernelIteratorType                     kernel_it;
-  ImageRegionIterator<GaussianImageType> git =
-    ImageRegionIterator<GaussianImageType>(gaussianImage->GetOutput(), gaussianImage->GetOutput()->GetBufferedRegion());
-  double norm = 0.0;
+  ImageRegionIterator<GaussianImageType> git(gaussianImage->GetOutput(),
+                                             gaussianImage->GetOutput()->GetBufferedRegion());
+  double                                 norm = 0.0;
   for (git.GoToBegin(); !git.IsAtEnd(); ++git)
   {
     norm += git.Get();
@@ -243,11 +243,9 @@ BilateralImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   ZeroFluxNeumannBoundaryCondition<TInputImage> BC;
 
   // Find the boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                        fC;
-  faceList = fC(this->GetInput(), outputRegionForThread, m_GaussianKernel.GetRadius());
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList =
+    fC(this->GetInput(), outputRegionForThread, m_GaussianKernel.GetRadius());
 
   OutputPixelRealType centerPixel;
   OutputPixelRealType val, tableArg, normFactor, rangeGaussian, rangeDistance, pixel, gaussianProduct;
@@ -264,12 +262,12 @@ BilateralImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 
   TotalProgressReporter progress(this, output->GetRequestedRegion().GetNumberOfPixels());
 
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
     // walk the boundary face and the corresponding section of the output
-    b_iter = NeighborhoodIteratorType(m_GaussianKernel.GetRadius(), this->GetInput(), *fit);
+    b_iter = NeighborhoodIteratorType(m_GaussianKernel.GetRadius(), this->GetInput(), face);
     b_iter.OverrideBoundaryCondition(&BC);
-    o_iter = ImageRegionIterator<OutputImageType>(this->GetOutput(), *fit);
+    o_iter = ImageRegionIterator<OutputImageType>(this->GetOutput(), face);
 
     while (!b_iter.IsAtEnd())
     {

@@ -41,7 +41,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TestImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(TestImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -236,7 +236,7 @@ itkImageFunctionTest(int, char *[])
   {
     std::cout << "Error with IsInsideBuffer 3C. Expected  false." << std::endl
               << "  indexC: " << indexC << std::endl
-              << "  start/end continuous indices: " << startIndexC << " " << endIndexC << std::endl;
+              << "  start/end continuous indices: " << startIndexC << ' ' << endIndexC << std::endl;
     result = EXIT_FAILURE;
   }
   indexC[0] = ContinuousIndexNumericTraits::max();

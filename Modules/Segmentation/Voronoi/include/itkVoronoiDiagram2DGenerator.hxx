@@ -283,10 +283,8 @@ VoronoiDiagram2DGenerator<TCoordRepType>::ConstructDiagram()
     buildEdges.push_back(curr);
     EdgeInfo front = curr;
     EdgeInfo back = curr;
-    auto     maxStop = static_cast<int>(rawEdges[i].size());
     while (!(rawEdges[i].empty()))
     {
-      --maxStop;
       curr = rawEdges[i].front();
       rawEdges[i].pop_front();
       frontbnd = Pointonbnd(front[0]);
@@ -401,7 +399,7 @@ VoronoiDiagram2DGenerator<TCoordRepType>::ConstructDiagram()
         }
         else
         {
-          itkDebugMacro(<< "Numerical problem 1" << curr[0] << " " << curr1[1]);
+          itkDebugMacro("Numerical problem 1" << curr[0] << ' ' << curr1[1]);
         }
       }
     }
@@ -1266,7 +1264,7 @@ VoronoiDiagram2DGenerator<TCoordRepType>::PrintSelf(std::ostream & os, Indent in
   os << indent << "ELHash: " << std::endl;
   for (unsigned int i = 0; i < m_ELHash.size(); ++i)
   {
-    os << indent << "[" << i << "]: " << m_ELHash[i] << std::endl;
+    os << indent << '[' << i << "]: " << m_ELHash[i] << std::endl;
   }
 }
 } // namespace itk

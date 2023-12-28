@@ -39,6 +39,7 @@
 #include "itksys/SystemInformation.hxx"
 #include "itkMath.h"
 #include "itkIsNumber.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -49,6 +50,41 @@ ResourceProbe<ValueType, MeanType>::ResourceProbe(std::string type, std::string 
   , m_UnitString(std::move(unit))
 {
   this->Reset();
+}
+
+template <typename ValueType, typename MeanType>
+void
+ResourceProbe<ValueType, MeanType>::Print(std::ostream & os, Indent indent) const
+{
+  using namespace print_helper;
+
+  os << indent << "StartValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_StartValue)
+     << std::endl;
+  os << indent << "TotalValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_TotalValue)
+     << std::endl;
+  os << indent << "MinimumValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_MinimumValue)
+     << std::endl;
+  os << indent << "MaximumValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_MaximumValue)
+     << std::endl;
+  os << indent
+     << "StandardDeviation: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_StandardDeviation)
+     << std::endl;
+  os << indent << "StandardError: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_StandardError)
+     << std::endl;
+
+  os << indent << "NumberOfStarts: " << static_cast<typename NumericTraits<CountType>::PrintType>(m_NumberOfStarts)
+     << std::endl;
+  os << indent << "NumberOfStops: " << static_cast<typename NumericTraits<CountType>::PrintType>(m_NumberOfStops)
+     << std::endl;
+  os << indent
+     << "NumberOfIteration: " << static_cast<typename NumericTraits<CountType>::PrintType>(m_NumberOfIteration)
+     << std::endl;
+
+  os << indent << "ProbeValueList: " << m_ProbeValueList << std::endl;
+
+  os << indent << "NameOfProbe: " << m_NameOfProbe << std::endl;
+  os << indent << "TypeString: " << m_TypeString << std::endl;
+  os << indent << "UnitString: " << m_UnitString << std::endl;
 }
 
 template <typename ValueType, typename MeanType>
@@ -113,24 +149,24 @@ ResourceProbe<ValueType, MeanType>::Stop()
 
 
 template <typename ValueType, typename MeanType>
-typename ResourceProbe<ValueType, MeanType>::CountType
-ResourceProbe<ValueType, MeanType>::GetNumberOfStarts() const
+auto
+ResourceProbe<ValueType, MeanType>::GetNumberOfStarts() const -> CountType
 {
   return this->m_NumberOfStarts;
 }
 
 
 template <typename ValueType, typename MeanType>
-typename ResourceProbe<ValueType, MeanType>::CountType
-ResourceProbe<ValueType, MeanType>::GetNumberOfStops() const
+auto
+ResourceProbe<ValueType, MeanType>::GetNumberOfStops() const -> CountType
 {
   return this->m_NumberOfStops;
 }
 
 
 template <typename ValueType, typename MeanType>
-typename ResourceProbe<ValueType, MeanType>::CountType
-ResourceProbe<ValueType, MeanType>::GetNumberOfIteration() const
+auto
+ResourceProbe<ValueType, MeanType>::GetNumberOfIteration() const -> CountType
 {
   return this->m_NumberOfIteration;
 }
@@ -148,7 +184,7 @@ template <typename ValueType, typename MeanType>
 MeanType
 ResourceProbe<ValueType, MeanType>::GetMean() const
 {
-  MeanType meanValue = NumericTraits<MeanType>::ZeroValue();
+  MeanType meanValue{};
 
   if (this->m_NumberOfStops)
   {
@@ -257,7 +293,7 @@ ResourceProbe<ValueType, MeanType>::PrintSystemInformation(std::ostream & os)
 
   os << "    Operating System is " << (systeminfo.Is64Bits() ? "64 bit" : "32 bit") << std::endl;
 
-  os << "ITK Version: " << ITK_VERSION_STRING << "." << ITK_VERSION_PATCH << std::endl;
+  os << "ITK Version: " << ITK_VERSION_STRING << '.' << ITK_VERSION_PATCH << std::endl;
 }
 
 
@@ -551,21 +587,11 @@ ResourceProbe<ValueType, MeanType>::PrintJSONSystemInformation(std::ostream & os
   os << "    },\n";
 
   std::ostringstream itkVersionStringStream;
-  itkVersionStringStream << ITK_VERSION_STRING << "." << ITK_VERSION_PATCH;
+  itkVersionStringStream << ITK_VERSION_STRING << '.' << ITK_VERSION_PATCH;
 
   PrintJSONvar(os, "ITKVersion", itkVersionStringStream.str(), 4, false);
   os << "  }";
 }
-
-
-// This protected member function that was introduced with ITK 4.8 has been deprecated
-// as of ITK 5.0. Please do not call or override this member function.
-#if !defined(ITK_LEGACY_REMOVE)
-template <typename ValueType, typename MeanType>
-void
-ResourceProbe<ValueType, MeanType>::GetSystemInformation()
-{}
-#endif
 
 } // end namespace itk
 

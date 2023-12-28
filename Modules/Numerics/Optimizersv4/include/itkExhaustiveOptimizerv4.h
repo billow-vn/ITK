@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ExhaustiveOptimizerv4
+ * \class ExhaustiveOptimizerv4
  * \brief Optimizer that fully samples a grid on the parametric space.
  *
  * This optimizer is equivalent to an exhaustive search in a discrete grid
@@ -92,7 +92,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExhaustiveOptimizerv4, Superclass);
+  itkOverrideGetNameOfClassMacro(ExhaustiveOptimizerv4);
 
   /** Steps type */
   using StepsType = Array<SizeValueType>;
@@ -161,7 +161,7 @@ protected:
   IncrementIndex(ParametersType & newPosition);
 
 protected:
-  ParametersType m_InitialPosition;
+  ParametersType m_InitialPosition{};
   MeasureType    m_CurrentValue{ 0 };
   StepsType      m_NumberOfSteps{ 0 };
   bool           m_Stop{ false };
@@ -169,8 +169,8 @@ protected:
   ParametersType m_CurrentIndex{ 0 };
   MeasureType    m_MaximumMetricValue{ 0.0 };
   MeasureType    m_MinimumMetricValue{ 0.0 };
-  ParametersType m_MinimumMetricValuePosition;
-  ParametersType m_MaximumMetricValuePosition;
+  ParametersType m_MinimumMetricValuePosition{};
+  ParametersType m_MaximumMetricValuePosition{};
 
 private:
   std::ostringstream m_StopConditionDescription{ "" };

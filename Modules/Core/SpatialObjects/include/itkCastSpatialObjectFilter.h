@@ -64,7 +64,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(CastSpatialObjectFilter, Object);
+  itkOverrideGetNameOfClassMacro(CastSpatialObjectFilter);
 
   using InputSpatialObjectType = SpatialObject<ObjectDimension>;
 
@@ -229,7 +229,7 @@ protected:
 
 
 private:
-  typename InputSpatialObjectType::Pointer m_Input;
+  typename InputSpatialObjectType::Pointer m_Input{};
 
 }; // End class CastSpatialObjectFilter
 

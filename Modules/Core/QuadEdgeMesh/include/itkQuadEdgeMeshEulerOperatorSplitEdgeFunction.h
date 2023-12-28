@@ -45,7 +45,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuadEdgeMeshEulerOperatorSplitEdgeFunction, QuadEdgeMeshFunctionBase);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshEulerOperatorSplitEdgeFunction);
 
   /** Type of QuadEdge with which to apply slicing. */
   using QEType = TQEType;
@@ -88,7 +88,7 @@ protected:
   ~QuadEdgeMeshEulerOperatorSplitEdgeFunction() override = default;
 
 private:
-  typename SplitVertex::Pointer m_SplitVertex;
+  typename SplitVertex::Pointer m_SplitVertex{};
 };
 } // end namespace itk
 

@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(KappaStatisticImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(KappaStatisticImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -130,7 +130,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  RealType m_ForegroundValue;
+  RealType m_ForegroundValue{};
   bool     m_Complement{ false };
 };
 } // end namespace itk

@@ -17,8 +17,9 @@ static int local_fileexists(const char* fname)
 int main( int argc , char *argv[] )
 {
    nifti_image *nim ;
-   int iarg=1 , outmode=1 , ll , argn=1, usegzip=0;
-   char *tmpstr;
+   int          iarg=1 , outmode=1 , argn, usegzip=0;
+   char        *tmpstr;
+   size_t       ll;
 
    if( argc < 2 || strcmp(argv[1],"-help") == 0 ){
      printf("Usage: nifti1_test [-n2|-n1|-na|-a2] infile [prefix]\n"
@@ -75,8 +76,8 @@ int main( int argc , char *argv[] )
    if( iarg >= argc ){ nifti_image_infodump(nim); exit(0); }
 
    nim->nifti_type = outmode ;
-   if( nim->fname != NULL ) free(nim->fname) ;
-   if( nim->iname != NULL ) free(nim->iname) ;
+   free(nim->fname) ;
+   free(nim->iname) ;
 
    ll = strlen(argv[iarg]) ;
    tmpstr = nifti_makebasename(argv[iarg]);

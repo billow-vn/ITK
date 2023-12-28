@@ -41,15 +41,15 @@ KullbackLeiblerCompareHistogramImageToImageMetric<TFixedImage, TMovingImage>::In
 }
 
 template <typename TFixedImage, typename TMovingImage>
-typename KullbackLeiblerCompareHistogramImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 KullbackLeiblerCompareHistogramImageToImageMetric<TFixedImage, TMovingImage>::EvaluateMeasure(
-  HistogramType & histogram) const
+  HistogramType & histogram) const -> MeasureType
 {
   // Two terms.
   // First the term that measures the entropy of the term
   // p(x,y) log p(x,y) - p(x,y) log q(x,y)
 
-  MeasureType KullbackLeibler = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType KullbackLeibler{};
 
   HistogramIteratorType measured_it = histogram.Begin();
   HistogramIteratorType measured_end = histogram.End();

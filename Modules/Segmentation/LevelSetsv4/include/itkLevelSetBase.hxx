@@ -79,7 +79,7 @@ template <typename TInput, unsigned int VDimension, typename TOutput, typename T
 auto
 LevelSetBase<TInput, VDimension, TOutput, TDomain>::EvaluateMeanCurvature(const InputType & iP) const -> OutputRealType
 {
-  OutputRealType oValue = NumericTraits<OutputRealType>::ZeroValue();
+  OutputRealType oValue{};
 
   HessianType  hessian = this->EvaluateHessian(iP);
   GradientType grad = this->EvaluateGradient(iP);
@@ -199,8 +199,8 @@ LevelSetBase<TInput, VDimension, TOutput, TDomain>::CopyInformation(const DataOb
   if (!levelSet)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::LevelSetBase::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(LevelSetBase *).name());
+    itkExceptionMacro("itk::LevelSetBase::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                          << typeid(LevelSetBase *).name());
   }
 
   m_MaximumNumberOfRegions = levelSet->GetMaximumNumberOfRegions();
@@ -224,8 +224,8 @@ LevelSetBase<TInput, VDimension, TOutput, TDomain>::Graft(const DataObject * dat
   if (!levelSet)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::LevelSetBase::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(Self *).name());
+    itkExceptionMacro("itk::LevelSetBase::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                          << typeid(Self *).name());
   }
 }
 
@@ -252,14 +252,14 @@ LevelSetBase<TInput, VDimension, TOutput, TDomain>::VerifyRequestedRegion()
   // Are we asking for more regions than we can get?
   if (m_RequestedNumberOfRegions > m_MaximumNumberOfRegions)
   {
-    itkExceptionMacro(<< "Cannot break object into " << m_RequestedNumberOfRegions << ". The limit is "
-                      << m_MaximumNumberOfRegions);
+    itkExceptionMacro("Cannot break object into " << m_RequestedNumberOfRegions << ". The limit is "
+                                                  << m_MaximumNumberOfRegions);
   }
 
   if (m_RequestedRegion >= m_RequestedNumberOfRegions)
   {
-    itkExceptionMacro(<< "Invalid update region " << m_RequestedRegion << ". Must be between 0 and "
-                      << m_RequestedNumberOfRegions - 1);
+    itkExceptionMacro("Invalid update region " << m_RequestedRegion << ". Must be between 0 and "
+                                               << m_RequestedNumberOfRegions - 1);
   }
 
   return retval;

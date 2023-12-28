@@ -30,7 +30,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class ImageClassifierFilter
+ * \class ImageClassifierFilter
  *
  *  \brief Image classification class
  *
@@ -58,7 +58,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(ImageClassifierFilter, ImageToImagefilter);
+  itkOverrideGetNameOfClassMacro(ImageClassifierFilter);
   itkNewMacro(Self);
 
   /** Image pixel value type alias. */
@@ -96,7 +96,7 @@ public:
   using MembershipFunctionVectorObjectType = SimpleDataObjectDecorator<MembershipFunctionVectorType>;
   using MembershipFunctionVectorObjectPointer = typename MembershipFunctionVectorObjectType::Pointer;
 
-  /** type alias for membership functions weight proprtion */
+  /** type alias for membership functions weight proportion */
   using MembershipFunctionsWeightsArrayType = Array<double>;
 
   using MembershipFunctionsWeightsArrayObjectType = SimpleDataObjectDecorator<MembershipFunctionsWeightsArrayType>;
@@ -156,10 +156,10 @@ protected:
   GenerateData() override;
 
 private:
-  unsigned int m_NumberOfClasses;
+  unsigned int m_NumberOfClasses{};
 
   /** Decision Rule */
-  DecisionRulePointer m_DecisionRule;
+  DecisionRulePointer m_DecisionRule{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

@@ -196,7 +196,7 @@ extern ITKImageIntensity_EXPORT std::ostream &
 } // end namespace Functor
 
 /**
- *\class SymmetricEigenAnalysisImageFilter
+ * \class SymmetricEigenAnalysisImageFilter
  * \brief Computes the eigen-values of every input symmetric matrix pixel.
  *
  * SymmetricEigenAnalysisImageFilter applies pixel-wise the invocation for
@@ -263,7 +263,7 @@ public:
   }
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(SymmetricEigenAnalysisImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(SymmetricEigenAnalysisImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -300,7 +300,7 @@ protected:
 };
 
 /**
- *\class SymmetricEigenAnalysisFixedDimensionImageFilter
+ * \class SymmetricEigenAnalysisFixedDimensionImageFilter
  * \brief Computes the eigen-values of every input symmetric matrix pixel.
  *
  * SymmetricEigenAnalysisImageFilter applies pixel-wise the invocation for
@@ -359,7 +359,7 @@ public:
   }
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(SymmetricEigenAnalysisFixedDimensionImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(SymmetricEigenAnalysisFixedDimensionImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

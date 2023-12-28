@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class CheckerBoardImageFilter
+ * \class CheckerBoardImageFilter
  * \brief Combines two images in a checkerboard pattern.
  *
  * CheckerBoardImageFilter takes two input images that must have the same
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CheckerBoardImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(CheckerBoardImageFilter);
 
   /** Number of dimensions. */
   static constexpr unsigned int ImageDimension = TImage::ImageDimension;
@@ -104,7 +104,7 @@ protected:
 
 
 private:
-  PatternArrayType m_CheckerPattern;
+  PatternArrayType m_CheckerPattern{};
 };
 } // end namespace itk
 

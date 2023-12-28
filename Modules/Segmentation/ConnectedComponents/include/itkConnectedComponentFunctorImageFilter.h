@@ -102,7 +102,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(ConnectedComponentFunctorImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ConnectedComponentFunctorImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -155,7 +155,7 @@ protected:
   ~ConnectedComponentFunctorImageFilter() override = default;
   ConnectedComponentFunctorImageFilter(const Self &) {}
 
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 
   /**
    * Standard pipeline method.

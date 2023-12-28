@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class LabelMapToLabelImageFilter
+ * \class LabelMapToLabelImageFilter
  * \brief Converts a LabelMap to a labeled image.
  *
  * LabelMapToBinaryImageFilter to a label image.
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToLabelImageFilter, LabelMapFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapToLabelImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   itkConceptMacro(SameDimensionCheck, (Concept::SameDimension<InputImageDimension, OutputImageDimension>));

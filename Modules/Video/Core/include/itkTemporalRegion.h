@@ -32,7 +32,7 @@
 namespace itk
 {
 /**
- *\class TemporalRegion
+ * \class TemporalRegion
  * \brief Region subclass that holds a region in time
  *
  * A temporal region is represented using a starting point and a duration. Here
@@ -47,7 +47,7 @@ public:
   using Self = TemporalRegion;
   using Superclass = Region;
 
-  itkTypeMacro(TemporalRegion, Region);
+  itkOverrideGetNameOfClassMacro(TemporalRegion);
 
   /** Typedef for frame offsets */
   using FrameOffsetType = itk::SizeValueType;
@@ -106,10 +106,10 @@ protected:
 
   /** Time boundaries */
   /** Timestamp corresponding to the first frame in the region. */
-  RealTimeStamp m_RealStart;
+  RealTimeStamp m_RealStart{};
   /** Time interval corresponding to the entire length of time
    *  represented by the region over ALL frames */
-  RealTimeInterval m_RealDuration;
+  RealTimeInterval m_RealDuration{};
   /** Index of the first frame in the region */
   FrameOffsetType m_FrameStart{ 0 };
   /** Total number of frames represented by the region (NOT individual frame duration) */

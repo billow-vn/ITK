@@ -168,9 +168,9 @@ public:
   }
 };
 
-/**\class AuthalicMatrixCoefficients
+/** \class AuthalicMatrixCoefficients
  *
- * \brief Compute a matrix filled with Authalic Coefiicients of the edge,
+ * \brief Compute a matrix filled with Authalic Coefficients of the edge,
  *        wherever two vertices are connected with an edge.
  * \note  Belongs to the Parameterisation package.
  * \note  See paper:
@@ -205,7 +205,7 @@ public:
     InputPointIdentifier id2 = iEdge->GetDestination();
     InputPointType       pt2 = iMesh->GetPoint(id2);
 
-    InputCoordRepType oValue = NumericTraits<InputCoordRepType>::ZeroValue();
+    InputCoordRepType oValue{};
 
     if (iEdge->IsLeftSet())
     {
@@ -226,7 +226,7 @@ public:
 };
 
 /** \class IntrinsicMatrixCoefficients
- * \brief Compute a mtrix filled by intrinsic Coefficients of the edge,
+ * \brief Compute a matrix filled by intrinsic Coefficients of the edge,
  *        wherever two vertices are connected by an edge.
  * \note  Belongs to the parameterization Package.
  * \note  See paper:

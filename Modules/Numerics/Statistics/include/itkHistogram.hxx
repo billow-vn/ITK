@@ -20,6 +20,7 @@
 
 #include "itkNumericTraits.h"
 #include "itkMath.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -175,8 +176,6 @@ Histogram<TMeasurement, TFrequencyContainer>::Initialize(const SizeType & size)
     this->m_OffsetTable[i + 1] = num;
   }
 
-  this->m_TempIndex.SetSize(this->GetMeasurementVectorSize());
-
   m_NumberOfInstances = num;
 
   // adjust the sizes of min max value containers
@@ -195,7 +194,10 @@ Histogram<TMeasurement, TFrequencyContainer>::Initialize(const SizeType & size)
 
   // initialize auxiliary variables
   this->m_TempIndex.SetSize(this->GetMeasurementVectorSize());
+  m_TempIndex.Fill(0);
+
   this->m_TempMeasurementVector.SetSize(this->GetMeasurementVectorSize());
+  m_TempMeasurementVector.Fill(0);
 
   // initialize the frequency container
   m_FrequencyContainer->Initialize(this->m_OffsetTable[this->GetMeasurementVectorSize()]);
@@ -363,8 +365,8 @@ Histogram<TMeasurement, TFrequencyContainer>::IsIndexOutOfBounds(const IndexType
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>
-inline typename Histogram<TMeasurement, TFrequencyContainer>::InstanceIdentifier
-Histogram<TMeasurement, TFrequencyContainer>::GetInstanceIdentifier(const IndexType & index) const
+inline auto
+Histogram<TMeasurement, TFrequencyContainer>::GetInstanceIdentifier(const IndexType & index) const -> InstanceIdentifier
 {
   InstanceIdentifier instanceId = 0;
 
@@ -467,8 +469,9 @@ Histogram<TMeasurement, TFrequencyContainer>::GetHistogramMaxFromIndex(const Ind
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>
-inline const typename Histogram<TMeasurement, TFrequencyContainer>::MeasurementVectorType &
+inline auto
 Histogram<TMeasurement, TFrequencyContainer>::GetMeasurementVector(const IndexType & index) const
+  -> const MeasurementVectorType &
 {
   const unsigned int measurementVectorSize = this->GetMeasurementVectorSize();
   for (unsigned int i = 0; i < measurementVectorSize; ++i)
@@ -480,8 +483,9 @@ Histogram<TMeasurement, TFrequencyContainer>::GetMeasurementVector(const IndexTy
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>
-inline const typename Histogram<TMeasurement, TFrequencyContainer>::MeasurementVectorType &
+inline auto
 Histogram<TMeasurement, TFrequencyContainer>::GetMeasurementVector(InstanceIdentifier id) const
+  -> const MeasurementVectorType &
 {
   return this->GetMeasurementVector(this->GetIndex(id));
 }
@@ -540,8 +544,8 @@ Histogram<TMeasurement, TFrequencyContainer>::IncreaseFrequencyOfMeasurement(con
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>
-inline typename Histogram<TMeasurement, TFrequencyContainer>::AbsoluteFrequencyType
-Histogram<TMeasurement, TFrequencyContainer>::GetFrequency(const IndexType & index) const
+inline auto
+Histogram<TMeasurement, TFrequencyContainer>::GetFrequency(const IndexType & index) const -> AbsoluteFrequencyType
 {
   return (this->GetFrequency(this->GetInstanceIdentifier(index)));
 }
@@ -583,8 +587,8 @@ Histogram<TMeasurement, TFrequencyContainer>::GetFrequency(InstanceIdentifier n,
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>
-inline typename Histogram<TMeasurement, TFrequencyContainer>::TotalAbsoluteFrequencyType
-Histogram<TMeasurement, TFrequencyContainer>::GetTotalFrequency() const
+inline auto
+Histogram<TMeasurement, TFrequencyContainer>::GetTotalFrequency() const -> TotalAbsoluteFrequencyType
 {
   return m_FrequencyContainer->GetTotalFrequency();
 }
@@ -626,7 +630,7 @@ Histogram<TMeasurement, TFrequencyContainer>::Quantile(unsigned int dimension, d
   else
   {
     n = size - 1;
-    InstanceIdentifier m = NumericTraits<InstanceIdentifier>::ZeroValue();
+    InstanceIdentifier m{};
     p_n = 1.0;
     do
     {
@@ -665,36 +669,44 @@ template <typename TMeasurement, typename TFrequencyContainer>
 void
 Histogram<TMeasurement, TFrequencyContainer>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  // os << indent << "MeasurementVectorSize: " << this->GetMeasurementVectorSize() << std::endl;
-  os << indent << "TotalFrequency: " << this->GetTotalFrequency() << std::endl;
-  os << indent << "Size: ";
-  for (unsigned int i = 0; i < m_Size.Size(); ++i)
+  os << indent << "Size: " << static_cast<typename NumericTraits<SizeType>::PrintType>(m_Size) << std::endl;
+  os << indent << "OffsetTable: " << std::endl;
+  for (const auto & elem : m_OffsetTable)
   {
-    os << m_Size[i] << "  ";
+    os << indent.GetNextIndent() << "[" << &elem - &*(m_OffsetTable.begin()) << "]: " << elem << std::endl;
   }
-  os << std::endl;
-  os << indent << "Bin Minima: ";
-  for (unsigned int i = 0; i < m_Min.size(); ++i)
-  {
-    os << m_Min[i][0] << "  ";
-  }
-  os << std::endl;
-  os << indent << "Bin Maxima: ";
-  for (unsigned int i = 0; i < m_Max.size(); ++i)
-  {
-    os << m_Max[i].back() << "  ";
-  }
-  os << std::endl;
-  os << indent << "ClipBinsAtEnds: " << itk::NumericTraits<bool>::PrintType(this->GetClipBinsAtEnds()) << std::endl;
-  os << indent << "OffsetTable: ";
-  for (unsigned int i = 0; i < this->m_OffsetTable.size(); ++i)
-  {
-    os << this->m_OffsetTable[i] << "  ";
-  }
-  os << std::endl;
+
   itkPrintSelfObjectMacro(FrequencyContainer);
+
+  os << indent << "NumberOfInstances: " << m_NumberOfInstances << std::endl;
+
+  os << indent << "Min: " << std::endl;
+  for (const auto & elemVec : m_Min)
+  {
+    for (const auto & elem : elemVec)
+    {
+      os << indent.GetNextIndent() << "[" << &elem - &*(elemVec.begin())
+         << "]: " << static_cast<typename NumericTraits<MeasurementType>::PrintType>(elem) << std::endl;
+    }
+  }
+
+  os << indent << "Max: " << std::endl;
+  for (const auto & elemVec : m_Max)
+  {
+    for (const auto & elem : elemVec)
+    {
+      os << indent.GetNextIndent() << "[" << &elem - &*(elemVec.begin())
+         << "]: " << static_cast<typename NumericTraits<MeasurementType>::PrintType>(elem) << std::endl;
+    }
+  }
+
+  os << indent << "TempMeasurementVector: " << m_TempMeasurementVector << std::endl;
+  os << indent << "TempIndex: " << static_cast<typename NumericTraits<IndexType>::PrintType>(m_TempIndex) << std::endl;
+  os << indent << "ClipBinsAtEnds: " << (m_ClipBinsAtEnds ? "On" : "Off") << std::endl;
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>

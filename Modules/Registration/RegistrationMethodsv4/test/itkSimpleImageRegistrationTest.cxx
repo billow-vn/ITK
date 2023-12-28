@@ -53,12 +53,12 @@ public:
   {
     if (object == nullptr)
     {
-      itkExceptionMacro(<< "Command update on null object");
+      itkExceptionMacro("Command update on null object");
     }
     std::cout << "Observing from class " << object->GetNameOfClass();
     if (!object->GetObjectName().empty())
     {
-      std::cout << " \"" << object->GetObjectName() << "\"";
+      std::cout << " \"" << object->GetObjectName() << '"';
     }
     std::cout << std::endl;
     const auto * filter = static_cast<const TFilter *>(object);
@@ -105,7 +105,7 @@ public:
     {
       for (itk::SizeValueType i = 0; i < gradient.GetSize(); i += (gradient.GetSize() / 16))
       {
-        std::cout << gradient[i] << " ";
+        std::cout << gradient[i] << ' ';
       }
     }
     std::cout << std::endl;
@@ -151,6 +151,10 @@ PerformSimpleImageRegistration(int argc, char * argv[])
 
   using AffineRegistrationType = itk::ImageRegistrationMethodv4<FixedImageType, MovingImageType>;
   auto affineSimple = AffineRegistrationType::New();
+
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(affineSimple, ImageRegistrationMethodv4, ProcessObject);
+
+
   affineSimple->SetObjectName("affineSimple");
 
   // Test exceptions
@@ -202,6 +206,17 @@ PerformSimpleImageRegistration(int argc, char * argv[])
     affineSimple->SetSmoothingSigmasPerLevel(smoothingSigmasPerLevel);
     ITK_TEST_SET_GET_VALUE(smoothingSigmasPerLevel, affineSimple->GetSmoothingSigmasPerLevel());
   }
+
+  typename AffineRegistrationType::RealType metricSamplingPercentage = 1.0;
+  affineSimple->SetMetricSamplingPercentage(metricSamplingPercentage);
+
+  typename AffineRegistrationType::MetricSamplingPercentageArrayType metricSamplingPercentagePerLevel;
+  metricSamplingPercentagePerLevel.SetSize(numberOfLevels);
+  metricSamplingPercentagePerLevel.Fill(metricSamplingPercentage);
+  ITK_TEST_SET_GET_VALUE(metricSamplingPercentagePerLevel, affineSimple->GetMetricSamplingPercentagePerLevel());
+
+  affineSimple->SetMetricSamplingPercentagePerLevel(metricSamplingPercentagePerLevel);
+  ITK_TEST_SET_GET_VALUE(metricSamplingPercentagePerLevel, affineSimple->GetMetricSamplingPercentagePerLevel());
 
   using GradientDescentOptimizerv4Type = itk::GradientDescentOptimizerv4;
   typename GradientDescentOptimizerv4Type::Pointer affineOptimizer =
@@ -295,7 +310,13 @@ PerformSimpleImageRegistration(int argc, char * argv[])
   displacementFieldSimple->SetNumberOfLevels(numberOfLevels);
   ITK_TEST_SET_GET_VALUE(numberOfLevels, displacementFieldSimple->GetNumberOfLevels());
 
-  displacementFieldSimple->SetMovingInitialTransformInput(affineSimple->GetTransformOutput());
+  typename AffineRegistrationType::DecoratedOutputTransformType * transformOutputNonConst =
+    affineSimple->GetTransformOutput();
+  const typename AffineRegistrationType::DecoratedOutputTransformType * transformOutputConst =
+    affineSimple->GetTransformOutput();
+  ITK_TEST_EXPECT_EQUAL(transformOutputNonConst, transformOutputConst);
+
+  displacementFieldSimple->SetMovingInitialTransformInput(transformOutputNonConst);
   displacementFieldSimple->SetMetric(correlationMetric);
   displacementFieldSimple->SetOptimizer(optimizer);
 

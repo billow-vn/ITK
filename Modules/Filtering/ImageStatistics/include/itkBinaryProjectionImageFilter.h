@@ -109,7 +109,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryProjectionImageFilter, ProjectionImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryProjectionImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -186,10 +186,10 @@ protected:
   }
 
   /** Pixel value to dilate */
-  InputPixelType m_ForegroundValue;
+  InputPixelType m_ForegroundValue{};
 
   /** Pixel value for background */
-  OutputPixelType m_BackgroundValue;
+  OutputPixelType m_BackgroundValue{};
 }; // end BinaryProjectionImageFilter
 } // end namespace itk
 

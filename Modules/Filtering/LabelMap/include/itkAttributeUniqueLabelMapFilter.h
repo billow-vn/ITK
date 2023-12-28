@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class AttributeUniqueLabelMapFilter
+ * \class AttributeUniqueLabelMapFilter
  * \brief Make sure that the objects are not overlapping
  *
  * AttributeUniqueLabelMapFilter search the overlapping zones in the overlapping
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributeUniqueLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(AttributeUniqueLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -109,7 +109,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  bool m_ReverseOrdering;
+  bool m_ReverseOrdering{};
 
 private:
   struct LineOfLabelObject

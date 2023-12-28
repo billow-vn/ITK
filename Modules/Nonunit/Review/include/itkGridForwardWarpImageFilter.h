@@ -51,7 +51,7 @@ namespace itk
  * \author Tom Vercauteren, INRIA & Mauna Kea Technologies
  *
  * This implementation was taken from the Insight Journal paper:
- * https://hdl.handle.net/1926/510
+ * https://www.insight-journal.org/browse/publication/154
  *
  * \ingroup ITKReview
  */
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(GridForwardWarpImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GridForwardWarpImageFilter);
 
   /** Typedef to describe the output image region type. */
   using OutputImageRegionType = typename TOutputImage::RegionType;
@@ -124,8 +124,8 @@ protected:
   GenerateData() override;
 
 private:
-  PixelType    m_BackgroundValue;
-  PixelType    m_ForegroundValue;
+  PixelType    m_BackgroundValue{};
+  PixelType    m_ForegroundValue{};
   unsigned int m_GridPixSpacing{ 5 };
 };
 } // end namespace itk

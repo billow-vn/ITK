@@ -22,9 +22,9 @@
 namespace itk
 {
 template <typename TFixedImage, typename TMovingImage>
-typename CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::EvaluateMeasure(
-  HistogramType & histogram) const
+  HistogramType & histogram) const -> MeasureType
 {
   const MeasureType varianceX = this->VarianceX(histogram);
   const MeasureType varianceY = this->VarianceY(histogram);
@@ -38,7 +38,7 @@ auto
 CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::MeanX(HistogramType & histogram) const
   -> MeasureType
 {
-  MeasureType meanX = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType meanX{};
 
   for (unsigned int i = 0; i < this->m_HistogramSize[0]; ++i)
   {
@@ -57,7 +57,7 @@ auto
 CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::MeanY(HistogramType & histogram) const
   -> MeasureType
 {
-  MeasureType meanY = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType meanY{};
 
   for (unsigned int i = 0; i < this->m_HistogramSize[1]; ++i)
   {
@@ -76,7 +76,7 @@ auto
 CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::VarianceX(HistogramType & histogram) const
   -> MeasureType
 {
-  MeasureType varX = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType varX{};
 
   for (unsigned int i = 0; i < this->m_HistogramSize[0]; ++i)
   {
@@ -92,7 +92,7 @@ auto
 CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::VarianceY(HistogramType & histogram) const
   -> MeasureType
 {
-  MeasureType varY = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType varY{};
 
   for (unsigned int i = 0; i < this->m_HistogramSize[1]; ++i)
   {
@@ -104,11 +104,11 @@ CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::Va
 }
 
 template <typename TFixedImage, typename TMovingImage>
-typename CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>::Covariance(
-  HistogramType & histogram) const
+  HistogramType & histogram) const -> MeasureType
 {
-  MeasureType var = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType var{};
   MeasureType meanX = MeanX(histogram);
   MeasureType meanY = MeanY(histogram);
 

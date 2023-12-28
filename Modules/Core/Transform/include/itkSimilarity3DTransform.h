@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Similarity3DTransform, VersorRigid3DTransform);
+  itkOverrideGetNameOfClassMacro(Similarity3DTransform);
 
   /** Dimension of parameters. */
   static constexpr unsigned int SpaceDimension = 3;
@@ -158,7 +158,7 @@ protected:
   ComputeMatrixParameters() override;
 
 private:
-  ScaleType m_Scale;
+  ScaleType m_Scale{};
 }; // class Similarity3DTransform
 } // namespace itk
 

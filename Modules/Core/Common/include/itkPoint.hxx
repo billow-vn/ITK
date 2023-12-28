@@ -219,9 +219,9 @@ Point<T, TPointDimension>::SetToBarycentricCombination(const Self * P, const dou
  * Set the point to the barycentric combination of N points in a Container
  */
 template <typename TPointContainer, typename TWeightContainer>
-typename BarycentricCombination<TPointContainer, TWeightContainer>::PointType
+auto
 BarycentricCombination<TPointContainer, TWeightContainer>::Evaluate(const PointContainerPointer & points,
-                                                                    const WeightContainerType &   weights)
+                                                                    const WeightContainerType &   weights) -> PointType
 {
   using ValueType = typename PointType::ValueType;
   PointType barycentre;
@@ -266,7 +266,7 @@ template <typename T, unsigned int TPointDimension>
 std::ostream &
 operator<<(std::ostream & os, const Point<T, TPointDimension> & vct)
 {
-  os << "[";
+  os << '[';
   if (TPointDimension == 1)
   {
     os << vct[0];
@@ -279,7 +279,7 @@ operator<<(std::ostream & os, const Point<T, TPointDimension> & vct)
     }
     os << vct[TPointDimension - 1];
   }
-  os << "]";
+  os << ']';
   return os;
 }
 

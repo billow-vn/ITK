@@ -44,6 +44,8 @@ namespace itk
 class ITKCommon_EXPORT TimeProbe : public ResourceProbe<RealTimeClock::TimeStampType, RealTimeClock::TimeStampType>
 {
 public:
+  using Superclass = ResourceProbe<RealTimeClock::TimeStampType, RealTimeClock::TimeStampType>;
+
   /** Type for counting how many times the probe has been started and stopped.
    */
   using CountType = unsigned long;
@@ -59,6 +61,9 @@ public:
   /** Destructor */
   ~TimeProbe() override;
 
+  void
+  Print(std::ostream & os, Indent indent) const override;
+
   /** Get the current time.
    *  Warning: the returned value is not the elapsed time since the last Start() call.
    */
@@ -69,7 +74,7 @@ public:
   itkGetConstObjectMacro(RealTimeClock, RealTimeClock);
 
 private:
-  RealTimeClock::Pointer m_RealTimeClock;
+  RealTimeClock::Pointer m_RealTimeClock{};
 };
 } // end namespace itk
 

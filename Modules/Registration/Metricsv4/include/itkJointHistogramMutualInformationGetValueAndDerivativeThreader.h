@@ -45,8 +45,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(JointHistogramMutualInformationGetValueAndDerivativeThreader,
-               ImageToImageMetricv4GetValueAndDerivativeThreader);
+  itkOverrideGetNameOfClassMacro(JointHistogramMutualInformationGetValueAndDerivativeThreader);
 
   itkNewMacro(Self);
 
@@ -129,7 +128,7 @@ protected:
 private:
   /** Internal pointer to the metric object in use by this threader.
    *  This will avoid costly dynamic casting in tight loops. */
-  TJointHistogramMetric * m_JointAssociate;
+  TJointHistogramMetric * m_JointAssociate{};
 };
 
 } // end namespace itk

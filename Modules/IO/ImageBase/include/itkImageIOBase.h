@@ -86,7 +86,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageIOBase, Superclass);
+  itkOverrideGetNameOfClassMacro(ImageIOBase);
 
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
@@ -307,7 +307,7 @@ public:
   itkGetConstMacro(WritePalette, bool);
   itkBooleanMacro(WritePalette);
 
-  /** Determine whether a paletized image file has been read as a scalar image
+  /** Determine whether a palletized image file has been read as a scalar image
    *  plus a color palette.
    *  ExpandRGBPalette must be set to true, and the file must be a
    *  palette image file supported for palette reading.*/
@@ -486,7 +486,7 @@ public:
   /** Method for supporting streaming.  Given a requested region, determine what
    * could be the region that we can read from the file. This is called the
    * streamable region, which will be equal or smaller than the
-   * LargestPossibleRegion (unless it was dimensionaly clipped) and
+   * LargestPossibleRegion (unless it was dimensionally clipped) and
    * greater or equal to the RequestedRegion
    *
    * the resulting IORegion may be a greater dimensions the the
@@ -520,7 +520,7 @@ public:
    *
    * numberOfActualSplits should be the value returned from GetActualNumberOfSplitsForWriting with the same parameters
    *
-   * Derieved classes should overload this method to return a compatible region
+   * Derived classes should overload this method to return a compatible region
    */
   virtual ImageIORegion
   GetSplitRegionForWriting(unsigned int          ithPiece,
@@ -708,14 +708,14 @@ protected:
   IOFileEnum m_FileType{ IOFileEnum::TypeNotApplicable };
 
   /** Does the ImageIOBase object have enough info to be of use? */
-  bool m_Initialized;
+  bool m_Initialized{};
 
   /** Filename to read */
-  std::string m_FileName;
+  std::string m_FileName{};
 
   /** Stores the number of components per pixel. This will be 1 for
    * grayscale images, 3 for RGBPixel images, and 4 for RGBPixelA images. */
-  unsigned int m_NumberOfComponents;
+  unsigned int m_NumberOfComponents{};
 
   /** The number of independent dimensions in the image. */
   unsigned int m_NumberOfDimensions{ 0 };
@@ -740,41 +740,41 @@ protected:
   InternalSetCompressor(const std::string & _compressor);
 
   /** Should we use streaming for reading */
-  bool m_UseStreamedReading;
+  bool m_UseStreamedReading{};
 
   /** Should we use streaming for writing */
-  bool m_UseStreamedWriting;
+  bool m_UseStreamedWriting{};
 
   /** Should we expand RGB palette or stay scalar */
-  bool m_ExpandRGBPalette;
+  bool m_ExpandRGBPalette{};
 
   /** true if a RGB palette has been read and the image
    * kept scalar */
-  bool m_IsReadAsScalarPlusPalette;
+  bool m_IsReadAsScalarPlusPalette{};
 
   /** Should we try to include a RGB palette while writing the image  */
-  bool m_WritePalette;
+  bool m_WritePalette{};
 
   /** The region to read or write. The region contains information about the
    * data within the region to read or write. */
-  ImageIORegion m_IORegion;
+  ImageIORegion m_IORegion{};
 
   /** The array which stores the number of pixels in the x, y, z directions. */
-  std::vector<SizeValueType> m_Dimensions;
+  std::vector<SizeValueType> m_Dimensions{};
 
   /** The array which stores the spacing of pixels in the
    * x, y, z directions. */
-  std::vector<double> m_Spacing;
+  std::vector<double> m_Spacing{};
 
   /** The array which stores the origin of the image. */
-  std::vector<double> m_Origin;
+  std::vector<double> m_Origin{};
 
   /** The arrays which store the direction cosines of the image. */
-  std::vector<std::vector<double>> m_Direction;
+  std::vector<std::vector<double>> m_Direction{};
 
   /** Stores the number of bytes it takes to get to the next 'thing'
    * e.g. component, pixel, row, slice, etc. */
-  std::vector<SizeType> m_Strides;
+  std::vector<SizeType> m_Strides{};
 
   /** Return the object to an initialized state, ready to be used */
   virtual void
@@ -891,8 +891,8 @@ private:
   bool
   HasSupportedExtension(const char *, const ArrayOfExtensionsType &, bool ignoreCase = true);
 
-  ArrayOfExtensionsType m_SupportedReadExtensions;
-  ArrayOfExtensionsType m_SupportedWriteExtensions;
+  ArrayOfExtensionsType m_SupportedReadExtensions{};
+  ArrayOfExtensionsType m_SupportedWriteExtensions{};
 };
 
 /** Utility function for writing RAW bytes */

@@ -141,9 +141,7 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::BeforeThreadedGenera
   m_OldClusters.resize(numberOfClusters * numberOfClusterComponents);
 
 
-  using InputConstIteratorType = ImageScanlineConstIterator<InputImageType>;
-
-  InputConstIteratorType it(shrunkImage, shrunkImage->GetLargestPossibleRegion());
+  ImageScanlineConstIterator it(shrunkImage, shrunkImage->GetLargestPossibleRegion());
 
   // Initialize cluster centers
   size_t cnt = 0;
@@ -160,8 +158,8 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::BeforeThreadedGenera
       const IndexType &                  idx = it.GetIndex();
       typename InputImageType::PointType pt;
       shrunkImage->TransformIndexToPhysicalPoint(idx, pt);
-      ContinuousIndexType cidx;
-      inputImage->TransformPhysicalPointToContinuousIndex(pt, cidx);
+      const ContinuousIndexType cidx =
+        inputImage->template TransformPhysicalPointToContinuousIndex<typename PointType::ValueType>(pt);
       for (unsigned int i = 0; i < ImageDimension; ++i)
       {
         cluster[numberOfComponents + i] = cidx[i];
@@ -197,9 +195,6 @@ void
 SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::ThreadedUpdateDistanceAndLabel(
   const OutputImageRegionType & outputRegionForThread)
 {
-  using InputConstIteratorType = ImageScanlineConstIterator<InputImageType>;
-  using DistanceIteratorType = ImageScanlineIterator<DistanceImageType>;
-
   const InputImageType * inputImage = this->GetInput();
   OutputImageType *      outputImage = this->GetOutput();
   const unsigned int     numberOfComponents = inputImage->GetNumberOfComponentsPerPixel();
@@ -234,8 +229,8 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::ThreadedUpdateDistan
 
     const size_t ln = localRegion.GetSize(0);
 
-    InputConstIteratorType inputIter(inputImage, localRegion);
-    DistanceIteratorType   distanceIter(m_DistanceImage, localRegion);
+    ImageScanlineConstIterator inputIter(inputImage, localRegion);
+    ImageScanlineIterator      distanceIter(m_DistanceImage, localRegion);
 
 
     while (!inputIter.IsAtEnd())
@@ -275,15 +270,12 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::ThreadedUpdateCluste
   const unsigned int numberOfComponents = inputImage->GetNumberOfComponentsPerPixel();
   const unsigned int numberOfClusterComponents = numberOfComponents + ImageDimension;
 
-  using InputConstIteratorType = ImageScanlineConstIterator<InputImageType>;
-  using OutputIteratorType = ImageScanlineIterator<OutputImageType>;
-
   UpdateClusterMap clusterMap;
 
   itkDebugMacro("Estimating Centers");
   // calculate new centers
-  OutputIteratorType     itOut = OutputIteratorType(outputImage, updateRegionForThread);
-  InputConstIteratorType itIn = InputConstIteratorType(inputImage, updateRegionForThread);
+  ImageScanlineIterator      itOut(outputImage, updateRegionForThread);
+  ImageScanlineConstIterator itIn(inputImage, updateRegionForThread);
   while (!itOut.IsAtEnd())
   {
     const size_t ln = updateRegionForThread.GetSize(0);
@@ -322,7 +314,7 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::ThreadedUpdateCluste
   }
 
   // TODO improve merge algorithm
-  std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+  const std::lock_guard<std::mutex> lockGuard(m_Mutex);
   m_UpdateClusterPerThread.push_back(clusterMap);
 }
 
@@ -465,8 +457,7 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::ThreadedConnectivity
 
 
   ClusterType cluster(numberOfClusterComponents, &m_Clusters[clusterIndex * numberOfClusterComponents]);
-  typename InputImageType::RegionType localRegion;
-  IndexType                           idx;
+  IndexType   idx;
 
   for (unsigned int d = 0; d < ImageDimension; ++d)
   {
@@ -540,13 +531,8 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::SingleThreadedConnec
   // a new label, otherwise it just gets the previously encountered
   // label id.
 
-
-  using OutputIteratorType = ImageScanlineIterator<OutputImageType>;
-  OutputIteratorType outputIter(outputImage, outputImage->GetRequestedRegion());
-
-  using MarkerIteratorType = ImageScanlineIterator<MarkerImageType>;
-  MarkerIteratorType markerIter(m_MarkerImage, outputImage->GetRequestedRegion());
-
+  ImageScanlineIterator outputIter(outputImage, outputImage->GetRequestedRegion());
+  ImageScanlineIterator markerIter(m_MarkerImage, outputImage->GetRequestedRegion());
 
   while (!markerIter.IsAtEnd())
   {
@@ -721,9 +707,9 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::AfterThreadedGenerat
 
 
 template <typename TInputImage, typename TOutputImage, typename TDistancePixel>
-typename SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::DistanceType
+auto
 SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::Distance(const ClusterType & cluster1,
-                                                                     const ClusterType & cluster2)
+                                                                     const ClusterType & cluster2) -> DistanceType
 {
   const unsigned int s = cluster1.size();
   DistanceType       d1 = 0.0;
@@ -745,10 +731,10 @@ SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::Distance(const Clust
 }
 
 template <typename TInputImage, typename TOutputImage, typename TDistancePixel>
-typename SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::DistanceType
+auto
 SLICImageFilter<TInputImage, TOutputImage, TDistancePixel>::Distance(const ClusterType &    cluster,
                                                                      const InputPixelType & _v,
-                                                                     const PointType &      pt)
+                                                                     const PointType &      pt) -> DistanceType
 {
   const unsigned int                                                    s = cluster.size();
   DistanceType                                                          d1 = 0.0;

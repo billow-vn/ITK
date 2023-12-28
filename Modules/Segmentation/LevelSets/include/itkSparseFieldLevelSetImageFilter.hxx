@@ -23,6 +23,7 @@
 #include "itkShiftScaleImageFilter.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkMath.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -72,14 +73,17 @@ SparseFieldCityBlockNeighborList<TNeighborhoodType>::SparseFieldCityBlockNeighbo
 
 template <typename TNeighborhoodType>
 void
-SparseFieldCityBlockNeighborList<TNeighborhoodType>::Print(std::ostream & os) const
+SparseFieldCityBlockNeighborList<TNeighborhoodType>::Print(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   os << "SparseFieldCityBlockNeighborList: " << std::endl;
-  for (unsigned int i = 0; i < this->GetSize(); ++i)
-  {
-    os << "m_ArrayIndex[" << i << "]: " << m_ArrayIndex[i] << std::endl;
-    os << "m_NeighborhoodOffset[" << i << "]: " << m_NeighborhoodOffset[i] << std::endl;
-  }
+
+  os << indent << "Size: " << m_Size << std::endl;
+  os << indent << "Radius: " << static_cast<typename NumericTraits<RadiusType>::PrintType>(m_Radius) << std::endl;
+  os << indent << "ArrayIndex: " << m_ArrayIndex << std::endl;
+  os << indent << "NeighborhoodOffset: " << m_NeighborhoodOffset << std::endl;
+  os << indent << "StrideTable: " << m_StrideTable << std::endl;
 }
 
 // template<typename TInputImage, typename TOutputImage>
@@ -535,12 +539,11 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Initialize()
   using BFCType = NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<StatusImageType>;
 
   BFCType                                  faceCalculator;
-  typename BFCType::FaceListType           faceList;
   typename BFCType::SizeType               sz;
   typename BFCType::FaceListType::iterator fit;
 
   sz.Fill(1);
-  faceList = faceCalculator(m_StatusImage, m_StatusImage->GetRequestedRegion(), sz);
+  typename BFCType::FaceListType faceList = faceCalculator(m_StatusImage, m_StatusImage->GetRequestedRegion(), sz);
   fit = faceList.begin();
 
   for (++fit; fit != faceList.end(); ++fit) // skip the first (nonboundary)
@@ -575,7 +578,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Initialize()
   // Throw an exception if we don't have enough layers.
   if (m_Layers.size() < 3)
   {
-    itkExceptionMacro(<< "Not enough layers have been allocated for the sparse field.  Requires at least one layer.");
+    itkExceptionMacro("Not enough layers have been allocated for the sparse field.  Requires at least one layer.");
   }
 
   // Construct the active layer and initialize the first layers inside and
@@ -655,8 +658,6 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActiveLayer(
   //
   NeighborhoodIterator<OutputImageType> shiftedIt(
     m_NeighborList.GetRadius(), m_ShiftedImage, this->m_OutputImage->GetRequestedRegion());
-  NeighborhoodIterator<OutputImageType> outputIt(
-    m_NeighborList.GetRadius(), this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
   NeighborhoodIterator<StatusImageType> statusIt(
     m_NeighborList.GetRadius(), m_StatusImage, this->m_OutputImage->GetRequestedRegion());
   IndexType       center_index, offset_index;
@@ -670,7 +671,10 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActiveLayer(
   upperBounds =
     this->m_OutputImage->GetRequestedRegion().GetIndex() + this->m_OutputImage->GetRequestedRegion().GetSize();
 
-  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
+  for (NeighborhoodIterator<OutputImageType> outputIt(
+         m_NeighborList.GetRadius(), this->m_OutputImage, this->m_OutputImage->GetRequestedRegion());
+       !outputIt.IsAtEnd();
+       ++outputIt)
   {
     if (Math::ExactlyEquals(outputIt.GetCenterPixel(), m_ValueZero))
     {
@@ -826,7 +830,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::InitializeActiveLayer
     length = std::sqrt(static_cast<double>(length)) + MIN_NORM;
     distance = shiftedIt.GetCenterPixel() / length;
 
-    output->SetPixel(activeIt->m_Value, std::min(std::max(-CHANGE_FACTOR, distance), CHANGE_FACTOR));
+    output->SetPixel(activeIt->m_Value, std::clamp(distance, -CHANGE_FACTOR, CHANGE_FACTOR));
   }
 }
 
@@ -1132,19 +1136,32 @@ template <typename TInputImage, typename TOutputImage>
 void
 SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  unsigned int i;
-  os << indent << "m_IsoSurfaceValue: " << m_IsoSurfaceValue << std::endl;
+  m_NeighborList.Print(os, indent);
+
+  os << indent << "ConstantGradientValue: " << m_ConstantGradientValue << std::endl;
+
+  itkPrintSelfObjectMacro(ShiftedImage);
+
+  os << indent << "Layers: " << m_Layers << std::endl;
+  os << indent << "NumberOfLayers: " << m_NumberOfLayers << std::endl;
+
+  itkPrintSelfObjectMacro(StatusImage);
   itkPrintSelfObjectMacro(LayerNodeStore);
-  os << indent << "m_BoundsCheckingActive: " << m_BoundsCheckingActive;
-  for (i = 0; i < m_Layers.size(); ++i)
-  {
-    os << indent << "m_Layers[" << i << "]: size=" << m_Layers[i]->Size() << std::endl;
-    os << indent << m_Layers[i];
-  }
-  os << indent << "m_UpdateBuffer: size=" << static_cast<SizeValueType>(m_UpdateBuffer.size())
-     << " capacity=" << static_cast<SizeValueType>(m_UpdateBuffer.capacity()) << std::endl;
+
+  os << indent << "IsoSurfaceValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_IsoSurfaceValue)
+     << std::endl;
+  os << indent << "UpdateBuffer: " << static_cast<typename NumericTraits<UpdateBufferType>::PrintType>(m_UpdateBuffer)
+     << std::endl;
+  os << indent << "InterpolateSurfaceLocation: " << (m_InterpolateSurfaceLocation ? "On" : "Off") << std::endl;
+
+  itkPrintSelfObjectMacro(InputImage);
+  itkPrintSelfObjectMacro(OutputImage);
+
+  os << indent << "BoundsCheckingActive: " << (m_BoundsCheckingActive ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 

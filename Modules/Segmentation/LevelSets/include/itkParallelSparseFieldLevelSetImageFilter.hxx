@@ -27,6 +27,7 @@
 #include <fstream>
 #include "itkMath.h"
 #include "itkPlatformMultiThreader.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -48,7 +49,6 @@ ParallelSparseFieldCityBlockNeighborList<TNeighborhoodType>::ParallelSparseField
   NeighborhoodType it(m_Radius, dummy_image, dummy_image->GetRequestedRegion());
   nCenter = it.Size() / 2;
 
-  m_Size = 2 * Dimension;
   m_ArrayIndex.reserve(m_Size);
   m_NeighborhoodOffset.reserve(m_Size);
 
@@ -76,14 +76,20 @@ ParallelSparseFieldCityBlockNeighborList<TNeighborhoodType>::ParallelSparseField
 
 template <typename TNeighborhoodType>
 void
-ParallelSparseFieldCityBlockNeighborList<TNeighborhoodType>::Print(std::ostream & os) const
+ParallelSparseFieldCityBlockNeighborList<TNeighborhoodType>::Print(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   os << "ParallelSparseFieldCityBlockNeighborList: " << std::endl;
-  for (unsigned int i = 0; i < this->GetSize(); ++i)
-  {
-    os << "m_ArrayIndex[" << i << "]: " << m_ArrayIndex[i] << std::endl
-       << "m_NeighborhoodOffset[" << i << "]: " << m_NeighborhoodOffset[i] << std::endl;
-  }
+
+  os << indent << "Pad1: " << m_Pad1 << std::endl;
+  os << indent << "Size: " << m_Size << std::endl;
+  os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "ArrayIndex: " << m_ArrayIndex << std::endl;
+  os << indent << "NeighborhoodOffset: " << m_NeighborhoodOffset << std::endl;
+
+  os << indent << "StrideTable: " << m_StrideTable << std::endl;
+  os << indent << "Pad2: " << m_Pad2 << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -224,12 +230,11 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Initialize()
   using BFCType = NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<StatusImageType>;
 
   BFCType                                  faceCalculator;
-  typename BFCType::FaceListType           faceList;
   typename BFCType::SizeType               sz;
   typename BFCType::FaceListType::iterator fit;
 
   sz.Fill(1);
-  faceList = faceCalculator(m_StatusImage, m_StatusImage->GetRequestedRegion(), sz);
+  typename BFCType::FaceListType faceList = faceCalculator(m_StatusImage, m_StatusImage->GetRequestedRegion(), sz);
   fit = faceList.begin();
 
   for (++fit; fit != faceList.end(); ++fit) // skip the first (nonboundary) region
@@ -336,8 +341,6 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActi
 
   NeighborhoodIterator<OutputImageType> shiftedIt(
     m_NeighborList.GetRadius(), m_ShiftedImage, m_OutputImage->GetRequestedRegion());
-  NeighborhoodIterator<OutputImageType> outputIt(
-    m_NeighborList.GetRadius(), m_OutputImage, m_OutputImage->GetRequestedRegion());
   NeighborhoodIterator<StatusImageType> statusIt(
     m_NeighborList.GetRadius(), m_StatusImage, m_OutputImage->GetRequestedRegion());
 
@@ -351,7 +354,10 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActi
   typename OutputImageType::IndexType startIndex = m_OutputImage->GetRequestedRegion().GetIndex();
   using StartIndexValueType = IndexValueType;
 
-  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
+  for (NeighborhoodIterator<OutputImageType> outputIt(
+         m_NeighborList.GetRadius(), m_OutputImage, m_OutputImage->GetRequestedRegion());
+       !outputIt.IsAtEnd();
+       ++outputIt)
   {
     bounds_status = true;
     if (Math::ExactlyEquals(outputIt.GetCenterPixel(), m_ValueZero))
@@ -371,7 +377,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActi
       }
       if (bounds_status == true)
       {
-        // Here record the hisgram information
+        // Here record the histogram information
         m_GlobalZHistogram[center_index[m_SplitAxis]]++;
 
         // Borrow a node from the store and set its value.
@@ -513,7 +519,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::InitializeAct
     length = std::sqrt(length) + MIN_NORM;
     distance = shiftedIt.GetCenterPixel() / length;
 
-    m_OutputImage->SetPixel(activeIt->m_Index, std::min(std::max(-CHANGE_FACTOR, distance), CHANGE_FACTOR));
+    m_OutputImage->SetPixel(activeIt->m_Index, std::clamp(distance, -CHANGE_FACTOR, CHANGE_FACTOR));
   }
 }
 
@@ -774,8 +780,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedAlloc
   // Throw an exception if we don't have enough layers.
   if (m_Data[ThreadId].m_Layers.size() < 3)
   {
-    itkExceptionMacro(<< "Not enough layers have been allocated for the sparse"
-                      << "field. Requires at least one layer.");
+    itkExceptionMacro("Not enough layers have been allocated for the sparse field. Requires at least one layer.");
   }
 
   // Layers used as buffers for transferring pixels during load balancing
@@ -878,7 +883,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedIniti
       // nodes for each thread implying no new nodes are created here.
       nodeTempPtr = m_Data[ThreadId].m_LayerNodeStore->Borrow();
       nodeTempPtr->m_Index = nodePtr->m_Index;
-      // push the node on the approproate layer
+      // push the node on the appropriate layer
       m_Data[ThreadId].m_Layers[i]->PushFront(nodeTempPtr);
 
       // for the active layer (layer-0) build the histogram for each thread
@@ -992,7 +997,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::DeallocateDat
         {
           if (tid == ThreadId)
           {
-            // a thread does NOT pass nodes to istelf
+            // a thread does NOT pass nodes to itself
             continue;
           }
 
@@ -1430,7 +1435,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedApply
   // A synchronize is NOT required here because in 3D case we have at least 7
   // layers, thus ThreadedProcessOutsideList() works on layers 5 & 6 while
   // ThreadedPropagateLayerValues() works on 0, 1, 2, 3, 4 only. => There can
-  // NOT be any dependencies amoing different threads.
+  // NOT be any dependencies among different threads.
 
   // Finally, we update all of the layer VALUES (excluding the active layer,
   // which has already been updated)
@@ -1984,7 +1989,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedProce
 
   // 2. make a copy of the node on the
   //    m_InterNeighborNodeTransferBufferLayers[InOrOut][LastLayer - 1][i] for
-  //    all thread neighbors i ... ... and insert it in one's own InoutList
+  //    all thread neighbors i ... ... and insert it in one's own InOutList
   CopyInsertInterNeighborNodeTransferBufferLayers(ThreadId, OutsideList, InOrOut, BufferLayerNumber - 1);
 
   // Push each index in the input list into its appropriate status layer
@@ -2221,7 +2226,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::CheckLoadBala
     return;
   }
 
-  // Reset the individual histograms to reflect the new distrbution
+  // Reset the individual histograms to reflect the new distribution
   // Also reset the mapping from the Z value --> the thread number i.e.
   // m_MapZToThreadNumber[]
   for (i = 0; i < m_NumOfWorkUnits; ++i)
@@ -2263,7 +2268,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedLoadB
     {
       if (tid == ThreadId)
       {
-        // a thread does NOT pass nodes to istelf
+        // a thread does NOT pass nodes to itself
         continue;
       }
 
@@ -2478,11 +2483,10 @@ void
 ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::SignalNeighbor(unsigned int SemaphoreArrayNumber,
                                                                                   ThreadIdType ThreadId)
 {
-  ThreadData & td = m_Data[ThreadId];
-  td.m_Lock[SemaphoreArrayNumber].lock();
+  ThreadData &                      td = m_Data[ThreadId];
+  const std::lock_guard<std::mutex> lockGuard(td.m_Lock[SemaphoreArrayNumber]);
   ++td.m_Semaphore[SemaphoreArrayNumber];
   td.m_Condition[SemaphoreArrayNumber].notify_one();
-  td.m_Lock[SemaphoreArrayNumber].unlock();
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -2504,25 +2508,102 @@ template <typename TInputImage, typename TOutputImage>
 void
 ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  unsigned int i;
-  os << indent << "m_NumberOfLayers: " << NumericTraits<StatusType>::PrintType(this->GetNumberOfLayers()) << std::endl;
-  os << indent << "m_IsoSurfaceValue: " << this->GetIsoSurfaceValue() << std::endl;
-  os << indent << "m_LayerNodeStore: " << m_LayerNodeStore;
-  ThreadIdType ThreadId;
-  for (ThreadId = 0; ThreadId < m_NumOfWorkUnits; ++ThreadId)
+  m_NeighborList.Print(os, indent);
+
+  os << indent << "ConstantGradientValue: " << m_ConstantGradientValue << std::endl;
+
+  itkPrintSelfObjectMacro(ShiftedImage);
+
+  os << indent << "Layers: " << m_Layers << std::endl;
+
+  os << indent << "NumberOfLayers: " << static_cast<typename NumericTraits<StatusType>::PrintType>(m_NumberOfLayers)
+     << std::endl;
+
+  itkPrintSelfObjectMacro(StatusImage);
+  itkPrintSelfObjectMacro(OutputImage);
+
+  itkPrintSelfObjectMacro(StatusImageTemp);
+  itkPrintSelfObjectMacro(OutputImageTemp);
+
+  itkPrintSelfObjectMacro(LayerNodeStore);
+
+  os << indent << "IsoSurfaceValue: " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_IsoSurfaceValue)
+     << std::endl;
+
+  os << indent << "TimeStepList: " << m_TimeStepList << std::endl;
+  os << indent << "ValidTimeStepList: " << m_ValidTimeStepList << std::endl;
+
+  os << indent << "TimeStep: " << static_cast<typename NumericTraits<TimeStepType>::PrintType>(m_TimeStep) << std::endl;
+
+  os << indent << "NumOfWorkUnits: " << static_cast<typename NumericTraits<ThreadIdType>::PrintType>(m_NumOfWorkUnits)
+     << std::endl;
+
+  os << indent << "SplitAxis: " << m_SplitAxis << std::endl;
+  os << indent << "ZSize: " << m_ZSize << std::endl;
+  os << indent << "BoundaryChanged: " << (m_BoundaryChanged ? "On" : "Off") << std::endl;
+
+  os << indent << "Boundary: ";
+  if (m_Boundary != nullptr)
+  {
+    os << *m_Boundary << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "GlobalZHistogram: ";
+  if (m_GlobalZHistogram != nullptr)
+  {
+    os << *m_GlobalZHistogram << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "MapZToThreadNumber: ";
+  if (m_MapZToThreadNumber != nullptr)
+  {
+    os << *m_MapZToThreadNumber << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "ZCumulativeFrequency: ";
+  if (m_ZCumulativeFrequency != nullptr)
+  {
+    os << *m_ZCumulativeFrequency << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "Data: ";
+  for (ThreadIdType ThreadId = 0; ThreadId < m_NumOfWorkUnits; ++ThreadId)
   {
     os << indent << "ThreadId: " << ThreadId << std::endl;
     if (m_Data != nullptr)
     {
-      for (i = 0; i < m_Data[ThreadId].m_Layers.size(); ++i)
+      for (unsigned int i = 0; i < m_Data[ThreadId].m_Layers.size(); ++i)
       {
-        os << indent << "m_Layers[" << i << "]: size=" << m_Data[ThreadId].m_Layers[i]->Size() << std::endl;
+        os << indent << "m_Layers[" << i << "] size: " << m_Data[ThreadId].m_Layers[i]->Size() << std::endl;
         os << indent << m_Data[ThreadId].m_Layers[i];
       }
     }
   }
+  os << std::endl;
+
+  os << indent << "Stop: " << (m_Stop ? "On" : "Off") << std::endl;
+  os << indent << "InterpolateSurfaceLocation: " << (m_InterpolateSurfaceLocation ? "On" : "Off") << std::endl;
+  os << indent << "BoundsCheckingActive: " << (m_BoundsCheckingActive ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 

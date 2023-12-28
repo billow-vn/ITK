@@ -29,9 +29,7 @@
 #include "itkSimpleFilterWatcher.h"
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedImage, typename TMovingImage>
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GradientDifferenceImageToImageMetric()
 {
@@ -56,9 +54,6 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GradientDiffere
   this->m_DerivativeDelta = 0.001;
 }
 
-/**
- * Initialize
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::Initialize()
@@ -67,7 +62,7 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::Initialize()
 
   if (!this->GetComputeGradient())
   {
-    itkExceptionMacro(<< "Gradients must be calculated");
+    itkExceptionMacro("Gradients must be calculated");
   }
 
   // Initialise the base class
@@ -135,20 +130,52 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::Initialize()
   }
 }
 
-/**
- * PrintSelf
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "DerivativeDelta: " << this->m_DerivativeDelta << std::endl;
+
+  os << indent << "Variance: " << m_Variance << std::endl;
+
+  os << indent << "MinMovedGradient: " << m_MinMovedGradient << std::endl;
+  os << indent << "MaxMovedGradient: " << m_MaxMovedGradient << std::endl;
+  os << indent << "MinFixedGradient: " << m_MinFixedGradient << std::endl;
+  os << indent << "MaxFixedGradient: " << m_MaxFixedGradient << std::endl;
+
+  itkPrintSelfObjectMacro(TransformMovingImageFilter);
+
+  itkPrintSelfObjectMacro(CastFixedImageFilter);
+
+  os << indent << "FixedSobelOperators: ";
+  for (const auto & elem : m_FixedSobelOperators)
+  {
+    os << indent.GetNextIndent() << elem << std::endl;
+  }
+
+  os << indent << "FixedSobelFilters: ";
+  if (m_FixedSobelFilters[0] != nullptr)
+  {
+    for (const auto & elem : m_FixedSobelFilters)
+    {
+      os << indent.GetNextIndent() << *elem << std::endl;
+    }
+  }
+  else
+  {
+    os << "(empty)" << std::endl;
+  }
+
+  m_MovedBoundCond.Print(os, indent);
+  m_FixedBoundCond.Print(os, indent);
+
+  itkPrintSelfObjectMacro(CastMovedImageFilter);
+
+  os << indent << "MovedSobelOperators: " << m_MovedSobelOperators << std::endl;
+
+  os << indent << "DerivativeDelta: " << m_DerivativeDelta << std::endl;
 }
 
-/**
- * Compute the range of the moved image gradients
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::ComputeMovedGradientRange() const
@@ -186,9 +213,6 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::ComputeMovedGra
   }
 }
 
-/**
- * Compute the gradient variances in each dimension.
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::ComputeVariance() const
@@ -262,20 +286,17 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::ComputeVariance
   }
 }
 
-/**
- * Get the value of the similarity measure
- */
 template <typename TFixedImage, typename TMovingImage>
-typename GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::ComputeMeasure(
   const TransformParametersType & parameters,
-  const double *                  subtractionFactor) const
+  const double *                  subtractionFactor) const -> MeasureType
 {
   unsigned int iDimension;
 
   this->SetTransformParameters(parameters);
   m_TransformMovingImageFilter->UpdateLargestPossibleRegion();
-  MeasureType measure = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType measure{};
 
   for (iDimension = 0; iDimension < FixedImageDimension; ++iDimension)
   {
@@ -325,13 +346,10 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::ComputeMeasure(
   return measure;
 }
 
-/**
- * Get the value of the similarity measure
- */
 template <typename TFixedImage, typename TMovingImage>
-typename GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetValue(
-  const TransformParametersType & parameters) const
+  const TransformParametersType & parameters) const -> MeasureType
 {
   unsigned int iFilter; // Index of Sobel filters for
                         // each dimension
@@ -371,9 +389,6 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetValue(
   return currentMeasure;
 }
 
-/**
- * Get the Derivative Measure
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetDerivative(
@@ -398,9 +413,6 @@ GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetDerivative(
   }
 }
 
-/**
- * Get both the match Measure and theDerivative Measure
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 GradientDifferenceImageToImageMetric<TFixedImage, TMovingImage>::GetValueAndDerivative(

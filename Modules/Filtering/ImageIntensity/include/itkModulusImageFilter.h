@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class ModulusImageFilter
+ * \class ModulusImageFilter
  * \brief Computes the modulus (x % dividend) pixel-wise
  *
  * The input pixel type must support the c++ modulus operator (%).
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ModulusImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(ModulusImageFilter);
 
   /** Set/Get the dividend */
   virtual void

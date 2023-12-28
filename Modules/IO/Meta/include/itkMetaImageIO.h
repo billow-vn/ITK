@@ -30,7 +30,7 @@
 namespace itk
 {
 /**
- *\class MetaImageIO
+ * \class MetaImageIO
  *
  *  \brief Read MetaImage file format.
  *
@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(MetaImageIO);
 
   /** The different types of ImageIO's can support data of varying
    * dimensionality. For example, some file formats are strictly 2D
@@ -161,7 +161,7 @@ public:
     return true;
   }
 
-  /** Determing the subsampling factor in case
+  /** Determining the subsampling factor in case
    *  we want a coarse version of the image/
    * \warning this is only used when streaming is on. */
   itkSetMacro(SubSamplingFactor, unsigned int);
@@ -195,9 +195,9 @@ private:
   /** Only used to synchronize the global variable across static libraries.*/
   itkGetGlobalDeclarationMacro(unsigned int, DefaultDoublePrecision);
 
-  MetaImage m_MetaImage;
+  MetaImage m_MetaImage{};
 
-  unsigned int m_SubSamplingFactor;
+  unsigned int m_SubSamplingFactor{};
 
   static unsigned int * m_DefaultDoublePrecision;
 };
@@ -218,7 +218,7 @@ MetaImageIO::WriteMatrixInMetaData(std::ostringstream &       strs,
         strs << mval[i][j];
         if (i != VNRows - 1 || j != VNColumns - 1)
         {
-          strs << " ";
+          strs << ' ';
         }
       }
     }

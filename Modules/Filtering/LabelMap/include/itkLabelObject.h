@@ -27,8 +27,8 @@
 namespace itk
 {
 /**
- *\class LabelObject
- *  \brief The base class for the representation of an labeled binary object in an image.
+ * \class LabelObject
+ *  \brief The base class for the representation of a labeled binary object in an image.
  *
  * LabelObject is the base class to represent a labeled object in an image.
  * It should be used associated with the LabelMap.
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LabelObject, LightObject);
+  itkOverrideGetNameOfClassMacro(LabelObject);
 
   static constexpr unsigned int ImageDimension = VImageDimension;
 
@@ -204,7 +204,7 @@ public:
   Shift(OffsetType offset);
 
   /**
-   *\class ConstLineIterator
+   * \class ConstLineIterator
    * \brief A forward iterator over the lines of a LabelObject
    * \ingroup ITKLabelMap
    */
@@ -286,7 +286,7 @@ public:
   };
 
   /**
-   *\class ConstLineIterator
+   * \class ConstLineIterator
    * \brief A forward iterator over the indexes of a LabelObject
    * \ingroup ITKLabelMap
    */
@@ -406,8 +406,8 @@ protected:
 private:
   using LineContainerType = typename std::deque<LineType>;
 
-  LineContainerType m_LineContainer;
-  LabelType         m_Label;
+  LineContainerType m_LineContainer{};
+  LabelType         m_Label{};
 };
 } // end namespace itk
 

@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class RenyiEntropyThresholdCalculator
+ * \class RenyiEntropyThresholdCalculator
  * \brief Computes the RenyiEntropy's threshold for an image.
  *
  * Kapur J.N., Sahoo P.K., and Wong A.K.C. (1985) "A New Method for
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RenyiEntropyThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(RenyiEntropyThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;
@@ -108,9 +108,9 @@ protected:
                           const std::vector<double> & P2);
 
 private:
-  InstanceIdentifier m_FirstBin;
-  InstanceIdentifier m_LastBin;
-  SizeValueType      m_Size;
+  InstanceIdentifier m_FirstBin{};
+  InstanceIdentifier m_LastBin{};
+  SizeValueType      m_Size{};
 };
 
 } // end namespace itk

@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToRectilinearFEMObjectFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageToRectilinearFEMObjectFilter);
 
   static constexpr unsigned int NDimensions = TInputImage::ImageDimension;
 
@@ -103,15 +103,15 @@ public:
   /**Get the number of element in each dimension of the generated mesh*/
   itkGetMacro(NumberOfElements, vnl_vector<unsigned int>);
 
-  /**Get/Set the material used for the mesh */
+  /**Get/Set the material used for the mesh. */
   itkGetMacro(Material, MaterialPointerType);
   itkSetMacro(Material, MaterialPointerType);
 
-  /**Get/Set the element type used to generate the mesh */
+  /**Get/Set the element type used to generate the mesh. */
   itkGetMacro(Element, ElementBasePointerType);
   itkSetMacro(Element, ElementBasePointerType);
 
-  /** Set/Get the image input of this process object.  */
+  /** Set/Get the input image. */
   using Superclass::SetInput;
   void
   SetInput(InputImageType * image);
@@ -161,17 +161,19 @@ protected:
   void
   GenerateData() override;
 
+  /** Generate a rectangular mesh of quadrilateral elements. */
   void
   Generate2DRectilinearMesh();
 
+  /** Generate a rectangular mesh of hexahedron elements. */
   void
   Generate3DRectilinearMesh();
 
 private:
-  vnl_vector<unsigned int> m_NumberOfElements;
-  vnl_vector<unsigned int> m_PixelsPerElement;
-  MaterialPointerType      m_Material;
-  ElementBasePointerType   m_Element;
+  vnl_vector<unsigned int> m_NumberOfElements{};
+  vnl_vector<unsigned int> m_PixelsPerElement{};
+  MaterialPointerType      m_Material{};
+  ElementBasePointerType   m_Element{};
 };
 } // end namespace fem
 } // end namespace itk

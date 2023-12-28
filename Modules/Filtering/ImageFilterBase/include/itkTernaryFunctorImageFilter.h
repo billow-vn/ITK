@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TernaryFunctorImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(TernaryFunctorImageFilter);
 
   /** Some type alias. */
   using FunctorType = TFunction;
@@ -162,7 +162,7 @@ protected:
 
 
 private:
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 };
 } // end namespace itk
 

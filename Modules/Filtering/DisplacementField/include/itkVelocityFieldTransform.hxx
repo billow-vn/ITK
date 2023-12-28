@@ -26,9 +26,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <typename TParametersValueType, unsigned int VDimension>
 VelocityFieldTransform<TParametersValueType, VDimension>::VelocityFieldTransform()
 {
@@ -67,9 +64,6 @@ VelocityFieldTransform<TParametersValueType, VDimension>::UpdateTransformParamet
   this->IntegrateVelocityField();
 }
 
-/**
- * return an inverse transformation
- */
 template <typename TParametersValueType, unsigned int VDimension>
 bool
 VelocityFieldTransform<TParametersValueType, VDimension>::GetInverse(Self * inverse) const
@@ -92,7 +86,6 @@ VelocityFieldTransform<TParametersValueType, VDimension>::GetInverse(Self * inve
   }
 }
 
-// Return an inverse of this transform
 template <typename TParametersValueType, unsigned int VDimension>
 auto
 VelocityFieldTransform<TParametersValueType, VDimension>::GetInverseTransform() const -> InverseTransformBasePointer
@@ -242,9 +235,9 @@ VelocityFieldTransform<TParametersValueType, VDimension>::SetFixedParametersFrom
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
-typename VelocityFieldTransform<TParametersValueType, VDimension>::DisplacementFieldType::Pointer
+auto
 VelocityFieldTransform<TParametersValueType, VDimension>::CopyDisplacementField(
-  const DisplacementFieldType * toCopy) const
+  const DisplacementFieldType * toCopy) const -> typename DisplacementFieldType::Pointer
 {
   auto rval = DisplacementFieldType::New();
   rval->SetOrigin(toCopy->GetOrigin());
@@ -272,7 +265,7 @@ VelocityFieldTransform<TParametersValueType, VDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   // set the fixed/moving parameters.
@@ -313,7 +306,7 @@ VelocityFieldTransform<TParametersValueType, VDimension>::InternalClone() const
     dynamic_cast<VelocityFieldInterpolatorType *>(this->m_VelocityFieldInterpolator->CreateAnother().GetPointer());
   if (newInterp.IsNull())
   {
-    itkExceptionMacro(<< "dynamic_cast failed.");
+    itkExceptionMacro("dynamic_cast failed.");
   }
 
   // interpolator needs to know about the velocity field

@@ -36,9 +36,7 @@ namespace itk
 {
 namespace fem
 {
-/*
- * Default constructor for FEMObject class
- */
+
 template <unsigned int VDimension>
 FEMObject<VDimension>::FEMObject()
 {
@@ -129,7 +127,7 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
     auto * mCopy = dynamic_cast<fem::MaterialLinearElasticity *>(Copy->GetMaterial(i).GetPointer());
     if (mCopy == nullptr)
     {
-      itkExceptionMacro(<< "dynamic_cast failed.");
+      itkExceptionMacro("dynamic_cast failed.");
     }
     fem::MaterialLinearElasticity::Pointer m = fem::MaterialLinearElasticity::New();
     m->SetGlobalNumber(mCopy->GetGlobalNumber());
@@ -152,7 +150,7 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
     auto * o1 = dynamic_cast<fem::Element *>(a.GetPointer());
     if (o1 == nullptr)
     {
-      itkExceptionMacro(<< "dynamic_cast failed.");
+      itkExceptionMacro("dynamic_cast failed.");
     }
     o1->SetGlobalNumber(elCopy->GetGlobalNumber());
 
@@ -174,13 +172,13 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
     fem::Load * load = Copy->GetLoad(k);
     // create a new object of the correct class
 
-    std::string loadname = std::string(load->GetNameOfClass());
+    std::string loadname(load->GetNameOfClass());
     if (loadname == "LoadNode")
     {
       auto * lCopy = dynamic_cast<fem::LoadNode *>(load);
       if (lCopy == nullptr)
       {
-        itkExceptionMacro(<< "dynamic_cast failed.");
+        itkExceptionMacro("dynamic_cast failed.");
       }
       fem::LoadNode::Pointer o1 = fem::LoadNode::New();
 
@@ -204,7 +202,7 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
       auto * lCopy = dynamic_cast<fem::LoadBC *>(load);
       if (lCopy == nullptr)
       {
-        itkExceptionMacro(<< "dynamic_cast failed.");
+        itkExceptionMacro("dynamic_cast failed.");
       }
 
       fem::LoadBC::Pointer o1 = fem::LoadBC::New();
@@ -229,7 +227,7 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
       auto * lCopy = dynamic_cast<fem::LoadBCMFC *>(load);
       if (lCopy == nullptr)
       {
-        itkExceptionMacro(<< "dynamic_cast failed.");
+        itkExceptionMacro("dynamic_cast failed.");
       }
 
       fem::LoadBCMFC::Pointer o1 = fem::LoadBCMFC::New();
@@ -267,7 +265,7 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
       auto * lCopy = dynamic_cast<fem::LoadEdge *>(load);
       if (lCopy == nullptr)
       {
-        itkExceptionMacro(<< "dynamic_cast failed.");
+        itkExceptionMacro("dynamic_cast failed.");
       }
 
       fem::LoadEdge::Pointer o1 = fem::LoadEdge::New();
@@ -303,7 +301,7 @@ FEMObject<VDimension>::DeepCopy(FEMObject * Copy)
       auto * lCopy = dynamic_cast<fem::LoadGravConst *>(load);
       if (lCopy == nullptr)
       {
-        itkExceptionMacro(<< "dynamic_cast failed.");
+        itkExceptionMacro("dynamic_cast failed.");
       }
 
       fem::LoadGravConst::Pointer o1 = fem::LoadGravConst::New();
@@ -333,9 +331,6 @@ FEMObject<VDimension>::FinalizeMesh()
   this->GenerateMFC();
 }
 
-/**
- * Assign a global freedom number to each DOF in a system.
- */
 template <unsigned int VDimension>
 void
 FEMObject<VDimension>::GenerateMFC()
@@ -369,9 +364,6 @@ FEMObject<VDimension>::GenerateMFC()
   }
 }
 
-/**
- * Assign a global freedom number to each DOF in a system.
- */
 template <unsigned int VDimension>
 void
 FEMObject<VDimension>::GenerateGFN()

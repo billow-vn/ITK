@@ -63,7 +63,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ElementStd, TBaseClass);
+  itkOverrideGetNameOfClassMacro(ElementStd);
 
   // FIXME: Add concept checking for TBaseClass, and TPointClass
 
@@ -156,7 +156,7 @@ protected:
   }
 
   // Array of pointers to point objects that define the element
-  const Node * m_node[NumberOfNodes];
+  const Node * m_node[NumberOfNodes]{};
 };
 
 } // end namespace fem

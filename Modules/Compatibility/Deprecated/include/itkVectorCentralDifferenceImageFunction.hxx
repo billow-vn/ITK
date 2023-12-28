@@ -21,29 +21,22 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TCoordRep>
 VectorCentralDifferenceImageFunction<TInputImage, TCoordRep>::VectorCentralDifferenceImageFunction()
 {
   this->m_UseImageDirection = true;
 }
 
-/**
- *
- */
 template <typename TInputImage, typename TCoordRep>
 void
 VectorCentralDifferenceImageFunction<TInputImage, TCoordRep>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageDirection = " << this->m_UseImageDirection << std::endl;
+
+  os << indent << "UseImageDirection: " << m_UseImageDirection << std::endl;
 }
 
-/**
- *
- */
 template <typename TInputImage, typename TCoordRep>
 auto
 VectorCentralDifferenceImageFunction<TInputImage, TCoordRep>::EvaluateAtIndex(const IndexType & index) const

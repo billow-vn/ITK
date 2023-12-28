@@ -25,11 +25,11 @@
 namespace itk
 {
 /**
- *\class StatisticsRelabelLabelMapFilter
+ * \class StatisticsRelabelLabelMapFilter
  * \brief relabel objects according to their shape attributes
  *
  * StatisticsRelabelLabelMapFilter relabel a label collection image according to the statistics attributes of
- * the objects. The label produced are always consecutives.
+# * the objects. The label produced are always consecutive.
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsRelabelLabelMapFilter, ShapeRelabelLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(StatisticsRelabelLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

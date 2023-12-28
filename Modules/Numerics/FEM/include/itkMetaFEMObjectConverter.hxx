@@ -29,7 +29,6 @@
 namespace itk
 {
 
-/** Constructor */
 template <unsigned int VDimension>
 MetaFEMObjectConverter<VDimension>::MetaFEMObjectConverter() = default;
 
@@ -40,7 +39,6 @@ MetaFEMObjectConverter<VDimension>::CreateMetaObject() -> MetaObjectType *
   return dynamic_cast<MetaObjectType *>(new FEMObjectMetaObjectType);
 }
 
-/** Convert a metaFEMObject into an FEMObject SpatialObject  */
 template <unsigned int VDimension>
 auto
 MetaFEMObjectConverter<VDimension>::MetaObjectToSpatialObject(const MetaObjectType * mo) -> SpatialObjectPointer
@@ -48,7 +46,7 @@ MetaFEMObjectConverter<VDimension>::MetaObjectToSpatialObject(const MetaObjectTy
   const auto * FEMmo = dynamic_cast<const MetaFEMObject *>(mo);
   if (FEMmo == nullptr)
   {
-    itkExceptionMacro(<< "Can't convert MetaObject to MetaFEMObject");
+    itkExceptionMacro("Can't convert MetaObject to MetaFEMObject");
   }
 
   FEMObjectSpatialObjectPointer FEMSO = FEMObjectSpatialObjectType::New();
@@ -99,7 +97,7 @@ MetaFEMObjectConverter<VDimension>::MetaObjectToSpatialObject(const MetaObjectTy
     o1->SetGlobalNumber(material->m_GN);
     o1->SetYoungsModulus(material->E); /* Young modulus */
     o1->SetPoissonsRatio(material->nu);
-    o1->SetCrossSectionalArea(material->A); /* Crossection area */
+    o1->SetCrossSectionalArea(material->A); /* Cross section area */
     o1->SetMomentOfInertia(material->I);    /* Moment of inertia */
     o1->SetThickness(material->h);
     o1->SetDensityHeatProduct(material->RhoC);
@@ -141,7 +139,7 @@ MetaFEMObjectConverter<VDimension>::MetaObjectToSpatialObject(const MetaObjectTy
   {
     FEMObjectLoad * load = (*it_load);
 
-    std::string loadname = std::string(load->m_LoadName);
+    std::string loadname(load->m_LoadName);
     if (loadname == "LoadNode")
     {
       fem::LoadNode::Pointer o1 = fem::LoadNode::New();
@@ -312,7 +310,6 @@ MetaFEMObjectConverter<VDimension>::MetaObjectToSpatialObject(const MetaObjectTy
   return FEMSO.GetPointer();
 }
 
-/** Convert an FEMObject SpatialObject into a metaFEMObject */
 template <unsigned int VDimension>
 auto
 MetaFEMObjectConverter<VDimension>::SpatialObjectToMetaObject(const SpatialObjectType * so) -> MetaObjectType *
@@ -320,7 +317,7 @@ MetaFEMObjectConverter<VDimension>::SpatialObjectToMetaObject(const SpatialObjec
   FEMObjectSpatialObjectConstPointer FEMSO = dynamic_cast<const FEMObjectSpatialObjectType *>(so);
   if (FEMSO.IsNull())
   {
-    itkExceptionMacro(<< "Can't downcast SpatialObject to FEMObjectSpatialObject");
+    itkExceptionMacro("Can't downcast SpatialObject to FEMObjectSpatialObject");
   }
 
   using FEMObjectType = fem::FEMObject<VDimension>;

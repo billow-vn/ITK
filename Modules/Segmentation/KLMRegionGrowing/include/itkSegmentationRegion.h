@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class SegmentationRegion
+ * \class SegmentationRegion
  * \brief Base class for SegmentationRegion object
  *
  * itkSegmentationRegion is the base class for the SegmentationRegion
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SegmentationRegion, Object);
+  itkOverrideGetNameOfClassMacro(SegmentationRegion);
 
   /** Type definition for a segmentation region label. */
   using RegionLabelType = unsigned int;

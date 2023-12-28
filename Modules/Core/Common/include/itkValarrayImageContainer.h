@@ -30,7 +30,7 @@ namespace itk
  *  \brief Defines a front-end to the std\\::\<valarray\> container that conforms to the
  *         ImageContainerInterface.
  *
- * This is a full-fleged Object, so
+ * This is a full-fledged Object, so
  * there is modification time, debug, and reference count information.
  *
  * \tparam TElementIdentifier
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(ValarrayImageContainer, Object);
+  itkOverrideGetNameOfClassMacro(ValarrayImageContainer);
 
   /** Index operator. This version can be an lvalue. */
   TElement & operator[](const ElementIdentifier id) { return this->ValarrayType::operator[](id); }

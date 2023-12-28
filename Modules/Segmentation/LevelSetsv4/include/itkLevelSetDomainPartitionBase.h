@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class LevelSetDomainPartitionBase
+ * \class LevelSetDomainPartitionBase
  *
  * \brief Helper class used to partition domain and efficiently compute overlap.
  * \ingroup ITKLevelSetsv4
@@ -42,7 +42,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(LevelSetDomainPartitionBase, LightObject);
+  itkOverrideGetNameOfClassMacro(LevelSetDomainPartitionBase);
 
   /** Get/Set the number of level set functions */
   itkSetMacro(NumberOfLevelSetFunctions, IdentifierType);
@@ -65,7 +65,7 @@ protected:
   using IdentifierListIterator = typename IdentifierListType::iterator;
   using IdentifierListConstIterator = typename IdentifierListType::const_iterator;
 
-  IdentifierType m_NumberOfLevelSetFunctions;
+  IdentifierType m_NumberOfLevelSetFunctions{};
 };
 } // end namespace itk
 

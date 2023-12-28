@@ -172,7 +172,7 @@ struct MakeJoin
 } // namespace Functor
 
 /**
- *\class JoinImageFilter
+ * \class JoinImageFilter
  * \brief Join two images, resulting in an image where each pixel has the components of the first image followed by the
  * components of the second image.
  *
@@ -231,7 +231,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JoinImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(JoinImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

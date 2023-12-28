@@ -56,7 +56,7 @@ class ITK_TEMPLATE_EXPORT LevelSetVelocityNeighborhoodExtractor : public LevelSe
 public:
   ITK_DISALLOW_COPY_AND_MOVE(LevelSetVelocityNeighborhoodExtractor);
 
-  /** Standard class typdedefs. */
+  /** Standard class typedefs. */
   using Self = LevelSetVelocityNeighborhoodExtractor;
   using Superclass = LevelSetNeighborhoodExtractor<TLevelSet>;
   using Pointer = SmartPointer<Self>;
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LevelSetVelocityNeighborhoodExtractor, LevelSetNeighborhoodExtractor);
+  itkOverrideGetNameOfClassMacro(LevelSetVelocityNeighborhoodExtractor);
 
   /** The type of the level set. */
   using LevelSetType = LevelSetTypeDefault<TLevelSet>;
@@ -132,9 +132,9 @@ protected:
   CalculateDistance(Index & index) override;
 
 private:
-  typename AuxValueContainer::Pointer m_AuxInsideValues;
-  typename AuxValueContainer::Pointer m_AuxOutsideValues;
-  AuxImageConstPointer                m_AuxImage[VAuxDimension];
+  typename AuxValueContainer::Pointer m_AuxInsideValues{};
+  typename AuxValueContainer::Pointer m_AuxOutsideValues{};
+  AuxImageConstPointer                m_AuxImage[VAuxDimension]{};
 };
 } // namespace itk
 

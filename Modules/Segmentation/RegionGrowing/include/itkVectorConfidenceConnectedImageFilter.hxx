@@ -26,12 +26,11 @@
 #include "itkFloodFilledImageFunctionConditionalIterator.h"
 #include "itkNumericTraitsRGBPixel.h"
 #include "itkProgressReporter.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::VectorConfidenceConnectedImageFilter()
 {
@@ -43,20 +42,23 @@ VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::VectorConfidenc
   m_ThresholdFunction = DistanceThresholdFunctionType::New();
 }
 
-/**
- * Standard PrintSelf method.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  this->Superclass::PrintSelf(os, indent);
-  os << indent << "Number of iterations: " << m_NumberOfIterations << std::endl;
-  os << indent << "Multiplier for confidence interval: " << m_Multiplier << std::endl;
+  using namespace print_helper;
+
+  Superclass::PrintSelf(os, indent);
+
+  os << indent << "Seeds: " << m_Seeds << std::endl;
+  os << indent << "Multiplier: " << m_Multiplier << std::endl;
+  os << indent << "NumberOfIterations: " << m_NumberOfIterations << std::endl;
   os << indent
      << "ReplaceValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_ReplaceValue)
      << std::endl;
   os << indent << "InitialNeighborhoodRadius: " << m_InitialNeighborhoodRadius << std::endl;
+
+  itkPrintSelfObjectMacro(ThresholdFunction);
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -202,7 +204,7 @@ VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
 
   m_ThresholdFunction->SetThreshold(m_Multiplier);
 
-  itkDebugMacro(<< "\nMultiplier originally = " << m_Multiplier);
+  itkDebugMacro("\nMultiplier originally = " << m_Multiplier);
 
   // Make sure that the multiplier is large enough to include the seed points
   // themselves.
@@ -230,7 +232,7 @@ VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   // threshold itself.
   m_ThresholdFunction->SetThreshold(m_Multiplier);
 
-  itkDebugMacro(<< "\nMultiplier after verifying seeds inclusion = " << m_Multiplier);
+  itkDebugMacro("\nMultiplier after verifying seeds inclusion = " << m_Multiplier);
 
   // Segment the image, the iterator walks the output image (so Set()
   // writes into the output image), starting at the seed point.  As
@@ -239,7 +241,7 @@ VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   // the [lower, upper] bounds prescribed, the pixel is added to the
   // output segmentation and its neighbors become candidates for the
   // iterator to walk.
-  IteratorType it = IteratorType(outputImage, m_ThresholdFunction, m_Seeds);
+  IteratorType it(outputImage, m_ThresholdFunction, m_Seeds);
   it.GoToBegin();
   while (!it.IsAtEnd())
   {
@@ -267,9 +269,9 @@ VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     covariance.fill(NumericTraits<ComponentRealType>::ZeroValue());
     mean.fill(NumericTraits<ComponentRealType>::ZeroValue());
 
-    SizeValueType num = NumericTraits<SizeValueType>::ZeroValue();
+    SizeValueType num{};
 
-    SecondIteratorType sit = SecondIteratorType(inputImage, secondFunction, m_Seeds);
+    SecondIteratorType sit(inputImage, secondFunction, m_Seeds);
     sit.GoToBegin();
     while (!sit.IsAtEnd())
     {
@@ -318,7 +320,7 @@ VectorConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     // segmentation and its neighbors become candidates for the
     // iterator to walk.
     outputImage->FillBuffer(NumericTraits<OutputImagePixelType>::ZeroValue());
-    IteratorType thirdIt = IteratorType(outputImage, m_ThresholdFunction, m_Seeds);
+    IteratorType thirdIt(outputImage, m_ThresholdFunction, m_Seeds);
     thirdIt.GoToBegin();
     try
     {

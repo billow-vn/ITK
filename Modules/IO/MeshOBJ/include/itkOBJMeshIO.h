@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class OBJMeshIO
+ * \class OBJMeshIO
  * \brief This class defines how to read and write Object file format.
  * \ingroup IOFilters
  * \ingroup ITKIOMeshOBJ
@@ -50,12 +50,12 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OBJMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(OBJMeshIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
   /** Determine if the file can be read with this MeshIO implementation.
-   * \param FileNameToRead The name of the file to test for reading.
+   * \param fileName The name of the file to test for reading.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can read the file specified.
    */
@@ -82,7 +82,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this MeshIO implementation.
-   * \param FileNameToWrite The name of the file to test for writing.
+   * \param fileName The name of the file to test for writing.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can write the file specified.
    */
@@ -116,7 +116,7 @@ protected:
   void
   WritePoints(T * buffer, std::ofstream & outputFile)
   {
-    SizeValueType index = itk::NumericTraits<SizeValueType>::ZeroValue();
+    SizeValueType index{};
 
     for (SizeValueType ii = 0; ii < this->m_NumberOfPoints; ++ii)
     {
@@ -133,7 +133,7 @@ protected:
   void
   WriteCells(T * buffer, std::ofstream & outputFile)
   {
-    SizeValueType index = itk::NumericTraits<SizeValueType>::ZeroValue();
+    SizeValueType index{};
 
     for (SizeValueType ii = 0; ii < this->m_NumberOfCells; ++ii)
     {
@@ -154,7 +154,7 @@ protected:
   void
   WritePointData(T * buffer, std::ofstream & outputFile)
   {
-    SizeValueType index = itk::NumericTraits<SizeValueType>::ZeroValue();
+    SizeValueType index{};
 
     for (SizeValueType ii = 0; ii < this->m_NumberOfPointPixels; ++ii)
     {
@@ -185,9 +185,9 @@ protected:
   CloseFile();
 
 private:
-  std::ifstream  m_InputFile;
-  std::streampos m_PointsStartPosition; // file position for points rlative to
-                                        // std::ios::beg
+  std::ifstream  m_InputFile{};
+  std::streampos m_PointsStartPosition{}; // file position for points relative to
+                                          // std::ios::beg
 };
 } // end namespace itk
 

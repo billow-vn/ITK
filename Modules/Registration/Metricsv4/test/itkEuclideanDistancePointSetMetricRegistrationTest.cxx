@@ -154,8 +154,7 @@ itkEuclideanDistancePointSetMetricRegistrationTestRun(unsigned int              
     typename TTransform::ParametersType params = transform->GetParameters();
     for (itk::SizeValueType n = 0; n < transform->GetNumberOfParameters(); n += transform->GetNumberOfLocalParameters())
     {
-      typename TTransform::ParametersValueType zero =
-        itk::NumericTraits<typename TTransform::ParametersValueType>::ZeroValue();
+      typename TTransform::ParametersValueType zero{};
       if (itk::Math::NotExactlyEquals(params[n], zero) && itk::Math::NotExactlyEquals(params[n + 1], zero))
       {
         std::cout << n << ", " << n + 1 << " : " << params[n] << ", " << params[n + 1] << std::endl;
@@ -182,7 +181,7 @@ itkEuclideanDistancePointSetMetricRegistrationTestRun(unsigned int              
     movingPoint = movingPoints->GetPoint(n);
     difference[0] = movingPoint[0] - transformedFixedPoint[0];
     difference[1] = movingPoint[1] - transformedFixedPoint[1];
-    std::cout << fixedPoints->GetPoint(n) << "\t" << movingPoint << "\t" << transformedFixedPoint << "\t" << difference
+    std::cout << fixedPoints->GetPoint(n) << '\t' << movingPoint << '\t' << transformedFixedPoint << '\t' << difference
               << std::endl;
     if (itk::Math::abs(difference[0]) > tolerance || itk::Math::abs(difference[1]) > tolerance)
     {

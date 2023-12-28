@@ -34,7 +34,7 @@
 namespace itk
 {
 /**
- *\class LabelMapFilter
+ * \class LabelMapFilter
  * \brief Base class for filters that take an image as input and overwrite that image as the output
  *
  * LabelMapFilter is the base class for all process objects whose
@@ -66,7 +66,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LabelMapFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapFilter);
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -132,10 +132,10 @@ protected:
     return static_cast<InputImageType *>(const_cast<DataObject *>(this->ProcessObject::GetInput(0)));
   }
 
-  std::mutex m_LabelObjectContainerLock;
+  std::mutex m_LabelObjectContainerLock{};
 
 private:
-  typename InputImageType::Iterator m_LabelObjectIterator;
+  typename InputImageType::Iterator m_LabelObjectIterator{};
 };
 } // end namespace itk
 

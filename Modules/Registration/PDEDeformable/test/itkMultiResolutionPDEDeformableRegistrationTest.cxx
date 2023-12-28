@@ -115,9 +115,13 @@ FillWithCircle(TImage *                   image,
       distance += itk::Math::sqr(static_cast<double>(index[j]) - center[j]);
     }
     if (distance <= r2)
+    {
       it.Set(foregnd);
+    }
     else
+    {
       it.Set(backgnd);
+    }
     ++it;
   }
 }
@@ -345,10 +349,8 @@ itkMultiResolutionPDEDeformableRegistrationTest(int argc, char * argv[])
     ++warpedIter;
   }
 
-  std::cout << "Number of pixels different: " << numPixelsDifferent;
-  std::cout << std::endl;
+  std::cout << "Number of pixels different: " << numPixelsDifferent << std::endl;
 
-  //-------------------------------------------------------------
   std::cout << "Test when last shrink factors are not ones." << std::endl;
 
   registrator->SetNumberOfLevels(1);

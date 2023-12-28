@@ -52,7 +52,7 @@ itkKullbackLeiblerCompareHistogramImageToImageMetricTest(int, char *[])
     ImageDimension = MovingImageType::ImageDimension
   };
 
-  MovingImageType::SizeType   size = { { 100, 100 } };
+  MovingImageType::SizeType   size = { { 16, 16 } };
   MovingImageType::IndexType  index = { { 0, 0 } };
   MovingImageType::RegionType region;
   region.SetSize(size);
@@ -210,7 +210,9 @@ itkKullbackLeiblerCompareHistogramImageToImageMetricTest(int, char *[])
   ScalesType scales(transformer->GetNumberOfParameters());
 
   for (unsigned int k = 0; k < transformer->GetNumberOfParameters(); ++k)
+  {
     scales[k] = 1;
+  }
 
   metric->SetDerivativeStepLengthScales(scales);
 
@@ -278,7 +280,7 @@ itkKullbackLeiblerCompareHistogramImageToImageMetricTest(int, char *[])
     parameters[4] = trans;
     metric->GetValueAndDerivative(parameters, measure, derivative);
 
-    std::cout << trans << "\t" << measure << "\t" << derivative[4] << std::endl;
+    std::cout << trans << '\t' << measure << '\t' << derivative[4] << std::endl;
 
     // exercise the other functions
     metric->GetValue(parameters);

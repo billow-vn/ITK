@@ -131,8 +131,7 @@ itkDiffusionTensor3DReconstructionImageFilterTest(int argc, char * argv[])
         {
           std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
           std::cerr << "Test failed!" << std::endl;
-          std::cerr << "Error in gradientDirection [" << i << "]"
-                    << "[" << j << "]" << std::endl;
+          std::cerr << "Error in gradientDirection [" << i << ']' << '[' << j << ']' << std::endl;
           std::cerr << "Expected value " << gradientDirectionComponent << std::endl;
           std::cerr << " differs from " << outputComponent;
           std::cerr << " by more than " << epsilon << std::endl;
@@ -206,10 +205,10 @@ itkDiffusionTensor3DReconstructionImageFilterTest(int argc, char * argv[])
     double precision = 0.0001;
     for (unsigned int i = 0; i < 3; ++i)
     {
-      std::cout << "\t";
+      std::cout << '\t';
       for (unsigned int j = 0; j < 3; ++j)
       {
-        std::cout << tensorImage->GetPixel(tensorImageIndex)(i, j) << " ";
+        std::cout << tensorImage->GetPixel(tensorImageIndex)(i, j) << ' ';
         if ((itk::Math::abs(tensorImage->GetPixel(tensorImageIndex)(i, j) - expectedResult[i][j])) > precision)
         {
           passed = false;
@@ -225,10 +224,10 @@ itkDiffusionTensor3DReconstructionImageFilterTest(int argc, char * argv[])
       std::cout << "Expected tensor : " << std::endl;
       for (const auto & i : expectedResult)
       {
-        std::cout << "\t";
+        std::cout << '\t';
         for (double j : i)
         {
-          std::cout << j << " ";
+          std::cout << j << ' ';
         }
         std::cout << std::endl;
       }

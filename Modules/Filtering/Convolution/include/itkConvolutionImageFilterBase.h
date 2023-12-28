@@ -24,7 +24,7 @@
 
 namespace itk
 {
-/**\class ConvolutionImageFilterBaseEnums
+/** \class ConvolutionImageFilterBaseEnums
  * \brief Contains all enum classes used by ConvolutionImageFilterBase class.
  * \ingroup ITKConvolution
  */
@@ -32,7 +32,7 @@ class ConvolutionImageFilterBaseEnums
 {
 public:
   /**
-   *\class ConvolutionImageFilterOutputRegion
+   * \class ConvolutionImageFilterOutputRegion
    * \ingroup ITKConvolution
    * Output region mode type enumeration
    */
@@ -47,7 +47,7 @@ extern ITKConvolution_EXPORT std::ostream &
                              operator<<(std::ostream & out, const ConvolutionImageFilterBaseEnums::ConvolutionImageFilterOutputRegion value);
 
 /**
- *\class ConvolutionImageFilterBase
+ * \class ConvolutionImageFilterBase
  * \brief Abstract base class for the convolution image filters.
  *
  * \ingroup ITKConvolution
@@ -65,7 +65,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(ConvolutionImageFilterBase, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ConvolutionImageFilterBase);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -156,8 +156,8 @@ protected:
 private:
   bool m_Normalize{ false };
 
-  DefaultBoundaryConditionType m_DefaultBoundaryCondition;
-  BoundaryConditionPointerType m_BoundaryCondition;
+  DefaultBoundaryConditionType m_DefaultBoundaryCondition{};
+  BoundaryConditionPointerType m_BoundaryCondition{};
 
   OutputRegionModeEnum m_OutputRegionMode{ ConvolutionImageFilterBaseEnums::ConvolutionImageFilterOutputRegion::SAME };
 };

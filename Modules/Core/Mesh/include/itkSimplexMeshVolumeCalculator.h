@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SimplexMeshVolumeCalculator, Object);
+  itkOverrideGetNameOfClassMacro(SimplexMeshVolumeCalculator);
 
   using InputMeshType = TInputMesh;
   using InputMeshPointer = typename InputMeshType::Pointer;
@@ -193,7 +193,7 @@ private:
   void
   CreateTriangles();
 
-  /** intermediate volume computation */
+  /** Calculate volume of triangle. */
   void
   CalculateTriangleVolume(InputPointType p1, InputPointType p2, InputPointType p3);
 
@@ -202,9 +202,9 @@ private:
   FindCellId(IdentifierType id1, IdentifierType id2, IdentifierType id3);
 
   /** attribute stores the result of the simplex cell visitor */
-  PointMapPointer m_Centers;
+  PointMapPointer m_Centers{};
 
-  InputMeshPointer m_SimplexMesh;
+  InputMeshPointer m_SimplexMesh{};
 
   double m_Volume{ 0.0 };
   double m_VolumeX{ 0.0 };

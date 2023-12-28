@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class RegistrationParameterScalesFromJacobian
+ * \class RegistrationParameterScalesFromJacobian
  *  \brief Implements a registration helper class for estimating scales of
  * transform parameters from Jacobian norms.
  *
@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegistrationParameterScalesFromJacobian, RegistrationParameterScalesEstimator);
+  itkOverrideGetNameOfClassMacro(RegistrationParameterScalesFromJacobian);
 
   /** Type of scales */
   using typename Superclass::ScalesType;
@@ -99,7 +99,7 @@ public:
   EstimateStepScale(const ParametersType & step) override;
 
   /** Estimate the scales of local steps. For each voxel, computes the impact
-   * of a step on its location as in ::EstimateStepScale. Then this impact is
+   * of a step on its location as in EstimateStepScale(). Then this impact is
    * attributed to the corresponding local parameters.
    */
   void

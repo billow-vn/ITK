@@ -72,7 +72,7 @@ public:
   using ConstWeakPointer = WeakPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageAdaptor, ImageBase);
+  itkOverrideGetNameOfClassMacro(ImageAdaptor);
 
   /** Typedef of unadapted image */
   using InternalImageType = TImage;
@@ -383,7 +383,7 @@ public:
 
   /** Returns the continuous index from a physical point. */
   template <typename TIndexRep, typename TCoordRep>
-  ContinuousIndex<TIndexRep, TImage::ImageDimension>
+  [[nodiscard]] ContinuousIndex<TIndexRep, TImage::ImageDimension>
   TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, TImage::ImageDimension> & point) const
   {
     return m_Image->template TransformPhysicalPointToContinuousIndex<TIndexRep>(point);
@@ -392,18 +392,22 @@ public:
   /** \brief Get the continuous index from a physical point
    *
    * Returns true if the resulting index is within the image, false otherwise.
+   *
+   * \note For performance reasons, if you do not need to use the `bool` return value, please call the corresponding
+   * overload instead, which has only one parameter (the point), and returns the continuous index.
+   *
    * \sa Transform */
   template <typename TCoordRep>
-  bool
-  TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, Self::ImageDimension> &     point,
-                                          ContinuousIndex<TCoordRep, Self::ImageDimension> & index) const
+  ITK_NODISCARD("Call the overload which has the point as the only parameter and returns the index")
+  bool TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, Self::ImageDimension> &     point,
+                                               ContinuousIndex<TCoordRep, Self::ImageDimension> & index) const
   {
     return m_Image->TransformPhysicalPointToContinuousIndex(point, index);
   }
 
   /** Returns the index (discrete) of a voxel from a physical point. */
   template <typename TCoordRep>
-  IndexType
+  [[nodiscard]] IndexType
   TransformPhysicalPointToIndex(const Point<TCoordRep, Self::ImageDimension> & point) const
   {
     return m_Image->TransformPhysicalPointToIndex(point);
@@ -412,10 +416,14 @@ public:
   /** Get the index (discrete) from a physical point.
    * Floating point index results are truncated to integers.
    * Returns true if the resulting index is within the image, false otherwise
+   *
+   * \note For performance reasons, if you do not need to use the `bool` return value, please call the corresponding
+   * overload instead, which has only one parameter (the point), and returns the index.
+   *
    * \sa Transform */
   template <typename TCoordRep>
-  bool
-  TransformPhysicalPointToIndex(const Point<TCoordRep, Self::ImageDimension> & point, IndexType & index) const
+  ITK_NODISCARD("Call the overload which has the point as the only parameter and returns the index")
+  bool TransformPhysicalPointToIndex(const Point<TCoordRep, Self::ImageDimension> & point, IndexType & index) const
   {
     return m_Image->TransformPhysicalPointToIndex(point, index);
   }
@@ -434,7 +442,7 @@ public:
 
   /** Returns a physical point from a continuous index (in the index space) */
   template <typename TCoordRep, typename TIndexRep>
-  Point<TCoordRep, TImage::ImageDimension>
+  [[nodiscard]] Point<TCoordRep, TImage::ImageDimension>
   TransformContinuousIndexToPhysicalPoint(const ContinuousIndex<TIndexRep, Self::ImageDimension> & index) const
   {
     return m_Image->template TransformContinuousIndexToPhysicalPoint<TIndexRep>(index);
@@ -454,7 +462,7 @@ public:
 
   /** Returns a physical point from a discrete index (in the index space) */
   template <typename TCoordRep>
-  Point<TCoordRep, Self::ImageDimension>
+  [[nodiscard]] Point<TCoordRep, Self::ImageDimension>
   TransformIndexToPhysicalPoint(const IndexType & index) const
   {
     return m_Image->template TransformIndexToPhysicalPoint<TCoordRep>(index);
@@ -469,7 +477,7 @@ public:
   }
 
   template <typename TVector>
-  TVector
+  [[nodiscard]] TVector
   TransformLocalVectorToPhysicalVector(const TVector & inputGradient) const
   {
     TVector outputGradient;
@@ -486,7 +494,7 @@ public:
   }
 
   template <typename TVector>
-  TVector
+  [[nodiscard]] TVector
   TransformPhysicalVectorToLocalVector(const TVector & inputGradient) const
   {
     TVector outputGradient;
@@ -521,11 +529,11 @@ private:
 
   // Adapted image, most of the calls to ImageAdaptor
   // will be delegated to this image
-  typename TImage::Pointer m_Image;
+  typename TImage::Pointer m_Image{};
 
   // Data accessor object,
   // it converts the presentation of a pixel
-  AccessorType m_PixelAccessor;
+  AccessorType m_PixelAccessor{};
 };
 } // end namespace itk
 

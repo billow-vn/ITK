@@ -32,6 +32,11 @@ itkSinRegularizedHeavisideStepFunctionTest1(int, char *[])
   std::cout << "GetNameOfClass() = " << functionBase0->GetNameOfClass() << std::endl;
   functionBase0->Print(std::cout);
 
+  constexpr double epsilon = -1.0;
+
+  ITK_TRY_EXPECT_EXCEPTION(functionBase0->SetEpsilon(epsilon));
+
+
   constexpr double epsilon0 = 1.0;
   const double     epsilon1 = 1e-4;
 
@@ -53,7 +58,7 @@ itkSinRegularizedHeavisideStepFunctionTest1(int, char *[])
     const InputType ix = x * incValue;
     OutputType      f = functionBase0->Evaluate(ix);
     OutputType      df = functionBase0->EvaluateDerivative(ix);
-    std::cout << ix << " " << f << " " << df << std::endl;
+    std::cout << ix << ' ' << f << ' ' << df << std::endl;
   }
 
   return EXIT_SUCCESS;

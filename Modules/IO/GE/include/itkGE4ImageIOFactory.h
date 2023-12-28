@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class GE4ImageIOFactory
+ * \class GE4ImageIOFactory
  * \brief Create instances of GE4ImageIO objects using an object factory.
  * \ingroup ITKIOGE
  */
@@ -52,7 +52,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GE4ImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(GE4ImageIOFactory);
 
   /** Register one factory of this type  */
   static void

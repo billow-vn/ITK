@@ -20,7 +20,6 @@
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMath.h"
-#include "itkMath.h"
 
 namespace itk
 {
@@ -72,7 +71,7 @@ private:
 } // namespace Functor
 
 /**
- *\class ExpNegativeImageFilter
+ * \class ExpNegativeImageFilter
  * \brief Computes the function exp(-K.x) for each input pixel.
  *
  * Every output pixel is equal to std::exp(-K.x ). where x is the
@@ -108,7 +107,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ExpNegativeImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(ExpNegativeImageFilter);
 
   void
   SetFactor(double factor)

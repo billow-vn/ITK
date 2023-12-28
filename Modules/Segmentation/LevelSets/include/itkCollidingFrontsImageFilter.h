@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(CollidingFrontsImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(CollidingFrontsImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -168,13 +168,13 @@ protected:
   PrintSelf(std::ostream &, Indent) const override;
 
 private:
-  NodeContainerPointer m_SeedPoints1;
-  NodeContainerPointer m_SeedPoints2;
+  NodeContainerPointer m_SeedPoints1{};
+  NodeContainerPointer m_SeedPoints2{};
 
-  bool m_StopOnTargets;
-  bool m_ApplyConnectivity;
+  bool m_StopOnTargets{};
+  bool m_ApplyConnectivity{};
 
-  double m_NegativeEpsilon;
+  double m_NegativeEpsilon{};
 };
 } // end namespace itk
 

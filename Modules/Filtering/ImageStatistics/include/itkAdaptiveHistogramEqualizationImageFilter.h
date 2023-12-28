@@ -98,9 +98,9 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AdaptiveHistogramEqualizationImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(AdaptiveHistogramEqualizationImageFilter);
 
-  /** Image type type alias support */
+  /** Image type alias support */
   using ImageType = TImageType;
   using InputPixelType = typename ImageType::PixelType;
   using ImageSizeType = typename ImageType::SizeType;
@@ -179,13 +179,13 @@ protected:
   BeforeThreadedGenerateData() override;
 
 private:
-  float m_Alpha;
-  float m_Beta;
+  float m_Alpha{};
+  float m_Beta{};
 
-  InputPixelType m_InputMinimum;
-  InputPixelType m_InputMaximum;
+  InputPixelType m_InputMinimum{};
+  InputPixelType m_InputMaximum{};
 
-  bool m_UseLookupTable;
+  bool m_UseLookupTable{};
 };
 } // end namespace itk
 

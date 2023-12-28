@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class GDCMImageIOFactory
+ * \class GDCMImageIOFactory
  * \brief Create instances of GDCMImageIO objects using an object factory.
  * \ingroup ITKIOGDCM
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GDCMImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(GDCMImageIOFactory);
 
   /** Register one factory of this type  */
   static void

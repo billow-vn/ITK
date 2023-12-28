@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class HessianRecursiveGaussianImageFilter
+ * \class HessianRecursiveGaussianImageFilter
  * \brief Computes the Hessian matrix of an image by convolution
  *        with the Second and Cross derivatives of a Gaussian.
  *
@@ -107,12 +107,12 @@ public:
   using OutputComponentType = typename PixelTraits<OutputPixelType>::ValueType;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(HessianRecursiveGaussianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HessianRecursiveGaussianImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Set Sigma value. Sigma is measured in the units of image spacing.  */
+  /** Set/Get Sigma value. Sigma is measured in the units of image spacing.  */
   void
   SetSigma(RealType sigma);
   RealType
@@ -156,13 +156,13 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
 private:
-  GaussianFiltersArray      m_SmoothingFilters;
-  DerivativeFilterAPointer  m_DerivativeFilterA;
-  DerivativeFilterBPointer  m_DerivativeFilterB;
-  OutputImageAdaptorPointer m_ImageAdaptor;
+  GaussianFiltersArray      m_SmoothingFilters{};
+  DerivativeFilterAPointer  m_DerivativeFilterA{};
+  DerivativeFilterBPointer  m_DerivativeFilterB{};
+  OutputImageAdaptorPointer m_ImageAdaptor{};
 
   /** Normalize the image across scale space */
-  bool m_NormalizeAcrossScale;
+  bool m_NormalizeAcrossScale{};
 };
 } // end namespace itk
 

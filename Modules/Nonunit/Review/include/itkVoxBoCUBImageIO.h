@@ -41,7 +41,7 @@ class GenericCUBFileAdaptor;
  * \author Burstein, Pablo D.; Yushkevich, Paul; Gee, James C.
  *
  * This implementation was contributed as a paper to the Insight Journal
- * https://hdl.handle.net/1926/303
+ * https://www.insight-journal.org/browse/publication/118
  *
  * \ingroup IOFilters
  *
@@ -61,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VoxBoCUBImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(VoxBoCUBImageIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
@@ -120,8 +120,8 @@ private:
   using OrientationMap = std::map<std::string, OrientationFlags>;
   using InverseOrientationMap = std::map<OrientationFlags, std::string>;
 
-  OrientationMap        m_OrientationMap;
-  InverseOrientationMap m_InverseOrientationMap;
+  OrientationMap        m_OrientationMap{};
+  InverseOrientationMap m_InverseOrientationMap{};
 
   // Method to swap bytes in read buffer
   void

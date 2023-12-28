@@ -40,7 +40,7 @@ ShapeOpeningLabelMapFilter<TImage>::GenerateData()
 {
   switch (m_Attribute)
   {
-    itkShapeLabelMapFilterDispatchMacro() default : itkExceptionMacro(<< "Unknown attribute type");
+    itkShapeLabelMapFilterDispatchMacro() default : itkExceptionMacro("Unknown attribute type");
     break;
   }
 }
@@ -53,7 +53,7 @@ ShapeOpeningLabelMapFilter<TImage>::PrintSelf(std::ostream & os, Indent indent) 
 
   os << indent << "ReverseOrdering: " << m_ReverseOrdering << std::endl;
   os << indent << "Lambda: " << m_Lambda << std::endl;
-  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ")"
+  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ')'
      << std::endl;
 }
 } // end namespace itk

@@ -50,7 +50,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(LBFGSBOptimizerv4TestMetric, ObjectToObjectMetricBase);
+  itkOverrideGetNameOfClassMacro(LBFGSBOptimizerv4TestMetric);
 
   enum
   {
@@ -140,8 +140,8 @@ public:
     derivative[0] = -(3 * x + 2 * y - 2);
     derivative[1] = -(2 * x + 6 * y + 8);
 
-    std::cout << "GetDerivative ( " << x << " , " << y << ") = "
-              << "(" << -derivative[0] << " , " << -derivative[1] << ")" << std::endl;
+    std::cout << "GetDerivative ( " << x << " , " << y << ") = " << '(' << -derivative[0] << " , " << -derivative[1]
+              << ')' << std::endl;
   }
 
   void
@@ -310,27 +310,19 @@ itkLBFGSBOptimizerv4Test(int, char *[])
   itkOptimizer->SetBoundSelection(select);
   ITK_TEST_SET_GET_VALUE(select, itkOptimizer->GetBoundSelection());
 
+  ITK_TEST_EXPECT_TRUE(!itkOptimizer->CanUseScales());
+
   auto eventChecker = EventChecker::New();
   itkOptimizer->AddObserver(itk::StartEvent(), eventChecker);
   itkOptimizer->AddObserver(itk::IterationEvent(), eventChecker);
   itkOptimizer->AddObserver(itk::EndEvent(), eventChecker);
 
-  try
-  {
-    itkOptimizer->StartOptimization();
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception thrown ! " << std::endl;
-    std::cerr << "An error occurred during Optimization" << std::endl;
-    std::cerr << "Location    = " << e.GetLocation() << std::endl;
-    std::cerr << "Description = " << e.GetDescription() << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(itkOptimizer->StartOptimization());
+
 
   const OptimizerType::ParametersType & finalPosition = itkOptimizer->GetCurrentPosition();
 
-  std::cout << "Solution = (" << finalPosition[0] << "," << finalPosition[1] << ")" << std::endl;
+  std::cout << "Solution = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
   std::cout << "Final Function Value = " << itkOptimizer->GetValue() << std::endl;
 
   std::cout << "Infinity Norm of Projected Gradient = " << itkOptimizer->GetInfinityNormOfProjectedGradient()
@@ -400,20 +392,10 @@ itkLBFGSBOptimizerv4Test(int, char *[])
   metric->SetParameters(initialValue);
   itkOptimizer->SetNumberOfIterations(1);
 
-  try
-  {
-    itkOptimizer->StartOptimization();
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception thrown ! " << std::endl;
-    std::cerr << "An error occurred during Optimization" << std::endl;
-    std::cerr << "Location    = " << e.GetLocation() << std::endl;
-    std::cerr << "Description = " << e.GetDescription() << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(itkOptimizer->StartOptimization());
 
-  std::cout << "Solution        = (" << finalPosition[0] << "," << finalPosition[1] << ")" << std::endl;
+
+  std::cout << "Solution        = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
   std::cout << "NumberOfIterations  = " << itkOptimizer->GetCurrentIteration() << std::endl;
 
   if (itkOptimizer->GetCurrentIteration() != 1)
@@ -458,25 +440,15 @@ itkLBFGSBOptimizerv4Test(int, char *[])
   itkOptimizer2->AddObserver(itk::IterationEvent(), eventChecker);
   itkOptimizer2->AddObserver(itk::EndEvent(), eventChecker);
 
-  try
-  {
-    itkOptimizer2->StartOptimization();
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cerr << "Exception thrown ! " << std::endl;
-    std::cerr << "An error occurred during Optimization" << std::endl;
-    std::cerr << "Location    = " << e.GetLocation() << std::endl;
-    std::cerr << "Description = " << e.GetDescription() << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(itkOptimizer2->StartOptimization());
+
 
   std::cout << "Boundaries after optimization: " << std::endl;
   std::cout << "Upper bound size: " << itkOptimizer2->GetUpperBound().size() << std::endl;
   std::cout << "Lower bound size: " << itkOptimizer2->GetLowerBound().size() << std::endl;
 
   const OptimizerType::ParametersType & finalPosition2 = itkOptimizer2->GetCurrentPosition();
-  std::cout << "Solution = (" << finalPosition2[0] << "," << finalPosition2[1] << ")" << std::endl;
+  std::cout << "Solution = (" << finalPosition2[0] << ',' << finalPosition2[1] << ')' << std::endl;
   std::cout << "Final Function Value = " << itkOptimizer2->GetValue() << std::endl;
 
   // check results

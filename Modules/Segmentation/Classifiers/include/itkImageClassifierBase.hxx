@@ -20,35 +20,24 @@
 
 namespace itk
 {
-/**
- * PrintSelf
- */
+
 template <typename TInputImage, typename TClassifiedImage>
 void
 ImageClassifierBase<TInputImage, TClassifiedImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "General Image Classifier / Clusterer" << std::endl;
-  os << indent << "ClassifiedImage: ";
-  os << m_ClassifiedImage.GetPointer() << std::endl;
-  os << indent << "InputImage: ";
-  os << m_InputImage.GetPointer() << std::endl;
-} // end PrintSelf
+  itkPrintSelfObjectMacro(InputImage);
+  itkPrintSelfObjectMacro(ClassifiedImage);
+}
 
-/**
- * Generate data (start the classification process)
- */
 template <typename TInputImage, typename TClassifiedImage>
 void
 ImageClassifierBase<TInputImage, TClassifiedImage>::GenerateData()
 {
   this->Classify();
-} // end Generate data
+}
 
-//------------------------------------------------------------------
-// The core function where classification is carried out
-//------------------------------------------------------------------
 template <typename TInputImage, typename TClassifiedImage>
 void
 ImageClassifierBase<TInputImage, TClassifiedImage>::Classify()
@@ -64,22 +53,16 @@ ImageClassifierBase<TInputImage, TClassifiedImage>::Classify()
     this->Modified();
   }
 
-  //--------------------------------------------------------------------
   // Set the iterators and the pixel type definition for the input image
-  //-------------------------------------------------------------------
   InputImageConstPointer  inputImage = this->GetInputImage();
   InputImageConstIterator inIt(inputImage, inputImage->GetBufferedRegion());
 
-  //--------------------------------------------------------------------
   // Set the iterators and the pixel type definition for the classified image
-  //--------------------------------------------------------------------
   classifiedImage = this->GetClassifiedImage();
 
   ClassifiedImageIterator classifiedIt(classifiedImage, classifiedImage->GetBufferedRegion());
 
-  //--------------------------------------------------------------------
   // Set up the vector to store the image  data
-
   InputImagePixelType      inputImagePixel;
   ClassifiedImagePixelType outputClassifiedLabel;
 
@@ -119,12 +102,9 @@ ImageClassifierBase<TInputImage, TClassifiedImage>::Classify()
 
     outputClassifiedLabel = ClassifiedImagePixelType(classLabel);
     classifiedIt.Set(outputClassifiedLabel);
-  } // end for (looping through the dataset)
-} // end Classify
+  }
+}
 
-/**
- * Allocate
- */
 template <typename TInputImage, typename TClassifiedImage>
 void
 ImageClassifierBase<TInputImage, TClassifiedImage>::Allocate()
@@ -156,7 +136,6 @@ ImageClassifierBase<TInputImage, TClassifiedImage>::GetPixelMembershipValue(cons
     pixelMembershipValue[classIndex] = (this->GetMembershipFunction(classIndex))->Evaluate(inputImagePixel);
   }
 
-  // Return the membership value of the
   return pixelMembershipValue;
 }
 } // namespace itk

@@ -32,14 +32,14 @@
 
 namespace itk
 {
-/**\class PatchBasedDenoisingBaseImageFilterEnums
+/** \class PatchBasedDenoisingBaseImageFilterEnums
  * \brief Contains all enum classes used by the PatchBasedDenoisingBaseImageFilter class.
  * \ingroup ITKDenoising
  */
 class PatchBasedDenoisingBaseImageFilterEnums
 {
 public:
-  /**\class NoiseModel
+  /** \class NoiseModel
    * \ingroup Filtering
    * \ingroup ITKDenoising
    * Type definition for selecting the noise model. */
@@ -51,7 +51,7 @@ public:
     POISSON = 3
   };
 
-  /**\class ComponentState
+  /** \class ComponentState
    * \ingroup Filtering
    * \ingroup ITKDenoising
    * Type definition to determine which space to do calculations in.
@@ -63,7 +63,7 @@ public:
     RIEMANNIAN = 1
   };
 
-  /**\class FilterState
+  /** \class FilterState
    * \ingroup Filtering
    * \ingroup ITKDenoising
    * State that the filter is in, i.e. UNINITIALIZED or INITIALIZED. */
@@ -82,7 +82,7 @@ extern ITKDenoising_EXPORT std::ostream &
 extern ITKDenoising_EXPORT std::ostream &
                            operator<<(std::ostream & out, const PatchBasedDenoisingBaseImageFilterEnums::FilterState value);
 /**
- *\class PatchBasedDenoisingBaseImageFilter
+ * \class PatchBasedDenoisingBaseImageFilter
  * \brief Base class for patch-based denoising algorithms.
  *
  * Implementation of a denoising filter that uses iterative non-local, or semi-local, weighted
@@ -153,7 +153,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PatchBasedDenoisingBaseImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(PatchBasedDenoisingBaseImageFilter);
 
   /** Input and output image types. */
   using InputImageType = TInputImage;
@@ -240,7 +240,7 @@ public:
   /** Set/Get the weight on the smoothing term.
    *  This option is used when a noise model is specified.
    *  This weight controls the balance between the smoothing and the closeness to the noisy data.
-   *  Large stepsizes may cause instabilities.
+   *  Large step sizes may cause instabilities.
    */
   itkSetClampMacro(SmoothingWeight, double, 0.0, 1.0);
   itkGetConstMacro(SmoothingWeight, double);
@@ -405,13 +405,13 @@ protected:
 
   // Cache input and output pointer to get rid of thousands of calls
   // to GetInput and GetOutput.
-  const InputImageType * m_InputImage;
-  OutputImageType *      m_OutputImage;
+  const InputImageType * m_InputImage{};
+  OutputImageType *      m_OutputImage{};
 
 private:
   /** Parameters that define patch size and patch weights (mask). */
   unsigned int     m_PatchRadius{ 4 };
-  PatchWeightsType m_PatchWeights;
+  PatchWeightsType m_PatchWeights{};
 
   /** Parameters that define the strategy for kernel-bandwidth estimation. */
   bool         m_KernelBandwidthEstimation{ false };

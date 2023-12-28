@@ -49,7 +49,7 @@ public:
   using Superclass = DecimationQuadEdgeMeshFilter<TInput, TOutput, TCriterion>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(EdgeDecimationQuadEdgeMeshFilter, DecimationQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(EdgeDecimationQuadEdgeMeshFilter);
 
   using InputMeshType = TInput;
   using InputMeshPointer = typename InputMeshType::Pointer;
@@ -93,11 +93,11 @@ protected:
   bool m_Relocate{ true };
   bool m_CheckOrientation{ false };
 
-  PriorityQueuePointer m_PriorityQueue;
-  QueueMapType         m_QueueMapper;
-  OutputQEType *       m_Element;
-  PriorityType         m_Priority;
-  OperatorPointer      m_JoinVertexFunction;
+  PriorityQueuePointer m_PriorityQueue{};
+  QueueMapType         m_QueueMapper{};
+  OutputQEType *       m_Element{};
+  PriorityType         m_Priority{};
+  OperatorPointer      m_JoinVertexFunction{};
 
   /**
    * \brief Compute the measure value for iEdge

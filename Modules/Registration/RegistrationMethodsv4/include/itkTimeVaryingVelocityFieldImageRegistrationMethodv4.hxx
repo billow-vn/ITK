@@ -32,9 +32,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TOutputTransform,
@@ -55,9 +52,6 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
   this->m_NumberOfIterationsPerLevel[2] = 40;
 }
 
-/*
- * Start the optimization at each level.  We just do a basic gradient descent operation.
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TOutputTransform,
@@ -150,13 +144,13 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
   while (this->m_CurrentIteration++ < this->m_NumberOfIterationsPerLevel[this->m_CurrentLevel] && !this->m_IsConverged)
   {
     updateDerivative.Fill(0);
-    MeasureType value = NumericTraits<MeasureType>::ZeroValue();
+    MeasureType value{};
     this->m_CurrentMetricValue = NumericTraits<MeasureType>::ZeroValue();
 
     // Time index zero brings the moving image closest to the fixed image
     for (IndexValueType timePoint = 0; timePoint < numberOfTimePoints; ++timePoint)
     {
-      RealType t = NumericTraits<RealType>::ZeroValue();
+      RealType t{};
       if (numberOfTimePoints > 1)
       {
         t = static_cast<RealType>(timePoint) / static_cast<RealType>(numberOfTimePoints - 1);
@@ -366,8 +360,8 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
 
       if (this->GetDebug())
       {
-        RealType spatialNorm = NumericTraits<RealType>::ZeroValue();
-        RealType spatioTemporalNorm = NumericTraits<RealType>::ZeroValue();
+        RealType spatialNorm{};
+        RealType spatioTemporalNorm{};
 
         typename TimeVaryingVelocityFieldType::SizeType radius;
         radius.Fill(1);
@@ -383,8 +377,8 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
         ConstNeighborhoodIterator<TimeVaryingVelocityFieldType> ItV(radius, velocityField, faceList.front());
         for (ItV.GoToBegin(); !ItV.IsAtEnd(); ++ItV)
         {
-          RealType localSpatialNorm = NumericTraits<RealType>::ZeroValue();
-          RealType localSpatioTemporalNorm = NumericTraits<RealType>::ZeroValue();
+          RealType localSpatialNorm{};
+          RealType localSpatioTemporalNorm{};
           for (unsigned int d = 0; d < ImageDimension + 1; ++d)
           {
             DisplacementVectorType vector = (ItV.GetNext(d) - ItV.GetPrevious(d)) * 0.5 * velocityFieldSpacing[d];
@@ -408,9 +402,6 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
   }
 }
 
-/*
- * Start the registration
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TOutputTransform,
@@ -444,9 +435,6 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
   this->GetTransformOutput()->Set(this->m_OutputTransform);
 }
 
-/*
- * PrintSelf
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TOutputTransform,
@@ -461,12 +449,13 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage,
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Number of levels: " << this->m_NumberOfLevels << std::endl;
-  os << indent << "Smoothing sigmas: " << this->m_SmoothingSigmasPerLevel << std::endl;
-  os << indent << "Number of iterations: " << this->m_NumberOfIterationsPerLevel << std::endl;
-  os << indent << "Convergence threshold: " << this->m_ConvergenceThreshold << std::endl;
-  os << indent << "Convergence window size: " << this->m_ConvergenceWindowSize << std::endl;
-  os << indent << "Learning rate: " << this->m_LearningRate << std::endl;
+  os << indent << "LearningRate: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_LearningRate)
+     << std::endl;
+  os << indent
+     << "ConvergenceThreshold: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_ConvergenceThreshold)
+     << std::endl;
+  os << indent << "ConvergenceWindowSize: " << m_ConvergenceWindowSize << std::endl;
+  os << indent << "NumberOfIterationsPerLevel: " << m_NumberOfIterationsPerLevel << std::endl;
 }
 
 } // end namespace itk

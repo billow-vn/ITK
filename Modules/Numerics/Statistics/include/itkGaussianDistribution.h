@@ -69,8 +69,8 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Strandard macros */
-  itkTypeMacro(GaussianDistribution, ProbabilityDistribution);
+  /** Standard macros */
+  itkOverrideGetNameOfClassMacro(GaussianDistribution);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

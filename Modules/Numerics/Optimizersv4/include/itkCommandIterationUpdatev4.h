@@ -69,13 +69,11 @@ public:
   {
     if (typeid(event) == typeid(itk::StartEvent))
     {
-      std::cout << std::endl << "Position              Value";
-      std::cout << std::endl << std::endl;
+      std::cout << std::endl << "Position              Value" << std::endl << std::endl;
     }
     else if (typeid(event) == typeid(itk::IterationEvent))
     {
-      std::cout << m_Optimizer->GetCurrentIteration() << " = ";
-      std::cout << m_Optimizer->GetValue();
+      std::cout << m_Optimizer->GetCurrentIteration() << " = " << m_Optimizer->GetValue();
       if (m_PrintParameters)
       {
         std::cout << " : " << m_Optimizer->GetCurrentPosition();
@@ -84,18 +82,15 @@ public:
     }
     else if (typeid(event) == typeid(itk::EndEvent))
     {
-      std::cout << std::endl << std::endl;
-      std::cout << "After " << m_Optimizer->GetCurrentIteration();
-      std::cout << "  iterations " << std::endl;
+      std::cout << std::endl
+                << std::endl
+                << "After " << m_Optimizer->GetCurrentIteration() << "  iterations " << std::endl;
       if (m_PrintParameters)
       {
-        std::cout << " Solution is    = " << m_Optimizer->GetCurrentPosition();
-        std::cout << std::endl;
+        std::cout << " Solution is    = " << m_Optimizer->GetCurrentPosition() << std::endl;
       }
-      std::cout << "Solution value     = " << m_Optimizer->GetValue();
-      std::cout << std::endl;
-      std::cout << "Stop condition = " << m_Optimizer->GetStopConditionDescription();
-      std::cout << std::endl;
+      std::cout << "Solution value     = " << m_Optimizer->GetValue() << std::endl
+                << "Stop condition = " << m_Optimizer->GetStopConditionDescription() << std::endl;
     }
   }
 
@@ -103,7 +98,7 @@ public:
   /**
    * Run-time type information (and related methods).
    */
-  itkTypeMacro(CommandIterationUpdatev4, itk::Command);
+  itkOverrideGetNameOfClassMacro(CommandIterationUpdatev4);
 
 
   /**
@@ -146,7 +141,7 @@ private:
   /**
    *  WeakPointer to the Optimizer
    */
-  WeakPointer<OptimizerType> m_Optimizer;
+  WeakPointer<OptimizerType> m_Optimizer{};
 
   bool m_PrintParameters{ false };
 };

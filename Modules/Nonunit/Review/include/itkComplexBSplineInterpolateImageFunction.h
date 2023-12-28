@@ -35,7 +35,7 @@ namespace itk
  * Derivative support is currently not implemented
  *
  * This implementation was taken from the Insight Journal paper:
- * https://hdl.handle.net/1926/585
+ * https://www.insight-journal.org/browse/publication/177
  *
  * \ingroup ImageInterpolators
  * \ingroup ITKReview
@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComplexBSplineInterpolateImageFunction, InterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(ComplexBSplineInterpolateImageFunction);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -143,14 +143,14 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int m_SplineOrder;
+  unsigned int m_SplineOrder{};
 
-  typename InterpolatorType::Pointer m_RealInterpolator;
-  typename InterpolatorType::Pointer m_ImaginaryInterpolator;
+  typename InterpolatorType::Pointer m_RealInterpolator{};
+  typename InterpolatorType::Pointer m_ImaginaryInterpolator{};
 
-  typename RealFilterType::Pointer m_RealFilter;
+  typename RealFilterType::Pointer m_RealFilter{};
 
-  typename ImaginaryFilterType::Pointer m_ImaginaryFilter;
+  typename ImaginaryFilterType::Pointer m_ImaginaryFilter{};
 }; // class
 } // namespace itk
 

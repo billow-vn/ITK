@@ -29,21 +29,20 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
 {
   namespace stat = itk::Statistics;
 
-  if (argc < 4)
+  if (argc < 5)
   {
     std::cerr << "Missing Arguments" << std::endl;
     std::cerr << "Usage: " << std::endl;
-    std::cerr << itkNameOfTestExecutableMacro(argv) << "inputFileName  bucketSize minStandardDeviation tolerancePercent"
-              << std::endl;
+    std::cerr << itkNameOfTestExecutableMacro(argv)
+              << "inputFileName  bucketSize minStandardDeviation tolerancePercent useClusterLabels" << std::endl;
     return EXIT_FAILURE;
   }
 
-  unsigned int i;
-  unsigned int j;
-  char *       dataFileName = argv[1];
-  int          dataSize = 2000;
-  int          bucketSize = std::stoi(argv[3]);
-  double       minStandardDeviation = std::stod(argv[2]);
+
+  char * dataFileName = argv[1];
+  int    dataSize = 2000;
+  int    bucketSize = std::stoi(argv[2]);
+  double minStandardDeviation = std::stod(argv[3]);
 
   itk::Array<double> trueMeans(4);
   trueMeans[0] = 99.261;
@@ -65,19 +64,19 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
   pointsContainer->Reserve(dataSize);
   pointSet->SetPoints(pointsContainer);
 
-  PointSetType::PointsContainerIterator p_iter = pointsContainer->Begin();
+  PointSetType::PointsContainerIterator pIter = pointsContainer->Begin();
   PointSetType::PointType               point;
   double                                temp;
   std::ifstream                         dataStream(dataFileName);
-  while (p_iter != pointsContainer->End())
+  while (pIter != pointsContainer->End())
   {
-    for (i = 0; i < PointSetType::PointDimension; ++i)
+    for (unsigned int i = 0; i < PointSetType::PointDimension; ++i)
     {
       dataStream >> temp;
       point[i] = temp;
     }
-    p_iter.Value() = point;
-    ++p_iter;
+    pIter.Value() = point;
+    ++pIter;
   }
 
   dataStream.close();
@@ -100,8 +99,8 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
   /* Searching kmeans */
   using Estimator = stat::KdTreeBasedKmeansEstimator<Generator::KdTreeType>;
   auto estimator = Estimator::New();
-  std::cout << estimator->GetNameOfClass() << std::endl;
-  estimator->Print(std::cout);
+
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(estimator, KdTreeBasedKmeansEstimator, Object);
 
 
   // Set the initial means
@@ -109,11 +108,7 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
 
   // Set the maximum iteration
   estimator->SetMaximumIteration(maximumIteration);
-  if (estimator->GetMaximumIteration() != maximumIteration)
-  {
-    std::cerr << "Error in Set/GetMaximum Iteration" << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TEST_SET_GET_VALUE(maximumIteration, estimator->GetMaximumIteration());
 
   estimator->SetKdTree(generator->GetOutput());
 
@@ -126,6 +121,8 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+  auto useClusterLabels = static_cast<bool>(std::stoi(argv[5]));
+  ITK_TEST_SET_GET_BOOLEAN(estimator, UseClusterLabels, useClusterLabels);
 
   estimator->StartOptimization();
   Estimator::ParametersType estimatedMeans = estimator->GetParameters();
@@ -134,16 +131,16 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
   int                index;
   const unsigned int numberOfMeasurements = sample->GetMeasurementVectorSize();
   const unsigned int numberOfClasses = trueMeans.size() / numberOfMeasurements;
-  for (i = 0; i < numberOfClasses; ++i)
+  for (unsigned int i = 0; i < numberOfClasses; ++i)
   {
     std::cout << "cluster[" << i << "] " << std::endl;
     double displacement = 0.0;
     std::cout << "    true mean :" << std::endl;
     std::cout << "        ";
     index = numberOfMeasurements * i;
-    for (j = 0; j < numberOfMeasurements; ++j)
+    for (unsigned int j = 0; j < numberOfMeasurements; ++j)
     {
-      std::cout << trueMeans[index] << " ";
+      std::cout << trueMeans[index] << ' ';
       ++index;
     }
     std::cout << std::endl;
@@ -151,9 +148,9 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
     std::cout << "        ";
 
     index = numberOfMeasurements * i;
-    for (j = 0; j < numberOfMeasurements; ++j)
+    for (unsigned int j = 0; j < numberOfMeasurements; ++j)
     {
-      std::cout << estimatedMeans[index] << " ";
+      std::cout << estimatedMeans[index] << ' ';
       temp = estimatedMeans[index] - trueMeans[index];
       ++index;
       displacement += (temp * temp);
@@ -163,7 +160,7 @@ itkKdTreeBasedKmeansEstimatorTest(int argc, char * argv[])
     std::cout << "    Mean displacement: " << std::endl;
     std::cout << "        " << displacement << std::endl << std::endl;
 
-    double tolearancePercent = std::stod(argv[3]);
+    double tolearancePercent = std::stod(argv[4]);
 
     // if the displacement of the estimates are within tolearancePercent% of
     // standardDeviation then we assume it is successful

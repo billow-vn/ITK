@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class CurvatureFlowFunction
+ * \class CurvatureFlowFunction
  *
  * \brief
  * This class encapsulate the finite difference equation which drives a
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(CurvatureFlowFunction, FiniteDifferenceFunction);
+  itkOverrideGetNameOfClassMacro(CurvatureFlowFunction);
 
   /** Inherit some parameters from the superclass type. */
   using typename Superclass::ImageType;
@@ -123,8 +123,7 @@ public:
     return m_TimeStep;
   }
 
-  /** This method computes the solution update for each pixel that does not
-   * lie on a the data set boundary. */
+  /** Compute the solution update for each pixel that does not lie on a the data set boundary. */
   PixelType
   ComputeUpdate(const NeighborhoodType & it,
                 void *                   globalData,
@@ -149,7 +148,7 @@ protected:
   ~CurvatureFlowFunction() override = default;
 
 private:
-  TimeStepType m_TimeStep;
+  TimeStepType m_TimeStep{};
 };
 } // end namespace itk
 

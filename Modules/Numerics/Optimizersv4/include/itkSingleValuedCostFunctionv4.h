@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class SingleValuedCostFunctionv4Template
+ * \class SingleValuedCostFunctionv4Template
  * \brief This class is a base for a CostFunction that returns a
  * single value.
  *
@@ -60,7 +60,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SingleValuedCostFunctionv4Template, CostFunctionTemplate);
+  itkOverrideGetNameOfClassMacro(SingleValuedCostFunctionv4Template);
 
   /**  MeasureType type alias.
    *  It defines a type used to return the cost function value. */

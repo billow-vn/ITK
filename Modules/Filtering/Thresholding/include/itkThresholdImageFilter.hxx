@@ -79,7 +79,7 @@ ThresholdImageFilter<TImage>::ThresholdOutside(const PixelType & lower, const Pi
 {
   if (lower > upper)
   {
-    itkExceptionMacro(<< "Lower threshold cannot be greater than upper threshold.");
+    itkExceptionMacro("Lower threshold cannot be greater than upper threshold.");
   }
 
   if (Math::NotExactlyEquals(m_Lower, lower) || Math::NotExactlyEquals(m_Upper, upper))
@@ -102,11 +102,8 @@ ThresholdImageFilter<TImage>::DynamicThreadedGenerateData(const OutputImageRegio
 
   // Define/declare an iterator that will walk the output region for this
   // thread.
-  using InputIterator = ImageScanlineConstIterator<TImage>;
-  using OutputIterator = ImageScanlineIterator<TImage>;
-
-  InputIterator  inIt(inputPtr, outputRegionForThread);
-  OutputIterator outIt(outputPtr, outputRegionForThread);
+  ImageScanlineConstIterator inIt(inputPtr, outputRegionForThread);
+  ImageScanlineIterator      outIt(outputPtr, outputRegionForThread);
 
   // Walk the regions; threshold each pixel
   while (!outIt.IsAtEnd())

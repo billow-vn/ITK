@@ -45,7 +45,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuadEdgeMeshEulerOperatorDeleteCenterVertexFunction, QuadEdgeMeshFunctionBase);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshEulerOperatorDeleteCenterVertexFunction);
 
   /** Type of QuadEdge with which to apply slicing. */
   using QEType = TQEType;
@@ -73,7 +73,7 @@ protected:
   ~QuadEdgeMeshEulerOperatorDeleteCenterVertexFunction() override = default;
 
 private:
-  PointIdentifier m_OldPointID;
+  PointIdentifier m_OldPointID{};
 };
 } // end namespace itk
 

@@ -303,9 +303,8 @@ auto
 ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType>::
   CastComponentWithBoundsChecking(const TComponent value) -> PixelComponentType
 {
-  static_assert(std::is_same<TComponent, ComponentType>::value,
-                "TComponent should just be the same as the ComponentType!");
-  static_assert(!std::is_same<TComponent, PixelComponentType>::value,
+  static_assert(std::is_same_v<TComponent, ComponentType>, "TComponent should just be the same as the ComponentType!");
+  static_assert(!std::is_same_v<TComponent, PixelComponentType>,
                 "For PixelComponentType there is a more appropriate overload, that should be called instead!");
 
   // Retrieve minimum and maximum values at compile-time:
@@ -341,9 +340,9 @@ auto
 ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType>::
   CastPixelWithBoundsChecking(const TPixel value) -> PixelType
 {
-  static_assert(std::is_same<TPixel, InterpolatorOutputType>::value,
+  static_assert(std::is_same_v<TPixel, InterpolatorOutputType>,
                 "TPixel should just be the same as the InterpolatorOutputType!");
-  static_assert(!std::is_same<TPixel, ComponentType>::value,
+  static_assert(!std::is_same_v<TPixel, ComponentType>,
                 "For ComponentType there is a more efficient overload, that should be called instead!");
 
   const unsigned int nComponents = InterpolatorConvertType::GetNumberOfComponents(value);
@@ -383,28 +382,22 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
 
   // Create an iterator that will walk the output region for this thread.
   using OutputIterator = ImageRegionIteratorWithIndex<TOutputImage>;
-  OutputIterator outIt(outputPtr, outputRegionForThread);
-
-  // Define a few indices that will be used to translate from an input pixel
-  // to an output pixel
-  OutputPointType outputPoint; // Coordinates of current output pixel
-  InputPointType  inputPoint;  // Coordinates of current input pixel
-
-  ContinuousInputIndexType inputIndex;
 
   using OutputType = typename InterpolatorType::OutputType;
 
   // Walk the output region
-  outIt.GoToBegin();
-
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(outputPtr, outputRegionForThread); !outIt.IsAtEnd(); ++outIt)
   {
     // Determine the index of the current output pixel
+
+    OutputPointType outputPoint; // Coordinates of current output pixel
     outputPtr->TransformIndexToPhysicalPoint(outIt.GetIndex(), outputPoint);
 
     // Compute corresponding input pixel position
-    inputPoint = transformPtr->TransformPoint(outputPoint);
-    const bool isInsideInput = inputPtr->TransformPhysicalPointToContinuousIndex(inputPoint, inputIndex);
+    const InputPointType inputPoint = transformPtr->TransformPoint(outputPoint);
+
+    ContinuousInputIndexType inputIndex;
+    const bool               isInsideInput = inputPtr->TransformPhysicalPointToContinuousIndex(inputPoint, inputIndex);
 
     OutputType value;
     // Evaluate input at right position and copy to the output
@@ -426,7 +419,6 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
       }
     }
     progress.CompletedPixel();
-    ++outIt;
   }
 }
 
@@ -441,10 +433,6 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
   OutputImageType *      outputPtr = this->GetOutput();
   const InputImageType * inputPtr = this->GetInput();
   const TransformType *  transformPtr = this->GetTransform();
-
-  // Create an iterator that will walk the output region for this thread.
-  using OutputIterator = ImageScanlineIterator<TOutputImage>;
-  OutputIterator outIt(outputPtr, outputRegionForThread);
 
   TotalProgressReporter progress(this, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 
@@ -474,7 +462,8 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
       transformPtr->TransformPoint(outputPtr->template TransformIndexToPhysicalPoint<double>(index)));
   };
 
-  while (!outIt.IsAtEnd())
+  // Create an iterator that will walk the output region for this thread.
+  for (ImageScanlineIterator outIt(outputPtr, outputRegionForThread); !outIt.IsAtEnd(); outIt.NextLine())
   {
     // Determine the continuous index of the first and end pixel of output
     // scan line when mapped to the input coordinate frame.
@@ -522,7 +511,6 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
       ++outIt;
       ++scanlineIndex;
     }
-    outIt.NextLine();
     progress.Completed(outputRegionForThread.GetSize()[0]);
   }
 }
@@ -537,7 +525,7 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
 {
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator not set");
+    itkExceptionMacro("Interpolator not set");
   }
 
   // Get pointers to the input and output

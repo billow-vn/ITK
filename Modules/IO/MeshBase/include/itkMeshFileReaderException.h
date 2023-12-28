@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MeshFileReaderException
+ * \class MeshFileReaderException
  *
  * \brief Base exception class for IO conflicts.
  * \ingroup ITKIOMeshBase
@@ -36,7 +36,7 @@ public:
   ~MeshFileReaderException() noexcept override;
 
   /** Run-time information. */
-  itkTypeMacro(MeshFileReaderException, ExceptionObject);
+  itkOverrideGetNameOfClassMacro(MeshFileReaderException);
 
   /** Constructor. */
   MeshFileReaderException(const char * file,

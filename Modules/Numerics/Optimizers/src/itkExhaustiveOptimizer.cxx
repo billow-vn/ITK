@@ -19,14 +19,8 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
-ExhaustiveOptimizer::ExhaustiveOptimizer() = default;
 
-/**
- * Start walking
- */
+ExhaustiveOptimizer::ExhaustiveOptimizer() = default;
 
 void
 ExhaustiveOptimizer::StartOptimization()
@@ -67,8 +61,8 @@ ExhaustiveOptimizer::StartWalking()
   // Make sure the scales have been set properly
   if (scales.size() != spaceDimension)
   {
-    itkExceptionMacro(<< "The size of Scales is " << scales.size() << ", but the NumberOfParameters is "
-                      << spaceDimension << ".");
+    itkExceptionMacro("The size of Scales is " << scales.size() << ", but the NumberOfParameters is " << spaceDimension
+                                               << '.');
   }
 
   // Setup first grid position.
@@ -84,9 +78,6 @@ ExhaustiveOptimizer::StartWalking()
   this->ResumeWalking();
 }
 
-/**
- * Resume the optimization
- */
 void
 ExhaustiveOptimizer::ResumeWalking()
 {
@@ -123,8 +114,8 @@ ExhaustiveOptimizer::ResumeWalking()
     }
 
     m_StopConditionDescription.str("");
-    m_StopConditionDescription << this->GetNameOfClass() << ": Running. ";
-    m_StopConditionDescription << "@ index " << this->GetCurrentIndex() << " value is " << this->GetCurrentValue();
+    m_StopConditionDescription << this->GetNameOfClass() << ": Running. "
+                               << "@ index " << this->GetCurrentIndex() << " value is " << this->GetCurrentValue();
 
     this->InvokeEvent(IterationEvent());
     this->AdvanceOneStep();
@@ -151,7 +142,7 @@ ExhaustiveOptimizer::AdvanceOneStep()
   ParametersType newPosition(spaceDimension);
   IncrementIndex(newPosition);
 
-  itkDebugMacro(<< "new position = " << newPosition);
+  itkDebugMacro("new position = " << newPosition);
 
   this->SetCurrentPosition(newPosition);
 }
@@ -181,8 +172,8 @@ ExhaustiveOptimizer::IncrementIndex(ParametersType & newPosition)
   {
     m_Stop = true;
     m_StopConditionDescription.str("");
-    m_StopConditionDescription << this->GetNameOfClass() << ": ";
-    m_StopConditionDescription << "Completed sampling of parametric space of size " << spaceDimension;
+    m_StopConditionDescription << this->GetNameOfClass() << ": "
+                               << "Completed sampling of parametric space of size " << spaceDimension;
   }
 
   const ScalesType & scales = this->GetScales();
@@ -204,17 +195,28 @@ ExhaustiveOptimizer::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "CurrentValue = " << m_CurrentValue << std::endl;
-  os << indent << "NumberOfSteps = " << m_NumberOfSteps << std::endl;
-  os << indent << "CurrentIteration = " << m_CurrentIteration << std::endl;
-  os << indent << "Stop = " << m_Stop << std::endl;
-  os << indent << "CurrentParameter = " << m_CurrentParameter << std::endl;
-  os << indent << "StepLength = " << m_StepLength << std::endl;
-  os << indent << "CurrentIndex = " << m_CurrentIndex << std::endl;
-  os << indent << "MaximumNumberOfIterations = " << m_MaximumNumberOfIterations << std::endl;
-  os << indent << "MaximumMetricValue = " << m_MaximumMetricValue << std::endl;
-  os << indent << "MinimumMetricValue = " << m_MinimumMetricValue << std::endl;
-  os << indent << "MinimumMetricValuePosition = " << m_MinimumMetricValuePosition << std::endl;
-  os << indent << "MaximumMetricValuePosition = " << m_MaximumMetricValuePosition << std::endl;
+  os << indent << "CurrentValue: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_CurrentValue)
+     << std::endl;
+  os << indent << "NumberOfSteps: " << static_cast<typename NumericTraits<StepsType>::PrintType>(m_NumberOfSteps)
+     << std::endl;
+  os << indent
+     << "CurrentIteration: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_CurrentIteration)
+     << std::endl;
+  os << indent << "Stop: " << (m_Stop ? "On" : "Off") << std::endl;
+  os << indent << "CurrentParameter: " << m_CurrentParameter << std::endl;
+  os << indent << "StepLength: " << m_StepLength << std::endl;
+  os << indent << "CurrentIndex: " << m_CurrentIndex << std::endl;
+  os << indent << "MaximumNumberOfIterations: "
+     << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_MaximumNumberOfIterations) << std::endl;
+  os << indent
+     << "MaximumMetricValue: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_MaximumMetricValue)
+     << std::endl;
+  os << indent
+     << "MinimumMetricValue: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_MinimumMetricValue)
+     << std::endl;
+  os << indent << "MinimumMetricValuePosition: " << m_MinimumMetricValuePosition << std::endl;
+  os << indent << "MaximumMetricValuePosition: " << m_MaximumMetricValuePosition << std::endl;
+
+  os << indent << "StopConditionDescription: " << m_StopConditionDescription.str() << std::endl;
 }
 } // end namespace itk

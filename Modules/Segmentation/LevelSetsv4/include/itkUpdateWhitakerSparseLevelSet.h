@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(UpdateWhitakerSparseLevelSet, Object);
+  itkOverrideGetNameOfClassMacro(UpdateWhitakerSparseLevelSet);
 
   static constexpr unsigned int ImageDimension = VDimension;
 
@@ -101,7 +101,7 @@ public:
   void
   Update();
 
-  /** Set/Get the sparse levet set image */
+  /** Set/Get the sparse level set image */
   itkSetObjectMacro(InputLevelSet, LevelSetType);
   itkGetModifiableObjectMacro(InputLevelSet, LevelSetType);
 
@@ -169,25 +169,25 @@ protected:
   MovePointFromPlus2();
 
 private:
-  LevelSetOutputType m_TimeStep;
-  LevelSetOutputType m_RMSChangeAccumulator;
-  IdentifierType     m_CurrentLevelSetId;
+  LevelSetOutputType m_TimeStep{};
+  LevelSetOutputType m_RMSChangeAccumulator{};
+  IdentifierType     m_CurrentLevelSetId{};
 
-  EquationContainerPointer m_EquationContainer;
+  EquationContainerPointer m_EquationContainer{};
 
-  LevelSetLayerType m_Update;
-  LevelSetPointer   m_InputLevelSet;
-  LevelSetPointer   m_OutputLevelSet;
+  LevelSetLayerType m_Update{};
+  LevelSetPointer   m_InputLevelSet{};
+  LevelSetPointer   m_OutputLevelSet{};
 
-  LevelSetPointer   m_TempLevelSet;
-  LevelSetLayerType m_TempPhi;
+  LevelSetPointer   m_TempLevelSet{};
+  LevelSetLayerType m_TempPhi{};
 
-  LevelSetLayerIdType m_MinStatus;
-  LevelSetLayerIdType m_MaxStatus;
+  LevelSetLayerIdType m_MinStatus{};
+  LevelSetLayerIdType m_MaxStatus{};
 
-  LabelImagePointer m_InternalImage;
+  LabelImagePointer m_InternalImage{};
 
-  LevelSetOffsetType m_Offset;
+  LevelSetOffsetType m_Offset{};
 
   using NeighborhoodIteratorType = ShapedNeighborhoodIterator<LabelImageType>;
 

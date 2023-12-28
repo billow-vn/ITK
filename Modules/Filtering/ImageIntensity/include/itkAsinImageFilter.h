@@ -53,7 +53,7 @@ public:
 } // namespace Functor
 
 /**
- *\class AsinImageFilter
+ * \class AsinImageFilter
  * \brief Computes the sine of each pixel.
  *
  * This filter is templated over the pixel type of the input image
@@ -92,7 +92,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AsinImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(AsinImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

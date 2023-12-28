@@ -323,7 +323,15 @@ def GetArrayFromImage(
     update: bool = True,
     ttype=None,
 ) -> np.ndarray:
-    """Get an array with the content of the image buffer"""
+    """Get an array with the content of the image buffer.
+
+    When *keep_axes* is *False*, the NumPy array will have C-order
+    indexing. This is the reverse of how indices are specified in ITK,
+    i.e. k,j,i versus i,j,k. However C-order indexing is expected by most
+    algorithms in NumPy / SciPy.
+
+    This is a deep copy of the image buffer and is completely safe and without potential side effects.
+    """
     return _GetArrayFromImage(
         image_or_filter, "GetArrayFromImage", keep_axes, update, ttype
     )
@@ -338,7 +346,13 @@ def GetArrayViewFromImage(
     update: bool = True,
     ttype=None,
 ) -> np.ndarray:
-    """Get an array view with the content of the image buffer"""
+    """Get an array view with the content of the image buffer.
+
+    When *keep_axes* is *False*, the NumPy array will have C-order
+    indexing. This is the reverse of how indices are specified in ITK,
+    i.e. k,j,i versus i,j,k. However C-order indexing is expected by most
+    algorithms in NumPy / SciPy.
+    """
     return _GetArrayFromImage(
         image_or_filter, "GetArrayViewFromImage", keep_axes, update, ttype
     )
@@ -347,7 +361,8 @@ def GetArrayViewFromImage(
 array_view_from_image = GetArrayViewFromImage
 
 
-def _GetImageFromArray(arr: ArrayLike, function_name: str, is_vector: bool, ttype):
+def _GetImageFromArray(arr: ArrayLike, function_name: str, is_vector: bool,
+        ttype, need_contiguous:bool = True):
     """Get an ITK image from a Python array."""
     import itk
 
@@ -398,13 +413,36 @@ def _GetImageFromArray(arr: ArrayLike, function_name: str, is_vector: bool, ttyp
 Please specify an output type via the 'ttype' keyword parameter."""
         )
     templatedFunction = getattr(itk.PyBuffer[keys[0]], function_name)
-    return templatedFunction(arr, is_vector)
+    if function_name == "GetImageViewFromArray":
+        return templatedFunction(arr, is_vector, need_contiguous)
+    else:
+        return templatedFunction(arr, is_vector)
+
 
 
 def GetImageFromArray(
     arr: ArrayLike, is_vector: bool = False, ttype=None
 ) -> "itkt.ImageBase":
-    """Get an ITK image from a Python array."""
+    """Get an ITK image from a Python array.
+
+    This is a deep copy of the NumPy array buffer and is completely safe without potential
+    side effects.
+
+    If is_vector is True, then a 3D array will be treated as a 2D vector image,
+    otherwise it will be treated as a 3D image.
+
+    If the array uses Fortran-order indexing, i.e. i,j,k, the Image Size
+    will have the same dimensions as the array shape. If the array uses
+    C-order indexing, i.e. k,j,i, the image Size will have the dimensions
+    reversed from the array shape.
+
+    Therefore, since the *np.transpose* operator on a 2D array simply
+    inverts the indexing scheme, the Image representation will be the
+    same for an array and its transpose. If flipping is desired, see
+    *np.reshape*.
+
+    ttype can be used te specify a specific itk.Image type.
+    """
     return _GetImageFromArray(arr, "GetImageFromArray", is_vector, ttype)
 
 
@@ -412,10 +450,29 @@ image_from_array = GetImageFromArray
 
 
 def GetImageViewFromArray(
-    arr: ArrayLike, is_vector: bool = False, ttype=None
+    arr: ArrayLike, is_vector: bool = False, ttype=None, need_contiguous=True
 ) -> "itkt.ImageBase":
-    """Get an ITK image view from a Python array."""
-    return _GetImageFromArray(arr, "GetImageViewFromArray", is_vector, ttype)
+    """Get an ITK image view (shared pixel buffer memory) from a Python array.
+
+    If is_vector is True, then a 3D array will be treated as a 2D vector image,
+    otherwise it will be treated as a 3D image.
+
+    If the array uses Fortran-order indexing, i.e. i,j,k, the Image Size
+    will have the same dimensions as the array shape. If the array uses
+    C-order indexing, i.e. k,j,i, the image Size will have the dimensions
+    reversed from the array shape.
+
+    Therefore, since the *np.transpose* operator on a 2D array simply
+    inverts the indexing scheme, the Image representation will be the
+    same for an array and its transpose. If flipping is desired, see
+    *np.reshape*.
+
+    By default, a warning is issued if this function is called on a non-contiguous
+    array, since a copy is performed and care must be taken to keep a reference
+    to the copied array. This warning can be suppressed with need_contiguous=False
+    """
+    return _GetImageFromArray(arr, "GetImageViewFromArray", is_vector, ttype,
+            need_contiguous=need_contiguous)
 
 
 image_view_from_array = GetImageViewFromArray
@@ -748,7 +805,13 @@ def image_from_dict(image_dict: Dict) -> "itkt.Image":
     import itk
 
     ImageType = image_type_from_wasm_type(image_dict["imageType"])
-    image = itk.PyBuffer[ImageType].GetImageViewFromArray(image_dict["data"])
+    if image_dict["data"] is None:
+        image = ImageType.New()
+        image.SetRegions(image_dict["size"])
+        image.Allocate(True)
+    else:
+        image = itk.PyBuffer[ImageType].GetImageViewFromArray(image_dict["data"])
+        image.SetRegions(image_dict["size"])
     image.SetOrigin(image_dict["origin"])
     image.SetSpacing(image_dict["spacing"])
     image.SetDirection(image_dict["direction"])
@@ -1119,10 +1182,11 @@ def imwrite(
 
 
 def imread(
-    filename: fileiotype,
+    filename: Union[fileiotype, Sequence[Union[str, os.PathLike]]],
     pixel_type: Optional["itkt.PixelTypes"] = None,
     fallback_only: bool = False,
     imageio: Optional["itkt.ImageIOBase"] = None,
+    series_uid: Optional[Union[int, str]] = None,
 ) -> "itkt.ImageBase":
     """Read an image from a file or series of files and return an itk.Image.
 
@@ -1143,6 +1207,9 @@ def imread(
     imageio :
         Use the provided itk.ImageIOBase derived instance to read the file.
 
+    series_uid :
+        If filename is a directory of DICOM files, and series_uid is a string, it will read the DICOM series that matches this series_uid name.  If series_uid is an integer, it will read the series_uid'th DICOM series in the directory (using python notation, e.g., -1 is the last DICOM series in the directory). If unspecified, it will read the first series in the directory.
+
     Returns
     -------
 
@@ -1153,10 +1220,11 @@ def imread(
     `pixel_type` is not provided (default). The dimension of the image is
     automatically deduced from the dimension stored on disk.
 
-    If the filename provided is a directory then the directory is assumed to
-    be for a DICOM series volume.  If there is exactly one DICOM series
-    volume in that directory, the reader will use an itk.ImageSeriesReader
-    object to read the the DICOM filenames within that directory.
+    If the filename provided is a directory then the directory is assumed
+    to be for a DICOM series volume. If the argument series_uid is
+    specified, it will read that series from that directory. If the
+    specified series_uid doesn't exist, an error is thrown.  If no
+    series_uid is given, the first series in that directory is read.
 
     If the given filename is a list or a tuple of file names, the reader
     will use an itk.ImageSeriesReader object to read the files.
@@ -1182,26 +1250,38 @@ def imread(
     if type(filename) not in [list, tuple]:
         import os
 
-        if os.path.isdir(filename):
+        if os.path.isdir(filename) and imageio is None:
             # read DICOM series of 1 image in a folder, refer to: https://github.com/RSIP-Vision/medio
             names_generator = itk.GDCMSeriesFileNames.New()
             names_generator.SetUseSeriesDetails(True)
             names_generator.AddSeriesRestriction("0008|0021")  # Series Date
             names_generator.SetDirectory(f"{filename}")
-            series_uid = names_generator.GetSeriesUIDs()
-            if len(series_uid) == 0:
+            series_uid_list = names_generator.GetSeriesUIDs()
+            if len(series_uid_list) == 0:
                 raise FileNotFoundError(f"no DICOMs in: {filename}.")
-            if len(series_uid) > 1:
-                raise OSError(
-                    f"the directory: {filename} contains more than one DICOM series."
-                )
-            series_identifier = series_uid[0]
+            if series_uid != None:
+                if isinstance(series_uid, int):
+                    try:
+                        series_identifier = series_uid_list[series_uid]
+                    except IndexError:
+                        raise OSError(
+                            f"cannot access DICOM series {series_uid} in the directory {filename}."
+                        )
+                else:
+                    if series_uid in series_uid_list:
+                        series_identifier = series_uid
+                    else:
+                        raise OSError(
+                            f"the directory {filename} does not contain the DICOM series {series_uid}."
+                        )
+            else:
+                series_identifier = series_uid_list[0]
             filename = names_generator.GetFileNames(series_identifier)
     if type(filename) in [list, tuple]:
         template_reader_type = itk.ImageSeriesReader
         io_filename = f"{filename[0]}"
         increase_dimension = True
-        kwargs = {"FileNames": [f"{f}" for f in filename]}
+        kwargs = {"FileNames": [f"{str(f)}" for f in filename]}
     else:
         template_reader_type = itk.ImageFileReader
         io_filename = f"{filename}"
@@ -1214,7 +1294,10 @@ def imread(
             io_filename, itk.CommonEnums.IOFileMode_ReadMode
         )
         if not image_IO:
-            raise RuntimeError("No ImageIO is registered to handle the given file.")
+            if os.path.exists(io_filename):
+                raise RuntimeError("No ImageIO is registered to handle the given file.")
+            else:
+                raise FileNotFoundError(f"File {io_filename} does not exist.")
         image_IO.SetFileName(io_filename)
         image_IO.ReadImageInformation()
         dimension = image_IO.GetNumberOfDimensions()

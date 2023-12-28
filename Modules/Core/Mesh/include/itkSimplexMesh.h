@@ -111,7 +111,7 @@ public:
   itkNewMacro(Self);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(SimplexMesh, Mesh);
+  itkOverrideGetNameOfClassMacro(SimplexMesh);
 
   /** Hold on to the type information specified by the template parameters. */
   using MeshTraits = TMeshTraits;
@@ -186,7 +186,7 @@ public:
   /**
    * Add a neighbor to a point.
    * Note: This can destroy the simplex mesh topology!
-   * Better use te simplex mesh creation filters.
+   * Better use the simplex mesh creation filters.
    */
   void
   AddNeighbor(PointIdentifier pointIdx, PointIdentifier neighborIdx);
@@ -295,7 +295,7 @@ protected:
   /**
    * The map stores a SimplexMeshGeometry object for each mesh point
    */
-  GeometryMapPointer m_GeometryData;
+  GeometryMapPointer m_GeometryData{};
 
   /**
    * The last cell id is the index which is used for insertion of new
@@ -303,7 +303,7 @@ protected:
    * one cannot rely on the size of the map or the highest index when
    * cells are removed.
    */
-  CellIdentifier m_LastCellId;
+  CellIdentifier m_LastCellId{};
 }; // End Class:  SimplexMesh
 } // end namespace itk
 

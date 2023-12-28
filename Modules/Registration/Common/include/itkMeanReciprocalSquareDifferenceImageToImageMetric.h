@@ -27,7 +27,7 @@ namespace itk
  * \brief Computes similarity between two objects to be registered
  *
  * This Class is templated over the type of the Images to be compared and
- * over the type of transformation and Iterpolator to be used.
+ * over the type of transformation and Interpolator to be used.
  *
  * This metric computes the sum of squared differences between pixels in
  * the moving image and pixels in the fixed image after passing the squared
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeanReciprocalSquareDifferenceImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(MeanReciprocalSquareDifferenceImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::TransformType;
@@ -107,8 +107,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_Lambda;
-  double m_Delta;
+  double m_Lambda{};
+  double m_Delta{};
 };
 } // end namespace itk
 

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class RelabelLabelMapFilter
+ * \class RelabelLabelMapFilter
  * \brief This filter relabels the LabelObjects; the new labels are arranged
  * consecutively with consideration for the background value.
  *
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RelabelLabelMapFilter, AttributeRelabelLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(RelabelLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

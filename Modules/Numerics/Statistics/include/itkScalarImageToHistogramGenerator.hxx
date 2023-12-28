@@ -103,8 +103,9 @@ void
 ScalarImageToHistogramGenerator<TImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "ImageToListSample adaptor = " << m_ImageToListSampleAdaptor << std::endl;
-  os << "HistogramGenerator = " << m_HistogramGenerator << std::endl;
+
+  itkPrintSelfObjectMacro(ImageToListSampleAdaptor);
+  itkPrintSelfObjectMacro(HistogramGenerator);
 }
 } // end of namespace Statistics
 } // end of namespace itk

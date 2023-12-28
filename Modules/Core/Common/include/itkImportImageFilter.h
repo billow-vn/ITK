@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImportImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(ImportImageFilter);
 
   /** Index type alias support An index is used to access pixel values. */
   using IndexType = Index<VImageDimension>;
@@ -139,7 +139,7 @@ public:
   itkGetConstReferenceMacro(Direction, DirectionType);
 
 protected:
-  ImportImageFilter();
+  ImportImageFilter() = default;
   ~ImportImageFilter() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -166,13 +166,13 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
 private:
-  RegionType    m_Region;
-  SpacingType   m_Spacing;
-  OriginType    m_Origin;
-  DirectionType m_Direction;
+  RegionType    m_Region{};
+  SpacingType   m_Spacing{ MakeFilled<SpacingType>(1.0) };
+  OriginType    m_Origin{};
+  DirectionType m_Direction{ DirectionType::GetIdentity() };
 
-  typename ImportImageContainerType::Pointer m_ImportImageContainer;
-  SizeValueType                              m_Size;
+  typename ImportImageContainerType::Pointer m_ImportImageContainer{};
+  SizeValueType                              m_Size{};
 };
 } // end namespace itk
 

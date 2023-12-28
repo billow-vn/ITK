@@ -182,8 +182,8 @@ itkFastMarchingUpwindGradientBaseTest(int, char *[])
 
     if ((outputPixelNorm < 0.9999) || (outputPixelNorm > 1.0001) || (dot < 0.99) || (dot > 1.01))
     {
-      std::cout << iterator.GetIndex() << " ";
-      std::cout << outputPixelNorm << " ";
+      std::cout << iterator.GetIndex() << ' ';
+      std::cout << outputPixelNorm << ' ';
       std::cout << dot << std::endl;
       passed = false;
     }
@@ -207,7 +207,7 @@ itkFastMarchingUpwindGradientBaseTest(int, char *[])
   }
   criterion->SetTargetNodes(TargetNodes);
 
-  auto targetOffset = itk::NumericTraits<typename CriterionType::OutputPixelType>::ZeroValue();
+  typename CriterionType::OutputPixelType targetOffset{};
   criterion->SetTargetOffset(targetOffset);
   ITK_TEST_SET_GET_VALUE(targetOffset, criterion->GetTargetOffset());
 

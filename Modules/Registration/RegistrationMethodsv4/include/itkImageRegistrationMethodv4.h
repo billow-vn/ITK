@@ -36,7 +36,7 @@
 
 namespace itk
 {
-/**\class ImageRegistrationMethodv4Enums
+/** \class ImageRegistrationMethodv4Enums
  *\brief Contains all enum classes for ImageRegistrationMethodv4 class.
  * \ingroup ITKRegistrationMethodsv4
  */
@@ -132,7 +132,7 @@ public:
   static constexpr unsigned int ImageDimension = TFixedImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageRegistrationMethodv4, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageRegistrationMethodv4);
 
   /** Input type alias for the images and transforms. */
   using FixedImageType = TFixedImage;
@@ -313,8 +313,8 @@ public:
    * By initializing the random number generator seed to a value the
    * same deterministic sampling will be used each Update
    * execution. On the other hand, calling the method
-   * ReinitializeSeed() without arguments will use the wall clock in
-   * order to have psuedo-random initialization of the seeds. This
+   * MetricSamplingReinitializeSeed() without arguments will use the wall clock in
+   * order to have pseudo-random initialization of the seeds. This
    * will indeed increase the non-deterministic behavior of the
    * metric.
    */
@@ -438,7 +438,7 @@ public:
   using Superclass::MakeOutput;
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
 
-  /** Returns the transform resulting from the registration process  */
+  /** Return the transform resulting from the registration process. */
   virtual DecoratedOutputTransformType *
   GetOutput();
   virtual const DecoratedOutputTransformType *
@@ -527,58 +527,58 @@ protected:
   virtual VirtualImageBaseConstPointer
   GetCurrentLevelVirtualDomainImage();
 
-  /** Get metric samples. */
+  /** Set the metric sample points. */
   virtual void
   SetMetricSamplePoints();
 
-  SizeValueType m_CurrentLevel;
-  SizeValueType m_NumberOfLevels;
-  SizeValueType m_CurrentIteration;
-  RealType      m_CurrentMetricValue;
-  RealType      m_CurrentConvergenceValue;
-  bool          m_IsConverged;
+  SizeValueType m_CurrentLevel{};
+  SizeValueType m_NumberOfLevels{ 0 };
+  SizeValueType m_CurrentIteration{};
+  RealType      m_CurrentMetricValue{};
+  RealType      m_CurrentConvergenceValue{};
+  bool          m_IsConverged{};
 
-  FixedImagesContainerType      m_FixedSmoothImages;
-  MovingImagesContainerType     m_MovingSmoothImages;
-  FixedImageMasksContainerType  m_FixedImageMasks;
-  MovingImageMasksContainerType m_MovingImageMasks;
-  VirtualImagePointer           m_VirtualDomainImage;
-  PointSetsContainerType        m_FixedPointSets;
-  PointSetsContainerType        m_MovingPointSets;
-  SizeValueType                 m_NumberOfFixedObjects;
-  SizeValueType                 m_NumberOfMovingObjects;
+  FixedImagesContainerType      m_FixedSmoothImages{};
+  MovingImagesContainerType     m_MovingSmoothImages{};
+  FixedImageMasksContainerType  m_FixedImageMasks{};
+  MovingImageMasksContainerType m_MovingImageMasks{};
+  VirtualImagePointer           m_VirtualDomainImage{};
+  PointSetsContainerType        m_FixedPointSets{};
+  PointSetsContainerType        m_MovingPointSets{};
+  SizeValueType                 m_NumberOfFixedObjects{};
+  SizeValueType                 m_NumberOfMovingObjects{};
 
-  OptimizerPointer     m_Optimizer;
-  OptimizerWeightsType m_OptimizerWeights;
-  bool                 m_OptimizerWeightsAreIdentity;
+  OptimizerPointer     m_Optimizer{};
+  OptimizerWeightsType m_OptimizerWeights{};
+  bool                 m_OptimizerWeightsAreIdentity{};
 
-  MetricPointer                                       m_Metric;
-  MetricSamplingStrategyEnum                          m_MetricSamplingStrategy;
-  MetricSamplingPercentageArrayType                   m_MetricSamplingPercentagePerLevel;
-  SizeValueType                                       m_NumberOfMetrics;
-  int                                                 m_FirstImageMetricIndex;
-  std::vector<ShrinkFactorsPerDimensionContainerType> m_ShrinkFactorsPerLevel;
-  SmoothingSigmasArrayType                            m_SmoothingSigmasPerLevel;
-  bool                                                m_SmoothingSigmasAreSpecifiedInPhysicalUnits;
+  MetricPointer                                       m_Metric{};
+  MetricSamplingStrategyEnum                          m_MetricSamplingStrategy{};
+  MetricSamplingPercentageArrayType                   m_MetricSamplingPercentagePerLevel{};
+  SizeValueType                                       m_NumberOfMetrics{};
+  int                                                 m_FirstImageMetricIndex{};
+  std::vector<ShrinkFactorsPerDimensionContainerType> m_ShrinkFactorsPerLevel{};
+  SmoothingSigmasArrayType                            m_SmoothingSigmasPerLevel{};
+  bool                                                m_SmoothingSigmasAreSpecifiedInPhysicalUnits{};
 
-  bool m_ReseedIterator;
-  int  m_RandomSeed;
-  int  m_CurrentRandomSeed;
+  bool m_ReseedIterator{};
+  int  m_RandomSeed{};
+  int  m_CurrentRandomSeed{};
 
 
-  TransformParametersAdaptorsContainerType m_TransformParametersAdaptorsPerLevel;
+  TransformParametersAdaptorsContainerType m_TransformParametersAdaptorsPerLevel{};
 
-  CompositeTransformPointer m_CompositeTransform;
+  CompositeTransformPointer m_CompositeTransform{};
 
   // TODO: m_OutputTransform should be removed and replaced with a named input parameter for
   //      the pipeline
-  OutputTransformPointer m_OutputTransform;
+  OutputTransformPointer m_OutputTransform{};
 
 
 private:
-  bool m_InPlace;
+  bool m_InPlace{};
 
-  bool m_InitializeCenterOfLinearOutputTransform;
+  bool m_InitializeCenterOfLinearOutputTransform{};
 
   // helper function to create the right kind of concrete transform
   template <typename TTransform>

@@ -108,9 +108,7 @@ itkWeightedCovarianceSampleFilterTest(int, char *[])
   try
   {
     filter->Update();
-    std::cerr << "Exception should have been thrown since \
-                    Update() is invoked without setting an input"
-              << std::endl;
+    std::cerr << "Exception should have been thrown since Update() is invoked without setting an input" << std::endl;
     return EXIT_FAILURE;
   }
   catch (const itk::ExceptionObject & excp)
@@ -120,9 +118,7 @@ itkWeightedCovarianceSampleFilterTest(int, char *[])
 
   if (filter->GetInput() != nullptr)
   {
-    std::cerr << "GetInput() should return nullptr if the input \
-                     has not been set"
-              << std::endl;
+    std::cerr << "GetInput() should return nullptr if the input has not been set" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -317,7 +313,7 @@ itkWeightedCovarianceSampleFilterTest(int, char *[])
     using Pointer = itk::SmartPointer<Self>;
 
     /** Standard macros. */
-    itkTypeMacro(WeightedCovarianceSampleTestFunction1, FunctionBase);
+    itkOverrideGetNameOfClassMacro(WeightedCovarianceSampleTestFunction1);
     itkNewMacro(Self);
 
     /** Input type */

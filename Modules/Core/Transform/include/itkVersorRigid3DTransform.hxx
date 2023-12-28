@@ -45,7 +45,7 @@ template <typename TParametersValueType>
 void
 VersorRigid3DTransform<TParametersValueType>::SetParameters(const ParametersType & parameters)
 {
-  itkDebugMacro(<< "Setting parameters " << parameters);
+  itkDebugMacro("Setting parameters " << parameters);
 
   // Save parameters. Needed for proper operation of TransformUpdateParameters.
   if (&parameters != &(this->m_Parameters))
@@ -56,19 +56,14 @@ VersorRigid3DTransform<TParametersValueType>::SetParameters(const ParametersType
   // Transfer the versor part
 
   AxisType axis;
-
-  double norm = parameters[0] * parameters[0];
   axis[0] = parameters[0];
-  norm += parameters[1] * parameters[1];
   axis[1] = parameters[1];
-  norm += parameters[2] * parameters[2];
   axis[2] = parameters[2];
-  if (norm > 0)
-  {
-    norm = std::sqrt(norm);
-  }
 
-  double epsilon = 1e-10;
+  const double norm =
+    std::sqrt(parameters[0] * parameters[0] + parameters[1] * parameters[1] + parameters[2] * parameters[2]);
+
+  constexpr double epsilon = 1e-10;
   if (norm >= 1.0 - epsilon)
   {
     axis = axis / (norm + epsilon * norm);
@@ -78,7 +73,7 @@ VersorRigid3DTransform<TParametersValueType>::SetParameters(const ParametersType
   this->SetVarVersor(newVersor);
   this->ComputeMatrix();
 
-  itkDebugMacro(<< "Versor is now " << this->GetVersor());
+  itkDebugMacro("Versor is now " << this->GetVersor());
 
   // Transfer the translation part
   TranslationType newTranslation;
@@ -92,7 +87,7 @@ VersorRigid3DTransform<TParametersValueType>::SetParameters(const ParametersType
   // parameters and cannot know if the parameters have changed.
   this->Modified();
 
-  itkDebugMacro(<< "After setting parameters ");
+  itkDebugMacro("After setting parameters ");
 }
 
 //
@@ -108,7 +103,7 @@ template <typename TParametersValueType>
 auto
 VersorRigid3DTransform<TParametersValueType>::GetParameters() const -> const ParametersType &
 {
-  itkDebugMacro(<< "Getting parameters ");
+  itkDebugMacro("Getting parameters ");
 
   this->m_Parameters[0] = this->GetVersor().GetX();
   this->m_Parameters[1] = this->GetVersor().GetY();
@@ -119,7 +114,7 @@ VersorRigid3DTransform<TParametersValueType>::GetParameters() const -> const Par
   this->m_Parameters[4] = this->GetTranslation()[1];
   this->m_Parameters[5] = this->GetTranslation()[2];
 
-  itkDebugMacro(<< "After getting parameters " << this->m_Parameters);
+  itkDebugMacro("After getting parameters " << this->m_Parameters);
 
   return this->m_Parameters;
 }

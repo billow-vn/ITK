@@ -24,9 +24,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 GradientMagnitudeRecursiveGaussianImageFilter<TInputImage,
                                               TOutputImage>::GradientMagnitudeRecursiveGaussianImageFilter()
@@ -72,13 +70,20 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::PrintS
                                                                                     Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
-  os << "Sigma: " << m_DerivativeFilter->GetSigma() << std::endl;
+
+  os << indent << "SmoothingFilters: ";
+  for (const auto & elem : m_SmoothingFilters)
+  {
+    os << indent.GetNextIndent() << elem << std::endl;
+  }
+
+  itkPrintSelfObjectMacro(DerivativeFilter);
+  itkPrintSelfObjectMacro(SqrSpacingFilter);
+  itkPrintSelfObjectMacro(SqrtFilter);
+
+  os << indent << "NormalizeAcrossScale: " << (m_NormalizeAcrossScale ? "On" : "Off") << std::endl;
 }
 
-/**
- * Set value of Sigma
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetSigma(RealType sigma)
@@ -117,9 +122,6 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNum
   m_SqrtFilter->SetNumberOfWorkUnits(nb);
 }
 
-/**
- * Set Normalize Across Scale Space
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNormalizeAcrossScale(bool normalize)
@@ -138,9 +140,6 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::SetNor
   }
 }
 
-//
-//
-//
 template <typename TInputImage, typename TOutputImage>
 void
 GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
@@ -158,9 +157,6 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Genera
   }
 }
 
-//
-//
-//
 template <typename TInputImage, typename TOutputImage>
 void
 GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::EnlargeOutputRequestedRegion(
@@ -174,14 +170,11 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::Enlarg
   }
 }
 
-/**
- * Compute filter for Gaussian kernel
- */
 template <typename TInputImage, typename TOutputImage>
 void
 GradientMagnitudeRecursiveGaussianImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
-  itkDebugMacro(<< "GradientMagnitudeRecursiveGaussianImageFilter generating data ");
+  itkDebugMacro("GradientMagnitudeRecursiveGaussianImageFilter generating data ");
 
   const typename TInputImage::ConstPointer inputImage(this->GetInput());
 

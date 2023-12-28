@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class LabelObjectLine
+ * \class LabelObjectLine
  * LabelObjectLine is the line object used in the LabelObject class
  * to store the line which are part of the object.
  * A line is formed of and index and a length in the dimension 0.
@@ -97,8 +97,8 @@ protected:
   PrintTrailer(std::ostream & os, Indent indent) const;
 
 private:
-  IndexType  m_Index;
-  LengthType m_Length;
+  IndexType  m_Index{};
+  LengthType m_Length{};
 };
 } // end namespace itk
 

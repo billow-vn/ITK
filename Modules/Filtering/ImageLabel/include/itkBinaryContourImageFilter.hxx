@@ -125,13 +125,10 @@ BinaryContourImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData
   OutputImageType *      output = this->GetOutput();
   const InputImageType * input = this->GetInput();
 
-  using InputLineIteratorType = ImageScanlineConstIterator<InputImageType>;
-  InputLineIteratorType inLineIt(input, outputRegionForThread);
+  ImageScanlineConstIterator inLineIt(input, outputRegionForThread);
 
-  using OutputLineIteratorType = ImageScanlineIterator<OutputImageType>;
-  OutputLineIteratorType outLineIt(output, outputRegionForThread);
+  ImageScanlineIterator outLineIt(output, outputRegionForThread);
 
-  outLineIt.GoToBegin();
   for (inLineIt.GoToBegin(); !inLineIt.IsAtEnd(); inLineIt.NextLine(), outLineIt.NextLine())
   {
     SizeValueType    lineId = this->IndexToLinearIndex(inLineIt.GetIndex());
@@ -198,12 +195,9 @@ BinaryContourImageFilter<TInputImage, TOutputImage>::ThreadedIntegrateData(const
 {
   OutputImagePointer output = this->GetOutput();
 
-  using OutputLineIteratorType = ImageScanlineIterator<OutputImageType>;
-  OutputLineIteratorType outLineIt(output, outputRegionForThread);
-
   OffsetValueType linecount = m_ForegroundLineMap.size();
 
-  for (outLineIt.GoToBegin(); !outLineIt.IsAtEnd(); outLineIt.NextLine())
+  for (ImageScanlineIterator outLineIt(output, outputRegionForThread); !outLineIt.IsAtEnd(); outLineIt.NextLine())
   {
     SizeValueType thisIdx = this->IndexToLinearIndex(outLineIt.GetIndex());
     if (!m_ForegroundLineMap[thisIdx].empty())
@@ -258,12 +252,11 @@ BinaryContourImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << this->m_FullyConnected << std::endl;
-  os << indent
-     << "BackgroundValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue)
-     << std::endl;
   os << indent
      << "ForegroundValue: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_ForegroundValue)
+     << std::endl;
+  os << indent
+     << "BackgroundValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue)
      << std::endl;
 }
 } // end namespace itk

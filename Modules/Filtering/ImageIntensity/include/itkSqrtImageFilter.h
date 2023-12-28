@@ -53,7 +53,7 @@ public:
 } // namespace Functor
 
 /**
- *\class SqrtImageFilter
+ * \class SqrtImageFilter
  * \brief Computes the square root of each pixel.
  *
  * The computations are performed using std::sqrt(x).
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SqrtImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(SqrtImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

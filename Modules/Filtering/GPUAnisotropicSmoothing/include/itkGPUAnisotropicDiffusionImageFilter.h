@@ -48,7 +48,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information. */
-  itkTypeMacro(GPUAnisotropicDiffusionImageFilter, GPUDenseFiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUAnisotropicDiffusionImageFilter);
 
   /** Capture information from the superclass. */
   using InputImageType = typename GPUSuperclass::InputImageType;
@@ -67,8 +67,6 @@ public:
 protected:
   GPUAnisotropicDiffusionImageFilter() = default;
   ~GPUAnisotropicDiffusionImageFilter() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Prepare for the iteration process. */
   void

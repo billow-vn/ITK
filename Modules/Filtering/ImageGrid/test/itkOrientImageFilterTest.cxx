@@ -53,7 +53,7 @@ PrintImg(ImageType::Pointer img)
     {
       for (Index[0] = 0; Index[0] < 4; Index[0]++)
       {
-        std::cerr << img->GetPixel(Index) << " ";
+        std::cerr << img->GetPixel(Index) << ' ';
       }
       std::cerr << std::endl;
     }
@@ -115,7 +115,9 @@ itkOrientImageFilterTest(int argc, char * argv[])
         ImageType::PixelType orig = randImage->GetPixel(originalIndex);
         ImageType::PixelType xfrm = IRP->GetPixel(transformedIndex);
         if (orig != xfrm)
+        {
           return EXIT_FAILURE;
+        }
       }
     }
   }
@@ -148,7 +150,9 @@ itkOrientImageFilterTest(int argc, char * argv[])
         ImageType::PixelType orig = randImage->GetPixel(originalIndex);
         ImageType::PixelType xfrm = LIP->GetPixel(transformedIndex);
         if (orig != xfrm)
+        {
           return EXIT_FAILURE;
+        }
       }
     }
   }

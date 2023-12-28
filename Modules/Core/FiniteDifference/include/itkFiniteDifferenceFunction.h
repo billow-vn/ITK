@@ -75,7 +75,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(FiniteDifferenceFunction, LightObject);
+  itkOverrideGetNameOfClassMacro(FiniteDifferenceFunction);
 
   /** Extract some parameters from the image type */
   using ImageType = TImageType;
@@ -199,8 +199,8 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  RadiusType    m_Radius;
-  PixelRealType m_ScaleCoefficients[ImageDimension];
+  RadiusType    m_Radius{};
+  PixelRealType m_ScaleCoefficients[ImageDimension]{};
 };
 } // end namespace itk
 

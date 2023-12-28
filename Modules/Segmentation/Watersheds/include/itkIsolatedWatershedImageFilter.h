@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class IsolatedWatershedImageFilter
+ * \class IsolatedWatershedImageFilter
  * \brief Isolate watershed basins using two seeds
  *
  * IsolatedWatershedImageFilter labels pixels with ReplaceValue1 that
@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(IsolatedWatershedImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(IsolatedWatershedImageFilter);
 
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;
@@ -117,20 +117,20 @@ public:
 protected:
   IsolatedWatershedImageFilter();
   ~IsolatedWatershedImageFilter() override = default;
-  IndexType m_Seed1;
-  IndexType m_Seed2;
+  IndexType m_Seed1{};
+  IndexType m_Seed2{};
 
-  OutputImagePixelType m_ReplaceValue1;
-  OutputImagePixelType m_ReplaceValue2;
+  OutputImagePixelType m_ReplaceValue1{};
+  OutputImagePixelType m_ReplaceValue2{};
 
-  typename GradientMagnitudeType::Pointer m_GradientMagnitude;
+  typename GradientMagnitudeType::Pointer m_GradientMagnitude{};
 
-  typename WatershedType::Pointer m_Watershed;
+  typename WatershedType::Pointer m_Watershed{};
 
-  double m_Threshold;
-  double m_IsolatedValue;
-  double m_IsolatedValueTolerance;
-  double m_UpperValueLimit;
+  double m_Threshold{};
+  double m_IsolatedValue{};
+  double m_IsolatedValueTolerance{};
+  double m_UpperValueLimit{};
 
   // Override since the filter needs all the data for the algorithm
   void

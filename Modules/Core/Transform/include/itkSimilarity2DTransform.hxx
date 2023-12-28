@@ -51,7 +51,7 @@ template <typename TParametersValueType>
 void
 Similarity2DTransform<TParametersValueType>::SetParameters(const ParametersType & parameters)
 {
-  itkDebugMacro(<< "Setting parameters " << parameters);
+  itkDebugMacro("Setting parameters " << parameters);
 
   // Save parameters. Needed for proper operation of TransformUpdateParameters.
   if (&parameters != &(this->m_Parameters))
@@ -82,7 +82,7 @@ Similarity2DTransform<TParametersValueType>::SetParameters(const ParametersType 
   // parameters and cannot know if the parameters have changed.
   this->Modified();
 
-  itkDebugMacro(<< "After setting parameters ");
+  itkDebugMacro("After setting parameters ");
 }
 
 
@@ -90,7 +90,7 @@ template <typename TParametersValueType>
 auto
 Similarity2DTransform<TParametersValueType>::GetParameters() const -> const ParametersType &
 {
-  itkDebugMacro(<< "Getting parameters ");
+  itkDebugMacro("Getting parameters ");
 
   this->m_Parameters[0] = this->GetScale();
   this->m_Parameters[1] = this->GetAngle();
@@ -102,7 +102,7 @@ Similarity2DTransform<TParametersValueType>::GetParameters() const -> const Para
     this->m_Parameters[i + 2] = translation[i];
   }
 
-  itkDebugMacro(<< "After getting parameters " << this->m_Parameters);
+  itkDebugMacro("After getting parameters " << this->m_Parameters);
 
   return this->m_Parameters;
 }
@@ -152,7 +152,7 @@ Similarity2DTransform<TParametersValueType>::ComputeMatrixParameters()
   // https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
   if (m_Scale < std::numeric_limits<TParametersValueType>::min())
   {
-    itkExceptionMacro(<< "Bad Rotation Matrix. Scale cannot be zero.\n"
+    itkExceptionMacro("Bad Rotation Matrix. Scale cannot be zero.\n"
                       << "m_Scale : " << m_Scale);
   }
 
@@ -165,7 +165,7 @@ Similarity2DTransform<TParametersValueType>::ComputeMatrixParameters()
 
   if ((this->GetMatrix()[1][0] / m_Scale) - std::sin(this->GetAngle()) > 0.000001)
   {
-    itkExceptionMacro(<< "Bad Rotation Matrix");
+    itkExceptionMacro("Bad Rotation Matrix");
   }
 }
 
@@ -218,7 +218,8 @@ void
 Similarity2DTransform<TParametersValueType>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Scale =" << m_Scale << std::endl;
+
+  os << indent << "Scale: " << static_cast<typename NumericTraits<ScaleType>::PrintType>(m_Scale) << std::endl;
 }
 
 

@@ -48,7 +48,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoggerManager, Object);
+  itkOverrideGetNameOfClassMacro(LoggerManager);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -108,9 +108,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  using ContainerType = std::map<NameType, LoggerPointer>;
-
-  ContainerType m_LoggerSet;
+  std::map<NameType, LoggerPointer> m_LoggerSet{};
 }; // class Logger
 } // namespace itk
 

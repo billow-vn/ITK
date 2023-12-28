@@ -26,8 +26,8 @@
 namespace itk
 {
 /**
- *\class AttributeSelectionLabelMapFilter
- * \brief remove the objects according to the value of their attribute
+ * \class AttributeSelectionLabelMapFilter
+ * \brief Remove the objects according to the value of their attribute.
  *
  * AttributeSelectionLabelMapFilter removes the objects in a label collection image
  * with an attribute value inside or outside a set of attribute values passed by
@@ -81,7 +81,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributeSelectionLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(AttributeSelectionLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -157,8 +157,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  AttributeSetType m_AttributeSet;
-  bool             m_Exclude;
+  AttributeSetType m_AttributeSet{};
+  bool             m_Exclude{};
 
 }; // end of class
 

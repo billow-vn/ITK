@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ConditionVariable
+ * \class ConditionVariable
  * \brief A thread synchronization object used to suspend execution until some
  * condition on shared data is met.
  *
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConditionVariable, LightObject);
+  itkOverrideGetNameOfClassMacro(ConditionVariable);
 
   /** Suspend execution of this thread until the condition is signaled. The
    *  argument is a SimpleMutex object that must be locked prior to calling
@@ -92,7 +92,7 @@ protected:
   ~ConditionVariable() override;
 
 private:
-  ConditionVariableType m_ConditionVariable;
+  ConditionVariableType m_ConditionVariable{};
 };
 } // end namespace itk
 

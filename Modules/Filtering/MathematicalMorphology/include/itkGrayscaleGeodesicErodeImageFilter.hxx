@@ -185,7 +185,7 @@ GrayscaleGeodesicErodeImageFilter<TInputImage, TOutputImage>::GenerateData()
   bool done = false;
 
   // set up the singleIteration filter. we are not using the grafting
-  // mechanism because we only need the requested regioN to be set up
+  // mechanism because we only need the requested region to be set up
   singleIteration->RunOneIterationOn();
   singleIteration->SetMarkerImage(this->GetMarkerImage());
   singleIteration->SetMaskImage(this->GetMaskImage());
@@ -234,7 +234,7 @@ GrayscaleGeodesicErodeImageFilter<TInputImage, TOutputImage>::GenerateData()
       // assign the old output as the input
       singleIteration->SetMarkerImage(marker);
       // since DisconnectPipeline() creates a new output object, we need
-      // to regraft the information onto the output
+      // to graft the information onto the output
       singleIteration->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
 
       // Keep track of how many iterations have be done
@@ -283,13 +283,11 @@ GrayscaleGeodesicErodeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGen
 
   // Find the boundary "faces". Structuring element is elementary
   // (face connected neighbors within a radius of 1).
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>::FaceListType faceList;
-  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>                        fC;
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>::RadiusType   kernelRadius;
+  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>                      fC;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>::RadiusType kernelRadius;
   kernelRadius.Fill(1);
-  faceList = fC(this->GetMarkerImage(), outputRegionForThread, kernelRadius);
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>::FaceListType::iterator fit;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<MarkerImageType>::FaceListType faceList =
+    fC(this->GetMarkerImage(), outputRegionForThread, kernelRadius);
 
   typename NeighborhoodIteratorType::OffsetValueType i;
   typename NeighborhoodIteratorType::OffsetType      offset;
@@ -298,11 +296,11 @@ GrayscaleGeodesicErodeImageFilter<TInputImage, TOutputImage>::DynamicThreadedGen
 
   // Iterate over the faces
   //
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    NeighborhoodIteratorType              markerIt(kernelRadius, this->GetMarkerImage(), *fit);
-    ImageRegionConstIterator<TInputImage> maskIt(this->GetMaskImage(), *fit);
-    ImageRegionIterator<TOutputImage>     oIt(this->GetOutput(), *fit);
+    NeighborhoodIteratorType              markerIt(kernelRadius, this->GetMarkerImage(), face);
+    ImageRegionConstIterator<TInputImage> maskIt(this->GetMaskImage(), face);
+    ImageRegionIterator<TOutputImage>     oIt(this->GetOutput(), face);
 
     markerIt.OverrideBoundaryCondition(&BC);
     markerIt.GoToBegin();
@@ -381,9 +379,9 @@ GrayscaleGeodesicErodeImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ost
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Run one iteration: " << (m_RunOneIteration ? "on" : "off") << std::endl;
-  os << indent << "Number of iterations used to produce current output: " << m_NumberOfIterationsUsed << std::endl;
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "RunOneIteration: " << (m_RunOneIteration ? "On" : "Off") << std::endl;
+  os << indent << "NumberOfIterationsUsed: " << m_NumberOfIterationsUsed << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 #endif

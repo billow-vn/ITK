@@ -54,7 +54,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Command, Object);
+  itkOverrideGetNameOfClassMacro(Command);
 
   /** Abstract method that defines the action to be taken by the command. */
   virtual void
@@ -100,7 +100,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MemberCommand, Command);
+  itkOverrideGetNameOfClassMacro(MemberCommand);
 
   /**  Set the callback function along with the object that it will
    *  be invoked on. */
@@ -139,15 +139,11 @@ public:
   }
 
 protected:
-  T *                         m_This;
-  TMemberFunctionPointer      m_MemberFunction;
-  TConstMemberFunctionPointer m_ConstMemberFunction;
+  T *                         m_This{ nullptr };
+  TMemberFunctionPointer      m_MemberFunction{ nullptr };
+  TConstMemberFunctionPointer m_ConstMemberFunction{ nullptr };
 
-  MemberCommand()
-    : m_This(nullptr)
-    , m_MemberFunction(nullptr)
-    , m_ConstMemberFunction(nullptr)
-  {}
+  MemberCommand() = default;
 
   ~MemberCommand() override = default;
 };
@@ -178,7 +174,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ReceptorMemberCommand, Command);
+  itkOverrideGetNameOfClassMacro(ReceptorMemberCommand);
 
   /**  Set the callback function along with the object that it will
    *  be invoked on. */
@@ -210,13 +206,10 @@ public:
   }
 
 protected:
-  T *                    m_This;
-  TMemberFunctionPointer m_MemberFunction;
+  T *                    m_This{ nullptr };
+  TMemberFunctionPointer m_MemberFunction{ nullptr };
 
-  ReceptorMemberCommand()
-    : m_This(nullptr)
-    , m_MemberFunction(nullptr)
-  {}
+  ReceptorMemberCommand() = default;
 
   ~ReceptorMemberCommand() override = default;
 };
@@ -244,7 +237,7 @@ public:
   using Pointer = SmartPointer<Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SimpleMemberCommand, Command);
+  itkOverrideGetNameOfClassMacro(SimpleMemberCommand);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -277,13 +270,10 @@ public:
   }
 
 protected:
-  T *                    m_This;
-  TMemberFunctionPointer m_MemberFunction;
+  T *                    m_This{ nullptr };
+  TMemberFunctionPointer m_MemberFunction{ nullptr };
 
-  SimpleMemberCommand()
-    : m_This(nullptr)
-    , m_MemberFunction(nullptr)
-  {}
+  SimpleMemberCommand() = default;
 
   ~SimpleMemberCommand() override = default;
 };
@@ -311,7 +301,7 @@ public:
   using Pointer = SmartPointer<Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SimpleConstMemberCommand, Command);
+  itkOverrideGetNameOfClassMacro(SimpleConstMemberCommand);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -344,13 +334,10 @@ public:
   }
 
 protected:
-  const T *              m_This;
-  TMemberFunctionPointer m_MemberFunction;
+  const T *              m_This{ nullptr };
+  TMemberFunctionPointer m_MemberFunction{ nullptr };
 
-  SimpleConstMemberCommand()
-    : m_This(nullptr)
-    , m_MemberFunction(nullptr)
-  {}
+  SimpleConstMemberCommand() = default;
 
   ~SimpleConstMemberCommand() override = default;
 };
@@ -380,7 +367,7 @@ public:
   using Pointer = SmartPointer<Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CStyleCommand, Command);
+  itkOverrideGetNameOfClassMacro(CStyleCommand);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -438,7 +425,7 @@ public:
   using FunctionObjectType = std::function<void(const EventObject &)>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FunctionCommand, Command);
+  itkOverrideGetNameOfClassMacro(FunctionCommand);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -460,7 +447,7 @@ protected:
   ~FunctionCommand() override;
 
 
-  FunctionObjectType m_FunctionObject;
+  FunctionObjectType m_FunctionObject{};
 };
 
 } // end namespace itk

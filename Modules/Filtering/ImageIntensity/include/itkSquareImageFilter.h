@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class SquareImageFilter
+ * \class SquareImageFilter
  * \brief Computes the square of the intensity values pixel-wise
  *
  * \ingroup IntensityImageFilters  MultiThreaded
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SquareImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(SquareImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

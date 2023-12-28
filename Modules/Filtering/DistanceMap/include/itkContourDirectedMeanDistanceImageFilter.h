@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class ContourDirectedMeanDistanceImageFilter
+ * \class ContourDirectedMeanDistanceImageFilter
  * \brief Computes the directed Mean distance between the boundaries of
  * non-zero pixel regions of two images.
  *
@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ContourDirectedMeanDistanceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ContourDirectedMeanDistanceImageFilter);
 
   /** Image related type alias. */
   using InputImage1Type = TInputImage1;
@@ -170,12 +170,12 @@ protected:
 private:
   using DistanceMapType = Image<RealType, Self::ImageDimension>;
 
-  typename DistanceMapType::Pointer m_DistanceMap;
+  typename DistanceMapType::Pointer m_DistanceMap{};
 
-  Array<RealType>       m_MeanDistance;
-  Array<IdentifierType> m_Count;
-  RealType              m_ContourDirectedMeanDistance;
-  bool                  m_UseImageSpacing;
+  Array<RealType>       m_MeanDistance{};
+  Array<IdentifierType> m_Count{};
+  RealType              m_ContourDirectedMeanDistance{};
+  bool                  m_UseImageSpacing{};
 };
 } // end namespace itk
 

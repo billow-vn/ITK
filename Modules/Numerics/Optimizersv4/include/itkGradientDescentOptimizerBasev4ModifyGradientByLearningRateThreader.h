@@ -27,7 +27,7 @@ template <typename TInternalComputationValueType>
 class ITK_FORWARD_EXPORT GradientDescentOptimizerBasev4Template;
 
 /**
- *\class GradientDescentOptimizerBasev4ModifyGradientByLearningRateThreaderTemplate
+ * \class GradientDescentOptimizerBasev4ModifyGradientByLearningRateThreaderTemplate
  * \brief Modify the gradient by the learning rate for
  * GradientDescentOptimizerBasev4.
  * \ingroup ITKOptimizersv4
@@ -48,7 +48,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(GradientDescentOptimizerBasev4ModifyGradientByLearningRateThreaderTemplate, DomainThreader);
+  itkOverrideGetNameOfClassMacro(GradientDescentOptimizerBasev4ModifyGradientByLearningRateThreaderTemplate);
 
   itkNewMacro(Self);
 

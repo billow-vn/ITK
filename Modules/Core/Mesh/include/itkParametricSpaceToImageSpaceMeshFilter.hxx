@@ -23,18 +23,13 @@
 
 namespace itk
 {
-/**
- *
- */
+
 template <typename TInputMesh, typename TOutputMesh>
 ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::ParametricSpaceToImageSpaceMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 }
 
-/**
- *
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
@@ -42,9 +37,6 @@ ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::PrintSelf(std::o
   Superclass::PrintSelf(os, indent);
 }
 
-/**
- * This method causes the filter to generate its output.
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
@@ -64,12 +56,12 @@ ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
 
   if (!inputMesh)
   {
-    itkExceptionMacro(<< "Missing Input Mesh");
+    itkExceptionMacro("Missing Input Mesh");
   }
 
   if (!outputMesh)
   {
-    itkExceptionMacro(<< "Missing Output Mesh");
+    itkExceptionMacro("Missing Output Mesh");
   }
 
   outputMesh->SetBufferedRegion(outputMesh->GetRequestedRegion());
@@ -130,9 +122,6 @@ ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
   }
 }
 
-/**
- * copy information from first input to all outputs
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ParametricSpaceToImageSpaceMeshFilter<TInputMesh, TOutputMesh>::GenerateOutputInformation()

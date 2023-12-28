@@ -31,7 +31,7 @@ namespace itk
  *
  * This class encapsulates a deformable transform of points from one
  * N-dimensional space to another N-dimensional space.
- * The deformation field is modelled using B-splines.
+ * The deformation field is modeled using B-splines.
  * A deformation is defined on a sparse regular grid of control points
  * \f$ \vec{\lambda}_j \f$ and is varied by defining a deformation
  * \f$ \vec{g}(\vec{\lambda}_j) \f$ of each control point.
@@ -143,7 +143,7 @@ public:
   itkCloneMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineDeformableTransform, BSplineBaseTransform);
+  itkOverrideGetNameOfClassMacro(BSplineDeformableTransform);
 
   /** Dimension of the domain space. */
   static constexpr unsigned int SpaceDimension = VDimension;
@@ -353,21 +353,21 @@ private:
    * through the pointers (although it does enforce some
    * internal class synchronization).
    */
-  const RegionType &    m_GridRegion;
-  const OriginType &    m_GridOrigin;
-  const SpacingType &   m_GridSpacing;
+  const RegionType &    m_GridRegion{};
+  const OriginType &    m_GridOrigin{};
+  const SpacingType &   m_GridSpacing{};
   const DirectionType & m_GridDirection;
 
   /** The bulk transform. */
-  BulkTransformPointer m_BulkTransform;
+  BulkTransformPointer m_BulkTransform{};
 
-  RegionType m_ValidRegion;
+  RegionType m_ValidRegion{};
 
   /** Variables defining the interpolation support region. */
-  unsigned long m_Offset;
-  bool          m_SplineOrderOdd;
-  IndexType     m_ValidRegionLast;
-  IndexType     m_ValidRegionFirst;
+  unsigned long m_Offset{};
+  bool          m_SplineOrderOdd{};
+  IndexType     m_ValidRegionLast{};
+  IndexType     m_ValidRegionFirst{};
 
   void
   UpdateValidGridRegion();

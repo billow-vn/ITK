@@ -81,19 +81,19 @@ ImageFileWriter<TInputImage>::Write()
 {
   const InputImageType * input = this->GetInput();
 
-  itkDebugMacro(<< "Writing an image file");
+  itkDebugMacro("Writing an image file");
 
   // Make sure input is available
   if (input == nullptr)
   {
-    itkExceptionMacro(<< "No input to writer!");
+    itkExceptionMacro("No input to writer!");
   }
 
   // Make sure that we can write the file given the name
   //
   if (m_FileName.empty())
   {
-    itkExceptionMacro(<< "No filename was specified");
+    itkExceptionMacro("No filename was specified");
   }
 
   if (m_ImageIO.IsNull() || (m_FactorySpecifiedImageIO && !m_ImageIO->CanWriteFile(m_FileName.c_str())))
@@ -101,12 +101,12 @@ ImageFileWriter<TInputImage>::Write()
     // try creating via factory
     if (m_ImageIO.IsNull())
     {
-      itkDebugMacro(<< "Attempting factory creation of ImageIO for file: " << m_FileName);
+      itkDebugMacro("Attempting factory creation of ImageIO for file: " << m_FileName);
     }
     else // ( m_FactorySpecifiedImageIO && !m_ImageIO->CanWriteFile( m_FileName.c_str() )
     {
-      itkDebugMacro(<< "ImageIO exists but doesn't know how to write file:" << m_FileName);
-      itkDebugMacro(<< "Attempting creation of ImageIO with a factory for file:" << m_FileName);
+      itkDebugMacro("ImageIO exists but doesn't know how to write file:" << m_FileName);
+      itkDebugMacro("Attempting creation of ImageIO with a factory for file:" << m_FileName);
     }
     m_ImageIO = ImageIOFactory::CreateImageIO(m_FileName.c_str(), ImageIOFactory::IOFileModeEnum::WriteMode);
     m_FactorySpecifiedImageIO = true;
@@ -126,13 +126,13 @@ ImageFileWriter<TInputImage>::Write()
         auto * io = dynamic_cast<ImageIOBase *>(allobject.GetPointer());
         msg << "    " << io->GetNameOfClass() << std::endl;
       }
-      msg << "  You probably failed to set a file suffix, or" << std::endl;
-      msg << "    set the suffix to an unsupported type." << std::endl;
+      msg << "  You probably failed to set a file suffix, or" << std::endl
+          << "    set the suffix to an unsupported type." << std::endl;
     }
     else
     {
-      msg << "  There are no registered IO factories." << std::endl;
-      msg << "  Please visit https://www.itk.org/Wiki/ITK/FAQ#NoFactoryException to diagnose the problem." << std::endl;
+      msg << "  There are no registered IO factories." << std::endl
+          << "  Please visit https://www.itk.org/Wiki/ITK/FAQ#NoFactoryException to diagnose the problem." << std::endl;
     }
     e.SetDescription(msg.str().c_str());
     e.SetLocation(ITK_LOCATION);
@@ -242,8 +242,8 @@ ImageFileWriter<TInputImage>::Write()
   // largest region or not.
   if (!largestIORegion.IsInside(pasteIORegion))
   {
-    itkExceptionMacro(<< "Largest possible region does not fully contain requested paste IO region"
-                      << "Paste IO region: " << pasteIORegion << "Largest possible region: " << largestRegion);
+    itkExceptionMacro("Largest possible region does not fully contain requested paste IO region. Paste IO region: "
+                      << pasteIORegion << "Largest possible region: " << largestRegion);
   }
 
   // Determine the actual number of divisions of the input. This is determined
@@ -270,8 +270,9 @@ ImageFileWriter<TInputImage>::Write()
     // largest region or not.
     if (!pasteIORegion.IsInside(streamIORegion))
     {
-      itkExceptionMacro(<< "ImageIO returns streamable region that is not fully contain in paste IO region"
-                        << "Paste IO region: " << pasteIORegion << "Streamable region: " << streamIORegion);
+      itkExceptionMacro(
+        << "ImageIO returns streamable region that is not fully contain in paste IO region. Paste IO region: "
+        << pasteIORegion << "Streamable region: " << streamIORegion);
     }
 
     InputImageRegionType streamRegion;
@@ -331,7 +332,7 @@ ImageFileWriter<TInputImage>::GenerateData()
   InputImageRegionType   largestRegion = input->GetLargestPossibleRegion();
   InputImagePointer      cacheImage;
 
-  itkDebugMacro(<< "Writing file: " << m_FileName);
+  itkDebugMacro("Writing file: " << m_FileName);
 
   // now extract the data as a raw buffer pointer
   const void * dataPtr = input->GetBufferPointer();
@@ -364,11 +365,10 @@ ImageFileWriter<TInputImage>::GenerateData()
     {
       ImageFileWriterException e(__FILE__, __LINE__);
       std::ostringstream       msg;
-      msg << "Did not get requested region!" << std::endl;
-      msg << "Requested:" << std::endl;
-      msg << ioRegion;
-      msg << "Actual:" << std::endl;
-      msg << bufferedRegion;
+      msg << "Did not get requested region!" << std::endl
+          << "Requested:" << std::endl
+          << ioRegion << "Actual:" << std::endl
+          << bufferedRegion;
       e.SetDescription(msg.str().c_str());
       e.SetLocation(ITK_LOCATION);
       throw e;
@@ -387,19 +387,11 @@ ImageFileWriter<TInputImage>::PrintSelf(std::ostream & os, Indent indent) const
 
   os << indent << "File Name: " << (m_FileName.data() ? m_FileName.data() : "(none)") << std::endl;
 
-  os << indent << "Image IO: ";
-  if (m_ImageIO.IsNull())
-  {
-    os << "(none)\n";
-  }
-  else
-  {
-    os << m_ImageIO << "\n";
-  }
+  itkPrintSelfObjectMacro(ImageIO);
 
-  os << indent << "IO Region: " << m_PasteIORegion << "\n";
-  os << indent << "Number of Stream Divisions: " << m_NumberOfStreamDivisions << "\n";
-  os << indent << "CompressionLevel: " << m_CompressionLevel << "\n";
+  os << indent << "IO Region: " << m_PasteIORegion << '\n';
+  os << indent << "Number of Stream Divisions: " << m_NumberOfStreamDivisions << '\n';
+  os << indent << "CompressionLevel: " << m_CompressionLevel << '\n';
 
   if (m_UseCompression)
   {

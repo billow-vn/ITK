@@ -83,7 +83,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(HardConnectedComponentImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HardConnectedComponentImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -125,7 +125,7 @@ protected:
   }
 
 private:
-  ListType m_Seeds;
+  ListType m_Seeds{};
 };
 } // end namespace itk
 

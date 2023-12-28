@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class LabelToRGBImageFilter
+ * \class LabelToRGBImageFilter
  * \brief Apply a colormap to a label image
  *
  * Apply a colormap to a label image. The set of colors
@@ -74,7 +74,7 @@ public:
   using OutputPixelValueType = typename NumericTraits<OutputPixelType>::ValueType;
 
   /** Runtime information support. */
-  itkTypeMacro(LabelToRGBImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelToRGBImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -118,8 +118,8 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  OutputPixelType m_BackgroundColor;
-  LabelPixelType  m_BackgroundValue;
+  OutputPixelType m_BackgroundColor{};
+  LabelPixelType  m_BackgroundValue{};
 };
 } // end namespace itk
 

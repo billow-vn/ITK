@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ImageFunction
+ * \class ImageFunction
  * \brief Evaluates a function of an image at specified position.
  *
  * ImageFunction is a baseclass for all objects that evaluates
@@ -69,7 +69,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageFunction, FunctionBase);
+  itkOverrideGetNameOfClassMacro(ImageFunction);
 
   /** InputImageType type alias support */
   using InputImageType = TInputImage;
@@ -191,7 +191,7 @@ public:
   void
   ConvertPointToContinuousIndex(const PointType & point, ContinuousIndexType & cindex) const
   {
-    m_Image->TransformPhysicalPointToContinuousIndex(point, cindex);
+    cindex = m_Image->template TransformPhysicalPointToContinuousIndex<TCoordRep>(point);
   }
 
   /** Convert continuous index to nearest index. */
@@ -214,14 +214,14 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Const pointer to the input image. */
-  InputImageConstPointer m_Image;
+  InputImageConstPointer m_Image{};
 
   /** Cache some values for testing if indices are inside buffered region. */
-  IndexType m_StartIndex;
-  IndexType m_EndIndex;
+  IndexType m_StartIndex{};
+  IndexType m_EndIndex{};
 
-  ContinuousIndexType m_StartContinuousIndex;
-  ContinuousIndexType m_EndContinuousIndex;
+  ContinuousIndexType m_StartContinuousIndex{};
+  ContinuousIndexType m_EndContinuousIndex{};
 };
 } // end namespace itk
 

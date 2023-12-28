@@ -81,7 +81,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Runtime information support. */
-  itkTypeMacro(MorphologyImageFilter, KernelImageFilter);
+  itkOverrideGetNameOfClassMacro(MorphologyImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -154,10 +154,10 @@ protected:
 private:
   /** Pointer to a persistent boundary condition object used
    * for the image iterator. */
-  ImageBoundaryConditionPointerType m_BoundaryCondition;
+  ImageBoundaryConditionPointerType m_BoundaryCondition{};
 
   /** Default boundary condition */
-  DefaultBoundaryConditionType m_DefaultBoundaryCondition;
+  DefaultBoundaryConditionType m_DefaultBoundaryCondition{};
 }; // end of class
 } // end namespace itk
 

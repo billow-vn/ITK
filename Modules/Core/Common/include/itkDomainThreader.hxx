@@ -82,8 +82,8 @@ DomainThreader<TDomainPartitioner, TAssociate>::DetermineNumberOfWorkUnitsUsed()
 
   if (this->m_NumberOfWorkUnitsUsed > numberOfWorkUnits)
   {
-    itkExceptionMacro("A subclass of ThreadedDomainPartitioner::PartitionDomain"
-                      << "returned more subdomains than were requested");
+    itkExceptionMacro(
+      "A subclass of ThreadedDomainPartitioner::PartitionDomain returned more subdomains than were requested");
   }
 }
 
@@ -120,7 +120,7 @@ DomainThreader<TDomainPartitioner, TAssociate>::ThreaderCallback(void * arg)
   // Execute the actual method with appropriate sub-domain.
   // If the work unit ID is greater than the total number of regions
   // that PartitionDomain will create, don't use this thread.
-  // Sometimes the threads dont break up very well and it is just
+  // Sometimes the threads don't break up very well and it is just
   // as efficient to leave a few threads idle.
   if (workUnitID < total)
   {

@@ -27,13 +27,10 @@
 #include "itkVectorNeighborhoodOperatorImageFilter.h"
 
 #include "itkMath.h"
-#include "itkMath.h"
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::PDEDeformableRegistrationFilter()
 {
@@ -66,9 +63,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   m_SmoothUpdateField = false;
 }
 
-/*
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 std::vector<SmartPointer<DataObject>>::size_type
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::GetNumberOfValidRequiredInputs() const
@@ -88,9 +82,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   return num;
 }
 
-/**
- * Set the standard deviations.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SetStandardDeviations(double value)
@@ -141,42 +132,26 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   }
 }
 
-/*
- * Standard PrintSelf method.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::PrintSelf(std::ostream & os,
                                                                                           Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Smooth deformation field: " << (m_SmoothDisplacementField ? "on" : "off") << std::endl;
-  unsigned int j = 0;
-  os << indent << "Standard deviations: [" << m_StandardDeviations[j];
-  for (j = 1; j < ImageDimension; ++j)
-  {
-    os << ", " << m_StandardDeviations[j];
-  }
-  os << "]" << std::endl;
-  os << indent << "Smooth update field: " << (m_SmoothUpdateField ? "on" : "off") << std::endl;
-  j = 0;
-  os << indent << "Update field standard deviations: [" << m_UpdateFieldStandardDeviations[j];
-  for (j = 1; j < ImageDimension; ++j)
-  {
-    os << ", " << m_UpdateFieldStandardDeviations[j];
-  }
-  os << "]" << std::endl;
-  os << indent << "StopRegistrationFlag: ";
-  os << m_StopRegistrationFlag << std::endl;
-  os << indent << "MaximumError: ";
-  os << m_MaximumError << std::endl;
-  os << indent << "MaximumKernelWidth: ";
-  os << m_MaximumKernelWidth << std::endl;
+
+  os << indent << "StandardDeviations: " << m_StandardDeviations << std::endl;
+  os << indent << "UpdateFieldStandardDeviations: " << m_UpdateFieldStandardDeviations << std::endl;
+
+  os << indent << "SmoothDisplacementField: " << (m_SmoothDisplacementField ? "On" : "Off") << std::endl;
+  os << indent << "SmoothUpdateField: " << (m_SmoothUpdateField ? "On" : "Off") << std::endl;
+
+  itkPrintSelfObjectMacro(TempField);
+
+  os << indent << "MaximumError: " << m_MaximumError << std::endl;
+  os << indent << "MaximumKernelWidth: " << m_MaximumKernelWidth << std::endl;
+  os << indent << "StopRegistrationFlag: " << (m_StopRegistrationFlag ? "On" : "Off") << std::endl;
 }
 
-/*
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::InitializeIteration()
@@ -186,7 +161,7 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
 
   if (!movingPtr || !fixedPtr)
   {
-    itkExceptionMacro(<< "Fixed and/or moving image not set");
+    itkExceptionMacro("Fixed and/or moving image not set");
   }
 
   // update variables in the equation object
@@ -194,7 +169,7 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
 
   if (!f)
   {
-    itkExceptionMacro(<< "FiniteDifferenceFunction not of type PDEDeformableRegistrationFilterFunction");
+    itkExceptionMacro("FiniteDifferenceFunction not of type PDEDeformableRegistrationFilterFunction");
   }
 
   f->SetFixedImage(fixedPtr);
@@ -203,12 +178,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   this->Superclass::InitializeIteration();
 }
 
-/*
- * Override the default implementation for the case when the
- * initial deformation is not set.
- * If the initial deformation is not set, the output is
- * fill with zero vectors.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::CopyInputToOutput()
@@ -253,7 +222,7 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   }
   else if (this->GetFixedImage())
   {
-    // Initial deforamtion field is not set.
+    // Initial deformation field is not set.
     // Copy information from the fixed image.
     for (unsigned int idx = 0; idx < this->GetNumberOfIndexedOutputs(); ++idx)
     {
@@ -297,9 +266,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   }
 }
 
-/*
- * Release memory of internal buffers
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::PostProcessOutput()
@@ -308,9 +274,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   m_TempField->Initialize();
 }
 
-/*
- * Initialize flags
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::Initialize()
@@ -319,9 +282,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   m_StopRegistrationFlag = false;
 }
 
-/*
- * Smooth deformation using a separable Gaussian kernel
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SmoothDisplacementField()
@@ -383,9 +343,6 @@ PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::
   delete oper;
 }
 
-/*
- * Smooth deformation using a separable Gaussian kernel
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::SmoothUpdateField()

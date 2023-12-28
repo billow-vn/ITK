@@ -61,7 +61,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeanImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(MeanImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -72,7 +72,7 @@ public:
   /** InputPixel type alias support */
   using typename Superclass::InputPixelType;
 
-  /** OutputType typdef support. */
+  /** OutputType typedef support. */
   using typename Superclass::OutputType;
 
   /** Index type alias support */
@@ -93,7 +93,7 @@ public:
   /** Datatype used for the mean */
   using RealType = typename NumericTraits<typename InputImageType::PixelType>::RealType;
 
-  /** Evalulate the function at specified index */
+  /** Evaluate the function at specified index */
   RealType
   EvaluateAtIndex(const IndexType & index) const override;
 

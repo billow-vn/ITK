@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MeshFileWriterException.
+ * \class MeshFileWriterException.
  * \brief Base exception class for IO problems during writing.
  *
  * \ingroup ITKIOMeshBase
@@ -36,7 +36,7 @@ public:
   ~MeshFileWriterException() noexcept override;
 
   /** Run-time information. */
-  itkTypeMacro(MeshFileWriterException, ExceptionObject);
+  itkOverrideGetNameOfClassMacro(MeshFileWriterException);
 
   /** Constructor. */
   MeshFileWriterException(const char * file,

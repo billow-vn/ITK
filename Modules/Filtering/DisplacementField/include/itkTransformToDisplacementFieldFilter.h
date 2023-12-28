@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformToDisplacementFieldFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(TransformToDisplacementFieldFilter);
 
   /** Number of dimensions. */
   static constexpr unsigned int ImageDimension = TOutputImage::ImageDimension;
@@ -187,11 +187,11 @@ protected:
 
 private:
   /** Member variables. */
-  SizeType      m_Size;             // size of the output region
-  IndexType     m_OutputStartIndex; // start index of the output region
-  SpacingType   m_OutputSpacing;    // output image spacing
-  OriginType    m_OutputOrigin;     // output image origin
-  DirectionType m_OutputDirection;  // output image direction cosines
+  SizeType      m_Size{};             // size of the output region
+  IndexType     m_OutputStartIndex{}; // start index of the output region
+  SpacingType   m_OutputSpacing{};    // output image spacing
+  OriginType    m_OutputOrigin{};     // output image origin
+  DirectionType m_OutputDirection{};  // output image direction cosines
   bool          m_UseReferenceImage{ false };
 };
 } // end namespace itk

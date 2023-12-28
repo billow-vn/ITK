@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class BinomialBlurImageFilter
+ * \class BinomialBlurImageFilter
  * \brief Performs a separable blur on each dimension of an image.
  *
  * The binomial blur consists of a nearest neighbor average along each
@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinomialBlurImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinomialBlurImageFilter);
 
   /** Number of dimensions */
   static constexpr unsigned int NDimensions = TInputImage::ImageDimension;
@@ -112,7 +112,7 @@ protected:
 
 private:
   /** How many times should we apply the blur? */
-  unsigned int m_Repetitions;
+  unsigned int m_Repetitions{};
 };
 } // end namespace itk
 

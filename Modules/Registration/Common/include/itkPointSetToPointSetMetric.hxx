@@ -21,7 +21,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <typename TFixedPointSet, typename TMovingPointSet>
 PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::PointSetToPointSetMetric()
 {
@@ -30,7 +30,6 @@ PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::PointSetToPointSetMet
   m_Transform = nullptr;      // has to be provided by the user.
 }
 
-/** Set the parameters that define a unique transform */
 template <typename TFixedPointSet, typename TMovingPointSet>
 void
 PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::SetTransformParameters(
@@ -38,29 +37,28 @@ PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::SetTransformParameter
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform has not been assigned");
+    itkExceptionMacro("Transform has not been assigned");
   }
   m_Transform->SetParameters(parameters);
 }
 
-/** Initialize the metric */
 template <typename TFixedPointSet, typename TMovingPointSet>
 void
 PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::Initialize()
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
 
   if (!m_MovingPointSet)
   {
-    itkExceptionMacro(<< "MovingPointSet is not present");
+    itkExceptionMacro("MovingPointSet is not present");
   }
 
   if (!m_FixedPointSet)
   {
-    itkExceptionMacro(<< "FixedPointSet is not present");
+    itkExceptionMacro("FixedPointSet is not present");
   }
 
   // If the PointSet is provided by a source, update the source.
@@ -70,15 +68,15 @@ PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::Initialize()
   m_FixedPointSet->UpdateSource();
 }
 
-/** PrintSelf */
 template <typename TFixedPointSet, typename TMovingPointSet>
 void
 PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Moving PointSet: " << m_MovingPointSet.GetPointer() << std::endl;
-  os << indent << "Fixed  PointSet: " << m_FixedPointSet.GetPointer() << std::endl;
-  os << indent << "Transform:    " << m_Transform.GetPointer() << std::endl;
+
+  itkPrintSelfObjectMacro(MovingPointSet);
+  itkPrintSelfObjectMacro(FixedPointSet);
+  itkPrintSelfObjectMacro(Transform);
 }
 } // end namespace itk
 

@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(LineSpatialObject, PointBasedSpatialObject);
+  itkOverrideGetNameOfClassMacro(LineSpatialObject);
 
   /** Returns true if the line is evaluable at the requested point,
    *  false otherwise. */
@@ -80,10 +80,6 @@ public:
 protected:
   LineSpatialObject();
   ~LineSpatialObject() override = default;
-
-  /** Method to print the object. */
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   typename LightObject::Pointer
   InternalClone() const override;

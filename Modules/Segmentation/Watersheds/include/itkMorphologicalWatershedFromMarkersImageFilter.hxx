@@ -81,7 +81,7 @@ MorphologicalWatershedFromMarkersImageFilter<TInputImage, TLabelImage>::Generate
 {
   // there is 2 possible cases: with or without watershed lines.
   // the algorithm with watershed lines is from Meyer
-  // the algorithm without watershed lines is from beucher
+  // the algorithm without watershed lines is from Beucher
   // The 2 algorithms are very similar and so are integrated in the same filter.
 
   //---------------------------------------------------------------------------
@@ -91,9 +91,9 @@ MorphologicalWatershedFromMarkersImageFilter<TInputImage, TLabelImage>::Generate
   //---------------------------------------------------------------------------
 
   // the label used to find background in the marker image
-  static const LabelImagePixelType bgLabel = NumericTraits<LabelImagePixelType>::ZeroValue();
+  static const LabelImagePixelType bgLabel{};
   // the label used to mark the watershed line in the output image
-  static const LabelImagePixelType wsLabel = NumericTraits<LabelImagePixelType>::ZeroValue();
+  static const LabelImagePixelType wsLabel{};
 
   this->AllocateOutputs();
 
@@ -109,7 +109,7 @@ MorphologicalWatershedFromMarkersImageFilter<TInputImage, TLabelImage>::Generate
   // mask and marker must have the same size
   if (markerImage->GetRequestedRegion().GetSize() != inputImage->GetRequestedRegion().GetSize())
   {
-    itkExceptionMacro(<< "Marker and input must have the same size.");
+    itkExceptionMacro("Marker and input must have the same size.");
   }
 
   // FAH (in french: File d'Attente Hierarchique)
@@ -430,7 +430,7 @@ MorphologicalWatershedFromMarkersImageFilter<TInputImage, TLabelImage>::PrintSel
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
   os << indent << "MarkWatershedLine: " << m_MarkWatershedLine << std::endl;
 }
 

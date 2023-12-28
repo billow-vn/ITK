@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BoxImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BoxImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -91,7 +91,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  RadiusType m_Radius;
+  RadiusType m_Radius{};
 };
 } // namespace itk
 

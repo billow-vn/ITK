@@ -45,7 +45,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoadBC, Load);
+  itkOverrideGetNameOfClassMacro(LoadBC);
 
   /** CreateAnother method will clone the existing instance of this type,
    * including its internal member variables. */
@@ -90,7 +90,7 @@ protected:
    *       defined by optional dim parameter (defaults to 0) in AssembleF
    *       function in solver.
    */
-  vnl_vector<Element::Float> m_Value;
+  vnl_vector<Element::Float> m_Value{};
 };
 } // end namespace fem
 } // end namespace itk

@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageDuplicator, Object);
+  itkOverrideGetNameOfClassMacro(ImageDuplicator);
 
   /** Type definitions for the input image. */
   using ImageType = TInputImage;
@@ -115,15 +115,15 @@ public:
   Update();
 
 protected:
-  ImageDuplicator();
+  ImageDuplicator() = default;
   ~ImageDuplicator() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ImageConstPointer m_InputImage;
-  ImagePointer      m_DuplicateImage;
-  ModifiedTimeType  m_InternalImageTime;
+  ImageConstPointer m_InputImage{};
+  ImagePointer      m_DuplicateImage{};
+  ModifiedTimeType  m_InternalImageTime{};
 };
 } // end namespace itk
 

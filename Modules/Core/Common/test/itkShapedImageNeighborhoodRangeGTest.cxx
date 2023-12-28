@@ -67,7 +67,7 @@ IsIteratorTypeTheSameAsConstIteratorType()
 {
   using RangeType = ShapedImageNeighborhoodRange<TImage>;
 
-  return std::is_same<typename RangeType::iterator, typename RangeType::const_iterator>::value;
+  return std::is_same_v<typename RangeType::iterator, typename RangeType::const_iterator>;
 }
 
 
@@ -770,7 +770,7 @@ TEST(ShapedImageNeighborhoodRange, IteratorsSupportRandomAccess)
     // Expression to be tested: 'r += n'
     difference_type n = 3;
 
-    static_assert(std::is_same<decltype(r += n), X &>::value, "Return type tested");
+    static_assert(std::is_same_v<decltype(r += n), X &>, "Return type tested");
 
     r = initialIterator;
     const auto expectedResult = [&r, n] {
@@ -792,8 +792,8 @@ TEST(ShapedImageNeighborhoodRange, IteratorsSupportRandomAccess)
     // Expressions to be tested: 'a + n' and 'n + a'
     difference_type n = 3;
 
-    static_assert(std::is_same<decltype(a + n), X>::value, "Return type tested");
-    static_assert(std::is_same<decltype(n + a), X>::value, "Return type tested");
+    static_assert(std::is_same_v<decltype(a + n), X>, "Return type tested");
+    static_assert(std::is_same_v<decltype(n + a), X>, "Return type tested");
 
     const auto expectedResult = [a, n] {
       // Operational semantics, as specified by the C++11 Standard:
@@ -808,7 +808,7 @@ TEST(ShapedImageNeighborhoodRange, IteratorsSupportRandomAccess)
     // Expression to be tested: 'r -= n'
     difference_type n = 3;
 
-    static_assert(std::is_same<decltype(r -= n), X &>::value, "Return type tested");
+    static_assert(std::is_same_v<decltype(r -= n), X &>, "Return type tested");
 
     r = initialIterator;
     const auto expectedResult = [&r, n] {
@@ -823,7 +823,7 @@ TEST(ShapedImageNeighborhoodRange, IteratorsSupportRandomAccess)
     // Expression to be tested: 'a - n'
     difference_type n = -3;
 
-    static_assert(std::is_same<decltype(a - n), X>::value, "Return type tested");
+    static_assert(std::is_same_v<decltype(a - n), X>, "Return type tested");
 
     const auto expectedResult = [a, n] {
       // Operational semantics, as specified by the C++11 Standard:
@@ -835,7 +835,7 @@ TEST(ShapedImageNeighborhoodRange, IteratorsSupportRandomAccess)
   }
   {
     // Expression to be tested: 'b - a'
-    static_assert(std::is_same<decltype(b - a), difference_type>::value, "Return type tested");
+    static_assert(std::is_same_v<decltype(b - a), difference_type>, "Return type tested");
 
     difference_type n = b - a;
     EXPECT_TRUE(a + n == b);
@@ -844,15 +844,15 @@ TEST(ShapedImageNeighborhoodRange, IteratorsSupportRandomAccess)
   {
     // Expression to be tested: 'a[n]'
     difference_type n = 3;
-    static_assert(std::is_convertible<decltype(a[n]), reference>::value, "Return type tested");
+    static_assert(std::is_convertible_v<decltype(a[n]), reference>, "Return type tested");
     EXPECT_EQ(a[n], *(a + n));
   }
   {
     // Expressions to be tested: 'a < b', 'a > b', 'a >= b', and 'a <= b':
-    static_assert(std::is_convertible<decltype(a < b), bool>::value, "Return type tested");
-    static_assert(std::is_convertible<decltype(a > b), bool>::value, "Return type tested");
-    static_assert(std::is_convertible<decltype(a >= b), bool>::value, "Return type tested");
-    static_assert(std::is_convertible<decltype(a <= b), bool>::value, "Return type tested");
+    static_assert(std::is_convertible_v<decltype(a < b), bool>, "Return type tested");
+    static_assert(std::is_convertible_v<decltype(a > b), bool>, "Return type tested");
+    static_assert(std::is_convertible_v<decltype(a >= b), bool>, "Return type tested");
+    static_assert(std::is_convertible_v<decltype(a <= b), bool>, "Return type tested");
     EXPECT_EQ(a<b, b - a> 0);
     EXPECT_EQ(a > b, b < a);
     EXPECT_EQ(a >= b, !(a < b));
@@ -955,6 +955,33 @@ TEST(ShapedImageNeighborhoodRange, ConstructorSupportsRValueShapeOffsets)
   // The code is carefully written so that this rvalue remains alive while
   // the range 'RangeType{...}' is being used.
   ASSERT_EQ((RangeType{ *image, location, std::vector<OffsetType>{ 1 } }).size(), 1);
+}
+
+
+// Tests that the shape of the neighborhood can be specified by a C-array of offsets.
+TEST(ShapedImageNeighborhoodRange, ConstructorSupportsCArrayOfShapeOffsets)
+{
+  using ImageType = itk::Image<unsigned char>;
+  using RangeType = itk::ShapedImageNeighborhoodRange<ImageType>;
+  using OffsetType = ImageType::OffsetType;
+
+  const auto                 image = CreateImageFilledWithSequenceOfNaturalNumbers<ImageType>(1, 2);
+  const ImageType::IndexType location{ { 1, 1 } };
+
+  // A rather arbitrary shape, specified by a C-array of offsets.
+  const OffsetType arrayOfShapeOffsets[] = { OffsetType{}, itk::MakeFilled<OffsetType>(1) };
+
+  // An std::vector that represents the very same shape.
+  const std::vector<OffsetType> vectorOfShapeOffsets(std::begin(arrayOfShapeOffsets), std::end(arrayOfShapeOffsets));
+
+  const RangeType rangeFromArrayOfShapeOffsets(*image, location, arrayOfShapeOffsets);
+  const RangeType rangeFromVectorOfShapeOffsets(*image, location, vectorOfShapeOffsets);
+
+  // Assert that both ranges iterate over the same neighborhood.
+  ASSERT_TRUE(std::equal(rangeFromArrayOfShapeOffsets.cbegin(),
+                         rangeFromArrayOfShapeOffsets.cend(),
+                         rangeFromVectorOfShapeOffsets.cbegin(),
+                         rangeFromVectorOfShapeOffsets.cend()));
 }
 
 

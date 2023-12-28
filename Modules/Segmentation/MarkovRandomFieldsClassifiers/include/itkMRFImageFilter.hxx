@@ -48,32 +48,44 @@ MRFImageFilter<TInputImage, TClassifiedImage>::PrintSelf(std::ostream & os, Inde
 
   Superclass::PrintSelf(os, indent);
 
-  os << indent << " MRF Image filter object " << std::endl;
-
-  os << indent << " Number of classes: " << m_NumberOfClasses << std::endl;
-
-  os << indent << " Maximum number of iterations: " << m_MaximumNumberOfIterations << std::endl;
-
-  os << indent << " Error tolerance for convergence: " << m_ErrorTolerance << std::endl;
-
-  os << indent << " Size of the MRF neighborhood radius:" << m_InputImageNeighborhoodRadius << std::endl;
-
-  os << indent
-     << " Number of elements in MRF neighborhood :" << static_cast<SizeValueType>(m_MRFNeighborhoodWeight.size())
+  os << indent << "InputImageNeighborhoodRadius: "
+     << static_cast<typename NumericTraits<InputImageNeighborhoodRadiusType>::PrintType>(m_InputImageNeighborhoodRadius)
+     << std::endl;
+  os << indent << "LabelledImageNeighborhoodRadius: "
+     << static_cast<typename NumericTraits<LabelledImageNeighborhoodRadiusType>::PrintType>(
+          m_LabelledImageNeighborhoodRadius)
+     << std::endl;
+  os << indent << "LabelStatusImageNeighborhoodRadius: "
+     << static_cast<typename NumericTraits<LabelStatusImageNeighborhoodRadiusType>::PrintType>(
+          m_LabelStatusImageNeighborhoodRadius)
      << std::endl;
 
-  os << indent << " Neighborhood weight : " << m_MRFNeighborhoodWeight << std::endl;
+  os << indent << "NumberOfClasses: " << m_NumberOfClasses << std::endl;
+  os << indent << "MaximumNumberOfIterations: " << m_MaximumNumberOfIterations << std::endl;
+  os << indent << "KernelSize: " << m_KernelSize << std::endl;
 
-  os << indent << " Smoothing factor for the MRF neighborhood:" << m_SmoothingFactor << std::endl;
+  os << indent << "ErrorCounter: " << m_ErrorCounter << std::endl;
+  os << indent << "NeighborhoodSize: " << m_NeighborhoodSize << std::endl;
+  os << indent << "TotalNumberOfValidPixelsInOutputImage: " << m_TotalNumberOfValidPixelsInOutputImage << std::endl;
+  os << indent << "TotalNumberOfPixelsInInputImage: " << m_TotalNumberOfPixelsInInputImage << std::endl;
+  os << indent << "ErrorTolerance: " << m_ErrorTolerance << std::endl;
 
+  os << indent << "SmoothingFactor: " << m_SmoothingFactor << std::endl;
+  os << indent << "ClassProbability: " << m_ClassProbability << std::endl;
+  os << indent << "NumberOfIterations: " << m_NumberOfIterations << std::endl;
   os << indent << "StopCondition: " << m_StopCondition << std::endl;
 
-  os << indent << " Number of iterations: " << m_NumberOfIterations << std::endl;
+  itkPrintSelfObjectMacro(LabelStatusImage);
+
+  os << indent << "MRFNeighborhoodWeight: " << m_MRFNeighborhoodWeight << std::endl;
+  os << indent << "NeighborInfluence: " << m_NeighborInfluence << std::endl;
+  os << indent << "MahalanobisDistance: " << m_MahalanobisDistance << std::endl;
+  os << indent << "DummyVector: " << m_DummyVector << std::endl;
+
+  itkPrintSelfObjectMacro(ClassifierPtr);
 } // end PrintSelf
 
-/*
- * GenerateInputRequestedRegion method.
- */
+
 template <typename TInputImage, typename TClassifiedImage>
 void
 MRFImageFilter<TInputImage, TClassifiedImage>::GenerateInputRequestedRegion()
@@ -89,9 +101,6 @@ MRFImageFilter<TInputImage, TClassifiedImage>::GenerateInputRequestedRegion()
   }
 }
 
-/**
- * EnlargeOutputRequestedRegion method.
- */
 template <typename TInputImage, typename TClassifiedImage>
 void
 MRFImageFilter<TInputImage, TClassifiedImage>::EnlargeOutputRequestedRegion(DataObject * output)
@@ -104,9 +113,6 @@ MRFImageFilter<TInputImage, TClassifiedImage>::EnlargeOutputRequestedRegion(Data
   imgData->SetRequestedRegionToLargestPossibleRegion();
 }
 
-/**
- * GenerateOutputInformation method.
- */
 template <typename TInputImage, typename TClassifiedImage>
 void
 MRFImageFilter<TInputImage, TClassifiedImage>::GenerateOutputInformation()
@@ -144,19 +150,12 @@ MRFImageFilter<TInputImage, TClassifiedImage>::GenerateData()
   outputPtr->SetBufferedRegion(outputPtr->GetRequestedRegion());
   outputPtr->Allocate();
 
-  //--------------------------------------------------------------------
   // Copy labelling result to the output buffer
-  //--------------------------------------------------------------------
   // Set the iterators to the processed image
-  //--------------------------------------------------------------------
   LabelledImageRegionIterator labelledImageIt(m_ClassifierPtr->GetClassifiedImage(), outputPtr->GetRequestedRegion());
 
-  //--------------------------------------------------------------------
   // Set the iterators to the output image buffer
-  //--------------------------------------------------------------------
   LabelledImageRegionIterator outImageIt(outputPtr, outputPtr->GetRequestedRegion());
-
-  //--------------------------------------------------------------------
 
   while (!outImageIt.IsAtEnd())
   {
@@ -165,8 +164,8 @@ MRFImageFilter<TInputImage, TClassifiedImage>::GenerateData()
     outImageIt.Set(labelvalue);
     ++labelledImageIt;
     ++outImageIt;
-  } // end while
-} // end GenerateData
+  }
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -178,11 +177,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::SetClassifier(typename Classifier
   }
   m_ClassifierPtr = ptrToClassifier;
   m_ClassifierPtr->SetNumberOfClasses(m_NumberOfClasses);
-} // end SetPtrToClassifier
-
-//-------------------------------------------------------
-// Set the neighborhood radius
-//-------------------------------------------------------
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -196,7 +191,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::SetNeighborhoodRadius(const SizeV
     radius[i] = radiusValue;
   }
   this->SetNeighborhoodRadius(radius);
-} // end SetNeighborhoodRadius
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -210,9 +205,8 @@ MRFImageFilter<TInputImage, TClassifiedImage>::SetNeighborhoodRadius(const SizeV
   }
   // Set up the neighborhood
   this->SetNeighborhoodRadius(radius);
-} // end SetNeighborhoodRadius
+}
 
-// Set the neighborhood radius
 template <typename TInputImage, typename TClassifiedImage>
 void
 MRFImageFilter<TInputImage, TClassifiedImage>::SetNeighborhoodRadius(const NeighborhoodRadiusType & radius)
@@ -224,13 +218,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::SetNeighborhoodRadius(const Neigh
     m_LabelledImageNeighborhoodRadius[i] = radius[i];
     m_LabelStatusImageNeighborhoodRadius[i] = radius[i];
   }
-} // end SetNeighborhoodRadius
-
-//-------------------------------------------------------
-
-//-------------------------------------------------------
-// Set the neighborhood weights
-//-------------------------------------------------------
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -238,14 +226,12 @@ MRFImageFilter<TInputImage, TClassifiedImage>::SetDefaultMRFNeighborhoodWeight()
 {
   // Set the beta matrix of a 3x3x3 kernel.
   // The index starts from 0 going along the three dimensions
-  // in the order of [coloumn], [row], [depth].
+  // in the order of [column], [row], [depth].
 
   // Allocate memory for the weights of the 3D MRF algorithm
   // and corresponding memory offsets.
 
-  //-----------------------------------------------------
   // Determine the default neighborhood size
-  //-----------------------------------------------------
   m_NeighborhoodSize = 1;
   int neighborhoodRadius = 1; // Default assumes a radius of 1
   for (unsigned int i = 0; i < InputImageDimension; ++i)
@@ -333,12 +319,8 @@ MRFImageFilter<TInputImage, TClassifiedImage>::SetMRFNeighborhoodWeight(std::vec
       m_MRFNeighborhoodWeight[i] = (betaMatrix[i] * m_SmoothingFactor);
     }
   }
-} // end SetDefaultMRFNeighborhoodWeight
+}
 
-//-------------------------------------------------------
-//-------------------------------------------------------
-// Allocate algorithm specific resources
-//-------------------------------------------------------
 template <typename TInputImage, typename TClassifiedImage>
 void
 MRFImageFilter<TInputImage, TClassifiedImage>::Allocate()
@@ -350,9 +332,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::Allocate()
 
   InputImageSizeType inputImageSize = this->GetInput()->GetBufferedRegion().GetSize();
 
-  //---------------------------------------------------------------------
   // Get the number of valid pixels in the output MRF image
-  //---------------------------------------------------------------------
   int tmp;
   for (unsigned int i = 0; i < InputImageDimension; ++i)
   {
@@ -379,12 +359,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::Allocate()
     rIter.Set(1);
     ++rIter;
   }
-} // Allocate
-
-//-------------------------------------------------------
-//-------------------------------------------------------
-// Apply the MRF image filter
-//-------------------------------------------------------
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -404,7 +379,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::ApplyMRFImageFilter()
   m_NumberOfIterations = 0;
   do
   {
-    itkDebugMacro(<< "Iteration No." << m_NumberOfIterations);
+    itkDebugMacro("Iteration No." << m_NumberOfIterations);
 
     MinimizeFunctional();
     m_NumberOfIterations += 1;
@@ -432,12 +407,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::ApplyMRFImageFilter()
   {
     m_StopCondition = MRFStopEnum::ErrorTolerance;
   }
-} // ApplyMRFImageFilter
-
-//-------------------------------------------------------
-//-------------------------------------------------------
-// Minimize the functional
-//-------------------------------------------------------
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -447,30 +417,22 @@ MRFImageFilter<TInputImage, TClassifiedImage>::MinimizeFunctional()
   ApplyICMLabeller();
 }
 
-//-------------------------------------------------------
-//-------------------------------------------------------
-// Core of the ICM algorithm
-//-------------------------------------------------------
 template <typename TInputImage, typename TClassifiedImage>
 void
 MRFImageFilter<TInputImage, TClassifiedImage>::ApplyICMLabeller()
 {
-  //---------------------------------------------------------------------
   // Loop through the data set and classify the data
-  //---------------------------------------------------------------------
   m_NeighborInfluence.resize(m_NumberOfClasses);
 
-  // Varible to store the input pixel vector value
+  // Variable to store the input pixel vector value
   // InputImagePixelType inputPixel;
 
   m_MahalanobisDistance.resize(m_NumberOfClasses);
 
-  //---------------------------------------------------------------------
   // Set up the neighborhood iterators and the valid neighborhoods
   // for iteration
-  //---------------------------------------------------------------------
 
-  // Set up the nighborhood iterators
+  // Set up the neighborhood iterators
 
   // Define the face list for the input/labelled image
   InputImageFacesCalculator       inputImageFacesCalculator;
@@ -509,7 +471,6 @@ MRFImageFilter<TInputImage, TClassifiedImage>::ApplyICMLabeller()
   LabelStatusImageNeighborhoodIterator nLabelStatusImageNeighborhoodIter(
     m_LabelStatusImageNeighborhoodRadius, m_LabelStatusImage, *labelStatusImageFaceListIter);
 
-  //---------------------------------------------------------------------
   while (!nInputImageNeighborhoodIter.IsAtEnd())
   {
     // Process each neighborhood
@@ -520,12 +481,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::ApplyICMLabeller()
     ++nLabelledImageNeighborhoodIter;
     ++nLabelStatusImageNeighborhoodIter;
   }
-} // ApplyICMlabeller
-
-//-------------------------------------------------------
-//-------------------------------------------------------
-// Function that performs the MRF operation with each neighborhood
-//-------------------------------------------------------
+}
 
 template <typename TInputImage, typename TClassifiedImage>
 void
@@ -556,7 +512,7 @@ MRFImageFilter<TInputImage, TClassifiedImage>::DoNeighborhoodOperation(
     labelledPixel = labelledIter.GetPixel(i);
     index = static_cast<unsigned int>(labelledPixel);
     m_NeighborInfluence[index] += m_MRFNeighborhoodWeight[i];
-  } // End neighborhood processing
+  }
 
   // Add the prior probability to the pixel probability
   for (index = 0; index < m_NumberOfClasses; ++index)
@@ -590,13 +546,13 @@ MRFImageFilter<TInputImage, TClassifiedImage>::DoNeighborhoodOperation(
     for (int i = 0; i < m_NeighborhoodSize; ++i)
     {
       labelStatusIter.SetPixel(i, 1);
-    } // End neighborhood processing
-  }   // end if
+    }
+  }
   else
   {
     labelStatusIter.SetCenterPixel(0);
   }
-} // end DoNeighborhoodOperation
+}
 } // namespace itk
 
 #endif

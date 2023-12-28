@@ -24,7 +24,6 @@
 int
 itkBinaryErodeImageFilterTest(int, char *[])
 {
-  unsigned int i;
 
   // Define the dimension of the images
   constexpr unsigned int myDimension = 2;
@@ -99,7 +98,7 @@ itkBinaryErodeImageFilterTest(int, char *[])
   ind[1] = 19;
   inputImage->SetPixel(ind, fgValue);
 
-  i = 0;
+  unsigned int i = 0;
   it.GoToBegin();
   while (!it.IsAtEnd())
   {
@@ -119,7 +118,11 @@ itkBinaryErodeImageFilterTest(int, char *[])
   using myFilterType = itk::BinaryErodeImageFilter<myImageType, myImageType, myKernelType>;
 
   // Create the filter
-  auto                     filter = myFilterType::New();
+  auto filter = myFilterType::New();
+
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(filter, BinaryErodeImageFilter, BinaryMorphologyImageFilter);
+
+
   itk::SimpleFilterWatcher watcher(filter, "filter");
 
   // Create the structuring element
@@ -133,15 +136,13 @@ itkBinaryErodeImageFilterTest(int, char *[])
   // Connect the input image
   filter->SetInput(inputImage);
   filter->SetKernel(ball);
+
   filter->SetErodeValue(fgValue);
+  ITK_TEST_SET_GET_VALUE(fgValue, filter->GetErodeValue());
 
   // Get the Smart Pointer to the Filter Output
   myImageType::Pointer outputImage = filter->GetOutput();
 
-
-  // Test the itkGetMacro
-  unsigned short value = filter->GetErodeValue();
-  std::cout << "filter->GetErodeValue(): " << value << std::endl;
 
   // Execute the filter
   ITK_TRY_EXPECT_NO_EXCEPTION(filter->Update());
@@ -150,7 +151,7 @@ itkBinaryErodeImageFilterTest(int, char *[])
   // Create an iterator for going through the image output
   myIteratorType it2(outputImage, outputImage->GetBufferedRegion());
 
-  //  Print the content of the result image
+  // Print the content of the result image
   std::cout << "Result " << std::endl;
   i = 0;
   while (!it2.IsAtEnd())
@@ -166,5 +167,6 @@ itkBinaryErodeImageFilterTest(int, char *[])
 
   // All objects should be automatically destroyed at this point
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

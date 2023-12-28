@@ -56,7 +56,7 @@ public:
 } // namespace Functor
 
 /**
- *\class PowImageFilter
+ * \class PowImageFilter
  * \brief Computes the powers of 2 images
  *
  * This class is templated over the types of the two
@@ -84,7 +84,8 @@ public:
    SetConstant2( constant );
    \endcode
  *
- * \ingroup IntensityImageFilters  MultiThreaded
+ * \ingroup IntensityImageFilters
+ * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  *
  */
@@ -108,7 +109,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PowImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(PowImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

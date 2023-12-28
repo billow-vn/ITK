@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HistogramToImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(HistogramToImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageRegionType;
@@ -86,7 +86,7 @@ public:
   /** Determine the image dimension. */
   static constexpr unsigned int ImageDimension = OutputImageType::ImageDimension;
 
-  /** Set/Get the input of this process object.  */
+  /** Set/Get the input histogram. */
   using Superclass::SetInput;
   virtual void
   SetInput(const HistogramType * input);
@@ -135,7 +135,7 @@ protected:
   void
   GenerateData() override;
 
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

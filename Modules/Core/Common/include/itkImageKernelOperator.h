@@ -56,7 +56,7 @@ public:
   using ImageType = Image<TPixel, VDimension>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageKernelOperator, NeighborhoodOperator);
+  itkOverrideGetNameOfClassMacro(ImageKernelOperator);
 
   /** Set the image kernel. Only images with odd size in all
    * dimensions are allowed. If an image with an even size is passed
@@ -87,7 +87,7 @@ protected:
   Fill(const CoefficientVector & coeff) override;
 
 private:
-  typename ImageType::ConstPointer m_ImageKernel;
+  typename ImageType::ConstPointer m_ImageKernel{};
 };
 } // namespace itk
 

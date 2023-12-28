@@ -47,7 +47,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ThreadLogger, Logger);
+  itkOverrideGetNameOfClassMacro(ThreadLogger);
 
   /** New macro for creation of a Smart Pointer */
   itkNewMacro(Self);
@@ -126,29 +126,21 @@ private:
   void
   InternalFlush();
 
-  using OperationContainerType = std::queue<OperationType>;
+  std::thread m_Thread{};
 
-  using MessageContainerType = std::queue<std::string>;
+  std::atomic<bool> m_TerminationRequested{};
 
-  using LevelContainerType = std::queue<PriorityLevelEnum>;
+  std::queue<OperationType> m_OperationQ{};
 
-  using OutputContainerType = std::queue<OutputType::Pointer>;
+  std::queue<std::string> m_MessageQ{};
 
-  std::thread m_Thread;
+  std::queue<PriorityLevelEnum> m_LevelQ{};
 
-  std::atomic<bool> m_TerminationRequested;
+  std::queue<OutputType::Pointer> m_OutputQ{};
 
-  OperationContainerType m_OperationQ;
+  mutable std::mutex m_Mutex{};
 
-  MessageContainerType m_MessageQ;
-
-  LevelContainerType m_LevelQ;
-
-  OutputContainerType m_OutputQ;
-
-  mutable std::mutex m_Mutex;
-
-  DelayType m_Delay;
+  DelayType m_Delay{};
 
 }; // class ThreadLogger
 } // namespace itk

@@ -26,7 +26,7 @@ namespace itk
 {
 namespace Testing
 {
-/**\class ExtractSliceImageFilterEnums
+/** \class ExtractSliceImageFilterEnums
  * \brief Contains all enum classes used by the ExtractSliceImageFilterEnums class.
  * \ingroup ITKTestKernel
  */
@@ -34,7 +34,7 @@ class ExtractSliceImageFilterEnums
 {
 public:
   /**
-   *\class TestExtractSliceImageFilterCollapseStrategy
+   * \class TestExtractSliceImageFilterCollapseStrategy
    * \ingroup ITKTestKernel
    */
   enum class TestExtractSliceImageFilterCollapseStrategy : uint8_t
@@ -50,7 +50,7 @@ extern std::ostream &
 operator<<(std::ostream & out, const ExtractSliceImageFilterEnums::TestExtractSliceImageFilterCollapseStrategy value);
 
 /**
- *\class ExtractSliceImageFilter
+ * \class ExtractSliceImageFilter
  * \brief Decrease the image size by cropping the image to the selected
  * region bounds.
  *
@@ -92,7 +92,7 @@ operator<<(std::ostream & out, const ExtractSliceImageFilterEnums::TestExtractSl
  *            define their desired behavior.
  *    1)  DirectionCollapseToIdentity();
  *            Output has identity direction no matter what
- *    2)  DirectionCollaspeToSubmatrix();
+ *    2)  DirectionCollapseToSubmatrix();
  *            Output direction is the sub-matrix if it is positive definite, else throw an exception.
  *
  * This filter is implemented as a multithreaded filter.  It provides a
@@ -119,7 +119,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExtractSliceImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(ExtractSliceImageFilter);
 
   /** Image type information. */
   using InputImageType = TInputImage;
@@ -158,7 +158,7 @@ public:
 #endif
 
   /**
-   * Set the strategy to be used to collapse pysical space dimensions.
+   * Set the strategy to be used to collapse physical space dimensions.
    *
    * itk::itkExtractSliceImageFilter::DIRECTIONCOLLAPSETOIDENTITY
    * Set the strategy so that all collapsed images have an identity direction.
@@ -192,7 +192,7 @@ public:
         break;
       case TestExtractSliceImageFilterCollapseStrategyEnum::DIRECTIONCOLLAPSETOUNKOWN:
       default:
-        itkExceptionMacro(<< "Invalid Strategy Chosen for itk::ExtractSliceImageFilter");
+        itkExceptionMacro("Invalid Strategy Chosen for itk::ExtractSliceImageFilter");
     }
 
     this->m_DirectionCollaspeStrategy = choosenStrategy;
@@ -301,9 +301,9 @@ protected:
   void
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
-  InputImageRegionType m_ExtractionRegion;
+  InputImageRegionType m_ExtractionRegion{};
 
-  OutputImageRegionType m_OutputImageRegion;
+  OutputImageRegionType m_OutputImageRegion{};
 
 private:
   DIRECTIONCOLLAPSESTRATEGY m_DirectionCollaspeStrategy{

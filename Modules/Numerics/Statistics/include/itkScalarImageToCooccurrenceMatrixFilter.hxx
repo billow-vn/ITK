@@ -35,7 +35,7 @@ ScalarImageToCooccurrenceMatrixFilter<TImageType, THistogramFrequencyContainer, 
 
   this->ProcessObject::SetNthOutput(0, this->MakeOutput(0));
 
-  // constant for a coocurrence matrix.
+  // constant for a cooccurrence matrix.
   constexpr unsigned int measurementVectorSize = 2;
 
   auto * output = const_cast<HistogramType *>(this->GetOutput());
@@ -176,7 +176,7 @@ ScalarImageToCooccurrenceMatrixFilter<TImageType, THistogramFrequencyContainer, 
     this->FillHistogram(radius, input->GetRequestedRegion());
   }
 
-  // Normalizse the histogram if requested
+  // Normalize the histogram if requested
   if (m_Normalize)
   {
     this->NormalizeHistogram();
@@ -197,12 +197,10 @@ ScalarImageToCooccurrenceMatrixFilter<TImageType, THistogramFrequencyContainer, 
   auto * output = static_cast<HistogramType *>(this->ProcessObject::GetOutput(0));
 
   using NeighborhoodIteratorType = ConstNeighborhoodIterator<ImageType>;
-  NeighborhoodIteratorType neighborIt;
-  neighborIt = NeighborhoodIteratorType(radius, input, region);
 
   MeasurementVectorType cooccur(output->GetMeasurementVectorSize());
 
-  for (neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt)
+  for (NeighborhoodIteratorType neighborIt(radius, input, region); !neighborIt.IsAtEnd(); ++neighborIt)
   {
     const PixelType centerPixelIntensity = neighborIt.GetCenterPixel();
     if (centerPixelIntensity < m_Min || centerPixelIntensity > m_Max)
@@ -262,9 +260,9 @@ ScalarImageToCooccurrenceMatrixFilter<TImageType, THistogramFrequencyContainer, 
   // Iterate over all of those pixels and offsets, adding each
   // co-occurrence pair to the histogram
   using NeighborhoodIteratorType = ConstNeighborhoodIterator<ImageType>;
-  NeighborhoodIteratorType neighborIt = NeighborhoodIteratorType(radius, input, region);
+  NeighborhoodIteratorType neighborIt(radius, input, region);
   using MaskNeighborhoodIteratorType = ConstNeighborhoodIterator<MaskImageType>;
-  MaskNeighborhoodIteratorType maskNeighborIt = MaskNeighborhoodIteratorType(radius, maskImage, region);
+  MaskNeighborhoodIteratorType maskNeighborIt(radius, maskImage, region);
 
   MeasurementVectorType             cooccur(output->GetMeasurementVectorSize());
   typename HistogramType::IndexType index;

@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MinimumMaximumImageFilter, ImageSink);
+  itkOverrideGetNameOfClassMacro(MinimumMaximumImageFilter);
 
   /** Image type alias support */
   using InputImageType = TInputImage;
@@ -140,10 +140,10 @@ protected:
   itkSetDecoratedOutputMacro(Maximum, PixelType);
 
 private:
-  PixelType m_ThreadMin;
-  PixelType m_ThreadMax;
+  PixelType m_ThreadMin{};
+  PixelType m_ThreadMax{};
 
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 };
 } // end namespace itk
 

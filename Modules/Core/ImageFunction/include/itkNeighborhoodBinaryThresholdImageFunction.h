@@ -52,7 +52,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NeighborhoodBinaryThresholdImageFunction, BinaryThresholdImageFunction);
+  itkOverrideGetNameOfClassMacro(NeighborhoodBinaryThresholdImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -60,7 +60,7 @@ public:
   /** InputImageType type alias support */
   using InputImageType = TInputImage;
 
-  /** OutputType typdef support. */
+  /** OutputType typedef support. */
   using typename Superclass::OutputType;
 
   /** Index type alias support */
@@ -87,7 +87,7 @@ public:
   /** Get the radius of the neighborhood used in computation */
   itkGetConstReferenceMacro(Radius, InputSizeType);
 
-  /** Evalulate the function at specified index */
+  /** Evaluate the function at specified index */
   bool
   EvaluateAtIndex(const IndexType & index) const override;
 
@@ -117,7 +117,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  InputSizeType m_Radius;
+  InputSizeType m_Radius{};
 };
 } // end namespace itk
 

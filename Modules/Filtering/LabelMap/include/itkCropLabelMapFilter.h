@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class CropLabelMapFilter
+ * \class CropLabelMapFilter
  * \brief Crop a LabelMap image
  *
  * Crop a label map. If the output cannot contain some lines of the objects, they are truncated
@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CropLabelMapFilter, ChangeRegionImageFilter);
+  itkOverrideGetNameOfClassMacro(CropLabelMapFilter);
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -124,8 +124,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  SizeType m_UpperBoundaryCropSize;
-  SizeType m_LowerBoundaryCropSize;
+  SizeType m_UpperBoundaryCropSize{};
+  SizeType m_LowerBoundaryCropSize{};
 };
 } // end namespace itk
 

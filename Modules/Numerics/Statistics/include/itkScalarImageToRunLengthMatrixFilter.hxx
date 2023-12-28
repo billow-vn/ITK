@@ -21,7 +21,6 @@
 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhood.h"
-#include "itkMath.h"
 #include "itkMacro.h"
 #include "itkMath.h"
 
@@ -113,9 +112,9 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>::Ge
 }
 
 template <typename TImageType, typename THistogramFrequencyContainer>
-typename ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>::DataObjectPointer
+auto
 ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>::MakeOutput(
-  DataObjectPointerArraySizeType itkNotUsed(idx))
+  DataObjectPointerArraySizeType itkNotUsed(idx)) -> DataObjectPointer
 {
   return HistogramType::New().GetPointer();
 }
@@ -257,14 +256,14 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>::Ge
 
         itkDebugStatement(typename HistogramType::IndexType tempMeasurementIndex);
         itkDebugStatement(output->GetIndex(run, tempMeasurementIndex));
-        itkDebugMacro("centerIndex<->index: " << static_cast<int>(centerPixelIntensity) << "@" << centerIndex << "<->"
-                                              << static_cast<int>(pixelIntensity) << "@" << index << ", Bin# "
+        itkDebugMacro("centerIndex<->index: " << static_cast<int>(centerPixelIntensity) << '@' << centerIndex << "<->"
+                                              << static_cast<int>(pixelIntensity) << '@' << index << ", Bin# "
                                               << tempMeasurementIndex << ", Measurement: (" << run[0] << ", " << run[1]
-                                              << ")"
-                                              << ", Center bin [" << this->GetOutput()->GetBinMinFromValue(0, run[0])
-                                              << "," << this->GetOutput()->GetBinMaxFromValue(0, run[0]) << "]"
-                                              << "~[" << this->GetOutput()->GetBinMinFromValue(1, run[1]) << ","
-                                              << this->GetOutput()->GetBinMaxFromValue(1, run[1]) << "]" << std::endl);
+                                              << ')' << ", Center bin ["
+                                              << this->GetOutput()->GetBinMinFromValue(0, run[0]) << ','
+                                              << this->GetOutput()->GetBinMaxFromValue(0, run[0]) << ']' << "~["
+                                              << this->GetOutput()->GetBinMinFromValue(1, run[1]) << ','
+                                              << this->GetOutput()->GetBinMaxFromValue(1, run[1]) << ']' << std::endl);
       }
     }
   }
@@ -304,13 +303,20 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>::Pr
                                                                                         Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Offsets: " << this->GetOffsets() << std::endl;
-  os << indent << "Min: " << this->m_Min << std::endl;
-  os << indent << "Max: " << this->m_Max << std::endl;
-  os << indent << "Min distance: " << this->m_MinDistance << std::endl;
-  os << indent << "Max distance: " << this->m_MaxDistance << std::endl;
-  os << indent << "NumberOfBinsPerAxis: " << this->m_NumberOfBinsPerAxis << std::endl;
-  os << indent << "InsidePixelValue: " << this->m_InsidePixelValue << std::endl;
+
+  os << indent << "NumberOfBinsPerAxis: " << m_NumberOfBinsPerAxis << std::endl;
+  os << indent << "Min: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_Min) << std::endl;
+  os << indent << "Max: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_Max) << std::endl;
+  os << indent << "MinDistance: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_MinDistance)
+     << std::endl;
+  os << indent << "MaxDistance: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_MaxDistance)
+     << std::endl;
+  os << indent << "InsidePixelValue: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_InsidePixelValue)
+     << std::endl;
+  os << indent << "LowerBound: " << m_LowerBound << std::endl;
+  os << indent << "UpperBound: " << m_UpperBound << std::endl;
+
+  itkPrintSelfObjectMacro(Offsets);
 }
 
 template <typename TImageType, typename THistogramFrequencyContainer>

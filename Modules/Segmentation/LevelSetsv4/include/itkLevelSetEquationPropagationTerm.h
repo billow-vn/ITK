@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetEquationPropagationTerm, LevelSetEquationTermBase);
+  itkOverrideGetNameOfClassMacro(LevelSetEquationPropagationTerm);
 
   using typename Superclass::InputImageType;
   using typename Superclass::InputImagePointer;
@@ -123,7 +123,7 @@ protected:
 
   ~LevelSetEquationPropagationTerm() override = default;
 
-  PropagationImagePointer m_PropagationImage;
+  PropagationImagePointer m_PropagationImage{};
 
   /** Return the spatial speed dependence a given pixel location
    * Usually, it is constant across the image domain */

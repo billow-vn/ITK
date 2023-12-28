@@ -22,14 +22,6 @@
 namespace itk
 {
 template <unsigned int VImageDimension, typename TInput>
-SphereSpatialFunction<VImageDimension, TInput>::SphereSpatialFunction()
-{
-  m_Radius = 1.0;
-
-  m_Center.Fill(0.0f);
-}
-
-template <unsigned int VImageDimension, typename TInput>
 auto
 SphereSpatialFunction<VImageDimension, TInput>::Evaluate(const InputType & position) const -> OutputType
 {
@@ -64,7 +56,7 @@ SphereSpatialFunction<VImageDimension, TInput>::PrintSelf(std::ostream & os, Ind
   {
     os << m_Center[i] << ", ";
   }
-  os << "]" << std::endl;
+  os << ']' << std::endl;
 
   os << indent << "Radius: " << m_Radius << std::endl;
 }

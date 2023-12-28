@@ -16,6 +16,12 @@
  *
  *=========================================================================*/
 
+#if !defined(ITK_LEGACY_REMOVE)
+// Suppress MSVC warnings from VS2022, saying: "warning C4996: 'std::complex<T>::complex': warning STL4037: The effect
+// of instantiating the template std::complex for any type other than float, double, or long double is unspecified."
+#  define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#endif
+
 #include <iostream>
 #include <cstddef>
 
@@ -34,6 +40,7 @@
 #include "itkNumericTraitsRGBPixel.h"
 #include "itkNumericTraitsTensorPixel.h"
 #include "itkNumericTraitsVariableLengthVectorPixel.h"
+#include "itkTestingMacros.h"
 
 namespace
 {
@@ -92,7 +99,7 @@ CheckVariableLengthArrayTraits(const T & t)
 #endif
 
   // check std::numeric_limits members
-  std::cout << "itk::NumericTraits<" << name << ">" << std::endl;
+  std::cout << "itk::NumericTraits<" << name << '>' << std::endl;
   std::cout << "\tmin(" << name
             << "): " << static_cast<typename itk::NumericTraits<T>::PrintType>(itk::NumericTraits<T>::min(t))
             << std::endl;
@@ -138,7 +145,7 @@ CheckFixedArrayTraits(const T & t)
 #endif
 
   // check std::numeric_limits members
-  std::cout << "itk::NumericTraits<" << name << ">" << std::endl;
+  std::cout << "itk::NumericTraits<" << name << '>' << std::endl;
   std::cout << "\tZero: " << static_cast<typename itk::NumericTraits<T>::PrintType>((T)(itk::NumericTraits<T>::Zero))
             << std::endl;
   std::cout << "\tOne: " << static_cast<typename itk::NumericTraits<T>::PrintType>((T)(itk::NumericTraits<T>::One))
@@ -168,7 +175,7 @@ void
 CheckTraits(const char * name, T t)
 {
   // check std::numeric_limits members
-  std::cout << "itk::NumericTraits<" << name << ">" << std::endl;
+  std::cout << "itk::NumericTraits<" << name << '>' << std::endl;
   std::cout << "\tis_specialized: " << itk::NumericTraits<T>::digits << std::endl;
   std::cout << "\tdigits: " << itk::NumericTraits<T>::digits << std::endl;
   std::cout << "\tdigits10: " << itk::NumericTraits<T>::digits10 << std::endl;
@@ -210,7 +217,7 @@ CheckSignedAndIntegerTraitsSameAsSTDNumericLimits(const char * const name)
     std::cout << "\tERROR:  IsSigned definitions for itk::NumericTraits and std::numeric_limits do not match!! ERROR!!"
               << std::endl;
     std::cout << "\tFor type: \t" << name << std::endl;
-    std::cout << "\tITK signed Value for:\t<  " << name << "  >\tis:\t" << (std::is_signed<T>::value ? "true" : "false")
+    std::cout << "\tITK signed Value for:\t<  " << name << "  >\tis:\t" << (std::is_signed_v<T> ? "true" : "false")
               << std::endl;
     std::cout << "\tstd signed Value for:\t<  " << name << "  >\tis:\t"
               << (std::numeric_limits<T>::is_signed ? "true" : "false") << std::endl;
@@ -219,13 +226,13 @@ CheckSignedAndIntegerTraitsSameAsSTDNumericLimits(const char * const name)
   else
   {
     std::cout << "\tSUCCESS:  IsSigned definition for itk::NumericTraits matches std::numeric_limits" << std::endl;
-    std::cout << "\tSigned Value for:\t<  " << name << "  >\tis:\t" << (std::is_signed<T>::value ? "true" : "false")
+    std::cout << "\tSigned Value for:\t<  " << name << "  >\tis:\t" << (std::is_signed_v<T> ? "true" : "false")
               << std::endl;
   }
 
   // test for IsInteger
   if ((itk::NumericTraits<T>::IsInteger != std::numeric_limits<T>::is_integer) ||
-      (itk::NumericTraits<T>::IsInteger != std::is_integral<T>::value))
+      (itk::NumericTraits<T>::IsInteger != std::is_integral_v<T>))
   {
     std::cout << "\tERROR:  IsInteger definitions for itk::NumericTraits and std::numeric_limits do not match!! ERROR!!"
               << std::endl;
@@ -235,13 +242,13 @@ CheckSignedAndIntegerTraitsSameAsSTDNumericLimits(const char * const name)
     std::cout << "\tstd numeric_limists::is_integer value for:\t<  " << name << "  >\tis:\t"
               << (std::numeric_limits<T>::is_integer ? "true" : "false") << std::endl;
     std::cout << "\tstd is_integral value for:\t<  " << name << "  >\tis:\t"
-              << (std::is_integral<T>::value ? "true" : "false") << std::endl;
+              << (std::is_integral_v<T> ? "true" : "false") << std::endl;
     didTestPass = false;
   }
   else
   {
     std::cout << "\tSUCCESS:  IsInteger definition for itk::NumericTraits matches std::numeric_limits" << std::endl;
-    std::cout << "\tInteger Value for:\t<  " << name << "  >\tis:\t" << (std::is_integral<T>::value ? "true" : "false")
+    std::cout << "\tInteger Value for:\t<  " << name << "  >\tis:\t" << (std::is_integral_v<T> ? "true" : "false")
               << std::endl;
   }
   std::cout << std::endl;
@@ -315,6 +322,7 @@ CheckAllSignedAndIntegerTraits()
   std::cout << "\tThis first one should fail" << std::endl << std::endl;
   didAllTestsPass &= !CheckSignedAndIntegerTraitsForComplexTypes<std::complex<ForcedFailureTestCase>>(
     "std::complex< ForcedFailureTestCase >");
+#if !defined(ITK_LEGACY_REMOVE)
   didAllTestsPass &= CheckSignedAndIntegerTraitsForComplexTypes<std::complex<UnknownTypeTestCase>>(
     "std::complex< UnknownTypeTestCase >");
   didAllTestsPass &= CheckSignedAndIntegerTraitsForComplexTypes<std::complex<char>>(" std::complex< char > ");
@@ -330,6 +338,7 @@ CheckAllSignedAndIntegerTraits()
   didAllTestsPass &=
     CheckSignedAndIntegerTraitsForComplexTypes<std::complex<unsigned long>>(" std::complex< unsigned long > ");
   didAllTestsPass &= CheckSignedAndIntegerTraitsForComplexTypes<std::complex<float>>(" std::complex< float > ");
+#endif // !defined(ITK_LEGACY_REMOVE)
   didAllTestsPass &= CheckSignedAndIntegerTraitsForComplexTypes<std::complex<double>>(" std::complex< double > ");
   didAllTestsPass &=
     CheckSignedAndIntegerTraitsForComplexTypes<std::complex<long double>>(" std::complex< long double > ");
@@ -363,12 +372,17 @@ CheckIsComplexTraits()
                 "std::complex<float> does not have the correct IsComplex trait");
   static_assert(itk::NumericTraits<std::complex<double>>::IsComplex,
                 "std::complex<double> does not have the correct IsComplex trait");
+  static_assert(itk::NumericTraits<std::complex<long double>>::IsComplex,
+                "std::complex<long double> does not have the correct IsComplex trait");
+
+#if !defined(ITK_LEGACY_REMOVE)
   static_assert(itk::NumericTraits<std::complex<char>>::IsComplex,
                 "std::complex<char> does not have the correct IsComplex trait");
   static_assert(itk::NumericTraits<std::complex<int>>::IsComplex,
                 "std::complex<int> does not have the correct IsComplex trait");
   static_assert(itk::NumericTraits<std::complex<unsigned long>>::IsComplex,
                 "std::complex<unsigned long> does not have the correct IsComplex trait");
+#endif // !defined(ITK_LEGACY_REMOVE)
 } // End CheckIsComplexTraits()
 
 } // end anonymous namespace
@@ -799,6 +813,13 @@ itkNumericTraitsTest(int, char *[])
   CheckFixedArrayTraits(itk::Point<double, 5>());
   CheckFixedArrayTraits(itk::Point<long double, 5>());
 
+  using PointType = itk::Point<long double, 5>;
+  auto         pointPixel = PointType();
+  unsigned int pointSize = itk::NumericTraits<PointType>::GetLength(pointPixel) + 1;
+  ITK_TRY_EXPECT_EXCEPTION(itk::NumericTraits<PointType>::SetLength(pointPixel, pointSize));
+
+  pointSize = itk::NumericTraits<PointType>::GetLength(pointPixel) - 1;
+  ITK_TRY_EXPECT_EXCEPTION(itk::NumericTraits<PointType>::SetLength(pointPixel, pointSize));
 
   // itk::RGBPixel<char>()
   CheckFixedArrayTraits(itk::RGBPixel<char>());
@@ -825,6 +846,13 @@ itkNumericTraitsTest(int, char *[])
   CheckFixedArrayTraits(itk::RGBPixel<double>());
   CheckFixedArrayTraits(itk::RGBPixel<long double>());
 
+  using RGBPixelType = itk::RGBPixel<long double>;
+  auto         rgbPixel = RGBPixelType();
+  unsigned int rgbPixelSize = itk::NumericTraits<RGBPixelType>::GetLength(rgbPixel) + 1;
+  ITK_TRY_EXPECT_EXCEPTION(itk::NumericTraits<RGBPixelType>::SetLength(rgbPixel, rgbPixelSize));
+
+  rgbPixelSize = itk::NumericTraits<RGBPixelType>::GetLength(rgbPixel) - 1;
+  ITK_TRY_EXPECT_EXCEPTION(itk::NumericTraits<RGBPixelType>::SetLength(rgbPixel, rgbPixelSize));
 
   // itk::RGBAPixel<char>()
   CheckFixedArrayTraits(itk::RGBAPixel<char>());
@@ -851,6 +879,17 @@ itkNumericTraitsTest(int, char *[])
   CheckFixedArrayTraits(itk::RGBAPixel<double>());
   CheckFixedArrayTraits(itk::RGBAPixel<long double>());
 
+  using RGBAPixelType = itk::RGBAPixel<long double>;
+  auto         rgbaPixel = RGBAPixelType();
+  unsigned int rgbaPixelSize = itk::NumericTraits<RGBAPixelType>::GetLength(rgbaPixel) + 1;
+  ITK_TRY_EXPECT_EXCEPTION(itk::NumericTraits<RGBAPixelType>::SetLength(rgbaPixel, rgbaPixelSize));
+
+  rgbaPixelSize = itk::NumericTraits<RGBAPixelType>::GetLength(rgbaPixel) - 1;
+  ITK_TRY_EXPECT_EXCEPTION(itk::NumericTraits<RGBAPixelType>::SetLength(rgbaPixel, rgbaPixelSize));
+
+  const auto constRgbaPixel = RGBAPixelType();
+  rgbaPixelSize = itk::NumericTraits<RGBAPixelType>::GetLength(constRgbaPixel);
+  ITK_TEST_EXPECT_EQUAL(rgbaPixelSize, 4);
 
   // itk::SymmetricSecondRankTensor<char, 1>()
   CheckFixedArrayTraits(itk::SymmetricSecondRankTensor<char, 1>());
@@ -1243,6 +1282,7 @@ itkNumericTraitsTest(int, char *[])
 
 
   // std::complex
+#  if !defined(ITK_LEGACY_REMOVE)
   CheckFixedArrayTraits(std::complex<char>());
   CheckFixedArrayTraits(std::complex<unsigned char>());
   CheckFixedArrayTraits(std::complex<short>());
@@ -1251,6 +1291,7 @@ itkNumericTraitsTest(int, char *[])
   CheckFixedArrayTraits(std::complex<unsigned int>());
   CheckFixedArrayTraits(std::complex<long>());
   CheckFixedArrayTraits(std::complex<unsigned long>());
+#  endif // !defined(ITK_LEGACY_REMOVE)
   CheckFixedArrayTraits(std::complex<float>());
   CheckFixedArrayTraits(std::complex<double>());
   CheckFixedArrayTraits(std::complex<long double>());
@@ -1261,6 +1302,15 @@ itkNumericTraitsTest(int, char *[])
 
   // CompileTime Checks IsComplex traits does not return
   CheckIsComplexTraits();
+
+  itkConceptMacro(NumericTraitsCheckLong, (itk::Concept::HasNumericTraits<long>));
+  itkConceptMacro(NumericTraitsCheckComplexFloat, (itk::Concept::HasNumericTraits<std::complex<float>>));
+  itkConceptMacro(NumericTraitsCheckVectorFloat3, (itk::Concept::HasNumericTraits<itk::Vector<float, 3>>));
+  itkConceptMacro(NumericTraitsCheckStdVectorFloat, (itk::Concept::HasNumericTraits<std::vector<float>>));
+  itkConceptMacro(NumericTraitsCheckVariableLengthVector,
+                  (itk::Concept::HasNumericTraits<itk::VariableLengthVector<double>>));
+  itkConceptMacro(NumericTraitsCheckRGBPixel, (itk::Concept::HasNumericTraits<itk::RGBPixel<unsigned char>>));
+  itkConceptMacro(NumericTraitsCheckRGBAPixel, (itk::Concept::HasNumericTraits<itk::RGBAPixel<unsigned char>>));
 
   return (testPassedStatus) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

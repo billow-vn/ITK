@@ -26,7 +26,7 @@ namespace itk
 namespace watershed
 {
 /**
- *\class BoundaryResolver
+ * \class BoundaryResolver
  *  This filter implements a piece of the streaming watershed
  *  segmentation algorithm.  It takes in pairs of itk::watershed::Boundary
  *  objects and connects the labeling of pixels across image chunk boundaries.
@@ -73,7 +73,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(BoundaryResolver, ProcessObject);
+  itkOverrideGetNameOfClassMacro(BoundaryResolver);
 
   /** Expose the image dimension at run time. */
   static constexpr unsigned int ImageDimension = TDimension;

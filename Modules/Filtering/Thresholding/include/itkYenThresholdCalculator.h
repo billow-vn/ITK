@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class YenThresholdCalculator
+ * \class YenThresholdCalculator
  * \brief Computes the Yen's threshold for an image.
  *
  * Implements Yen  thresholding method
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(YenThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(YenThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

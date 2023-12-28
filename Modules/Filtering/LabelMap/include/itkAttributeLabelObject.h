@@ -52,7 +52,7 @@ public:
 
 
 /**
- *\class AttributeLabelObject
+ * \class AttributeLabelObject
  *  \brief A LabelObject with a generic attribute
  *
  * The attribute type is defined in the third template parameter.
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AttributeLabelObject, LabelObject);
+  itkOverrideGetNameOfClassMacro(AttributeLabelObject);
 
   using LabelMapType = LabelMap<Self>;
 

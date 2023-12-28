@@ -52,7 +52,7 @@ TileImageFilter<TInputImage, TOutputImage>::GenerateData()
   OutputPixelType defaultPixelValue = m_DefaultPixelValue;
   if (NumericTraits<OutputPixelType>::GetLength(defaultPixelValue) == 0)
   {
-    const OutputPixelComponentType zeroComponent = NumericTraits<OutputPixelComponentType>::ZeroValue();
+    const OutputPixelComponentType zeroComponent{};
     const unsigned int             nComponents = output->GetNumberOfComponentsPerPixel();
     NumericTraits<OutputPixelType>::SetLength(defaultPixelValue, nComponents);
     for (unsigned int n = 0; n < nComponents; ++n)
@@ -66,7 +66,6 @@ TileImageFilter<TInputImage, TOutputImage>::GenerateData()
   output->FillBuffer(defaultPixelValue);
 
   ImageRegionIterator<TileImageType> it(m_TileImage, m_TileImage->GetBufferedRegion());
-  it.GoToBegin();
 
   SizeValueType numPastes = 0;
   while (!it.IsAtEnd())
@@ -149,7 +148,7 @@ void
 TileImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
 
-  // Do not call the superclass's GenerateOutptuInformation method.
+  // Do not call the superclass's GenerateOutputInformation method.
   // The input images are likely a different dimension than the input,
   // so the superclass's implementation is not compatible.
 
@@ -237,7 +236,6 @@ TileImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
   // image number to -1.
   ImageRegionIteratorWithIndex<TileImageType> it(m_TileImage, m_TileImage->GetBufferedRegion());
 
-  it.GoToBegin();
   unsigned int input = 0;
   TileInfo     info;
   while (!it.IsAtEnd())
@@ -372,7 +370,7 @@ TileImageFilter<TInputImage, TOutputImage>::VerifyInputInformation() ITKv5_CONST
 
   if (image.IsNull())
   {
-    itkExceptionMacro(<< "Input not set as expected!");
+    itkExceptionMacro("Input not set as expected!");
   }
 
   const unsigned int numComponents = image->GetNumberOfComponentsPerPixel();
@@ -393,8 +391,9 @@ TileImageFilter<TInputImage, TOutputImage>::VerifyInputInformation() ITKv5_CONST
 
     if (numComponents != image->GetNumberOfComponentsPerPixel())
     {
-      itkExceptionMacro(<< "Primary input has " << numComponents << " numberOfComponents "
-                        << "but input " << idx << " has " << image->GetNumberOfComponentsPerPixel() << "!");
+      itkExceptionMacro("Primary input has " << numComponents << " numberOfComponents "
+                                             << "but input " << idx << " has " << image->GetNumberOfComponentsPerPixel()
+                                             << '!');
     }
   }
 }
@@ -405,9 +404,10 @@ TileImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent 
 {
   Superclass::PrintSelf(os, indent);
 
-  os << "DefaultPixelValue: " << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_DefaultPixelValue)
+  os << indent
+     << "DefaultPixelValue: " << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_DefaultPixelValue)
      << std::endl;
-  os << "Layout: " << m_Layout << std::endl;
+  os << indent << "Layout: " << m_Layout << std::endl;
 }
 } // end namespace itk
 #endif

@@ -95,8 +95,7 @@ CovarianceSampleFilter<TSample>::GetMeasurementVectorSize() const -> Measurement
   }
 
   // Test if the Vector type knows its length
-  MeasurementVectorType     vector;
-  MeasurementVectorSizeType measurementVectorSize = NumericTraits<MeasurementVectorType>::GetLength(vector);
+  MeasurementVectorSizeType measurementVectorSize = NumericTraits<MeasurementVectorType>::GetLength({});
 
   if (measurementVectorSize)
   {
@@ -141,7 +140,7 @@ CovarianceSampleFilter<TSample>::GenerateData()
   NumericTraits<MeasurementVectorRealType>::SetLength(diff, measurementVectorSize);
 
   using TotalFrequencyType = typename SampleType::TotalAbsoluteFrequencyType;
-  TotalFrequencyType totalFrequency = NumericTraits<TotalFrequencyType>::ZeroValue();
+  TotalFrequencyType totalFrequency{};
 
   typename SampleType::ConstIterator       iter = input->Begin();
   const typename SampleType::ConstIterator end = input->End();

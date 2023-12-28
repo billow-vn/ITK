@@ -55,11 +55,11 @@ AntiAliasBinaryImageFilter<TInputImage, TOutputImage>::AntiAliasBinaryImageFilte
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename AntiAliasBinaryImageFilter<TInputImage, TOutputImage>::ValueType
+auto
 AntiAliasBinaryImageFilter<TInputImage, TOutputImage>::CalculateUpdateValue(const IndexType &    idx,
                                                                             const TimeStepType & dt,
                                                                             const ValueType &    value,
-                                                                            const ValueType &    change)
+                                                                            const ValueType &    change) -> ValueType
 {
   // This method introduces the constraint on the flow of the surface.
 
@@ -124,8 +124,12 @@ AntiAliasBinaryImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & 
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "m_UpperBinaryValue = " << m_UpperBinaryValue << std::endl;
-  os << indent << "m_LowerBinaryValue = " << m_LowerBinaryValue << std::endl;
+  os << indent
+     << "UpperBinaryValue: " << static_cast<typename NumericTraits<BinaryValueType>::PrintType>(m_UpperBinaryValue)
+     << std::endl;
+  os << indent
+     << "LowerBinaryValue: " << static_cast<typename NumericTraits<BinaryValueType>::PrintType>(m_LowerBinaryValue)
+     << std::endl;
 
   itkPrintSelfObjectMacro(InputImage);
 }

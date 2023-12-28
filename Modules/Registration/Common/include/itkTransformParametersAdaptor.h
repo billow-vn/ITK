@@ -67,7 +67,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformParametersAdaptor, TransformParametersAdaptorBase);
+  itkOverrideGetNameOfClassMacro(TransformParametersAdaptor);
 
   /** Typedefs associated with the transform */
 
@@ -120,7 +120,7 @@ protected:
     itkPrintSelfObjectMacro(Transform);
   }
 
-  TransformPointer m_Transform;
+  TransformPointer m_Transform{};
 }; // class TransformParametersAdaptor
 } // namespace itk
 

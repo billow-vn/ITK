@@ -9,7 +9,6 @@ configure_file(${HDF5_SRC_DIR}/itk_hdf5_mangle.h.in
                ${HDF5_SRC_BINARY_DIR}/itk_hdf5_mangle.h
                @ONLY)
 # ITK --stop
-
 #-----------------------------------------------------------------------------
 # List Source Files
 #-----------------------------------------------------------------------------

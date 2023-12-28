@@ -38,7 +38,7 @@ namespace itk
 {
 
 /**
- *\class BoundingBox
+ * \class BoundingBox
  *
  * \brief Represent and compute information about bounding boxes.
  *
@@ -79,7 +79,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(BoundingBox, Object);
+  itkOverrideGetNameOfClassMacro(BoundingBox);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -189,7 +189,7 @@ public:
   DeepCopy() const;
 
 protected:
-  BoundingBox();
+  BoundingBox() = default;
   ~BoundingBox() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -197,13 +197,13 @@ protected:
   using ConstIterator = typename PointsContainer::ConstIterator;
 
 private:
-  PointsContainerConstPointer m_PointsContainer;
+  PointsContainerConstPointer m_PointsContainer{};
 #if !defined(ITK_LEGACY_REMOVE)
   PointsContainerPointer m_CornersContainer{ PointsContainer::New() };
 #endif
-  mutable BoundsArrayType m_Bounds;
-  mutable TimeStamp       m_BoundsMTime; // The last time the bounds
-                                         // were computed.
+  mutable BoundsArrayType m_Bounds{};
+  mutable TimeStamp       m_BoundsMTime{}; // The last time the bounds
+                                           // were computed.
 };
 } // end namespace itk
 

@@ -28,7 +28,7 @@ namespace itk
  *  \brief Defines an itk::Image front-end to a standard C-array.
  *
  * Defines an itk::Image front-end to a standard C-array. This container
- * conforms to the ImageContainerInterface. This is a full-fleged Object,
+ * conforms to the ImageContainerInterface. This is a full-fledged Object,
  * so there is modification time, debug, and reference count information.
  *
  * \tparam TElementIdentifier An INTEGRAL type for use in indexing the
@@ -61,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(ImportImageContainer, Object);
+  itkOverrideGetNameOfClassMacro(ImportImageContainer);
 
   /** Get the pointer from which the image data is imported. */
   TElement *
@@ -118,12 +118,12 @@ public:
    * container. However, in this particular case, Reserve as a Resize
    * semantics that is kept for backward compatibility reasons.
    *
-   * If UseDefaultConstructor is true, then * the default constructor is used
-   * to initialize each element.  POD date types initialize to zero.
+   * If UseValueInitialization is true, then POD types will be
+   * zero-initialized.
    *
    * \sa SetImportPointer() */
   void
-  Reserve(ElementIdentifier size, const bool UseDefaultConstructor = false);
+  Reserve(ElementIdentifier size, const bool UseValueInitialization = false);
 
   /** Tell the container to try to minimize its memory usage for
    * storage of the current number of elements.  If new memory is
@@ -152,7 +152,7 @@ public:
   itkBooleanMacro(ContainerManageMemory);
 
 protected:
-  ImportImageContainer();
+  ImportImageContainer() = default;
   ~ImportImageContainer() override;
 
   /** PrintSelf routine. Normally this is a protected internal method. It is
@@ -162,12 +162,11 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /**
-   * Allocates elements of the array.  If UseDefaultConstructor is true, then
-   * the default constructor is used to initialize each element.  POD date types
-   * initialize to zero.
+   * Allocates elements of the array.  If UseValueInitialization is true, then
+   * POD types will be zero-initialized.
    */
   virtual TElement *
-  AllocateElements(ElementIdentifier size, bool UseDefaultConstructor = false) const;
+  AllocateElements(ElementIdentifier size, bool UseValueInitialization = false) const;
 
   virtual void
   DeallocateManagedMemory();
@@ -199,10 +198,10 @@ protected:
   }
 
 private:
-  TElement *         m_ImportPointer;
-  TElementIdentifier m_Size;
-  TElementIdentifier m_Capacity;
-  bool               m_ContainerManageMemory;
+  TElement *         m_ImportPointer{};
+  TElementIdentifier m_Size{};
+  TElementIdentifier m_Capacity{};
+  bool               m_ContainerManageMemory{ true };
 };
 } // end namespace itk
 

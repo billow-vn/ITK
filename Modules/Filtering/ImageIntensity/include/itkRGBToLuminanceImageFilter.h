@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class RGBToLuminanceImageFilter
+ * \class RGBToLuminanceImageFilter
  * \brief Converts an RGB image into a grayscale image.
  *
  * This filters converts an RGB image into a Luminance on by computing
@@ -78,7 +78,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RGBToLuminanceImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(RGBToLuminanceImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

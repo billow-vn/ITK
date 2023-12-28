@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class MultivariateLegendrePolynomial
+ * \class MultivariateLegendrePolynomial
  * \brief 2D and 3D multivariate Legendre Polynomial
  *
  * In 2D,
@@ -132,7 +132,7 @@ public:
   }
 
   /**
-   *\class CoefficientVectorSizeMismatch
+   * \class CoefficientVectorSizeMismatch
    * \brief Exception object.
    * \ingroup ITKPolynomials
    */
@@ -212,7 +212,7 @@ public:
   GetNumberOfCoefficients(unsigned int dimension, unsigned int degree);
 
   /**
-   *\class SimpleForwardIterator
+   * \class SimpleForwardIterator
    * \brief Iterator which only supports forward iteration and
    * Begin(), IsAtEnd(), and Get() method which work just like as
    * SimpleImageRegionIterator.
@@ -304,19 +304,19 @@ protected:
   CalculateYCoef(double norm_z, const CoefficientArrayType & coef);
 
 private:
-  DomainSizeType m_DomainSize;
-  unsigned int   m_Dimension;
-  unsigned int   m_Degree;
-  unsigned int   m_NumberOfCoefficients;
+  DomainSizeType m_DomainSize{};
+  unsigned int   m_Dimension{};
+  unsigned int   m_Degree{};
+  unsigned int   m_NumberOfCoefficients{};
 
-  CoefficientArrayType m_CoefficientArray;
-  CoefficientArrayType m_CachedXCoef;
-  CoefficientArrayType m_CachedYCoef;
-  CoefficientArrayType m_CachedZCoef;
+  CoefficientArrayType m_CoefficientArray{};
+  CoefficientArrayType m_CachedXCoef{};
+  CoefficientArrayType m_CachedYCoef{};
+  CoefficientArrayType m_CachedZCoef{};
 
-  DoubleArrayType m_NormFactor;
-  IndexValueType  m_PrevY;
-  IndexValueType  m_PrevZ;
+  DoubleArrayType m_NormFactor{};
+  IndexValueType  m_PrevY{};
+  IndexValueType  m_PrevZ{};
 }; // end of class
 
 ITKPolynomials_EXPORT std::ostream &

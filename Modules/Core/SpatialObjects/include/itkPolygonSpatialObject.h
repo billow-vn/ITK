@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class PolygonSpatialObject
+ * \class PolygonSpatialObject
  *
  * \brief TODO
  * \ingroup ITKSpatialObjects
@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(PolygonSpatialObject, PointBasedSpatialObject);
+  itkOverrideGetNameOfClassMacro(PolygonSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -109,10 +109,10 @@ protected:
   InternalClone() const override;
 
 private:
-  mutable bool             m_IsClosed;
-  mutable int              m_OrientationInObjectSpace;
-  mutable ModifiedTimeType m_OrientationInObjectSpaceMTime;
-  double                   m_ThicknessInObjectSpace;
+  mutable bool             m_IsClosed{};
+  mutable int              m_OrientationInObjectSpace{};
+  mutable ModifiedTimeType m_OrientationInObjectSpaceMTime{};
+  double                   m_ThicknessInObjectSpace{};
 };
 
 } // namespace itk

@@ -40,7 +40,7 @@ public:
   using Superclass = QuadEdgeMeshToQuadEdgeMeshFilter<TInput, TOutput>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(DecimationQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(DecimationQuadEdgeMeshFilter);
 
   using InputMeshType = TInput;
   using InputMeshPointer = typename InputMeshType::Pointer;
@@ -65,8 +65,8 @@ protected:
 
   ~DecimationQuadEdgeMeshFilter() override = default;
 
-  CriterionPointer m_Criterion;
-  SizeValueType    m_Iteration;
+  CriterionPointer m_Criterion{};
+  SizeValueType    m_Iteration{};
 
   void
   GenerateData() override
@@ -119,7 +119,7 @@ protected:
   }
 
   /** Cache pointer to output to use in inner loops */
-  OutputMeshType * m_OutputMesh;
+  OutputMeshType * m_OutputMesh{};
 };
 } // namespace itk
 

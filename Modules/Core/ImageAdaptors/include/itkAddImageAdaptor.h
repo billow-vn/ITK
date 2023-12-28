@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class AddImageAdaptor
+ * \class AddImageAdaptor
  * \brief Presents an image as being the addition of a constant value to all pixels
  *
  * Additional casting is performed according to the input and output image
@@ -50,7 +50,7 @@ public:
   using PixelType = typename TImage::PixelType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AddImageAdaptor, ImageAdaptor);
+  itkOverrideGetNameOfClassMacro(AddImageAdaptor);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

@@ -33,6 +33,17 @@
 #include "itkSize.h"
 #include "itkContinuousIndex.h"
 #include "itkMath.h"
+#include <type_traits> // For conditional and integral_constant.
+#include <utility>     // For tuple_element and tuple_size.
+
+// Macro added to each `ImageRegion` member function that overrides a virtual member function of `Region`. In the
+// future, `ImageRegion` will no longer inherit from `Region`, so then those `ImageRegion` member functions will no
+// longer override.
+#ifdef ITK_FUTURE_LEGACY_REMOVE
+#  define itkRegionOverrideMacro // nothing (in the future)
+#else
+#  define itkRegionOverrideMacro override
+#endif
 
 namespace itk
 {
@@ -66,15 +77,26 @@ class ITK_TEMPLATE_EXPORT ImageBase;
  * \endsphinx
  */
 template <unsigned int VImageDimension>
-class ITK_TEMPLATE_EXPORT ImageRegion final : public Region
+class ITK_TEMPLATE_EXPORT ImageRegion final
+#ifndef ITK_FUTURE_LEGACY_REMOVE
+  // This inheritance is to be removed in the future.
+  : public Region
+#endif
 {
 public:
   /** Standard class type aliases. */
   using Self = ImageRegion;
+
+#ifndef ITK_FUTURE_LEGACY_REMOVE
   using Superclass = Region;
+#endif
 
   /** Standard part of all itk objects. */
-  itkTypeMacro(ImageRegion, Region);
+  const char *
+  GetNameOfClass() const itkRegionOverrideMacro
+  {
+    return "ImageRegion";
+  }
 
   /** Dimension of the image available at compile time. */
   static constexpr unsigned int ImageDimension = VImageDimension;
@@ -106,11 +128,15 @@ public:
   using SliceRegion = ImageRegion<Self::SliceDimension>;
 
   /** Return the region type. Images are described with structured regions. */
-  Superclass::RegionEnum
-  GetRegionType() const override
+  Region::RegionEnum
+  GetRegionType() const itkRegionOverrideMacro
   {
-    return Superclass::RegionEnum::ITK_STRUCTURED_REGION;
+    return Region::RegionEnum::ITK_STRUCTURED_REGION;
   }
+
+  /** Print the region. */
+  void
+  Print(std::ostream & os, Indent indent = 0) const itkRegionOverrideMacro;
 
   /** Constructor. ImageRegion is a lightweight object that is not reference
    * counted, so the constructor is public. Its two data members are filled
@@ -119,7 +145,7 @@ public:
 
   /** Destructor. ImageRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
-  ~ImageRegion() override = default;
+  ~ImageRegion() itkRegionOverrideMacro = default;
 
   /** Copy constructor. ImageRegion is a lightweight object that is not
    * reference counted, so the copy constructor is public. */
@@ -275,8 +301,8 @@ public:
   bool
   IsInside(const Self & otherRegion) const
   {
-    const auto otherIndex = otherRegion.m_Index;
-    const auto otherSize = otherRegion.m_Size;
+    const auto & otherIndex = otherRegion.m_Index;
+    const auto & otherSize = otherRegion.m_Size;
 
     for (unsigned int i = 0; i < ImageDimension; ++i)
     {
@@ -333,13 +359,46 @@ public:
   SliceRegion
   Slice(const unsigned int dim) const;
 
+  /** Supports tuple-like access: `get<0>()` returns a reference to the index and `get<1>()` returns a reference to the
+   * size of the region. */
+  template <size_t VTupleIndex>
+  [[nodiscard]] auto &
+  get()
+  {
+    if constexpr (VTupleIndex == 0)
+    {
+      return m_Index;
+    }
+    else
+    {
+      static_assert(VTupleIndex == 1);
+      return m_Size;
+    }
+  }
+
+  /** Supports tuple-like access. Const overload. */
+  template <size_t VTupleIndex>
+  [[nodiscard]] const auto &
+  get() const
+  {
+    if constexpr (VTupleIndex == 0)
+    {
+      return m_Index;
+    }
+    else
+    {
+      static_assert(VTupleIndex == 1);
+      return m_Size;
+    }
+  }
+
 protected:
   /** Methods invoked by Print() to print information about the object
    * including superclasses. Typically not called by the user (use Print()
    * instead) but used in the hierarchical print process to combine the
    * output of several classes.  */
   void
-  PrintSelf(std::ostream & os, Indent indent) const override;
+  PrintSelf(std::ostream & os, Indent indent) const itkRegionOverrideMacro;
 
 private:
   IndexType m_Index = { { 0 } };
@@ -353,6 +412,37 @@ template <unsigned int VImageDimension>
 std::ostream &
 operator<<(std::ostream & os, const ImageRegion<VImageDimension> & region);
 } // end namespace itk
+
+
+namespace std
+{
+// NOLINTBEGIN(cert-dcl58-cpp)
+// Locally suppressed the following warning from Clang-Tidy (LLVM 17.0.1), as it appears undeserved.
+// > warning: modification of 'std' namespace can result in undefined behavior [cert-dcl58-cpp]
+
+/** `std::tuple_size` specialization, needed for ImageRegion to support C++ structured binding.
+ *
+ * Example, using structured binding to retrieve the index and size of a region:
+   \code
+    auto [index, size] = image.GetRequestedRegion();
+   \endcode
+ */
+template <unsigned int VImageDimension>
+struct tuple_size<itk::ImageRegion<VImageDimension>> : integral_constant<size_t, 2>
+{};
+
+/** `std::tuple_element` specialization, needed for ImageRegion to support C++ structured binding. */
+template <size_t VTupleIndex, unsigned int VImageDimension>
+struct tuple_element<VTupleIndex, itk::ImageRegion<VImageDimension>>
+  : conditional<VTupleIndex == 0, itk::Index<VImageDimension>, itk::Size<VImageDimension>>
+{
+  static_assert(VTupleIndex < tuple_size_v<itk::ImageRegion<VImageDimension>>);
+};
+
+// NOLINTEND(cert-dcl58-cpp)
+} // namespace std
+
+#undef itkRegionOverrideMacro
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #  include "itkImageRegion.hxx"

@@ -23,9 +23,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TPixel>
 Hessian3DToVesselnessMeasureImageFilter<TPixel>::Hessian3DToVesselnessMeasureImageFilter()
 {
@@ -41,7 +39,7 @@ template <typename TPixel>
 void
 Hessian3DToVesselnessMeasureImageFilter<TPixel>::GenerateData()
 {
-  itkDebugMacro(<< "Hessian3DToVesselnessMeasureImageFilter generating data ");
+  itkDebugMacro("Hessian3DToVesselnessMeasureImageFilter generating data ");
 
   m_SymmetricEigenValueFilter->SetInput(this->GetInput());
 
@@ -60,8 +58,6 @@ Hessian3DToVesselnessMeasureImageFilter<TPixel>::GenerateData()
   ImageRegionIterator<OutputImageType> oit;
   this->AllocateOutputs();
   oit = ImageRegionIterator<OutputImageType>(output, output->GetRequestedRegion());
-  oit.GoToBegin();
-  it.GoToBegin();
   while (!it.IsAtEnd())
   {
     // Get the eigen value

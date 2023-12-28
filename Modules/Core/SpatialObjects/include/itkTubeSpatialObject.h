@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(TubeSpatialObject, PointBasedSpatialObject);
+  itkOverrideGetNameOfClassMacro(TubeSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -79,16 +79,16 @@ public:
   itkGetConstMacro(EndRounded, bool);
   itkBooleanMacro(EndRounded);
 
-  /** Calculate the normalized tangent */
+  /** Compute the tangents and normals of the centerline of the tube. */
   bool
   ComputeTangentsAndNormals();
 
 #if !defined(ITK_LEGACY_REMOVE)
-  /** Calculate the normalized tangent - Old spelling of function name */
+  /** Compute the tangents and normals of the centerline of the tube. */
   itkLegacyMacro(bool ComputeTangentAndNormals()) { return ComputeTangentsAndNormals(); }
 #endif
 
-  /** Remove duplicate points */
+  /** Remove duplicate points. */
   unsigned int
   RemoveDuplicatePointsInObjectSpace(double minSpacingInObjectSpace = 0);
 
@@ -110,13 +110,18 @@ public:
 
   itkBooleanMacro(Root);
 
-  /** Returns true if the point is inside the tube, false otherwise. */
+  /** Test whether a point is inside the object: returns true if the point is inside the tube, false otherwise.
+   *
+   * For computational speed purposes, it is faster if the method does not check the name of the class and the current
+   * depth.
+   */
   bool
   IsInsideInObjectSpace(const PointType & point) const override;
 
   /* Avoid hiding the overload that supports depth and name arguments */
   using Superclass::IsInsideInObjectSpace;
 
+  /** Copy the information from another spatial object. */
   void
   CopyInformation(const DataObject * data) override;
 
@@ -136,9 +141,9 @@ protected:
   InternalClone() const override;
 
 private:
-  int  m_ParentPoint;
-  bool m_EndRounded;
-  bool m_Root;
+  int  m_ParentPoint{};
+  bool m_EndRounded{};
+  bool m_Root{};
 };
 
 } // end namespace itk

@@ -40,7 +40,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DOMTestObject, Object);
+  itkOverrideGetNameOfClassMacro(DOMTestObject);
 
   /** Functions to set/get foo value. */
   itkSetMacro(FooValue, std::string);
@@ -53,8 +53,8 @@ public:
 private:
   DOMTestObject() = default;
 
-  std::string m_FooValue;
-  std::string m_FooFileName;
+  std::string m_FooValue{};
+  std::string m_FooFileName{};
 };
 
 } // namespace itk

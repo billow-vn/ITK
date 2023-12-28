@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Euler3DTransform, Rigid3DTransform);
+  itkOverrideGetNameOfClassMacro(Euler3DTransform);
 
   /** Dimension of the space. */
   static constexpr unsigned int SpaceDimension = 3;
@@ -131,6 +131,10 @@ public:
   SetComputeZYX(const bool flag);
   itkGetConstMacro(ComputeZYX, bool);
 
+  /** Set the state to the identity.
+   *
+   * Sets the angles to a 0 value.
+   */
   void
   SetIdentity() override;
 
@@ -152,14 +156,15 @@ protected:
   void
   ComputeMatrix() override;
 
+  /** Compute angles from the rotation matrix. */
   void
   ComputeMatrixParameters() override;
 
 private:
-  ScalarType m_AngleX;
-  ScalarType m_AngleY;
-  ScalarType m_AngleZ;
-  bool       m_ComputeZYX;
+  ScalarType m_AngleX{};
+  ScalarType m_AngleY{};
+  ScalarType m_AngleZ{};
+  bool       m_ComputeZYX{};
 }; // class Euler3DTransform
 } // namespace itk
 

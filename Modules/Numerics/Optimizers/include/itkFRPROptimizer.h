@@ -23,14 +23,14 @@
 
 namespace itk
 {
-/**\class FRPROptimizerEnums
+/** \class FRPROptimizerEnums
  * \brief Contains enum classes used by FRPROptimizer class
  * \ingroup ITKOptimizers
  */
 class FRPROptimizerEnums
 {
 public:
-  /**\class Optimization
+  /** \class Optimization
    * \ingroup ITKOptimizers
    * */
   enum class Optimization : uint8_t
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FRPROptimizer, PowellOptimizer);
+  itkOverrideGetNameOfClassMacro(FRPROptimizer);
 
   /** Type of the Cost Function   */
   using CostFunctionType = SingleValuedCostFunction;
@@ -133,9 +133,9 @@ private:
   static constexpr OptimizationEnum PolakRibiere = OptimizationEnum::PolakRibiere;
 #endif
 
-  OptimizationEnum m_OptimizationType;
+  OptimizationEnum m_OptimizationType{};
 
-  bool m_UseUnitLengthGradient;
+  bool m_UseUnitLengthGradient{};
 }; // end of class
 } // end of namespace itk
 

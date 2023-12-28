@@ -138,7 +138,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Octree, OctreeBase);
+  itkOverrideGetNameOfClassMacro(Octree);
 
   ImageTypePointer
   GetImage();
@@ -217,11 +217,11 @@ private:
   // and large enough to contain MAX(DIMS[1,2,3])
   unsigned int m_Width{ 0 };
 
-  unsigned int        m_Depth{ 0 };  // The depth of the Octree
-  unsigned int        m_TrueDims[3]; // The true dimensions of the image
+  unsigned int        m_Depth{ 0 };    // The depth of the Octree
+  unsigned int        m_TrueDims[3]{}; // The true dimensions of the image
   OctreeNodeBranch    m_ColorTable[ColorTableSize];
-  OctreeNode          m_Tree;
-  MappingFunctionType m_MappingFunction;
+  OctreeNode          m_Tree{};
+  MappingFunctionType m_MappingFunction{};
 };
 } // namespace itk
 

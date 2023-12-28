@@ -39,7 +39,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int VDimension, typename PixelType, typename TMeshTraits>
 MetaSceneConverter<VDimension, PixelType, TMeshTraits>::MetaSceneConverter()
 {
@@ -108,8 +108,6 @@ MetaSceneConverter<VDimension, PixelType, TMeshTraits>::SetTransform(SpatialObje
   so->GetModifiableObjectToParentTransform()->SetOffset(offset);
 }
 
-/** Convert a metaScene into a Composite Spatial Object
- *  Also Managed Composite Spatial Object to keep a hierarchy */
 template <unsigned int VDimension, typename PixelType, typename TMeshTraits>
 auto
 MetaSceneConverter<VDimension, PixelType, TMeshTraits>::CreateSpatialObjectScene(MetaScene * mScene)
@@ -203,7 +201,7 @@ MetaSceneConverter<VDimension, PixelType, TMeshTraits>::CreateSpatialObjectScene
 
       if (converterIt == this->m_ConverterMap.end())
       {
-        itkGenericExceptionMacro(<< "Unable to find MetaObject -> SpatialObject converter for " << objectTypeName);
+        itkGenericExceptionMacro("Unable to find MetaObject -> SpatialObject converter for " << objectTypeName);
       }
       currentSO = converterIt->second->MetaObjectToSpatialObject(*it);
     }
@@ -230,7 +228,6 @@ MetaSceneConverter<VDimension, PixelType, TMeshTraits>::CreateSpatialObjectScene
   return soScene;
 }
 
-/** Read a meta file give the type */
 template <unsigned int VDimension, typename PixelType, typename TMeshTraits>
 auto
 MetaSceneConverter<VDimension, PixelType, TMeshTraits>::ReadMeta(const std::string & name) -> SpatialObjectPointer
@@ -247,7 +244,6 @@ MetaSceneConverter<VDimension, PixelType, TMeshTraits>::ReadMeta(const std::stri
   return soScene;
 }
 
-/** Write a meta file give the type */
 template <unsigned int VDimension, typename PixelType, typename TMeshTraits>
 MetaScene *
 MetaSceneConverter<VDimension, PixelType, TMeshTraits>::CreateMetaScene(const SpatialObjectType * soScene,
@@ -344,8 +340,7 @@ MetaSceneConverter<VDimension, PixelType, TMeshTraits>::CreateMetaScene(const Sp
       auto converterIt = this->m_ConverterMap.find(spatialObjectTypeName);
       if (converterIt == this->m_ConverterMap.end())
       {
-        itkGenericExceptionMacro(<< "Unable to find MetaObject -> SpatialObject converter for "
-                                 << spatialObjectTypeName);
+        itkGenericExceptionMacro("Unable to find MetaObject -> SpatialObject converter for " << spatialObjectTypeName);
       }
       currentMeta = converterIt->second->SpatialObjectToMetaObject(*it);
     }
@@ -369,7 +364,6 @@ MetaSceneConverter<VDimension, PixelType, TMeshTraits>::CreateMetaScene(const Sp
   return metaScene;
 }
 
-/** Write a meta file give the type */
 template <unsigned int VDimension, typename PixelType, typename TMeshTraits>
 bool
 MetaSceneConverter<VDimension, PixelType, TMeshTraits>::WriteMeta(const SpatialObjectType * soScene,

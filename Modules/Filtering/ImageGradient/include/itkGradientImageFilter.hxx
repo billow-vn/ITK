@@ -28,9 +28,7 @@
 
 namespace itk
 {
-//
-// Constructor
-//
+
 template <typename TInputImage, typename TOperatorValueType, typename TOutputValueType, typename TOutputImageType>
 GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputImageType>::GradientImageFilter()
 {
@@ -42,9 +40,6 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
   this->ThreaderUpdateProgressOff();
 }
 
-//
-// Destructor
-//
 template <typename TInputImage, typename TOperatorValueType, typename TOutputValueType, typename TOutputImageType>
 GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputImageType>::~GradientImageFilter()
 {
@@ -135,7 +130,7 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
     {
       if (this->GetInput()->GetSpacing()[i] == 0.0)
       {
-        itkExceptionMacro(<< "Image spacing cannot be zero.");
+        itkExceptionMacro("Image spacing cannot be zero.");
       }
       else
       {
@@ -153,13 +148,10 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
   typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList =
     bC(inputImage, outputRegionForThread, radius);
 
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
-  fit = faceList.begin();
-
   TotalProgressReporter progress(this, this->GetOutput()->GetRequestedRegion().GetNumberOfPixels());
 
   // Initialize the x_slice array
-  ConstNeighborhoodIterator<InputImageType> nit = ConstNeighborhoodIterator<InputImageType>(radius, inputImage, *fit);
+  ConstNeighborhoodIterator<InputImageType> nit(radius, inputImage, faceList.front());
 
   std::slice          x_slice[InputImageDimension];
   const SizeValueType center = nit.Size() / 2;
@@ -171,10 +163,10 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
   CovariantVectorType gradient;
   // Process non-boundary face and then each of the boundary faces.
   // These are N-d regions which border the edge of the buffer.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    nit = ConstNeighborhoodIterator<InputImageType>(radius, inputImage, *fit);
-    ImageRegionIterator<OutputImageType> it = ImageRegionIterator<OutputImageType>(outputImage, *fit);
+    nit = ConstNeighborhoodIterator<InputImageType>(radius, inputImage, face);
+    ImageRegionIterator<OutputImageType> it(outputImage, face);
     nit.OverrideBoundaryCondition(m_BoundaryCondition);
     nit.GoToBegin();
 
@@ -185,7 +177,7 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
         gradient[i] = SIP(x_slice[i], nit, op[i]);
       }
 
-      // This method optionally performs a tansform for Physical
+      // This method optionally performs a transform for Physical
       // coordinates and potential conversion to a different output
       // pixel type.
       this->SetOutputPixel(it, gradient);
@@ -217,10 +209,6 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
   }
 }
 
-
-/**
- * Standard "PrintSelf" method
- */
 template <typename TInputImage, typename TOperatorValueType, typename TOutputValueType, typename TOutputImageType>
 void
 GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputImageType>::PrintSelf(std::ostream & os,
@@ -228,9 +216,18 @@ GradientImageFilter<TInputImage, TOperatorValueType, TOutputValueType, TOutputIm
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "UseImageSpacing: " << (this->m_UseImageSpacing ? "On" : "Off") << std::endl;
-  os << indent << "UseImageDirection = " << (this->m_UseImageDirection ? "On" : "Off") << std::endl;
-  os << indent << "BoundaryCondition = \n" << this->m_BoundaryCondition << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  os << indent << "UseImageDirection: " << (m_UseImageDirection ? "On" : "Off") << std::endl;
+
+  os << indent << "BoundaryCondition: ";
+  if (m_BoundaryCondition != nullptr)
+  {
+    os << m_BoundaryCondition << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
 }
 } // end namespace itk
 

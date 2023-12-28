@@ -17,6 +17,7 @@
  *=========================================================================*/
 #include "itkBMPImageIO.h"
 #include "itkByteSwapper.h"
+#include "itkMakeUniqueForOverwrite.h"
 #include "itksys/SystemTools.hxx"
 #include <iostream>
 
@@ -59,7 +60,7 @@ BMPImageIO::CanReadFile(const char * filename)
 
   if (fname.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
   }
 
 
@@ -67,7 +68,7 @@ BMPImageIO::CanReadFile(const char * filename)
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
   }
 
   // Now check the content
@@ -152,14 +153,14 @@ BMPImageIO::CanWriteFile(const char * name)
 
   if (filename.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
   }
 
   bool extensionFound = this->HasSupportedWriteExtension(name, false);
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -171,7 +172,6 @@ BMPImageIO::Read(void * buffer)
 {
   auto *        p = static_cast<char *>(buffer);
   unsigned long l = 0;
-  char *        value;
 
   this->OpenFileForReading(m_Ifstream, m_FileName);
 
@@ -181,9 +181,9 @@ BMPImageIO::Read(void * buffer)
   // https://msdn.microsoft.com/en-us/library/windows/desktop/dd183383%28v=vs.85%29.aspx
   if (m_BMPCompression == 1 && (this->GetNumberOfComponents() == 3 || this->GetIsReadAsScalarPlusPalette()))
   {
-    value = new char[m_BMPDataSize + 1];
+    const auto value = make_unique_for_overwrite<char[]>(m_BMPDataSize + 1);
     m_Ifstream.seekg(m_BitMapOffset, std::ios::beg);
-    m_Ifstream.read((char *)value, m_BMPDataSize);
+    m_Ifstream.read(value.get(), m_BMPDataSize);
 
     SizeValueType posLine = 0;
     SizeValueType line = m_Dimensions[1] - 1;
@@ -288,13 +288,13 @@ BMPImageIO::Read(void * buffer)
     {
       paddedStreamRead = ((streamRead / 4) + 1) * 4;
     }
-    value = new char[paddedStreamRead + 1];
+    const auto value = make_unique_for_overwrite<char[]>(paddedStreamRead + 1);
 
     for (unsigned int id = 0; id < m_Dimensions[1]; ++id)
     {
       const unsigned int line_id = m_FileLowerLeft ? (m_Dimensions[1] - id - 1) : id;
       m_Ifstream.seekg(m_BitMapOffset + paddedStreamRead * line_id, std::ios::beg);
-      m_Ifstream.read((char *)value, paddedStreamRead);
+      m_Ifstream.read(value.get(), paddedStreamRead);
       for (long i = 0; i < streamRead; ++i)
       {
         if (this->GetNumberOfComponents() == 1)
@@ -331,7 +331,6 @@ BMPImageIO::Read(void * buffer)
       }
     }
   }
-  delete[] value;
   m_Ifstream.close();
 }
 
@@ -393,7 +392,7 @@ BMPImageIO::ReadImageInformation()
     // error checking
     if ((infoSize != 40) && (infoSize != 12))
     {
-      itkExceptionMacro(<< "Unknown file type! " << m_FileName.c_str() << " is not a Windows BMP file!");
+      itkExceptionMacro("Unknown file type! " << m_FileName.c_str() << " is not a Windows BMP file!");
     }
 
     // there are two different types of BMP files
@@ -425,7 +424,7 @@ BMPImageIO::ReadImageInformation()
     // error checking
     if ((infoSize != 40) && (infoSize != 12))
     {
-      itkExceptionMacro(<< "Unknown file type! " << m_FileName.c_str() << " is not a Windows BMP file!");
+      itkExceptionMacro("Unknown file type! " << m_FileName.c_str() << " is not a Windows BMP file!");
     }
 
     // there are two different types of BMP files
@@ -650,7 +649,7 @@ BMPImageIO::SwapBytesIfNecessary(void * buffer, SizeValueType numberOfPixels)
       break;
     }
     default:
-      itkExceptionMacro(<< "Pixel Type Unknown");
+      itkExceptionMacro("Pixel Type Unknown");
   }
 }
 
@@ -704,16 +703,16 @@ BMPImageIO::Write(const void * buffer)
 
   if (nDims != 2)
   {
-    itkExceptionMacro(<< "BMPImageIO cannot write images with a dimension != 2");
+    itkExceptionMacro("BMPImageIO cannot write images with a dimension != 2");
   }
 
   if (this->GetComponentType() != IOComponentEnum::UCHAR)
   {
-    itkExceptionMacro(<< "BMPImageIO supports unsigned char only");
+    itkExceptionMacro("BMPImageIO supports unsigned char only");
   }
   if ((this->m_NumberOfComponents != 1) && (this->m_NumberOfComponents != 3) && (this->m_NumberOfComponents != 4))
   {
-    itkExceptionMacro(<< "BMPImageIO supports 1,3 or 4 components only");
+    itkExceptionMacro("BMPImageIO supports 1,3 or 4 components only");
   }
 
   this->OpenFileForWriting(m_Ofstream, m_FileName);
@@ -820,7 +819,7 @@ BMPImageIO::Write(const void * buffer)
       numberOfBitsPerPixel = 8;
       break;
     default:
-      itkExceptionMacro(<< "Number of components not supported.");
+      itkExceptionMacro("Number of components not supported.");
   }
   this->Write16BitsInteger(numberOfBitsPerPixel);
 
@@ -935,15 +934,14 @@ BMPImageIO::PrintSelf(std::ostream & os, Indent indent) const
   os << indent << "DataSize: " << m_BMPDataSize << std::endl;
   if (m_IsReadAsScalarPlusPalette)
   {
-    os << "Read as Scalar Image plus palette"
-       << "\n";
+    os << "Read as Scalar Image plus palette" << '\n';
   }
   if (!m_ColorPalette.empty())
   {
     os << indent << "ColorPalette:" << std::endl;
     for (unsigned int i = 0; i < m_ColorPalette.size(); ++i)
     {
-      os << indent << "[" << i << "]" << itk::NumericTraits<PaletteType::value_type>::PrintType(m_ColorPalette[i])
+      os << indent << '[' << i << ']' << itk::NumericTraits<PaletteType::value_type>::PrintType(m_ColorPalette[i])
          << std::endl;
     }
   }

@@ -28,6 +28,7 @@
 #ifndef itkMath_h
 #define itkMath_h
 
+#include <cassert>
 #include <cmath>
 #include "itkMathDetail.h"
 #include "itkConceptChecking.h"
@@ -39,6 +40,7 @@
  * supported.
  */
 #include <vxl_version.h>
+
 
 namespace itk
 {
@@ -299,7 +301,7 @@ FloatAddULP(T x, typename Detail::FloatIEEE<T>::IntType ulps)
  * to each other.
  *
  * \param x1                    first floating value to compare
- * \param x2                    second floating values to compare
+ * \param x2                    second floating value to compare
  * \param maxUlps               maximum units in the last place to be considered equal
  * \param maxAbsoluteDifference maximum absolute difference to be considered equal
  */
@@ -410,9 +412,13 @@ struct AlmostEqualsSignedVsUnsigned
   AlmostEqualsFunction(TSignedInt signedVariable, TUnsignedInt unsignedVariable)
   {
     if (signedVariable < 0)
+    {
       return false;
+    }
     if (unsignedVariable > static_cast<size_t>(itk::NumericTraits<TSignedInt>::max()))
+    {
       return false;
+    }
     return signedVariable == static_cast<TSignedInt>(unsignedVariable);
   }
 };
@@ -515,10 +521,10 @@ struct AlmostEqualsFunctionSelector<true, false, true, false>
 template <typename TInputType1, typename TInputType2>
 struct AlmostEqualsScalarImplementer
 {
-  static constexpr bool TInputType1IsInteger = std::is_integral<TInputType1>::value;
-  static constexpr bool TInputType1IsSigned = std::is_signed<TInputType1>::value;
-  static constexpr bool TInputType2IsInteger = std::is_integral<TInputType2>::value;
-  static constexpr bool TInputType2IsSigned = std::is_signed<TInputType2>::value;
+  static constexpr bool TInputType1IsInteger = std::is_integral_v<TInputType1>;
+  static constexpr bool TInputType1IsSigned = std::is_signed_v<TInputType1>;
+  static constexpr bool TInputType2IsInteger = std::is_integral_v<TInputType2>;
+  static constexpr bool TInputType2IsSigned = std::is_signed_v<TInputType2>;
 
   using SelectedVersion = typename AlmostEqualsFunctionSelector<TInputType1IsInteger,
                                                                 TInputType1IsSigned,
@@ -759,15 +765,6 @@ GreatestPrimeFactor(unsigned long n);
 ITKCommon_EXPORT unsigned long long
 GreatestPrimeFactor(unsigned long long n);
 
-// C++11 does not guarantee that assert can be used in constexpr
-// functions. This is a work-around for GCC 4.8, 4.9. Originating
-// from Andrzej's C++ blog:
-//  https://akrzemi1.wordpress.com/2017/05/18/asserts-in-constexpr-functions/
-#if defined NDEBUG
-#  define ITK_X_ASSERT(CHECK) void(0)
-#else
-#  define ITK_X_ASSERT(CHECK) ((CHECK) ? void(0) : [] { assert(!#CHECK); }())
-#endif
 
 /**  Returns `a * b`. Numeric overflow triggers a compilation error in
  * "constexpr context" and a debug assert failure at run-time.
@@ -776,14 +773,14 @@ template <typename TReturnType = uintmax_t>
 constexpr TReturnType
 UnsignedProduct(const uintmax_t a, const uintmax_t b) noexcept
 {
-  static_assert(std::is_unsigned<TReturnType>::value, "UnsignedProduct only supports unsigned return types");
+  static_assert(std::is_unsigned_v<TReturnType>, "UnsignedProduct only supports unsigned return types");
 
   // Note that numeric overflow is not "undefined behavior", for unsigned numbers.
   // This function checks if the result of a*b is mathematically correct.
   return (a == 0) || (b == 0) ||
              (((static_cast<TReturnType>(a * b) / a) == b) && ((static_cast<TReturnType>(a * b) / b) == a))
            ? static_cast<TReturnType>(a * b)
-           : (ITK_X_ASSERT(!"UnsignedProduct overflow!"), 0);
+           : (assert(!"UnsignedProduct overflow!"), 0);
 }
 
 
@@ -798,18 +795,16 @@ template <typename TReturnType = uintmax_t>
 constexpr TReturnType
 UnsignedPower(const uintmax_t base, const uintmax_t exponent) noexcept
 {
-  static_assert(std::is_unsigned<TReturnType>::value, "UnsignedPower only supports unsigned return types");
+  static_assert(std::is_unsigned_v<TReturnType>, "UnsignedPower only supports unsigned return types");
 
   // Uses recursive function calls because C++11 does not support other ways of
   // iterations for a constexpr function.
   return (exponent == 0)
-           ? (ITK_X_ASSERT(base > 0), 1)
+           ? (assert(base > 0), 1)
            : (exponent == 1) ? base
                              : UnsignedProduct<TReturnType>(UnsignedPower<TReturnType>(base, exponent / 2),
                                                             UnsignedPower<TReturnType>(base, (exponent + 1) / 2));
 }
-
-#undef ITK_X_ASSERT
 
 
 /*==========================================
@@ -839,7 +834,7 @@ using vnl_math::squared_magnitude;
 
 
 /*============================================
-Decouple dependance and exposure of vnl_math::abs operations
+Decouple dependence and exposure of vnl_math::abs operations
 in ITK.  Placing this small amount of duplicate vnl_math
 code directly in ITK removes backward compatibility
 issues with system installed VXL versions.

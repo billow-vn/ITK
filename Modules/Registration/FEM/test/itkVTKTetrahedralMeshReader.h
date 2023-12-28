@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKTetrahedralMeshReader, MeshSource);
+  itkOverrideGetNameOfClassMacro(VTKTetrahedralMeshReader);
 
   /** Hold on to the type information specified by the template parameters. */
   using OutputMeshType = TOutputMesh;
@@ -103,9 +103,9 @@ protected:
 
 private:
   /** Filename to read */
-  std::string m_FileName;
-  std::string m_Header;
-  std::string m_Version;
+  std::string m_FileName{};
+  std::string m_Header{};
+  std::string m_Version{};
 };
 
 } // end namespace itk

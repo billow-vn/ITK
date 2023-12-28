@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class SigmoidImageFilter
+ * \class SigmoidImageFilter
  * \brief Computes the sigmoid function pixel-wise
  *
  * A linear transformation is applied first on the argument of
@@ -164,7 +164,7 @@ public:
   itkNewMacro(Self);
 
   /** Macro that provides the GetNameOfClass() method */
-  itkTypeMacro(SigmoidImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(SigmoidImageFilter);
 
   void
   SetAlpha(double alpha)

@@ -26,12 +26,11 @@
 #include "itkBinaryThresholdImageFunction.h"
 #include "itkFloodFilledImageFunctionConditionalIterator.h"
 #include "itkProgressReporter.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::ConfidenceConnectedImageFilter()
 {
@@ -71,7 +70,6 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::AddSeed(const IndexTy
   this->Modified();
 }
 
-/** Method to access seed container */
 template <typename TInputImage, typename TOutputImage>
 auto
 ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GetSeeds() const -> const SeedsContainerType &
@@ -80,22 +78,24 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GetSeeds() const -> c
   return this->m_Seeds;
 }
 
-/**
- * Standard PrintSelf method.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  this->Superclass::PrintSelf(os, indent);
-  os << indent << "Number of iterations: " << m_NumberOfIterations << std::endl;
-  os << indent << "Multiplier for confidence interval: " << m_Multiplier << std::endl;
+  using namespace print_helper;
+
+  Superclass::PrintSelf(os, indent);
+
+  os << indent << "Seeds: " << m_Seeds << std::endl;
+  os << indent << "Multiplier: " << m_Multiplier << std::endl;
+  os << indent << "NumberOfIterations: " << m_NumberOfIterations << std::endl;
   os << indent
      << "ReplaceValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_ReplaceValue)
      << std::endl;
   os << indent << "InitialNeighborhoodRadius: " << m_InitialNeighborhoodRadius << std::endl;
-  os << indent << "Mean of the connected region: " << m_Mean << std::endl;
-  os << indent << "Variance of the connected region: " << m_Variance << std::endl;
+  os << indent << "Mean: " << static_cast<typename NumericTraits<InputRealType>::PrintType>(m_Mean) << std::endl;
+  os << indent << "Variance: " << static_cast<typename NumericTraits<InputRealType>::PrintType>(m_Variance)
+     << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -158,7 +158,7 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     auto neighborhoodRange =
       ShapedImageNeighborhoodRange<const InputImageType>(*inputImage, IndexType(), neighborhoodOffsets);
 
-    InputRealType sumOfSquares = itk::NumericTraits<InputRealType>::ZeroValue();
+    InputRealType sumOfSquares{};
 
     typename SeedsContainerType::const_iterator si = m_Seeds.begin();
     typename SeedsContainerType::const_iterator li = m_Seeds.end();
@@ -199,8 +199,8 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   }
   else
   {
-    InputRealType sum = itk::NumericTraits<InputRealType>::ZeroValue();
-    InputRealType sumOfSquares = itk::NumericTraits<InputRealType>::ZeroValue();
+    InputRealType sum{};
+    InputRealType sumOfSquares{};
 
     typename SeedsContainerType::const_iterator si = m_Seeds.begin();
     typename SeedsContainerType::const_iterator li = m_Seeds.end();
@@ -279,8 +279,8 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
 
   function->ThresholdBetween(static_cast<InputImagePixelType>(lower), static_cast<InputImagePixelType>(upper));
 
-  itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean
-                << " , std::sqrt(variance) = " << std::sqrt(m_Variance));
+  itkDebugMacro("\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean
+                                       << " , std::sqrt(variance) = " << std::sqrt(m_Variance));
 
   // Segment the image, the iterator walks the output image (so Set()
   // writes into the output image), starting at the seed point.  As
@@ -289,7 +289,7 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   // the [lower, upper] bounds prescribed, the pixel is added to the
   // output segmentation and its neighbors become candidates for the
   // iterator to walk.
-  IteratorType it = IteratorType(outputImage, function, m_Seeds);
+  IteratorType it(outputImage, function, m_Seeds);
   it.GoToBegin();
   while (!it.IsAtEnd())
   {
@@ -316,7 +316,7 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     sumOfSquares = NumericTraits<InputRealType>::ZeroValue();
     typename TOutputImage::SizeValueType numberOfSamples = 0;
 
-    SecondIteratorType sit = SecondIteratorType(inputImage, secondFunction, m_Seeds);
+    SecondIteratorType sit(inputImage, secondFunction, m_Seeds);
     sit.GoToBegin();
     while (!sit.IsAtEnd())
     {
@@ -332,10 +332,11 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     // if the variance is zero, there is no point in continuing
     if (Math::AlmostEquals(m_Variance, 0.0))
     {
-      itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean
-                    << ", variance = " << m_Variance << " , std::sqrt(variance) = " << std::sqrt(m_Variance));
-      itkDebugMacro(<< "\nsum = " << sum << ", sumOfSquares = " << sumOfSquares
-                    << "\nnumberOfSamples = " << numberOfSamples);
+      itkDebugMacro("\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean
+                                           << ", variance = " << m_Variance
+                                           << " , std::sqrt(variance) = " << std::sqrt(m_Variance));
+      itkDebugMacro("\nsum = " << sum << ", sumOfSquares = " << sumOfSquares
+                               << "\nnumberOfSamples = " << numberOfSamples);
       break;
     }
     lower = m_Mean - m_Multiplier * std::sqrt(m_Variance);
@@ -365,9 +366,10 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
 
     function->ThresholdBetween(static_cast<InputImagePixelType>(lower), static_cast<InputImagePixelType>(upper));
 
-    itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean
-                  << ", variance = " << m_Variance << " , std::sqrt(variance) = " << std::sqrt(m_Variance));
-    itkDebugMacro(<< "\nsum = " << sum << ", sumOfSquares = " << sumOfSquares << "\nnum = " << numberOfSamples);
+    itkDebugMacro("\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean
+                                         << ", variance = " << m_Variance
+                                         << " , std::sqrt(variance) = " << std::sqrt(m_Variance));
+    itkDebugMacro("\nsum = " << sum << ", sumOfSquares = " << sumOfSquares << "\nnum = " << numberOfSamples);
 
     // Rerun the segmentation, the iterator walks the output image,
     // starting at the seed point.  As the iterator walks, if the
@@ -377,7 +379,7 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     // segmentation and its neighbors become candidates for the
     // iterator to walk.
     outputImage->FillBuffer(NumericTraits<OutputImagePixelType>::ZeroValue());
-    IteratorType thirdIt = IteratorType(outputImage, function, m_Seeds);
+    IteratorType thirdIt(outputImage, function, m_Seeds);
     thirdIt.GoToBegin();
     try
     {

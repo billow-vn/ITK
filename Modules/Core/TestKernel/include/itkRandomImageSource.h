@@ -34,7 +34,7 @@
 namespace itk
 {
 /**
- *\class RandomImageSource
+ * \class RandomImageSource
  * \brief Generate an n-dimensional image of random pixel values.
  *
  * RandomImageSource generates an image of random pixel values.
@@ -70,7 +70,7 @@ public:
   using OutputImageRegionType = typename TOutputImage::RegionType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RandomImageSource, ImageSource);
+  itkOverrideGetNameOfClassMacro(RandomImageSource);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -151,18 +151,18 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  SizeType      m_Size;      // size of the output image
-  SpacingType   m_Spacing;   // spacing
-  PointType     m_Origin;    // origin
-  DirectionType m_Direction; // direction
+  SizeType      m_Size{};      // size of the output image
+  SpacingType   m_Spacing{};   // spacing
+  PointType     m_Origin{};    // origin
+  DirectionType m_Direction{}; // direction
 
-  typename TOutputImage::PixelType m_Min; // minimum possible value
-  typename TOutputImage::PixelType m_Max; // maximum possible value
+  typename TOutputImage::PixelType m_Min{}; // minimum possible value
+  typename TOutputImage::PixelType m_Max{}; // maximum possible value
 
   // The following variables are deprecated, and provided here just for
   // backward compatibility. It use is discouraged.
-  mutable PointValueArrayType   m_OriginArray;
-  mutable SpacingValueArrayType m_SpacingArray;
+  mutable PointValueArrayType   m_OriginArray{};
+  mutable SpacingValueArrayType m_SpacingArray{};
 };
 } // end namespace itk
 

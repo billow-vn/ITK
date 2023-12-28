@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LineSpatialObjectPoint
+ * \class LineSpatialObjectPoint
  * \brief Point used for a line definition
  *
  * This class contains all the functions necessary to define a point
@@ -58,11 +58,11 @@ public:
   /** Destructor */
   ~LineSpatialObjectPoint() override = default;
 
-  /** Get Normal */
+  /** Get the normal. */
   const CovariantVectorType &
   GetNormalInObjectSpace(unsigned int index) const;
 
-  /** Set Normal */
+  /** Set the normal. */
   void
   SetNormalInObjectSpace(CovariantVectorType & normal, unsigned int index);
 
@@ -71,7 +71,7 @@ public:
   operator=(const LineSpatialObjectPoint & rhs);
 
 protected:
-  NormalArrayType m_NormalArrayInObjectSpace;
+  NormalArrayType m_NormalArrayInObjectSpace{};
 
   /** Method to print the object. */
   void

@@ -102,7 +102,7 @@ public:
   static constexpr unsigned int ParametersDimension = VDimension * (VDimension + 1);
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(AzimuthElevationToCartesianTransform, AffineTransform);
+  itkOverrideGetNameOfClassMacro(AzimuthElevationToCartesianTransform);
 
   /** New macro for creation of through a Smart Pointer.   */
   itkNewMacro(Self);
@@ -188,13 +188,11 @@ public:
   void
   SetForwardCartesianToAzimuthElevation();
 
-  /** Perform conversion from Azimuth Elevation coordinates to Cartesian
-   *  Coordinates. */
+  /** Transform a point from azimuth-elevation coordinates to Cartesian coordinates. */
   OutputPointType
   TransformAzElToCartesian(const InputPointType & point) const;
 
-  /** Perform conversion from Cartesian Coordinates to Azimuth Elevation
-   *  coordinates.  */
+  /** Transform a point from Cartesian coordinates to azimuth-elevation coordinates. */
   OutputPointType
   TransformCartesianToAzEl(const OutputPointType & point) const;
 
@@ -240,13 +238,13 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  long   m_MaxAzimuth;
-  long   m_MaxElevation;
-  double m_RadiusSampleSize;
-  double m_AzimuthAngularSeparation;
-  double m_ElevationAngularSeparation;
-  double m_FirstSampleDistance;
-  bool   m_ForwardAzimuthElevationToPhysical;
+  long   m_MaxAzimuth{};
+  long   m_MaxElevation{};
+  double m_RadiusSampleSize{};
+  double m_AzimuthAngularSeparation{};
+  double m_ElevationAngularSeparation{};
+  double m_FirstSampleDistance{};
+  bool   m_ForwardAzimuthElevationToPhysical{};
 }; // class AzimuthElevationToCartesianTransform
 } // namespace itk
 

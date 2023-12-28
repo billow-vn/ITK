@@ -290,7 +290,7 @@ GDCMImageIO::Read(void * pointer)
   reader.SetFileName(m_FileName.c_str());
   if (!reader.Read())
   {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro("Cannot read requested file");
   }
 
   gdcm::Image & image = reader.GetImage();
@@ -308,7 +308,7 @@ GDCMImageIO::Read(void * pointer)
     icts.SetTransferSyntax(gdcm::TransferSyntax::ImplicitVRLittleEndian);
     if (!icts.Change())
     {
-      itkExceptionMacro(<< "Failed to change to Implicit Transfer Syntax");
+      itkExceptionMacro("Failed to change to Implicit Transfer Syntax");
     }
     image = icts.GetOutput();
   }
@@ -321,7 +321,7 @@ GDCMImageIO::Read(void * pointer)
     icpc.SetPlanarConfiguration(0);
     if (!icpc.Change())
     {
-      itkExceptionMacro(<< "Failed to change to Planar Configuration");
+      itkExceptionMacro("Failed to change to Planar Configuration");
     }
     image = icpc.GetOutput();
   }
@@ -333,7 +333,7 @@ GDCMImageIO::Read(void * pointer)
     const size_t x = m_Dimensions[0] * m_Dimensions[1] * m_Dimensions[2];
     if (x > len * 8)
     {
-      itkExceptionMacro(<< "Failed to load SINGLEBIT image, buffer size " << len);
+      itkExceptionMacro("Failed to load SINGLEBIT image, buffer size " << len);
     }
     len = x;
   }
@@ -354,16 +354,16 @@ GDCMImageIO::Read(void * pointer)
     icpi.SetPhotometricInterpretation(gdcm::PhotometricInterpretation::MONOCHROME2);
     if (!icpi.Change())
     {
-      itkExceptionMacro(<< "Failed to change to Photometric Interpretation");
+      itkExceptionMacro("Failed to change to Photometric Interpretation");
     }
-    itkWarningMacro(<< "Converting from MONOCHROME1 to MONOCHROME2 may impact the meaning of DICOM attributes related "
-                       "to pixel values.");
+    itkWarningMacro("Converting from MONOCHROME1 to MONOCHROME2 may impact the meaning of DICOM attributes related "
+                    "to pixel values.");
     image = icpi.GetOutput();
   }
 
   if (!image.GetBuffer((char *)pointer))
   {
-    itkExceptionMacro(<< "Failed to get the buffer!");
+    itkExceptionMacro("Failed to get the buffer!");
   }
 
   if (m_SingleBit)
@@ -422,7 +422,7 @@ GDCMImageIO::Read(void * pointer)
     {
       if (len % 3 != 0)
       {
-        itkExceptionMacro(<< "Buffer size " << len << " is not valid");
+        itkExceptionMacro("Buffer size " << len << " is not valid");
       }
       YCbCr_to_RGB(reinterpret_cast<unsigned char *>(pointer), static_cast<size_t>(len));
     }
@@ -459,7 +459,7 @@ GDCMImageIO::InternalReadImageInformation()
   reader.SetFileName(m_FileName.c_str());
   if (!reader.Read())
   {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro("Cannot read requested file");
   }
   const gdcm::Image &   image = reader.GetImage();
   const gdcm::File &    f = reader.GetFile();
@@ -646,7 +646,7 @@ GDCMImageIO::InternalReadImageInformation()
         gdcm::Element<gdcm::VR::DS, gdcm::VM::VM1_n> m_El;
         const gdcm::ByteValue *                      bv = de.GetByteValue();
         assert(bv);
-        std::string s = std::string(bv->GetPointer(), bv->GetLength());
+        std::string s(bv->GetPointer(), bv->GetLength());
         m_Ss.str(s);
         // Erroneous file CT-MONO2-8-abdo.dcm,
         // The spacing is something like that [0.2\0\0.200000],
@@ -655,7 +655,9 @@ GDCMImageIO::InternalReadImageInformation()
         m_El.Read(m_Ss);
         assert(m_El.GetLength() == 2);
         for (unsigned long i = 0; i < m_El.GetLength(); ++i)
+        {
           sp.push_back(m_El.GetValue(i));
+        }
         std::swap(sp[0], sp[1]);
         assert(sp.size() == 2);
         spacing[0] = sp[0];
@@ -811,7 +813,7 @@ GDCMImageIO::CanWriteFile(const char * name)
 
   if (filename.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 
@@ -999,7 +1001,7 @@ GDCMImageIO::Write(const void * buffer)
       }
       else
       {
-        itkDebugMacro(<< "GDCMImageIO: non-DICOM and non-ITK standard key = " << key);
+        itkDebugMacro("GDCMImageIO: non-DICOM and non-ITK standard key = " << key);
       }
     }
 
@@ -1177,7 +1179,7 @@ GDCMImageIO::Write(const void * buffer)
       pixeltype = gdcm::PixelFormat::FLOAT64;
       break;
     default:
-      itkExceptionMacro(<< "DICOM does not support this component type");
+      itkExceptionMacro("DICOM does not support this component type");
   }
   itkAssertInDebugAndIgnoreInReleaseMacro(pixeltype != gdcm::PixelFormat::UNKNOWN);
   gdcm::PhotometricInterpretation pi;
@@ -1193,7 +1195,7 @@ GDCMImageIO::Write(const void * buffer)
   }
   else
   {
-    itkExceptionMacro(<< "DICOM does not support this component type");
+    itkExceptionMacro("DICOM does not support this component type");
   }
   pixeltype.SetSamplesPerPixel(static_cast<short unsigned int>(this->GetNumberOfComponents()));
 
@@ -1209,14 +1211,14 @@ GDCMImageIO::Write(const void * buffer)
       outpixeltype.SetPixelRepresentation(static_cast<unsigned short>(std::stoi(pixelRep.c_str())));
       if (this->GetNumberOfComponents() != 1)
       {
-        itkExceptionMacro(<< "Sorry Dave I can't do that");
+        itkExceptionMacro("Sorry Dave I can't do that");
       }
       itkAssertInDebugAndIgnoreInReleaseMacro(outpixeltype != gdcm::PixelFormat::UNKNOWN);
     }
     else
     {
-      itkExceptionMacro(<< "A Floating point buffer was passed but the stored pixel type was not specified."
-                           "This is currently not supported");
+      itkExceptionMacro("A Floating point buffer was passed but the stored pixel type was not specified."
+                        "This is currently not supported");
     }
   }
   else if (this->GetInternalComponentType() != IOComponentEnum::UNKNOWNCOMPONENTTYPE)
@@ -1250,7 +1252,7 @@ GDCMImageIO::Write(const void * buffer)
         outpixeltype = gdcm::PixelFormat::UINT32;
         break;
       default:
-        itkExceptionMacro(<< "DICOM does not support this component type");
+        itkExceptionMacro("DICOM does not support this component type");
     }
   }
 
@@ -1323,13 +1325,13 @@ GDCMImageIO::Write(const void * buffer)
     }
     else
     {
-      itkExceptionMacro(<< "Unknown compression type");
+      itkExceptionMacro("Unknown compression type");
     }
     change.SetInput(image);
     bool b = change.Change();
     if (!b)
     {
-      itkExceptionMacro(<< "Could not change the Transfer Syntax for Compression");
+      itkExceptionMacro("Could not change the Transfer Syntax for Compression");
     }
     writer.SetImage(change.GetOutput());
   }
@@ -1382,14 +1384,14 @@ GDCMImageIO::Write(const void * buffer)
     fef.SetFile(writer.GetFile());
     if (!fef.Change())
     {
-      itkExceptionMacro(<< "Failed to change to Explicit Transfer Syntax");
+      itkExceptionMacro("Failed to change to Explicit Transfer Syntax");
     }
   }
 
   writer.SetFileName(m_FileName.c_str());
   if (!writer.Write())
   {
-    itkExceptionMacro(<< "DICOM does not support this component type");
+    itkExceptionMacro("DICOM does not support this component type");
   }
 }
 
@@ -1605,38 +1607,48 @@ void
 GDCMImageIO::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Internal Component Type: " << this->GetComponentTypeAsString(m_InternalComponentType) << std::endl;
+
   os << indent << "RescaleSlope: " << m_RescaleSlope << std::endl;
   os << indent << "RescaleIntercept: " << m_RescaleIntercept << std::endl;
-  os << indent << "KeepOriginalUID:" << (m_KeepOriginalUID ? "On" : "Off") << std::endl;
-  os << indent << "LoadPrivateTags:" << (m_LoadPrivateTags ? "On" : "Off") << std::endl;
   os << indent << "UIDPrefix: " << m_UIDPrefix << std::endl;
   os << indent << "StudyInstanceUID: " << m_StudyInstanceUID << std::endl;
   os << indent << "SeriesInstanceUID: " << m_SeriesInstanceUID << std::endl;
   os << indent << "FrameOfReferenceInstanceUID: " << m_FrameOfReferenceInstanceUID << std::endl;
-  os << indent << "CompressionType:" << m_CompressionType << std::endl;
+  os << indent << "KeepOriginalUID: " << (m_KeepOriginalUID ? "On" : "Off") << std::endl;
+  os << indent << "LoadPrivateTags: " << (m_LoadPrivateTags ? "On" : "Off") << std::endl;
+  os << indent << "ReadYBRtoRGB: " << (m_ReadYBRtoRGB ? "On" : "Off") << std::endl;
+
+  os << indent << "GlobalNumberOfDimensions: " << m_GlobalNumberOfDimensions << std::endl;
+  os << indent << "CompressionType: " << m_CompressionType << std::endl;
+  os << indent << "SingleBit: " << (m_SingleBit ? "On" : "Off") << std::endl;
+  os << indent << "InternalComponentType: " << m_InternalComponentType << std::endl;
+
+  os << indent << "DICOMHeader: ";
+  if (m_DICOMHeader != nullptr)
+  {
+    os << m_DICOMHeader << std::endl;
+  }
 
 #if defined(ITKIO_DEPRECATED_GDCM1_API)
-  os << indent << "Patient Name:" << m_PatientName << std::endl;
-  os << indent << "Patient ID:" << m_PatientID << std::endl;
-  os << indent << "Patient Sex:" << m_PatientSex << std::endl;
-  os << indent << "Patient Age:" << m_PatientAge << std::endl;
-  os << indent << "Study ID:" << m_StudyID << std::endl;
-  os << indent << "Patient DOB:" << m_PatientDOB << std::endl;
-  os << indent << "Study Description:" << m_StudyDescription << std::endl;
-  os << indent << "Body Part:" << m_BodyPart << std::endl;
-  os << indent << "Number Of Series In Study:" << m_NumberOfSeriesInStudy << std::endl;
-  os << indent << "Number Of Study Related Series:" << m_NumberOfStudyRelatedSeries << std::endl;
-  os << indent << "Study Date:" << m_StudyDate << std::endl;
-  os << indent << "Modality:" << m_Modality << std::endl;
-  os << indent << "Manufacturer:" << m_Manufacturer << std::endl;
-  os << indent << "Institution Name:" << m_Institution << std::endl;
-  os << indent << "Model:" << m_Model << std::endl;
-  os << indent << "Scan Options:" << m_ScanOptions << std::endl;
+  os << indent << "PatientName: " << m_PatientName << std::endl;
+  os << indent << "PatientID: " << m_PatientID << std::endl;
+  os << indent << "PatientSex: " << m_PatientSex << std::endl;
+  os << indent << "PatientAge: " << m_PatientAge << std::endl;
+  os << indent << "StudyID: " << m_StudyID << std::endl;
+  os << indent << "PatientDOB: " << m_PatientDOB << std::endl;
+  os << indent << "StudyDescription: " << m_StudyDescription << std::endl;
+  os << indent << "BodyPart: " << m_BodyPart << std::endl;
+  os << indent << "NumberOfSeriesInStudy: " << m_NumberOfSeriesInStudy << std::endl;
+  os << indent << "NumberOfStudyRelatedSeries: " << m_NumberOfStudyRelatedSeries << std::endl;
+  os << indent << "StudyDate: " << m_StudyDate << std::endl;
+  os << indent << "Modality: " << m_Modality << std::endl;
+  os << indent << "Manufacturer: " << m_Manufacturer << std::endl;
+  os << indent << "InstitutionName: " << m_Institution << std::endl;
+  os << indent << "Model: " << m_Model << std::endl;
+  os << indent << "ScanOptions: " << m_ScanOptions << std::endl;
 #endif
 }
 
-/** Print enum values */
 std::ostream &
 operator<<(std::ostream & out, const GDCMImageIOEnums::Compression value)
 {

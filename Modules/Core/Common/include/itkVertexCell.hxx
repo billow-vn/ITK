@@ -18,9 +18,11 @@
 #ifndef itkVertexCell_hxx
 #define itkVertexCell_hxx
 
+#include <algorithm> // For copy_n.
+
 namespace itk
 {
-/** Standard CellInterface: */
+
 template <typename TCellInterface>
 void
 VertexCell<TCellInterface>::MakeCopy(CellAutoPointer & cellPointer) const
@@ -29,8 +31,6 @@ VertexCell<TCellInterface>::MakeCopy(CellAutoPointer & cellPointer) const
   cellPointer->SetPointIds(this->GetPointIds());
 }
 
-/** Standard CellInterface:
- *  Get the topological dimension of this cell. */
 template <typename TCellInterface>
 unsigned int
 VertexCell<TCellInterface>::GetDimension() const
@@ -38,8 +38,6 @@ VertexCell<TCellInterface>::GetDimension() const
   return Self::CellDimension;
 }
 
-/** Standard CellInterface:
- *  Get the number of points required to define the cell. */
 template <typename TCellInterface>
 unsigned int
 VertexCell<TCellInterface>::GetNumberOfPoints() const
@@ -47,8 +45,6 @@ VertexCell<TCellInterface>::GetNumberOfPoints() const
   return Self::NumberOfPoints;
 }
 
-/** Standard CellInterface:
- *  A vertex has no boundary entities of any dimension. */
 template <typename TCellInterface>
 auto
 VertexCell<TCellInterface>::GetNumberOfBoundaryFeatures(int) const -> CellFeatureCount
@@ -56,8 +52,6 @@ VertexCell<TCellInterface>::GetNumberOfBoundaryFeatures(int) const -> CellFeatur
   return 0;
 }
 
-/** Standard CellInterface:
- *  A vertex has no boundary entities.  Just return null. */
 template <typename TCellInterface>
 bool
 VertexCell<TCellInterface>::GetBoundaryFeature(int, CellFeatureIdentifier, CellAutoPointer & cellAPtr)
@@ -66,27 +60,13 @@ VertexCell<TCellInterface>::GetBoundaryFeature(int, CellFeatureIdentifier, CellA
   return false;
 }
 
-/** Standard CellInterface:
- *  Set the point id list used by the cell.  It is assumed that the given
- *  iterator can be incremented and safely de-referenced enough times to
- *  get all the point ids needed by the cell. */
 template <typename TCellInterface>
 void
 VertexCell<TCellInterface>::SetPointIds(PointIdConstIterator first)
 {
-  PointIdConstIterator ii(first);
-
-  for (unsigned int i = 0; i < Self::NumberOfPoints; ++i)
-  {
-    m_PointIds[i] = *ii++;
-  }
+  std::copy_n(first, Self::NumberOfPoints, m_PointIds.begin());
 }
 
-/** Standard CellInterface:
- *  Set the point id list used by the cell.  It is assumed that the range
- *  of iterators [first, last) contains the correct number of points needed to
- *  define the cell.  The position *last is NOT referenced, so it can safely
- *  be one beyond the end of an array or other container. */
 template <typename TCellInterface>
 void
 VertexCell<TCellInterface>::SetPointIds(PointIdConstIterator first, PointIdConstIterator last)
@@ -100,8 +80,6 @@ VertexCell<TCellInterface>::SetPointIds(PointIdConstIterator first, PointIdConst
   }
 }
 
-/** Standard CellInterface:
- *  Set an individual point identifier in the cell. */
 template <typename TCellInterface>
 void
 VertexCell<TCellInterface>::SetPointId(int localId, PointIdentifier ptId)
@@ -109,9 +87,6 @@ VertexCell<TCellInterface>::SetPointId(int localId, PointIdentifier ptId)
   m_PointIds[localId] = ptId;
 }
 
-/** Standard CellInterface:
- *  Get a begin iterator to the list of point identifiers used by the
- *  cell. */
 template <typename TCellInterface>
 auto
 VertexCell<TCellInterface>::PointIdsBegin() -> PointIdIterator
@@ -119,9 +94,6 @@ VertexCell<TCellInterface>::PointIdsBegin() -> PointIdIterator
   return &m_PointIds[0];
 }
 
-/** Standard CellInterface:
- *  Get a const begin iterator to the list of point identifiers used
- *  by the cell. */
 template <typename TCellInterface>
 auto
 VertexCell<TCellInterface>::PointIdsBegin() const -> PointIdConstIterator
@@ -129,8 +101,6 @@ VertexCell<TCellInterface>::PointIdsBegin() const -> PointIdConstIterator
   return &m_PointIds[0];
 }
 
-/** Standard CellInterface:
- *  Get an end iterator to the list of point identifiers used by the cell. */
 template <typename TCellInterface>
 auto
 VertexCell<TCellInterface>::PointIdsEnd() -> PointIdIterator
@@ -138,9 +108,6 @@ VertexCell<TCellInterface>::PointIdsEnd() -> PointIdIterator
   return &m_PointIds[Self::NumberOfPoints - 1] + 1;
 }
 
-/** Standard CellInterface:
- *  Get a const end iterator to the list of point identifiers used
- *  by the cell. */
 template <typename TCellInterface>
 auto
 VertexCell<TCellInterface>::PointIdsEnd() const -> PointIdConstIterator
@@ -148,8 +115,6 @@ VertexCell<TCellInterface>::PointIdsEnd() const -> PointIdConstIterator
   return &m_PointIds[Self::NumberOfPoints - 1] + 1;
 }
 
-/** Vertex-specific:
- *  Set the identifier of the point defining the vertex. */
 template <typename TCellInterface>
 void
 VertexCell<TCellInterface>::SetPointId(PointIdentifier ptId)
@@ -157,8 +122,6 @@ VertexCell<TCellInterface>::SetPointId(PointIdentifier ptId)
   m_PointIds[0] = ptId;
 }
 
-/** Vertex-specific:
- *  Get the identifier of the point defining the vertex. */
 template <typename TCellInterface>
 auto
 VertexCell<TCellInterface>::GetPointId() -> PointIdentifier
@@ -166,13 +129,12 @@ VertexCell<TCellInterface>::GetPointId() -> PointIdentifier
   return m_PointIds[0];
 }
 
-/** Evaluate the position of a given point */
 template <typename TCellInterface>
 bool
 VertexCell<TCellInterface>::EvaluatePosition(CoordRepType *            x,
                                              PointsContainer *         points,
                                              CoordRepType *            closestPoint,
-                                             CoordRepType              pcoord[2],
+                                             CoordRepType              pcoord[],
                                              double *                  minDist2,
                                              InterpolationWeightType * weights)
 {

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LevelSetEvolutionStoppingCriterion
+ * \class LevelSetEvolutionStoppingCriterion
 \ingroup ITKLevelSetsv4
 */
 template <typename TLevelSetContainer>
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LevelSetEvolutionNumberOfIterationsStoppingCriterion, LevelSetEvolutionStoppingCriterion);
+  itkOverrideGetNameOfClassMacro(LevelSetEvolutionNumberOfIterationsStoppingCriterion);
 
   using LevelSetContainerType = TLevelSetContainer;
   using LevelSetContainerPointer = typename LevelSetContainerType::Pointer;

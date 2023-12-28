@@ -46,7 +46,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoadPoint, LoadElement);
+  itkOverrideGetNameOfClassMacro(LoadPoint);
 
   /** CreateAnother method will clone the existing instance of this type,
    * including its internal member variables. */
@@ -87,10 +87,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Point of which the load acts in global the coordinate system. */
-  vnl_vector<Float> m_Point;
+  vnl_vector<Float> m_Point{};
 
   /** The actual load vector. */
-  vnl_vector<Float> m_ForcePoint;
+  vnl_vector<Float> m_ForcePoint{};
 };
 } // end namespace fem
 } // end namespace itk

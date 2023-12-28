@@ -41,7 +41,7 @@ ShapeKeepNObjectsLabelMapFilter<TImage>::GenerateData()
 {
   switch (m_Attribute)
   {
-    itkShapeLabelMapFilterDispatchMacro() default : itkExceptionMacro(<< "Unknown attribute type");
+    itkShapeLabelMapFilterDispatchMacro() default : itkExceptionMacro("Unknown attribute type");
     break;
   }
 }
@@ -54,7 +54,7 @@ ShapeKeepNObjectsLabelMapFilter<TImage>::PrintSelf(std::ostream & os, Indent ind
 
   os << indent << "ReverseOrdering: " << m_ReverseOrdering << std::endl;
   os << indent << "NumberOfObjects: " << m_NumberOfObjects << std::endl;
-  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ")"
+  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ')'
      << std::endl;
 }
 } // end namespace itk

@@ -70,7 +70,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run time information. */
-  itkTypeMacro(ConicShellInteriorExteriorSpatialFunction, InteriorExteriorSpatialFunction);
+  itkOverrideGetNameOfClassMacro(ConicShellInteriorExteriorSpatialFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -115,20 +115,20 @@ public:
 
   /** Set/Get direction along the gradient to search.
    * Set to true to use the direction that the gradient is pointing;
-   * set to false for the opposite direction. Default is Off. */
+   * set to false for the opposite direction. */
   itkGetConstMacro(Polarity, bool);
   itkSetMacro(Polarity, bool);
   itkBooleanMacro(Polarity);
 
 protected:
-  ConicShellInteriorExteriorSpatialFunction();
+  ConicShellInteriorExteriorSpatialFunction() = default;
   ~ConicShellInteriorExteriorSpatialFunction() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  InputType    m_Origin;
-  GradientType m_OriginGradient;
+  InputType    m_Origin{};
+  GradientType m_OriginGradient{};
   double       m_DistanceMin{ 0.0 };
   double       m_DistanceMax{ 0.0 };
   double       m_Epsilon{ 0.0 };

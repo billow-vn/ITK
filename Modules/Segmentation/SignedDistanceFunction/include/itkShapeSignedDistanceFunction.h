@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ShapeSignedDistanceFunction
+ * \class ShapeSignedDistanceFunction
  * \brief Base class for functions which evaluates the signed distance
  * from a shape.
  *
@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShapeSignedDistanceFunction, SpatialFunction);
+  itkOverrideGetNameOfClassMacro(ShapeSignedDistanceFunction);
 
   /** OutputType type alias support */
   using typename Superclass::OutputType;
@@ -127,7 +127,7 @@ protected:
     // FIX    os << indent << "Parameters: " << m_Parameters << std::endl;
   }
 
-  ParametersType m_Parameters;
+  ParametersType m_Parameters{};
 };
 } // end namespace itk
 

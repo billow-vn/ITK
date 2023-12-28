@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class GiplImageIOFactory
+ * \class GiplImageIOFactory
  * \brief Create instances of GiplImageIO objects using an object factory.
  * \ingroup ITKIOGIPL
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GiplImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(GiplImageIOFactory);
 
   /** Register one factory of this type  */
   static void

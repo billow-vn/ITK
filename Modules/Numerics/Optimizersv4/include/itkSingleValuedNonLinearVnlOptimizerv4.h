@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class SingleValuedNonLinearVnlOptimizerv4
+ * \class SingleValuedNonLinearVnlOptimizerv4
  * \brief This is a base for the ITKv4 Optimization methods using
  * the vnl library.
  *
@@ -47,7 +47,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SingleValuedNonLinearVnlOptimizerv4, ObjectToObjectOptimizerBase);
+  itkOverrideGetNameOfClassMacro(SingleValuedNonLinearVnlOptimizerv4);
 
   /** Command observer that will interact with the ITKVNL cost-function
    * adaptor in order to generate iteration events. This will allow to overcome
@@ -124,12 +124,12 @@ private:
   void
   IterationReport(const EventObject & event);
 
-  CostFunctionAdaptorType * m_CostFunctionAdaptor;
+  CostFunctionAdaptorType * m_CostFunctionAdaptor{};
 
-  CommandType::Pointer m_Command;
+  CommandType::Pointer m_Command{};
 
-  mutable ParametersType m_CachedCurrentPosition;
-  mutable DerivativeType m_CachedDerivative;
+  mutable ParametersType m_CachedCurrentPosition{};
+  mutable DerivativeType m_CachedDerivative{};
 };
 } // end namespace itk
 

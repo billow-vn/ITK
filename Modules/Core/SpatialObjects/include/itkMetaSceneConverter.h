@@ -32,8 +32,8 @@
 namespace itk
 {
 /**
- *\class MetaSceneConverter
- *  \brief Converts between MetaObject and SpaitalObject group.
+ * \class MetaSceneConverter
+ *  \brief Converts between MetaObject and SpatialObject group.
  *
  *  SpatialObject hierarchies are written to disk using the MetaIO
  *  library. This class is responsible for converting between MetaIO
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaSceneConverter, Object);
+  itkOverrideGetNameOfClassMacro(MetaSceneConverter);
 
   /** SpatialObject Scene types */
   using SpatialObjectType = itk::SpatialObject<VDimension>;
@@ -69,11 +69,11 @@ public:
   using MetaConverterPointer = typename MetaConverterBaseType::Pointer;
   using ConverterMapType = std::map<std::string, MetaConverterPointer>;
 
-  /** Read a MetaFile and create a Scene SpatialObject */
+  /** Read a MetaFile and create a Scene SpatialObject. */
   SpatialObjectPointer
   ReadMeta(const std::string & name);
 
-  /** write out a SpatialObject */
+  /** Write out a SpatialObject. */
   bool
   WriteMeta(const SpatialObjectType * soScene,
             const std::string &       fileName,
@@ -108,6 +108,10 @@ public:
                         const std::string &     spatialObjectTypeName,
                         MetaConverterBaseType * converter);
 
+  /** Convert a metaScene into a composite SpatialObject
+   *
+   * Manages the composite SpatialObject to keep a hierarchy.
+   */
   MetaScene *
   CreateMetaScene(const SpatialObjectType * soScene,
                   unsigned int              depth = SpatialObjectType::MaximumDepth,
@@ -147,15 +151,15 @@ private:
   void
   SetTransform(SpatialObjectType * so, const MetaObject * meta);
 
-  double m_Orientation[100];
-  double m_Position[10];
-  double m_CenterOfRotation[10];
+  double m_Orientation[100]{};
+  double m_Position[10]{};
+  double m_CenterOfRotation[10]{};
 
-  MetaEvent *      m_Event;
-  bool             m_BinaryPoints;
-  bool             m_WriteImagesInSeparateFile;
-  unsigned int     m_TransformPrecision;
-  ConverterMapType m_ConverterMap;
+  MetaEvent *      m_Event{};
+  bool             m_BinaryPoints{};
+  bool             m_WriteImagesInSeparateFile{};
+  unsigned int     m_TransformPrecision{};
+  ConverterMapType m_ConverterMap{};
 };
 } // end namespace itk
 

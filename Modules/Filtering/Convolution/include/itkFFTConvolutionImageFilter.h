@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class FFTConvolutionImageFilter
+ * \class FFTConvolutionImageFilter
  * \brief Convolve a given image with an arbitrary image kernel using
  * multiplication in the Fourier domain.
  *
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(FFTConvolutionImageFilter, ConvolutionImageFilterBase);
+  itkOverrideGetNameOfClassMacro(FFTConvolutionImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -207,9 +207,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  SizeValueType      m_SizeGreatestPrimeFactor;
-  InternalSizeType   m_FFTPadSize{ 0 };
-  InternalRegionType m_PaddedInputRegion;
+  SizeValueType      m_SizeGreatestPrimeFactor{};
+  InternalSizeType   m_FFTPadSize{ { 0 } };
+  InternalRegionType m_PaddedInputRegion{};
 };
 } // namespace itk
 

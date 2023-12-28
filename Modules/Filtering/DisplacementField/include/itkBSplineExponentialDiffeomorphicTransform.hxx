@@ -27,9 +27,6 @@
 namespace itk
 {
 
-/**
- * Constructor
- */
 template <typename TParametersValueType, unsigned int VDimension>
 BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::BSplineExponentialDiffeomorphicTransform()
 
@@ -38,9 +35,6 @@ BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::BSpl
   this->m_NumberOfControlPointsForTheUpdateField.Fill(4);
 }
 
-/**
- * set mesh size for update field
- */
 template <typename TParametersValueType, unsigned int VDimension>
 void
 BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::SetMeshSizeForTheUpdateField(
@@ -54,9 +48,6 @@ BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::SetM
   this->SetNumberOfControlPointsForTheUpdateField(numberOfControlPoints);
 }
 
-/**
- * set mesh size for update field
- */
 template <typename TParametersValueType, unsigned int VDimension>
 void
 BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::SetMeshSizeForTheConstantVelocityField(
@@ -143,9 +134,7 @@ BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::Upda
   updatedVelocityField->Update();
   updatedVelocityField->DisconnectPipeline();
 
-  //
   // Smooth the velocity field
-  //
   bool smoothVelocityField = true;
   for (unsigned int d = 0; d < Dimension; ++d)
   {
@@ -175,10 +164,10 @@ BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::Upda
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
-typename BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::ConstantVelocityFieldPointer
+auto
 BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::BSplineSmoothConstantVelocityField(
   const ConstantVelocityFieldType * field,
-  const ArrayType &                 numberOfControlPoints)
+  const ArrayType &                 numberOfControlPoints) -> ConstantVelocityFieldPointer
 {
   auto bspliner = BSplineFilterType::New();
   bspliner->SetUseInputFieldToDefineTheBSplineDomain(true);
@@ -195,9 +184,6 @@ BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::BSpl
   return smoothField;
 }
 
-/**
- * Standard "PrintSelf" method
- */
 template <typename TParametersValueType, unsigned int VDimension>
 void
 BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::PrintSelf(std::ostream & os,
@@ -205,11 +191,11 @@ BSplineExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::Prin
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Spline order = " << this->m_SplineOrder << std::endl;
   os << indent
-     << "Number of control points for the velocity field = " << this->m_NumberOfControlPointsForTheConstantVelocityField
+     << "NumberOfControlPointsForTheConstantVelocityField: " << m_NumberOfControlPointsForTheConstantVelocityField
      << std::endl;
-  os << indent << "Number of control points for the update field = " << this->m_NumberOfControlPointsForTheUpdateField
+  os << indent << "NumberOfControlPointsForTheUpdateField: " << m_NumberOfControlPointsForTheUpdateField << std::endl;
+  os << indent << "SplineOrder: " << static_cast<typename NumericTraits<SplineOrderType>::PrintType>(m_SplineOrder)
      << std::endl;
 }
 

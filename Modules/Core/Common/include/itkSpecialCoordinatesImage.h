@@ -33,7 +33,7 @@ namespace itk
  * dependent variables), and a dimension (number of independent variables).
  * The container for the pixel data is the ImportImageContainer.
  *
- * Within the pixel container, images are modelled as arrays, defined by a
+ * Within the pixel container, images are modeled as arrays, defined by a
  * start index and a size.
  *
  * Almost arbitrary mappings between index space & Cartesian physical space are
@@ -108,7 +108,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpecialCoordinatesImage, ImageBase);
+  itkOverrideGetNameOfClassMacro(SpecialCoordinatesImage);
 
   /** Pixel type alias support Used to declare pixel type in filters
    * or other operations. */
@@ -325,7 +325,7 @@ public:
   */
 
 protected:
-  SpecialCoordinatesImage();
+  SpecialCoordinatesImage() = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
@@ -333,7 +333,7 @@ protected:
 
 private:
   /** Memory for the current buffer. */
-  PixelContainerPointer m_Buffer;
+  PixelContainerPointer m_Buffer{ PixelContainer::New() };
 };
 } // end namespace itk
 

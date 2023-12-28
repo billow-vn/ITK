@@ -43,7 +43,6 @@ namespace itk
  *
  * "Grayscale morphological attribute operations"
  * by Beare R.
- * https://hdl.handle.net/1926/1316
  * https://www.insight-journal.org/browse/publication/203
  *
  * \author Richard Beare. Department of Medicine, Monash University, Melbourne, Australia.
@@ -100,7 +99,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(AttributeMorphologyBaseImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(AttributeMorphologyBaseImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -157,11 +156,11 @@ protected:
   void
   EnlargeOutputRequestedRegion(DataObject * itkNotUsed(output)) override;
 
-  AttributeType m_AttributeValuePerPixel;
+  AttributeType m_AttributeValuePerPixel{};
 
 private:
-  bool          m_FullyConnected;
-  AttributeType m_Lambda;
+  bool          m_FullyConnected{};
+  AttributeType m_Lambda{};
 
   // some constants used several times in the code
   static constexpr OffsetValueType INACTIVE = -1;
@@ -203,7 +202,7 @@ private:
     }
   };
 
-  CompareOffsetType m_CompareOffset;
+  CompareOffsetType m_CompareOffset{};
   // version from PAMI. Note - using the AuxData array rather than the
   // parent array to store area
   void

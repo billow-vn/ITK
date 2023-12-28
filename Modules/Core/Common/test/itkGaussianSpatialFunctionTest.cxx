@@ -25,7 +25,8 @@ itkGaussianSpatialFunctionTest(int argc, char * argv[])
 {
   if (argc < 3)
   {
-    std::cout << "Usage: " << itkNameOfTestExecutableMacro(argv) << " scale normalized" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " scale normalized" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -104,11 +105,14 @@ itkGaussianSpatialFunctionTest(int argc, char * argv[])
 
   if (itk::Math::NotAlmostEquals(expectedValueAtMean, computedValueAtMean))
   {
-    std::cout << "Error in point " << point << ": ";
-    std::cout << "expected: " << expectedValueAtMean << ", but got " << computedValueAtMean << std::endl;
-    std::cout << "Test failed" << std::endl;
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in Evaluate at point " << point << std::endl;
+    std::cerr << "Expected value " << expectedValueAtMean << std::endl;
+    std::cerr << " differs from " << computedValueAtMean << std::endl;
     return EXIT_FAILURE;
   }
 
+
+  std::cerr << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

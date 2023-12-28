@@ -78,7 +78,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TimeVaryingBSplineVelocityFieldTransform, VelocityFieldTransform);
+  itkOverrideGetNameOfClassMacro(TimeVaryingBSplineVelocityFieldTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -182,13 +182,13 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int m_SplineOrder;
-  bool         m_TemporalPeriodicity;
+  unsigned int m_SplineOrder{};
+  bool         m_TemporalPeriodicity{};
 
-  VelocityFieldPointType     m_VelocityFieldOrigin;
-  VelocityFieldSpacingType   m_VelocityFieldSpacing;
-  VelocityFieldDirectionType m_VelocityFieldDirection;
-  VelocityFieldSizeType      m_VelocityFieldSize;
+  VelocityFieldPointType     m_VelocityFieldOrigin{};
+  VelocityFieldSpacingType   m_VelocityFieldSpacing{};
+  VelocityFieldDirectionType m_VelocityFieldDirection{};
+  VelocityFieldSizeType      m_VelocityFieldSize{};
 };
 
 } // end namespace itk

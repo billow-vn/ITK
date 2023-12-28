@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class RegistrationParameterScalesFromIndexShift
+ * \class RegistrationParameterScalesFromIndexShift
  *  \brief Registration helper class for estimating scales of
  * transform parameters from the maximum voxel shift in image index space
  * caused by a parameter change.
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegistrationParameterScalesFromIndexShift, RegistrationParameterScalesFromShiftBase);
+  itkOverrideGetNameOfClassMacro(RegistrationParameterScalesFromIndexShift);
 
   /** Type of scales */
   using typename Superclass::ScalesType;

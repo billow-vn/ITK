@@ -71,7 +71,7 @@ itkFloodFilledSpatialFunctionTest(int, char *[])
   for (int strat = 0; strat < 4; ++strat)
   {
     // Initialize the image to hold all 0's
-    itk::ImageRegionIterator<ImageType> it = itk::ImageRegionIterator<ImageType>(sourceImage, largestPossibleRegion);
+    itk::ImageRegionIterator<ImageType> it(sourceImage, largestPossibleRegion);
 
     for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
@@ -97,7 +97,7 @@ itkFloodFilledSpatialFunctionTest(int, char *[])
 
     using ItType = itk::FloodFilledSpatialFunctionConditionalIterator<ImageType, FunctionType>;
 
-    ItType sfi = ItType(sourceImage, spatialFunc, seedPos);
+    ItType sfi(sourceImage, spatialFunc, seedPos);
 
     switch (strat)
     {

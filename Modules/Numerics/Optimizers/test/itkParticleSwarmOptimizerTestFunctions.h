@@ -42,7 +42,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(ParticleSwarmTestF1, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(ParticleSwarmTestF1);
 
   using ParametersType = Superclass::ParametersType;
   using MeasureType = Superclass::MeasureType;
@@ -98,7 +98,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(ParticleSwarmTestF2, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(ParticleSwarmTestF2);
 
   using ParametersType = Superclass::ParametersType;
   using DerivativeType = Superclass::DerivativeType;
@@ -141,8 +141,8 @@ public:
   }
 
 private:
-  MatrixType m_A;
-  VectorType m_Intercept;
+  MatrixType m_A{};
+  VectorType m_Intercept{};
 };
 
 /**
@@ -158,7 +158,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(ParticleSwarmTestF3, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(ParticleSwarmTestF3);
 
   using ParametersType = Superclass::ParametersType;
   using MeasureType = Superclass::MeasureType;
@@ -233,8 +233,8 @@ protected:
   }
 
 private:
-  unsigned long m_IterationNumber;
-  bool          m_PrintOptimizer;
+  unsigned long m_IterationNumber{};
+  bool          m_PrintOptimizer{};
 };
 
 } // namespace itk

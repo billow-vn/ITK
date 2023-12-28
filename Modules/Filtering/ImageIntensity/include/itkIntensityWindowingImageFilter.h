@@ -111,7 +111,7 @@ private:
 } // end namespace Functor
 
 /**
- *\class IntensityWindowingImageFilter
+ * \class IntensityWindowingImageFilter
  * \brief Applies a linear transformation to the intensity levels of the
  * input Image that are inside a user-defined interval. Values below this
  * interval are mapped to a constant. Values over the interval are mapped
@@ -166,7 +166,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(IntensityWindowingImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(IntensityWindowingImageFilter);
 
   /** Set/Get the values of the maximum and minimum
    *  intensities of the output image. */
@@ -219,14 +219,14 @@ protected:
   ~IntensityWindowingImageFilter() override = default;
 
 private:
-  RealType m_Scale;
-  RealType m_Shift;
+  RealType m_Scale{};
+  RealType m_Shift{};
 
-  InputPixelType m_WindowMinimum;
-  InputPixelType m_WindowMaximum;
+  InputPixelType m_WindowMinimum{};
+  InputPixelType m_WindowMaximum{};
 
-  OutputPixelType m_OutputMinimum;
-  OutputPixelType m_OutputMaximum;
+  OutputPixelType m_OutputMinimum{};
+  OutputPixelType m_OutputMaximum{};
 };
 } // end namespace itk
 

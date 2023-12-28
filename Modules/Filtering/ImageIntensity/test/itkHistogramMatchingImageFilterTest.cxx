@@ -102,8 +102,8 @@ CompareImages(itk::ImageRegionIterator<ImageType> & refIter, itk::ImageRegionIte
     if (itk::Math::abs(diff) > 1)
     {
       passed = false;
-      std::cout << "Test failed at: " << outIter.GetIndex() << " ";
-      std::cout << "Output value: " << outIter.Get() << " ";
+      std::cout << "Test failed at: " << outIter.GetIndex() << ' ';
+      std::cout << "Output value: " << outIter.Get() << ' ';
       std::cout << "Ref value: " << refIter.Get() << std::endl;
     }
     ++outIter;
@@ -369,7 +369,7 @@ itkHistogramMatchingImageFilterTest()
       passed = false; // We should never get here, and exception should have been thrown
       std::cout
         << "ERROR: Reached code that should have aborted due to thrown exception of missing ReferenceHistogram\n"
-        << __FILE__ << ":" << __LINE__ << std::endl;
+        << __FILE__ << ':' << __LINE__ << std::endl;
     }
     catch (const itk::ExceptionObject &)
     {
@@ -389,7 +389,7 @@ itkHistogramMatchingImageFilterTest()
       mismatchReferenceChoice->Update();
       passed = false; // We should never get here, and exception should have been thrown
       std::cout << "ERROR: Reached code that should have aborted due to thrown exception of missing ReferenceImage\n"
-                << __FILE__ << ":" << __LINE__ << std::endl;
+                << __FILE__ << ':' << __LINE__ << std::endl;
     }
     catch (const itk::ExceptionObject &)
     {

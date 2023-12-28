@@ -138,10 +138,10 @@ ConnectedComponentImageFilter<TInputImage, TOutputImage, TMaskImage>::GenerateDa
   // check for overflow exception here
   if (numberOfObjects > static_cast<SizeValueType>(NumericTraits<OutputPixelType>::max()))
   {
-    itkExceptionMacro(<< "Number of objects (" << numberOfObjects << ") greater than maximum of output pixel type ("
-                      << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(
-                           NumericTraits<OutputPixelType>::max())
-                      << ").");
+    itkExceptionMacro("Number of objects (" << numberOfObjects << ") greater than maximum of output pixel type ("
+                                            << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(
+                                                 NumericTraits<OutputPixelType>::max())
+                                            << ").");
   }
   m_ObjectCount = numberOfObjects;
 
@@ -166,14 +166,11 @@ void
 ConnectedComponentImageFilter<TInputImage, TOutputImage, TMaskImage>::DynamicThreadedGenerateData(
   const RegionType & outputRegionForThread)
 {
-  using InputLineIteratorType = ImageScanlineConstIterator<InputImageType>;
-  InputLineIteratorType inLineIt(m_Input, outputRegionForThread);
-
   WorkUnitData  workUnitData = this->CreateWorkUnitData(outputRegionForThread);
   SizeValueType lineId = workUnitData.firstLine;
 
   SizeValueType nbOfLabels = 0;
-  for (inLineIt.GoToBegin(); !inLineIt.IsAtEnd(); inLineIt.NextLine())
+  for (ImageScanlineConstIterator inLineIt(m_Input, outputRegionForThread); !inLineIt.IsAtEnd(); inLineIt.NextLine())
   {
     LineEncodingType thisLine;
     while (!inLineIt.IsAtEndOfLine())
@@ -207,7 +204,7 @@ ConnectedComponentImageFilter<TInputImage, TOutputImage, TMaskImage>::DynamicThr
   }
 
   this->m_NumberOfLabels.fetch_add(nbOfLabels, std::memory_order_relaxed);
-  std::lock_guard<std::mutex> mutexHolder(this->m_Mutex);
+  const std::lock_guard<std::mutex> lockGuard(this->m_Mutex);
   this->m_WorkUnitResults.push_back(workUnitData);
 }
 
@@ -222,7 +219,7 @@ ConnectedComponentImageFilter<TInputImage, TOutputImage, TMaskImage>::ThreadedWr
   // performance of the map by being able to iterate through it,
   // rather than do lots of look ups. Don't know whether that will
   // make much difference in practice.
-  // Note - this is unnecessary if AllocateOutputs initalizes to zero
+  // Note - this is unnecessary if AllocateOutputs initializes to zero
 
   OutputImageType *                    output = this->GetOutput();
   ImageRegionIterator<OutputImageType> oit(output, outputRegionForThread);

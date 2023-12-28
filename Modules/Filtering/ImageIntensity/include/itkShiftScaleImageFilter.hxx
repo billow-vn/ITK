@@ -47,15 +47,13 @@ ShiftScaleImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   SizeValueType underflow = 0;
   SizeValueType overflow = 0;
 
-  ImageScanlineIterator<TOutputImage>     ot(outputPtr, outputRegion);
-  ImageScanlineConstIterator<TInputImage> it(inputPtr, outputRegion);
+  ImageScanlineIterator      ot(outputPtr, outputRegion);
+  ImageScanlineConstIterator it(inputPtr, outputRegion);
 
   // support progress methods/callbacks
 
   TotalProgressReporter progress(this, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 
-  it.GoToBegin();
-  ot.GoToBegin();
   // do the work
   while (!it.IsAtEnd())
   {
@@ -85,7 +83,7 @@ ShiftScaleImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
     progress.Completed(outputRegion.GetSize()[0]);
   }
 
-  std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+  const std::lock_guard<std::mutex> lockGuard(m_Mutex);
   m_OverflowCount += overflow;
   m_UnderflowCount += underflow;
 }

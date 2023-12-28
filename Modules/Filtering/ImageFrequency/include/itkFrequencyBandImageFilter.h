@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class FrequencyBandImageFilter
+ * \class FrequencyBandImageFilter
  * \brief Performs a frequency band filtering on a frequency domain image
  *
  * The default filtering functor filters in the range LowFrequencyThreshold and
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FrequencyBandImageFilter, UnaryFrequencyDomainFilter);
+  itkOverrideGetNameOfClassMacro(FrequencyBandImageFilter);
 
   /** Typedef to images */
   using ImageType = TImageType;
@@ -141,11 +141,11 @@ public:
   /**
    * Utility method equivalent to:
    * SetPassBand(true)
-   * SetPassLowFrequencyThreshold(pass_low_threshold)
-   * SetPassHighFrequencyThreshold(pass_high_threshold)
+   * SetPassLowFrequencyThreshold(passLowThreshold)
+   * SetPassHighFrequencyThreshold(passHighThreshold)
    *
-   * @param pass_low_threshold flag to let pass or not low boundary
-   * @param pass_high_threshold flag to let pass or not high boundary
+   * @param passLowThreshold flag to let pass or not low boundary
+   * @param passHighThreshold flag to let pass or not high boundary
    */
   void
   SetPassBand(const bool passLowThreshold, const bool passHighThreshold);
@@ -153,11 +153,11 @@ public:
   /**
    * Utility method equivalent to:
    * SetPassBand(false)
-   * SetPassLowFrequencyThreshold(pass_low_threshold)
-   * SetPassHighFrequencyThreshold(pass_high_threshold)
+   * SetPassLowFrequencyThreshold(passLowThreshold)
+   * SetPassHighFrequencyThreshold(passHighThreshold)
    *
-   * @param pass_low_threshold flag to let pass or not low boundary
-   * @param pass_high_threshold flag to let pass or not high boundary
+   * @param passLowThreshold flag to let pass or not low boundary
+   * @param passHighThreshold flag to let pass or not high boundary
    */
   void
   SetStopBand(const bool passLowThreshold, const bool passHighThreshold);
@@ -195,10 +195,10 @@ protected:
   BandPass(FrequencyIteratorType & freqIt);
 
 private:
-  std::function<void(const ImageRegionType &)> m_DynamicThreadedGenerateDataFunction;
+  std::function<void(const ImageRegionType &)> m_DynamicThreadedGenerateDataFunction{};
 
-  FrequencyValueType m_LowFrequencyThreshold;
-  FrequencyValueType m_HighFrequencyThreshold;
+  FrequencyValueType m_LowFrequencyThreshold{};
+  FrequencyValueType m_HighFrequencyThreshold{};
 
   bool m_PassBand{ true };
   bool m_PassLowFrequencyThreshold{ true };

@@ -32,7 +32,7 @@ namespace itk
 namespace VideoSourceTest
 {
 /**
- *\class DummyVideoSource
+ * \class DummyVideoSource
  * Provide dummy implementation of VideoSource that just sets all pixels to 1
  */
 template <typename TOutputVideoStream>
@@ -52,7 +52,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(DummyVideoSource, VideoSource);
+  itkOverrideGetNameOfClassMacro(DummyVideoSource);
 
 protected:
   /** Constructor */
@@ -84,8 +84,8 @@ protected:
     // unit output size
     if (frameDuration != this->TemporalProcessObject::m_UnitOutputNumberOfFrames)
     {
-      itkExceptionMacro(<< "Trying to generate output of non-unit size. Got: " << frameDuration
-                        << " Expected: " << this->TemporalProcessObject::m_UnitOutputNumberOfFrames);
+      itkExceptionMacro("Trying to generate output of non-unit size. Got: "
+                        << frameDuration << " Expected: " << this->TemporalProcessObject::m_UnitOutputNumberOfFrames);
     }
 
     for (SizeValueType i = startFrame; i < startFrame + frameDuration; ++i)

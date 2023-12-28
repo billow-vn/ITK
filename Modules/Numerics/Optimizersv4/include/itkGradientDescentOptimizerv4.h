@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class GradientDescentOptimizerv4Template
+ * \class GradientDescentOptimizerv4Template
  *  \brief Gradient descent optimizer.
  *
  * GradientDescentOptimizer implements a simple gradient descent optimizer.
@@ -41,7 +41,7 @@ namespace itk
  *
  * Gradient scales can be manually set or automatically estimated,
  * as documented in the base class.
- * The learing rate defaults to 1.0, and can be set in two ways:
+ * The learning rate defaults to 1.0, and can be set in two ways:
  * 1) manually, via \c SetLearningRate().
  * Or,
  * 2) automatically, either at each iteration or only at the first iteration,
@@ -88,7 +88,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientDescentOptimizerv4Template, GradientDescentOptimizerBasev4Template);
+  itkOverrideGetNameOfClassMacro(GradientDescentOptimizerv4Template);
 
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
@@ -225,13 +225,13 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 
-  TInternalComputationValueType m_LearningRate;
-  TInternalComputationValueType m_MinimumConvergenceValue;
-  TInternalComputationValueType m_ConvergenceValue;
+  TInternalComputationValueType m_LearningRate{};
+  TInternalComputationValueType m_MinimumConvergenceValue{};
+  TInternalComputationValueType m_ConvergenceValue{};
 
   /** Store the best value and related parameters. */
-  MeasureType    m_CurrentBestValue;
-  ParametersType m_BestParameters;
+  MeasureType    m_CurrentBestValue{};
+  ParametersType m_BestParameters{};
 
   bool m_ReturnBestParametersAndValue{ false };
 
@@ -240,7 +240,7 @@ protected:
    * This is needed by the regular step gradient descent and
    * Quasi Newton optimizers.
    */
-  DerivativeType m_PreviousGradient;
+  DerivativeType m_PreviousGradient{};
 
 private:
 };

@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class NormalizeImageFilter
+ * \class NormalizeImageFilter
  * \brief Normalize an image by setting its mean to zero and variance to one.
  *
  * NormalizeImageFilter shifts and scales an image so that the pixels
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(NormalizeImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(NormalizeImageFilter);
 
   /** Image related type alias. */
   using InputImagePointer = typename TInputImage::Pointer;
@@ -88,9 +88,9 @@ protected:
   GenerateInputRequestedRegion() override;
 
 private:
-  typename StatisticsImageFilter<TInputImage>::Pointer m_StatisticsFilter;
+  typename StatisticsImageFilter<TInputImage>::Pointer m_StatisticsFilter{};
 
-  typename ShiftScaleImageFilter<TInputImage, TOutputImage>::Pointer m_ShiftScaleFilter;
+  typename ShiftScaleImageFilter<TInputImage, TOutputImage>::Pointer m_ShiftScaleFilter{};
 }; // end of class
 } // end namespace itk
 

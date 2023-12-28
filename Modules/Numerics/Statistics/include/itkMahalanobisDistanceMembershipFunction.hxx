@@ -72,13 +72,13 @@ MahalanobisDistanceMembershipFunction<TVector>::SetCovariance(const CovarianceMa
   // Sanity check
   if (cov.GetVnlMatrix().rows() != cov.GetVnlMatrix().cols())
   {
-    itkExceptionMacro(<< "Covariance matrix must be square");
+    itkExceptionMacro("Covariance matrix must be square");
   }
   if (this->GetMeasurementVectorSize())
   {
     if (cov.GetVnlMatrix().rows() != this->GetMeasurementVectorSize())
     {
-      itkExceptionMacro(<< "Length of measurement vectors must be"
+      itkExceptionMacro("Length of measurement vectors must be"
                         << " the same as the size of the covariance.");
     }
   }
@@ -104,7 +104,7 @@ MahalanobisDistanceMembershipFunction<TVector>::SetCovariance(const CovarianceMa
 
   if (det < 0.)
   {
-    itkExceptionMacro(<< "det( m_Covariance ) < 0");
+    itkExceptionMacro("det( m_Covariance ) < 0");
   }
 
   // 1e-6 is an arbitrary value!!!
@@ -138,7 +138,7 @@ MahalanobisDistanceMembershipFunction<TVector>::Evaluate(const MeasurementVector
   const MeasurementVectorSizeType measurementVectorSize = this->GetMeasurementVectorSize();
 
   // Our inverse covariance is always well formed. When the covariance
-  // is singular, we use a diagonal inverse covariance with a large diagnonal
+  // is singular, we use a diagonal inverse covariance with a large diagonal
 
   // temp = ( y - mean )^t * InverseCovariance * ( y - mean )
   //
@@ -181,7 +181,7 @@ MahalanobisDistanceMembershipFunction<TVector>::InternalClone() const
   typename Self::Pointer membershipFunction = dynamic_cast<Self *>(loPtr.GetPointer());
   if (membershipFunction.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   membershipFunction->SetMeasurementVectorSize(this->GetMeasurementVectorSize());

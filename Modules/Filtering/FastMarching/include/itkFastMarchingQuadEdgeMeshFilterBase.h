@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class FastMarchingQuadEdgeMeshFilterBase
+ * \class FastMarchingQuadEdgeMeshFilterBase
   \brief Fast Marching Method on QuadEdgeMesh
 
   The speed function is specified by the input mesh. Data associated to each
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingQuadEdgeMeshFilterBase, FastMarchingBase);
+  itkOverrideGetNameOfClassMacro(FastMarchingQuadEdgeMeshFilterBase);
 
   using InputMeshType = typename Superclass::InputDomainType;
   using InputMeshPointer = typename Superclass::InputDomainPointer;
@@ -105,7 +105,7 @@ protected:
   FastMarchingQuadEdgeMeshFilterBase();
   ~FastMarchingQuadEdgeMeshFilterBase() override = default;
 
-  NodeLabelMapType m_Label;
+  NodeLabelMapType m_Label{};
 
   IdentifierType
   GetTotalNumberOfNodes() const override;
@@ -174,7 +174,7 @@ protected:
   InitializeOutput(OutputMeshType * oMesh) override;
 
 private:
-  const InputMeshType * m_InputMesh;
+  const InputMeshType * m_InputMesh{};
 };
 } // namespace itk
 

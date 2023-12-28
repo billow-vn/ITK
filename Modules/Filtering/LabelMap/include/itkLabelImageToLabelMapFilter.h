@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LabelImageToLabelMapFilter
+ * \class LabelImageToLabelMapFilter
  * \brief convert a labeled image to a label collection image
  *
  * LabelImageToLabelMapFilter converts a label image to a label collection image.
@@ -81,7 +81,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelImageToLabelMapFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelImageToLabelMapFilter);
 
   /**
    * Set/Get the value used as "background" in the output image.
@@ -126,9 +126,9 @@ protected:
   AfterThreadedGenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
+  OutputImagePixelType m_BackgroundValue{};
 
-  typename std::vector<OutputImagePointer> m_TemporaryImages;
+  typename std::vector<OutputImagePointer> m_TemporaryImages{};
 }; // end of class
 } // end namespace itk
 

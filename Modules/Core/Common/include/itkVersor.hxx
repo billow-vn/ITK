@@ -24,16 +24,6 @@
 
 namespace itk
 {
-/** Constructor to initialize entire vector to one value. */
-template <typename T>
-Versor<T>::Versor()
-  : m_X(NumericTraits<T>::ZeroValue())
-  , m_Y(NumericTraits<T>::ZeroValue())
-  , m_Z(NumericTraits<T>::ZeroValue())
-  , m_W(NumericTraits<T>::OneValue())
-{}
-
-/** Copy Constructor */
 template <typename T>
 Versor<T>::Versor(const Self & v)
 {
@@ -43,7 +33,6 @@ Versor<T>::Versor(const Self & v)
   m_W = v.m_W;
 }
 
-/** Assignment Operator */
 template <typename T>
 Versor<T> &
 Versor<T>::operator=(const Self & v)
@@ -55,7 +44,6 @@ Versor<T>::operator=(const Self & v)
   return *this;
 }
 
-/** Set to an identity transform */
 template <typename T>
 void
 Versor<T>::SetIdentity()
@@ -66,7 +54,6 @@ Versor<T>::SetIdentity()
   m_W = NumericTraits<T>::OneValue();
 }
 
-/** Return a vnl_quaternion */
 template <typename T>
 vnl_quaternion<T>
 Versor<T>::GetVnlQuaternion() const
@@ -74,7 +61,6 @@ Versor<T>::GetVnlQuaternion() const
   return vnl_quaternion<T>(m_X, m_Y, m_Z, m_W);
 }
 
-/** Assignment and Composition Operator */
 template <typename T>
 const Versor<T> &
 Versor<T>::operator*=(const Self & v)
@@ -92,7 +78,6 @@ Versor<T>::operator*=(const Self & v)
   return *this;
 }
 
-/** Composition Operator */
 template <typename T>
 Versor<T> Versor<T>::operator*(const Self & v) const
 {
@@ -106,7 +91,6 @@ Versor<T> Versor<T>::operator*(const Self & v) const
   return result;
 }
 
-/** Division and Assignment Operator */
 template <typename T>
 const Versor<T> &
 Versor<T>::operator/=(const Self & v)
@@ -124,7 +108,6 @@ Versor<T>::operator/=(const Self & v)
   return *this;
 }
 
-/** Division Operator  */
 template <typename T>
 Versor<T>
 Versor<T>::operator/(const Self & v) const
@@ -139,7 +122,6 @@ Versor<T>::operator/(const Self & v) const
   return result;
 }
 
-/** Comparison operator */
 template <typename T>
 bool
 Versor<T>::operator==(const Self & v) const
@@ -159,7 +141,6 @@ Versor<T>::operator==(const Self & v) const
   return false;
 }
 
-/** Get Conjugate */
 template <typename T>
 Versor<T>
 Versor<T>::GetConjugate() const
@@ -174,7 +155,6 @@ Versor<T>::GetConjugate() const
   return result;
 }
 
-/** Get Reciprocal */
 template <typename T>
 Versor<T>
 Versor<T>::GetReciprocal() const
@@ -189,7 +169,6 @@ Versor<T>::GetReciprocal() const
   return result;
 }
 
-/** Get Tensor part */
 template <typename T>
 auto
 Versor<T>::GetTensor() const -> ValueType
@@ -199,7 +178,6 @@ Versor<T>::GetTensor() const -> ValueType
   return tensor;
 }
 
-/** Normalize */
 template <typename T>
 void
 Versor<T>::Normalize()
@@ -209,8 +187,7 @@ Versor<T>::Normalize()
   if (itk::Math::abs(tensor) < 1e-20)
   {
     ExceptionObject except;
-    except.SetDescription("Attempt to normalize a \
-                           itk::Versor with zero tensor");
+    except.SetDescription("Attempt to normalize a itk::Versor with zero tensor");
     except.SetLocation(__FILE__);
     throw except;
   }
@@ -220,7 +197,6 @@ Versor<T>::Normalize()
   m_W /= tensor;
 }
 
-/** Get Axis */
 template <typename T>
 auto
 Versor<T>::GetAxis() const -> VectorType
@@ -249,7 +225,6 @@ Versor<T>::GetAxis() const -> VectorType
   return axis;
 }
 
-/** Get Right part */
 template <typename T>
 auto
 Versor<T>::GetRight() const -> VectorType
@@ -263,7 +238,6 @@ Versor<T>::GetRight() const -> VectorType
   return axis;
 }
 
-/** Get Scalar part */
 template <typename T>
 auto
 Versor<T>::GetScalar() const -> ValueType
@@ -271,7 +245,6 @@ Versor<T>::GetScalar() const -> ValueType
   return m_W;
 }
 
-/** Get Angle (in radians) */
 template <typename T>
 auto
 Versor<T>::GetAngle() const -> ValueType
@@ -287,7 +260,6 @@ Versor<T>::GetAngle() const -> ValueType
   return angle;
 }
 
-/** Get the Square root of the unit quaternion */
 template <typename T>
 Versor<T>
 Versor<T>::SquareRoot() const
@@ -307,7 +279,6 @@ Versor<T>::SquareRoot() const
   return result;
 }
 
-/** Compute the Exponential of the quaternion */
 template <typename T>
 Versor<T>
 Versor<T>::Exponential(ValueType exponent) const
@@ -319,7 +290,6 @@ Versor<T>::Exponential(ValueType exponent) const
   return result;
 }
 
-/** Set Axis and Angle (in radians) */
 template <typename T>
 void
 Versor<T>::Set(const VectorType & axis, ValueType angle)
@@ -345,7 +315,6 @@ Versor<T>::Set(const VectorType & axis, ValueType angle)
   m_W = cosangle2;
 }
 
-/**  Set using an orthogonal matrix. */
 template <typename T>
 void
 Versor<T>::Set(const MatrixType & mat)
@@ -353,7 +322,7 @@ Versor<T>::Set(const MatrixType & mat)
   // const double epsilon = 1e-30;
   // Keep the epsilon value large enough so that the alternate routes of
   // computing the quaternion are used to within floating point precision of the
-  // math to be used.  Using 1e-30 results in degenerate matries for rotations
+  // math to be used.  Using 1e-30 results in degenerate matrices for rotations
   // near itk::Math::pi due to imprecision of the math.  0.5/std::sqrt(trace) is
   // not accurate to 1e-30, so the resulting matrices would have very large
   // errors.  By decreasing this epsilon value to a higher tolerance, the
@@ -378,8 +347,8 @@ Versor<T>::Set(const MatrixType & mat)
       itk::Math::abs(I[1][1] - itk::NumericTraits<T>::OneValue()) > epsilonDiff ||
       itk::Math::abs(I[2][2] - itk::NumericTraits<T>::OneValue()) > epsilonDiff || vnl_det(I) < 0)
   {
-    itkGenericExceptionMacro(<< "The following matrix does not represent rotation to within an epsion of " << epsilon
-                             << "." << std::endl
+    itkGenericExceptionMacro("The following matrix does not represent rotation to within an epsion of "
+                             << epsilon << '.' << std::endl
                              << m << std::endl
                              << "det(m * m transpose) is: " << vnl_det(I) << std::endl
                              << "m * m transpose is:" << std::endl
@@ -429,7 +398,6 @@ Versor<T>::Set(const MatrixType & mat)
   this->Normalize();
 }
 
-/** Set right Part (in radians) */
 template <typename T>
 void
 Versor<T>::Set(const VectorType & axis)
@@ -453,9 +421,6 @@ Versor<T>::Set(const VectorType & axis)
   m_W = cosangle2;
 }
 
-/** Set the Versor from four components.
- *  After assignment, the quaternion is normalized
- *  in order to get a consistent Versor (unit quaternion). */
 template <typename T>
 void
 Versor<T>::Set(T x, T y, T z, T w)
@@ -484,9 +449,6 @@ Versor<T>::Set(T x, T y, T z, T w)
   this->Normalize();
 }
 
-/** Set from a vnl_quaternion
- *  After assignment, the quaternion is normalized
- *  in order to get a consistent Versor (unit quaternion). */
 template <typename T>
 void
 Versor<T>::Set(const VnlQuaternionType & quaternion)
@@ -498,7 +460,6 @@ Versor<T>::Set(const VnlQuaternionType & quaternion)
   this->Normalize();
 }
 
-/** Set rotation around X axis */
 template <typename T>
 void
 Versor<T>::SetRotationAroundX(ValueType angle)
@@ -512,7 +473,6 @@ Versor<T>::SetRotationAroundX(ValueType angle)
   m_W = cosangle2;
 }
 
-/** Set rotation around Y axis  */
 template <typename T>
 void
 Versor<T>::SetRotationAroundY(ValueType angle)
@@ -526,7 +486,6 @@ Versor<T>::SetRotationAroundY(ValueType angle)
   m_W = cosangle2;
 }
 
-/**  Set rotation around Z axis  */
 template <typename T>
 void
 Versor<T>::SetRotationAroundZ(ValueType angle)
@@ -578,7 +537,6 @@ localTransformVectorMath(const InputVectorType & VectorObject,
 }
 } // namespace
 
-/** Transform a Vector */
 template <typename T>
 auto
 Versor<T>::Transform(const VectorType & v) const -> VectorType
@@ -587,9 +545,6 @@ Versor<T>::Transform(const VectorType & v) const -> VectorType
     v, this->m_X, this->m_Y, this->m_Z, this->m_W);
 }
 
-/** Transform a CovariantVector
- *  given that this is an orthogonal transformation
- *  CovariantVectors are transformed as vectors. */
 template <typename T>
 auto
 Versor<T>::Transform(const CovariantVectorType & v) const -> CovariantVectorType
@@ -598,7 +553,6 @@ Versor<T>::Transform(const CovariantVectorType & v) const -> CovariantVectorType
     v, this->m_X, this->m_Y, this->m_Z, this->m_W);
 }
 
-/** Transform a Point */
 template <typename T>
 auto
 Versor<T>::Transform(const PointType & v) const -> PointType
@@ -607,7 +561,6 @@ Versor<T>::Transform(const PointType & v) const -> PointType
     v, this->m_X, this->m_Y, this->m_Z, this->m_W);
 }
 
-/** Transform a VnlVector */
 template <typename T>
 auto
 Versor<T>::Transform(const VnlVectorType & v) const -> VnlVectorType
@@ -616,7 +569,6 @@ Versor<T>::Transform(const VnlVectorType & v) const -> VnlVectorType
     v, this->m_X, this->m_Y, this->m_Z, this->m_W);
 }
 
-/** Get Matrix representation */
 template <typename T>
 Matrix<T, 3, 3>
 Versor<T>::GetMatrix() const

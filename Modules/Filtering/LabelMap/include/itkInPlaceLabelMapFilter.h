@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class InPlaceLabelMapFilter
+ * \class InPlaceLabelMapFilter
  * \brief Base class for filters that takes an image as input and overwrites
  * that image as the output
  *
@@ -92,7 +92,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(InPlaceLabelMapFilter, LabelMapFilter);
+  itkOverrideGetNameOfClassMacro(InPlaceLabelMapFilter);
 
   /** Standard New method. */
   itkNewMacro(Self);

@@ -24,7 +24,7 @@ namespace itk
 /**
  * Constructor
  */
-LBFGSOptimizer ::LBFGSOptimizer()
+LBFGSOptimizer::LBFGSOptimizer()
 {
   m_OptimizerInitialized = false;
   m_VnlOptimizer = nullptr;
@@ -38,10 +38,7 @@ LBFGSOptimizer ::LBFGSOptimizer()
 /**
  * Destructor
  */
-LBFGSOptimizer::~LBFGSOptimizer()
-{
-  delete m_VnlOptimizer;
-}
+LBFGSOptimizer::~LBFGSOptimizer() = default;
 
 /**
  * PrintSelf
@@ -185,14 +182,9 @@ LBFGSOptimizer::SetCostFunction(SingleValuedCostFunction * costFunction)
 
   adaptor->SetCostFunction(costFunction);
 
-  if (m_OptimizerInitialized)
-  {
-    delete m_VnlOptimizer;
-  }
-
   this->SetCostFunctionAdaptor(adaptor);
 
-  m_VnlOptimizer = new vnl_lbfgs(*adaptor);
+  m_VnlOptimizer = std::make_unique<vnl_lbfgs>(*adaptor);
 
   // set the optimizer parameters
   m_VnlOptimizer->set_trace(m_Trace);
@@ -244,7 +236,7 @@ LBFGSOptimizer::StartOptimization()
   {
     // set current position to initial position and throw an exception
     this->SetCurrentPosition(currentPositionInternalValue);
-    itkExceptionMacro(<< "Error occurred in optimization");
+    itkExceptionMacro("Error occurred in optimization");
   }
 
   // we scale the vnlCompatibleParameters down if scales are defined
@@ -265,7 +257,7 @@ LBFGSOptimizer::StartOptimization()
 vnl_lbfgs *
 LBFGSOptimizer::GetOptimizer()
 {
-  return m_VnlOptimizer;
+  return m_VnlOptimizer.get();
 }
 
 const std::string
@@ -280,6 +272,14 @@ LBFGSOptimizer::GetStopConditionDescription() const
       case vnl_nonlinear_minimizer::ERROR_FAILURE:
         m_StopConditionDescription << "Failure";
         break;
+#if VXL_VERSION_MAJOR >= 4
+      case vnl_nonlinear_minimizer::ABNORMAL_TERMINATION_IN_LNSRCH:
+        m_StopConditionDescription
+          << "Abnormal termination in line search.  Often caused by "
+          << "rounding errors dominating computation.  This can occur if the function is a very "
+          << "flat surface, or has oscillations.";
+        break;
+#endif
       case vnl_nonlinear_minimizer::ERROR_DODGY_INPUT:
         m_StopConditionDescription << "Dodgy input";
         break;

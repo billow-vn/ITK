@@ -53,7 +53,7 @@ public:
 } // namespace Functor
 
 /**
- *\class ExpImageFilter
+ * \class ExpImageFilter
  * \brief Computes the exponential function of each pixel.
  *
  * The computation is performed using std::exp(x).
@@ -80,7 +80,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ExpImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(ExpImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

@@ -243,7 +243,7 @@ FiniteDifferenceFunctionLoad<TMoving, TFixed>::Fe(FEMVectorType Gpos) -> FEMVect
     physicalPoint[k] = Gpos[k];
   }
 
-  m_FixedImage->TransformPhysicalPointToIndex(physicalPoint, oindex);
+  oindex = m_FixedImage->TransformPhysicalPointToIndex(physicalPoint);
 
   for (unsigned int k = 0; k < ImageDimension; ++k)
   {
@@ -355,9 +355,17 @@ FiniteDifferenceFunctionLoad<TMoving, TFixed>::PrintSelf(std::ostream & os, Inde
   os << indent << "SolutionIndex2: " << m_SolutionIndex2 << std::endl;
   os << indent << "Gamma: " << m_Gamma << std::endl;
 
-  os << indent << "Solution: " << m_Solution << std::endl;
+  os << indent << "Solution: ";
+  if (m_Solution != nullptr)
+  {
+    os << m_Solution << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
 
-  os << indent << "GradSigma: " << itk::NumericTraits<Float>::PrintType(m_GradSigma) << std::endl;
+  os << indent << "GradSigma: " << static_cast<typename NumericTraits<Float>::PrintType>(m_GradSigma) << std::endl;
   os << indent << "Sign: " << m_Sign << std::endl;
   os << indent << "WhichMetric: " << m_WhichMetric << std::endl;
 

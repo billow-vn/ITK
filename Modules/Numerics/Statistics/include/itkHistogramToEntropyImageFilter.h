@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class HistogramToEntropyImageFilter
+ * \class HistogramToEntropyImageFilter
  * \brief The class takes a histogram as an input and gives the entropy
  * image as the output. A pixel, at position I,  in the output image is given by
  *
@@ -120,7 +120,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(HistogramToEntropyImageFilter, HistogramToImageFilter);
+  itkOverrideGetNameOfClassMacro(HistogramToEntropyImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

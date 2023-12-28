@@ -66,7 +66,7 @@ template <typename TInputImage, typename TOutputImage>
 void
 ExponentialDisplacementFieldImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
-  itkDebugMacro(<< "Actually executing");
+  itkDebugMacro("Actually executing");
 
   InputImageConstPointer inputPtr = this->GetInput();
 
@@ -92,7 +92,7 @@ ExponentialDisplacementFieldImageFilter<TInputImage, TOutputImage>::GenerateData
     }
 
     using InputConstIterator = ImageRegionConstIterator<InputImageType>;
-    InputConstIterator InputIt = InputConstIterator(inputPtr, inputPtr->GetRequestedRegion());
+    InputConstIterator InputIt(inputPtr, inputPtr->GetRequestedRegion());
 
     for (InputIt.GoToBegin(); !InputIt.IsAtEnd(); ++InputIt)
     {

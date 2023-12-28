@@ -30,7 +30,6 @@ namespace itk
  * This code was contributed in the Insight Journal paper:
  * "Robust Automatic Threshold Selection"
  * by Lehmann G.
- * https://hdl.handle.net/1926/370
  * https://www.insight-journal.org/browse/publication/134
  *
  *
@@ -53,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RobustAutomaticThresholdCalculator, Object);
+  itkOverrideGetNameOfClassMacro(RobustAutomaticThresholdCalculator);
 
   /** Extract the dimension of the image. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -116,10 +115,10 @@ protected:
 private:
   bool           m_Valid{ false }; // Have moments been computed yet?
   double         m_Pow{ 1 };
-  InputPixelType m_Output;
+  InputPixelType m_Output{};
 
-  InputImageConstPointer    m_Input;
-  GradientImageConstPointer m_Gradient;
+  InputImageConstPointer    m_Input{};
+  GradientImageConstPointer m_Gradient{};
 };
 } // end namespace itk
 

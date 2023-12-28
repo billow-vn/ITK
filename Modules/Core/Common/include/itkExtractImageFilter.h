@@ -130,7 +130,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExtractImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(ExtractImageFilter);
 
   /** Image type information. */
   using InputImageType = TInputImage;
@@ -201,7 +201,7 @@ public:
         break;
       case DirectionCollapseStrategyEnum::DIRECTIONCOLLAPSETOUNKOWN:
       default:
-        itkExceptionMacro(<< "Invalid Strategy Chosen for itk::ExtractImageFilter");
+        itkExceptionMacro("Invalid Strategy Chosen for itk::ExtractImageFilter");
     }
 
     this->m_DirectionCollapseStrategy = choosenStrategy;
@@ -314,9 +314,9 @@ protected:
   void
   GenerateData() override;
 
-  InputImageRegionType m_ExtractionRegion;
+  InputImageRegionType m_ExtractionRegion{};
 
-  OutputImageRegionType m_OutputImageRegion;
+  OutputImageRegionType m_OutputImageRegion{};
 
 private:
   DirectionCollapseStrategyEnum m_DirectionCollapseStrategy{ DirectionCollapseStrategyEnum::DIRECTIONCOLLAPSETOUNKOWN };

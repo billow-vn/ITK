@@ -37,7 +37,7 @@ namespace itk
 {
 
 /**
- *\class SimpleMutexLock
+ * \class SimpleMutexLock
  * \brief Simple mutual exclusion locking class.
 
  * SimpleMutexLock allows the locking of variables which are accessed
@@ -79,7 +79,7 @@ public:
   Lock();
 
   /** Non-blocking Lock access.
-   \return bool - true if lock is captured, false if it was already heald by someone else.
+   \return bool - true if lock is captured, false if it was already held by someone else.
    */
   bool
   TryLock();
@@ -102,11 +102,11 @@ public:
   }
 
 protected:
-  MutexType m_MutexLock;
+  MutexType m_MutexLock{};
 };
 
 /**
- *\class MutexLock
+ * \class MutexLock
  * \brief Mutual exclusion locking class.
  *
  * MutexLock allows the locking of variables which are accessed
@@ -131,14 +131,14 @@ public:
   itkNewMacro(Self);
 
   /** Run-time information. */
-  itkTypeMacro(MutexLock, Object);
+  itkOverrideGetNameOfClassMacro(MutexLock);
 
   /** Lock the itkMutexLock. */
   void
   Lock();
 
   /** Non-blocking Lock access.
-   \return bool - true if lock is captured, false if it was already heald by someone else.
+   \return bool - true if lock is captured, false if it was already held by someone else.
    */
   bool
   TryLock();
@@ -151,7 +151,7 @@ protected:
   MutexLock() = default;
   ~MutexLock() override = default;
 
-  SimpleMutexLock m_SimpleMutexLock;
+  SimpleMutexLock m_SimpleMutexLock{};
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 };

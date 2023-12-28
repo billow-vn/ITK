@@ -46,7 +46,7 @@ namespace itk
  * and do not necessarily represent the official view of NCRR or NIH.
  *
  * This class was taken from the Insight Journal paper:
- * https://insight-journal.org/browse/publication/128
+ * https://www.insight-journal.org/browse/publication/128
  *
  * \sa ComposeImageFilter
  *
@@ -106,7 +106,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MagnitudeAndPhaseToComplexImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(MagnitudeAndPhaseToComplexImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

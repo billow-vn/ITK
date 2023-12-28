@@ -64,7 +64,7 @@ StimulateImageIO::CanReadFile(const char * filename)
 
   if (fname.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 
@@ -72,7 +72,7 @@ StimulateImageIO::CanReadFile(const char * filename)
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -139,7 +139,7 @@ StimulateImageIO::Read(void * buffer)
       }
       catch (const ExceptionObject &)
       {
-        itkExceptionMacro(<< "No Data file was specified in header (spr) file and guessing file data name failed.");
+        itkExceptionMacro("No Data file was specified in header (spr) file and guessing file data name failed.");
       }
     }
   } // a filename was found for data file
@@ -148,9 +148,9 @@ StimulateImageIO::Read(void * buffer)
 
   if (!this->ReadBufferAsBinary(file_data, buffer, this->GetImageSizeInBytes()))
   {
-    itkExceptionMacro(<< "Read failed: Wanted " << this->GetImageSizeInBytes() << " bytes, but read "
-                      << file_data.gcount() << " bytes."
-                      << " from file " << m_DataFileName);
+    itkExceptionMacro("Read failed: Wanted " << this->GetImageSizeInBytes() << " bytes, but read " << file_data.gcount()
+                                             << " bytes."
+                                             << " from file " << m_DataFileName);
   }
 
   // byte swapping depending on pixel type:
@@ -271,7 +271,7 @@ StimulateImageIO::InternalReadImageInformation(std::ifstream & file)
     else if (text.find("extent") < text.length())
     {
       // not documented
-      itkDebugMacro(<< "Extent was specified");
+      itkDebugMacro("Extent was specified");
     }
     else if (text.find("fov") < text.length())
     {
@@ -336,7 +336,7 @@ StimulateImageIO::InternalReadImageInformation(std::ifstream & file)
       }
       else
       {
-        itkExceptionMacro(<< "Unrecognized type");
+        itkExceptionMacro("Unrecognized type");
       }
     } // found scalars
     else if (text.find("displayRange") < text.length())
@@ -367,7 +367,7 @@ StimulateImageIO::InternalReadImageInformation(std::ifstream & file)
       char * pch;
       pch = strchr(line, ':');
       sscanf(++pch, "%s", m_FidName); // delete any white space left
-      itkDebugMacro(<< "fidName was specified");
+      itkDebugMacro("fidName was specified");
     }
     else if (text.find("sdtOrient") < text.length())
     {
@@ -379,30 +379,30 @@ StimulateImageIO::InternalReadImageInformation(std::ifstream & file)
       char * pch;
       pch = strchr(line, ':');
       sscanf(++pch, "%s", m_SdtOrient); // delete any white space left
-      itkDebugMacro(<< "Orientation was specified");
+      itkDebugMacro("Orientation was specified");
     }
     else if (text.find("dsplyThres") < text.length())
     {
       // not documented
-      itkDebugMacro(<< "Display threshold was specified");
+      itkDebugMacro("Display threshold was specified");
     }
     else if (text.find("endian") < text.length())
     {
       // BigEndian ieee-be / LittleEndian: ieee-le
       if (text.find("ieee-le") < text.length())
       {
-        itkExceptionMacro(<< "Little Endian Stimulate files are not handled.");
+        itkExceptionMacro("Little Endian Stimulate files are not handled.");
       }
     }
     else if (text.find("mapParmFileName") < text.length())
     {
       // not documented
-      itkDebugMacro(<< "mapParmFileName was specified");
+      itkDebugMacro("mapParmFileName was specified");
     }
     else if (text.find("mapTypeName") < text.length())
     {
       // not documented
-      itkDebugMacro(<< "mapTypeName was specified");
+      itkDebugMacro("mapTypeName was specified");
     }
     else if (text.find("stimFileName:") < text.length())
     {
@@ -412,7 +412,7 @@ StimulateImageIO::InternalReadImageInformation(std::ifstream & file)
       itksys::RegularExpression regexp("stimFileName:[ ]*(.*)[ ]*$");
       if (!regexp.find(text))
       {
-        itkExceptionMacro(<< "Missing value for stimFileName attribute");
+        itkExceptionMacro("Missing value for stimFileName attribute");
       }
       datafilename = regexp.match(1);
 
@@ -432,12 +432,12 @@ StimulateImageIO::InternalReadImageInformation(std::ifstream & file)
     else if (text.find("mapConf") < text.length())
     {
       // not documented
-      itkDebugMacro(<< "mapConf was specified");
+      itkDebugMacro("mapConf was specified");
     }
     else if (text.find("periodStr") < text.length())
     {
       // not documented
-      itkDebugMacro(<< "periodStr was specified");
+      itkDebugMacro("periodStr was specified");
     }
   }
 
@@ -473,7 +473,7 @@ StimulateImageIO::CanWriteFile(const char * name)
 
   if (filename.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 
@@ -482,7 +482,7 @@ StimulateImageIO::CanWriteFile(const char * name)
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -501,7 +501,7 @@ StimulateImageIO::Write(const void * buffer)
   unsigned int numDims = this->GetNumberOfDimensions();
   if (numDims < 2 || numDims > 4)
   {
-    itkExceptionMacro(<< "Stimulate Writer can only write 2,3 or 4-dimensional images");
+    itkExceptionMacro("Stimulate Writer can only write 2,3 or 4-dimensional images");
   }
 
   // Write the Stimulate header information
@@ -511,25 +511,25 @@ StimulateImageIO::Write(const void * buffer)
   file << "\ndim:";
   for (i = 0; i < m_NumberOfDimensions; ++i)
   {
-    file << " " << m_Dimensions[i];
+    file << ' ' << m_Dimensions[i];
   }
 
   file << "\norigin:";
   for (i = 0; i < m_NumberOfDimensions; ++i)
   {
-    file << " " << m_Origin[i];
+    file << ' ' << m_Origin[i];
   }
 
   file << "\nfov:";
   for (i = 0; i < m_NumberOfDimensions; ++i)
   {
-    file << " " << m_Spacing[i] * m_Dimensions[i]; // fov = interval * dim
+    file << ' ' << m_Spacing[i] * m_Dimensions[i]; // fov = interval * dim
   }
 
   file << "\ninterval:";
   for (i = 0; i < m_NumberOfDimensions; ++i)
   {
-    file << " " << m_Spacing[i];
+    file << ' ' << m_Spacing[i];
   }
 
   // preparation for writing buffer:
@@ -577,7 +577,7 @@ StimulateImageIO::Write(const void * buffer)
     file << "\nstimFileName: " << m_DataFileName.c_str();
 
     // Last carrier return:
-    file << "\n";
+    file << '\n';
 
     // actually read data file
     std::ofstream file_data;
@@ -594,6 +594,6 @@ void
 StimulateImageIO::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "\nDisplayRange: " << m_DisplayRange[0] << " " << m_DisplayRange[1];
+  os << indent << "\nDisplayRange: " << m_DisplayRange[0] << ' ' << m_DisplayRange[1];
 }
 } // end namespace itk

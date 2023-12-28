@@ -45,7 +45,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Method for defining the name of the class */
-  itkTypeMacro(RealTimeClock, Object);
+  itkOverrideGetNameOfClassMacro(RealTimeClock);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -79,8 +79,8 @@ protected:
 
 private:
   FrequencyType m_Frequency{ 1 };
-  TimeStampType m_Difference;
-  TimeStampType m_Origin;
+  TimeStampType m_Difference{};
+  TimeStampType m_Origin{};
 
   // Returns a timestamp in a TimeStamp data structure.
   // We hide this method in the private section, because it returns the

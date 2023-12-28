@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NormalizedCorrelationImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(NormalizedCorrelationImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -106,7 +106,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  bool m_SubtractMean;
+  bool m_SubtractMean{};
 };
 } // end namespace itk
 

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MedianImageFilter
+ * \class MedianImageFilter
  * \brief Applies a median filter to an image
  *
  * Computes an image where a given pixel is the median value of the
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MedianImageFilter, BoxImageFilter);
+  itkOverrideGetNameOfClassMacro(MedianImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;

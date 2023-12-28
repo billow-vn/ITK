@@ -42,7 +42,7 @@ namespace itk
  * be used for general purpose surface processing. It is motivated by unsharp
  * masking from image processing which is a way of enhancing detail. This
  * filter acts much like the IsotropicFourthOrderLevelSetImageFilter because it
- * first smoothes the normal vectors via isotropic diffusion. However, as a
+ * first smooths the normal vectors via isotropic diffusion. However, as a
  * post-processing step we extrapolate from the original normals in the
  * direction opposite to the new processes normals. By refitting the surface to
  * these extrapolated vectors we achieve detail enhancement. This process is
@@ -77,7 +77,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(UnsharpMaskLevelSetImageFilter, SparseFieldFourthOrderLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(UnsharpMaskLevelSetImageFilter);
 
   /** Standard new macro */
   itkNewMacro(Self);
@@ -102,10 +102,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** The LevelSetFunctionWithRefitTerm object. */
-  typename FunctionType::Pointer m_Function;
+  typename FunctionType::Pointer m_Function{};
 
   /** The number of iterations for which this filter will run. */
-  unsigned int m_MaxFilterIteration;
+  unsigned int m_MaxFilterIteration{};
 
   /** This filter halts when the iteration count reaches the specified count. */
   bool

@@ -86,7 +86,7 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>::GenerateData()
   // mask and marker must have the same size
   if (this->GetMarkerImage()->GetRequestedRegion().GetSize() != this->GetMaskImage()->GetRequestedRegion().GetSize())
   {
-    itkExceptionMacro(<< "Marker and mask must have the same size.");
+    itkExceptionMacro("Marker and mask must have the same size.");
   }
 
   // create padded versions of the marker image and the mask image
@@ -147,10 +147,9 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>::GenerateData()
   {
     FaceCalculatorType faceCalculator;
 
-    FaceListType   faceList;
     FaceListTypeIt fit;
 
-    faceList = faceCalculator(maskImageP, maskImageP->GetLargestPossibleRegion(), kernelRadius);
+    FaceListType faceList = faceCalculator(maskImageP, maskImageP->GetLargestPossibleRegion(), kernelRadius);
     // we will only be processing the body region
     fit = faceList.begin();
     // must be a better way of doing this
@@ -191,11 +190,11 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>::GenerateData()
     {
       if (compare(0, 1))
       {
-        itkExceptionMacro(<< "Marker pixels must be <= mask pixels.");
+        itkExceptionMacro("Marker pixels must be <= mask pixels.");
       }
       else
       {
-        itkExceptionMacro(<< "Marker pixels must be >= mask pixels.");
+        itkExceptionMacro("Marker pixels must be >= mask pixels.");
       }
     }
 
@@ -343,7 +342,7 @@ ReconstructionImageFilter<TInputImage, TOutputImage, TCompare>::PrintSelf(std::o
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
   os << indent << "MarkerValue: " << m_MarkerValue << std::endl;
   os << indent << "UseInternalCopy: " << m_UseInternalCopy << std::endl;
 }

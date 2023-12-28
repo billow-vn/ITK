@@ -28,7 +28,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class ImageToListSampleFilter
+ * \class ImageToListSampleFilter
  *  \brief The class takes an image as input and generates a list sample as
  *  output.
  *
@@ -65,7 +65,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToListSampleFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageToListSampleFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -144,7 +144,7 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  MaskPixelType m_MaskValue;
+  MaskPixelType m_MaskValue{};
 }; // end of class ImageToListSampleFilter
 } // end of namespace Statistics
 } // end of namespace itk

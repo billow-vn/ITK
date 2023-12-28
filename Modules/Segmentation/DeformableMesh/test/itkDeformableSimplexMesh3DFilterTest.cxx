@@ -175,6 +175,7 @@ itkDeformableSimplexMesh3DFilterTest(int, char *[])
     simplexMesh->DisconnectPipeline();
     deformFilter->SetInput(simplexMesh);
     deformFilter->SetGradient(gradientFilter->GetOutput());
+    ITK_TEST_SET_GET_VALUE(gradientFilter->GetOutput(), deformFilter->GetGradient());
 
     deformFilter->SetAlpha(alpha);
     ITK_TEST_SET_GET_VALUE(alpha, deformFilter->GetAlpha());
@@ -197,6 +198,9 @@ itkDeformableSimplexMesh3DFilterTest(int, char *[])
     deformFilter->Update();
   }
 
+  std::cout << "ImageWidth: " << deformFilter->GetImageWidth() << std::endl;
+  std::cout << "ImageHeight: " << deformFilter->GetImageHeight() << std::endl;
+  std::cout << "ImageDepth: " << deformFilter->GetImageDepth() << std::endl;
   std::cout << "Deform filter Step: " << deformFilter->GetStep() << std::endl;
 
   SimplexMeshType::Pointer deformResult = deformFilter->GetOutput();
@@ -207,6 +211,8 @@ itkDeformableSimplexMesh3DFilterTest(int, char *[])
   volumecalculator->Compute();
 
   std::cout << "whole volume is " << volumecalculator->GetVolume() << std::endl;
-  std::cout << "[TEST DONE]" << std::endl;
+
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -39,6 +39,8 @@
 #include "itkImageSourceCommon.h"
 #include "itkSingleton.h"
 #include "itkProcessObject.h"
+
+#include <algorithm> // For clamp.
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -65,7 +67,7 @@ struct MultiThreaderBaseGlobals
   // API is ever used by the developer, the developers choice is
   // respected over the environmental variable.
   bool       GlobalDefaultThreaderTypeIsInitialized{ false };
-  std::mutex globalDefaultInitializerLock;
+  std::mutex globalDefaultInitializerMutex;
 
   // Global value to control which threader to be used by default. First it is initialized with the default preprocessor
   // definition from CMake configuration value, for compile time control of default. This initial value can be
@@ -112,7 +114,7 @@ MultiThreaderBase::GetGlobalDefaultUseThreadPool()
 void
 MultiThreaderBase::SetGlobalDefaultThreaderPrivate(ThreaderEnum threaderType)
 {
-  // m_PimplGlobals->globalDefaultInitializerLock must be already held here!
+  // m_PimplGlobals->globalDefaultInitializerMutex must be already held here!
 
   m_PimplGlobals->m_GlobalDefaultThreader = threaderType;
   m_PimplGlobals->GlobalDefaultThreaderTypeIsInitialized = true;
@@ -124,7 +126,7 @@ MultiThreaderBase::SetGlobalDefaultThreader(ThreaderEnum threaderType)
   itkInitGlobalsMacro(PimplGlobals);
 
   // Acquire mutex then call private method to do the real work.
-  std::lock_guard<std::mutex> lock(m_PimplGlobals->globalDefaultInitializerLock);
+  const std::lock_guard<std::mutex> lockGuard(m_PimplGlobals->globalDefaultInitializerMutex);
 
   MultiThreaderBase::SetGlobalDefaultThreaderPrivate(threaderType);
 }
@@ -132,7 +134,7 @@ MultiThreaderBase::SetGlobalDefaultThreader(ThreaderEnum threaderType)
 MultiThreaderBase::ThreaderEnum
 MultiThreaderBase::GetGlobalDefaultThreaderPrivate()
 {
-  // m_PimplGlobals->globalDefaultInitializerLock must be already held here!
+  // m_PimplGlobals->globalDefaultInitializerMutex must be already held here!
 
   if (!m_PimplGlobals->GlobalDefaultThreaderTypeIsInitialized)
   {
@@ -152,10 +154,8 @@ MultiThreaderBase::GetGlobalDefaultThreaderPrivate()
              itksys::SystemTools::GetEnv("ITK_USE_THREADPOOL", envVar))
     {
       envVar = itksys::SystemTools::UpperCase(envVar);
-      itkGenericOutputMacro("Warning: ITK_USE_THREADPOOL \
-has been deprecated since ITK v5.0. \
-You should now use ITK_GLOBAL_DEFAULT_THREADER\
-\nFor example ITK_GLOBAL_DEFAULT_THREADER=Pool");
+      itkGenericOutputMacro("Warning: ITK_USE_THREADPOOL has been deprecated since ITK v5.0. You should now use "
+                            "ITK_GLOBAL_DEFAULT_THREADER\nFor example ITK_GLOBAL_DEFAULT_THREADER=Pool");
       if (envVar != "NO" && envVar != "OFF" && envVar != "FALSE")
       {
 #ifdef __EMSCRIPTEN__
@@ -182,7 +182,7 @@ MultiThreaderBase::GetGlobalDefaultThreader()
   itkInitGlobalsMacro(PimplGlobals);
 
   // Acquire mutex then call private method to do the real work.
-  std::lock_guard<std::mutex> lock(m_PimplGlobals->globalDefaultInitializerLock);
+  const std::lock_guard<std::mutex> lockGuard(m_PimplGlobals->globalDefaultInitializerMutex);
 
   return MultiThreaderBase::GetGlobalDefaultThreaderPrivate();
 }
@@ -214,13 +214,7 @@ MultiThreaderBase::SetGlobalMaximumNumberOfThreads(ThreadIdType val)
 {
   itkInitGlobalsMacro(PimplGlobals);
 
-  m_PimplGlobals->m_GlobalMaximumNumberOfThreads = val;
-
-  // clamp between 1 and ITK_MAX_THREADS
-  m_PimplGlobals->m_GlobalMaximumNumberOfThreads =
-    std::min(m_PimplGlobals->m_GlobalMaximumNumberOfThreads, ThreadIdType{ ITK_MAX_THREADS });
-  m_PimplGlobals->m_GlobalMaximumNumberOfThreads =
-    std::max(m_PimplGlobals->m_GlobalMaximumNumberOfThreads, NumericTraits<ThreadIdType>::OneValue());
+  m_PimplGlobals->m_GlobalMaximumNumberOfThreads = std::clamp<ThreadIdType>(val, 1, ITK_MAX_THREADS);
 
   // If necessary reset the default to be used from now on.
   m_PimplGlobals->m_GlobalDefaultNumberOfThreads =
@@ -239,45 +233,23 @@ MultiThreaderBase::SetGlobalDefaultNumberOfThreads(ThreadIdType val)
 {
   itkInitGlobalsMacro(PimplGlobals);
 
-  std::lock_guard<std::mutex> lock(m_PimplGlobals->globalDefaultInitializerLock);
+  const std::lock_guard<std::mutex> lockGuard(m_PimplGlobals->globalDefaultInitializerMutex);
 
-  m_PimplGlobals->m_GlobalDefaultNumberOfThreads = val;
-
-  // clamp between 1 and m_PimplGlobals->m_GlobalMaximumNumberOfThreads
   m_PimplGlobals->m_GlobalDefaultNumberOfThreads =
-    std::min(m_PimplGlobals->m_GlobalDefaultNumberOfThreads, m_PimplGlobals->m_GlobalMaximumNumberOfThreads);
-  m_PimplGlobals->m_GlobalDefaultNumberOfThreads =
-    std::max(m_PimplGlobals->m_GlobalDefaultNumberOfThreads, NumericTraits<ThreadIdType>::OneValue());
+    std::clamp<ThreadIdType>(val, 1, m_PimplGlobals->m_GlobalMaximumNumberOfThreads);
 }
 
 void
 MultiThreaderBase::SetMaximumNumberOfThreads(ThreadIdType numberOfThreads)
 {
-  if (m_MaximumNumberOfThreads == numberOfThreads && numberOfThreads <= m_PimplGlobals->m_GlobalMaximumNumberOfThreads)
-  {
-    return;
-  }
-
-  m_MaximumNumberOfThreads = numberOfThreads;
-
-  // clamp between 1 and m_MultiThreaderBaseGlobals->m_GlobalMaximumNumberOfThreads
-  m_MaximumNumberOfThreads = std::min(m_MaximumNumberOfThreads, m_PimplGlobals->m_GlobalMaximumNumberOfThreads);
-  m_MaximumNumberOfThreads = std::max(m_MaximumNumberOfThreads, NumericTraits<ThreadIdType>::OneValue());
+  m_MaximumNumberOfThreads =
+    std::clamp<ThreadIdType>(numberOfThreads, 1, m_PimplGlobals->m_GlobalMaximumNumberOfThreads);
 }
 
 void
 MultiThreaderBase::SetNumberOfWorkUnits(ThreadIdType numberOfWorkUnits)
 {
-  if (m_NumberOfWorkUnits == numberOfWorkUnits && numberOfWorkUnits <= m_PimplGlobals->m_GlobalMaximumNumberOfThreads)
-  {
-    return;
-  }
-
-  m_NumberOfWorkUnits = numberOfWorkUnits;
-
-  // clamp between 1 and m_MultiThreaderBaseGlobals->m_GlobalMaximumNumberOfThreads
-  m_NumberOfWorkUnits = std::min(m_NumberOfWorkUnits, m_PimplGlobals->m_GlobalMaximumNumberOfThreads);
-  m_NumberOfWorkUnits = std::max(m_NumberOfWorkUnits, NumericTraits<ThreadIdType>::OneValue());
+  m_NumberOfWorkUnits = std::clamp<ThreadIdType>(numberOfWorkUnits, 1, m_PimplGlobals->m_GlobalMaximumNumberOfThreads);
 }
 
 void
@@ -291,7 +263,7 @@ MultiThreaderBase::GetGlobalDefaultNumberOfThreads()
 {
   itkInitGlobalsMacro(PimplGlobals);
 
-  std::lock_guard<std::mutex> lock(m_PimplGlobals->globalDefaultInitializerLock);
+  const std::lock_guard<std::mutex> lockGuard(m_PimplGlobals->globalDefaultInitializerMutex);
 
   if (m_PimplGlobals->m_GlobalDefaultNumberOfThreads == 0) // need to initialize
   {
@@ -351,10 +323,8 @@ MultiThreaderBase::GetGlobalDefaultNumberOfThreads()
     }
 
     // limit the number of threads to m_GlobalMaximumNumberOfThreads
-    threadCount = std::min(threadCount, ThreadIdType{ ITK_MAX_THREADS });
-
     // verify that the default number of threads is larger than zero
-    threadCount = std::max(threadCount, NumericTraits<ThreadIdType>::OneValue());
+    threadCount = std::clamp(threadCount, ThreadIdType{ 1 }, ThreadIdType{ ITK_MAX_THREADS });
 
     m_PimplGlobals->m_GlobalDefaultNumberOfThreads = threadCount;
   }
@@ -596,8 +566,8 @@ MultiThreaderBase::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Number of Work Units: " << m_NumberOfWorkUnits << "\n";
-  os << indent << "Number of Threads: " << m_MaximumNumberOfThreads << "\n";
+  os << indent << "Number of Work Units: " << m_NumberOfWorkUnits << '\n';
+  os << indent << "Number of Threads: " << m_MaximumNumberOfThreads << '\n';
   os << indent << "Global Maximum Number Of Threads: " << m_PimplGlobals->m_GlobalMaximumNumberOfThreads << std::endl;
   os << indent << "Global Default Number Of Threads: " << m_PimplGlobals->m_GlobalDefaultNumberOfThreads << std::endl;
   os << indent << "Global Default Threader Type: " << m_PimplGlobals->m_GlobalDefaultThreader << std::endl;

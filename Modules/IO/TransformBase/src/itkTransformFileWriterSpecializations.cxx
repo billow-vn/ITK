@@ -37,6 +37,7 @@ TransformFileWriterTemplate<TParametersValueType>::TransformFileWriterTemplate()
 template <typename TParametersValueType>
 TransformFileWriterTemplate<TParametersValueType>::~TransformFileWriterTemplate() = default;
 
+#if !defined(ITK_FUTURE_LEGACY_REMOVE)
 /** Set the writer to append to the specified file */
 template <typename TParametersValueType>
 void
@@ -54,14 +55,6 @@ TransformFileWriterTemplate<TParametersValueType>::SetAppendOff()
   this->SetAppendMode(false);
 }
 
-/** Set the writer mode (append/overwrite). */
-template <typename TParametersValueType>
-void
-TransformFileWriterTemplate<TParametersValueType>::SetAppendMode(bool mode)
-{
-  this->m_AppendMode = mode;
-}
-
 /** Get the writer mode. */
 template <typename TParametersValueType>
 bool
@@ -69,6 +62,7 @@ TransformFileWriterTemplate<TParametersValueType>::GetAppendMode()
 {
   return (this->m_AppendMode);
 }
+#endif
 
 template <>
 void
@@ -91,7 +85,7 @@ template <typename TParametersValueType>
 const typename TransformFileWriterTemplate<TParametersValueType>::TransformType *
 TransformFileWriterTemplate<TParametersValueType>::GetInput()
 {
-  ConstTransformPointer res = *(m_TransformList.begin());
+  ConstTransformPointer res = m_TransformList.front();
   return res.GetPointer();
 }
 
@@ -146,13 +140,13 @@ TransformFileWriterTemplate<TParametersValueType>::Update()
           const Object * obj = dynamic_cast<Object *>(allobject.GetPointer());
           msg << "    " << obj->GetNameOfClass() << std::endl;
         }
-        msg << "  You probably failed to set a file suffix, or" << std::endl;
-        msg << "    set the suffix to an unsupported type." << std::endl;
+        msg << "  You probably failed to set a file suffix, or" << std::endl
+            << "    set the suffix to an unsupported type." << std::endl;
       }
       else
       {
-        msg << "  There are no registered Transform IO factories." << std::endl;
-        msg << "  Please visit https://www.itk.org/Wiki/ITK/FAQ#NoFactoryException to diagnose the problem."
+        msg << "  There are no registered Transform IO factories." << std::endl
+            << "  Please visit https://www.itk.org/Wiki/ITK/FAQ#NoFactoryException to diagnose the problem."
             << std::endl;
       }
 
@@ -206,7 +200,7 @@ struct TransformIOHelper
     OutputTransformPointer convertedTransform = dynamic_cast<TOutputTransformType *>(i.GetPointer());
     if (convertedTransform.IsNull())
     {
-      itkGenericExceptionMacro(<< "Could not create an instance of " << transformName);
+      itkGenericExceptionMacro("Could not create an instance of " << transformName);
     }
     convertedTransform->UnRegister();
     return convertedTransform;

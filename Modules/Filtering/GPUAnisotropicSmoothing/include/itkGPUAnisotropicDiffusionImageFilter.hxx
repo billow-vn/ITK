@@ -23,7 +23,6 @@
 namespace itk
 {
 
-/** Prepare for the iteration process. */
 template <typename TInputImage, typename TOutputImage, typename TParentImageFilter>
 void
 GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter>::InitializeIteration()
@@ -59,7 +58,8 @@ GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter
   {
     //    f->SetTimeStep(1.0 / std::pow(2.0,
     // static_cast<double>(ImageDimension)));
-    itkWarningMacro(<< "Anisotropic diffusion unstable time step: " << this->GetTimeStep() << std::endl
+    itkWarningMacro("Anisotropic diffusion unstable time step: "
+                    << this->GetTimeStep() << std::endl
                     << "Stable time step for this image must be smaller than "
                     << minSpacing / std::pow(2.0, static_cast<double>(ImageDimension + 1)));
   }
@@ -68,7 +68,7 @@ GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter
   {
     if ((this->GetElapsedIterations() % this->GetConductanceScalingUpdateInterval()) == 0)
     {
-      /** GPU version of average squared gradient magniture calculation */
+      /** GPU version of average squared gradient magnitude calculation */
       f->GPUCalculateAverageGradientMagnitudeSquared(this->GetOutput());
     }
   }
@@ -88,14 +88,6 @@ GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter
   {
     this->UpdateProgress(0);
   }
-}
-
-template <typename TInputImage, typename TOutputImage, typename TParentImageFilter>
-void
-GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter>::PrintSelf(std::ostream & os,
-                                                                                             Indent indent) const
-{
-  GPUSuperclass::PrintSelf(os, indent.GetNextIndent());
 }
 
 } // end namespace itk

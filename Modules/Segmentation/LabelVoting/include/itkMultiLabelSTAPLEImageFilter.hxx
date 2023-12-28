@@ -32,16 +32,16 @@ void
 MultiLabelSTAPLEImageFilter<TInputImage, TOutputImage, TWeights>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "HasLabelForUndecidedPixels = " << this->m_HasLabelForUndecidedPixels << std::endl;
+  os << indent << "HasLabelForUndecidedPixels: " << this->m_HasLabelForUndecidedPixels << std::endl;
   using OutputPixelPrintType = typename NumericTraits<OutputPixelType>::PrintType;
-  os << indent << "LabelForUndecidedPixels = " << static_cast<OutputPixelPrintType>(this->m_LabelForUndecidedPixels)
+  os << indent << "LabelForUndecidedPixels: " << static_cast<OutputPixelPrintType>(this->m_LabelForUndecidedPixels)
      << std::endl;
-  os << indent << "HasPriorProbabilities = " << this->m_PriorProbabilities << std::endl;
-  os << indent << "PriorProbabilities = " << this->m_PriorProbabilities << std::endl;
-  os << indent << "HasMaximumNumberOfIterations = " << this->m_HasMaximumNumberOfIterations << std::endl;
-  os << indent << "MaximumNumberOfIterations = " << this->m_MaximumNumberOfIterations << std::endl;
-  os << indent << "m_ElapsedNumberOfIterations = " << m_ElapsedNumberOfIterations << std::endl;
-  os << indent << "TerminationUpdateThreshold = " << this->m_TerminationUpdateThreshold << std::endl;
+  os << indent << "HasPriorProbabilities: " << this->m_PriorProbabilities << std::endl;
+  os << indent << "PriorProbabilities: " << this->m_PriorProbabilities << std::endl;
+  os << indent << "HasMaximumNumberOfIterations: " << this->m_HasMaximumNumberOfIterations << std::endl;
+  os << indent << "MaximumNumberOfIterations: " << this->m_MaximumNumberOfIterations << std::endl;
+  os << indent << "ElapsedNumberOfIterations: " << m_ElapsedNumberOfIterations << std::endl;
+  os << indent << "TerminationUpdateThreshold: " << this->m_TerminationUpdateThreshold << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage, typename TWeights>
@@ -102,7 +102,7 @@ MultiLabelSTAPLEImageFilter<TInputImage, TOutputImage, TWeights>::AllocateConfus
   for (unsigned int k = 0; k < numberOfInputs; ++k)
   {
     // the confusion matrix has as many rows as there are input labels, and
-    // one more column to accomodate "reject" classifications by the combined
+    // one more column to accommodate "reject" classifications by the combined
     // classifier.
     this->m_ConfusionMatrixArray.push_back(ConfusionMatrixType(static_cast<unsigned int>(this->m_TotalLabelCount) + 1,
                                                                static_cast<unsigned int>(this->m_TotalLabelCount)));
@@ -133,13 +133,13 @@ MultiLabelSTAPLEImageFilter<TInputImage, TOutputImage, TWeights>::InitializeConf
     votingOutput = votingFilter->GetOutput();
   } // begin scope for local filter allocation; de-allocate filter
 
-  OutputIteratorType out = OutputIteratorType(votingOutput, votingOutput->GetRequestedRegion());
+  OutputIteratorType out(votingOutput, votingOutput->GetRequestedRegion());
 
   for (unsigned int k = 0; k < numberOfInputs; ++k)
   {
     this->m_ConfusionMatrixArray[k].Fill(0.0);
 
-    InputConstIteratorType in = InputConstIteratorType(this->GetInput(k), votingOutput->GetRequestedRegion());
+    InputConstIteratorType in(this->GetInput(k), votingOutput->GetRequestedRegion());
 
     for (out.GoToBegin(); !out.IsAtEnd(); ++out, ++in)
     {
@@ -193,7 +193,7 @@ MultiLabelSTAPLEImageFilter<TInputImage, TOutputImage, TWeights>::InitializePrio
     const size_t numberOfInputs = this->GetNumberOfInputs();
     for (size_t k = 0; k < numberOfInputs; ++k)
     {
-      InputConstIteratorType in = InputConstIteratorType(this->GetInput(k), this->GetOutput()->GetRequestedRegion());
+      InputConstIteratorType in(this->GetInput(k), this->GetOutput()->GetRequestedRegion());
       for (in.GoToBegin(); !in.IsAtEnd(); ++in)
       {
         ++(this->m_PriorProbabilities[in.Get()]);
@@ -202,9 +202,13 @@ MultiLabelSTAPLEImageFilter<TInputImage, TOutputImage, TWeights>::InitializePrio
 
     WeightsType totalProbMass = 0.0;
     for (InputPixelType l = 0; l < this->m_TotalLabelCount; ++l)
+    {
       totalProbMass += this->m_PriorProbabilities[l];
+    }
     for (InputPixelType l = 0; l < this->m_TotalLabelCount; ++l)
+    {
       this->m_PriorProbabilities[l] /= totalProbMass;
+    }
   }
 }
 
@@ -374,9 +378,7 @@ MultiLabelSTAPLEImageFilter<TInputImage, TOutputImage, TWeights>::GenerateData()
     it[k].GoToBegin();
   }
 
-  // reset output iterator to start
-  OutputIteratorType out = OutputIteratorType(output, output->GetRequestedRegion());
-  for (out.GoToBegin(); !out.IsAtEnd(); ++out)
+  for (OutputIteratorType out(output, output->GetRequestedRegion()); !out.IsAtEnd(); ++out)
   {
     // basically, we'll repeat the E step from above
     for (OutputPixelType ci = 0; ci < this->m_TotalLabelCount; ++ci)

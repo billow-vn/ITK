@@ -38,7 +38,7 @@
 namespace itk
 {
 /**
- *\class DeformableSimplexMesh3DBalloonForceFilter
+ * \class DeformableSimplexMesh3DBalloonForceFilter
  * \brief
  * Additional to its superclass this model adds an balloon force component to the
  * internal forces.
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DeformableSimplexMesh3DBalloonForceFilter, DeformableSimplexMesh3DFilter);
+  itkOverrideGetNameOfClassMacro(DeformableSimplexMesh3DBalloonForceFilter);
 
   /** Some type alias. */
   using InputMeshType = TInputMesh;
@@ -87,6 +87,7 @@ public:
   using GradientIntensityImageType = Image<PixelType, 3>;
   using GradientIntensityImagePointer = typename GradientIntensityImageType::Pointer;
 
+  /** Set/Get the scalar for balloon force. */
   itkSetMacro(Kappa, double);
   itkGetConstMacro(Kappa, double);
 
@@ -102,18 +103,14 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /**
-   * Compute the external force component
+  /** Compute the external force component.
+   *
+   * Computes the model Displacement according to image gradient forces.
    */
   void
   ComputeExternalForce(SimplexMeshGeometry * data, const GradientImageType * gradientImage) override;
 
-  /** Parameters definitions. */
-
-  /**
-   * scalar for balloon force
-   */
-  double m_Kappa;
+  double m_Kappa{};
 }; // end of class
 } // end namespace itk
 

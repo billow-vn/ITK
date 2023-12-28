@@ -84,7 +84,7 @@ public:
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageSource, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageSource);
 
   /** Some convenient type alias. */
   using OutputImageType = TOutputImage;
@@ -399,7 +399,7 @@ protected:
   itkSetMacro(DynamicMultiThreading, bool);
   itkBooleanMacro(DynamicMultiThreading);
 
-  bool m_DynamicMultiThreading;
+  bool m_DynamicMultiThreading{};
 };
 } // end namespace itk
 

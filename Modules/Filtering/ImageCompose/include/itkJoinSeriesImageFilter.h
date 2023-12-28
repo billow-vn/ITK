@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class JoinSeriesImageFilter
+ * \class JoinSeriesImageFilter
  * \brief Join N-D images into an (N+1)-D image
  *
  * This filter is templated over the input image type and the output image
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JoinSeriesImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(JoinSeriesImageFilter);
 
   /** Compiler can't inherit type alias? */
   using typename Superclass::InputImageType;

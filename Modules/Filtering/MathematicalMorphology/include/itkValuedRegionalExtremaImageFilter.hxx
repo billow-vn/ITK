@@ -80,8 +80,6 @@ ValuedRegionalExtremaImageFilter<TInputImage, TOutputImage, TFunction1, TFunctio
 
   InputIterator  inIt(input, output->GetRequestedRegion());
   OutputIterator outIt(output, output->GetRequestedRegion());
-  inIt.GoToBegin();
-  outIt.GoToBegin();
 
   InputImagePixelType firstValue = inIt.Get();
   this->m_Flat = true;
@@ -216,7 +214,7 @@ ValuedRegionalExtremaImageFilter<TInputImage, TOutputImage, TFunction1, TFunctio
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
   os << indent << "Flat: " << m_Flat << std::endl;
   os << indent << "MarkerValue: " << m_MarkerValue << std::endl;
 }

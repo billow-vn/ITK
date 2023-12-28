@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class TikhonovDeconvolutionImageFilter
+ * \class TikhonovDeconvolutionImageFilter
  * \brief An inverse deconvolution filter regularized in the Tikhonov sense.
  *
  * The Tikhonov deconvolution filter is the inverse deconvolution
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(TikhonovDeconvolutionImageFilter, InverseDeconvolutionImageFilter);
+  itkOverrideGetNameOfClassMacro(TikhonovDeconvolutionImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -114,7 +114,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_RegularizationConstant;
+  double m_RegularizationConstant{};
 };
 
 namespace Functor
@@ -143,7 +143,7 @@ public:
   {
     typename TOutput::value_type normH = std::norm(H);
     typename TOutput::value_type denominator = normH + m_RegularizationConstant;
-    TOutput                      value = NumericTraits<TOutput>::ZeroValue();
+    TOutput                      value{};
     if (denominator >= m_KernelZeroMagnitudeThreshold)
     {
       value = static_cast<TOutput>(I * (std::conj(H) / denominator));

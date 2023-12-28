@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class ShanbhagThresholdImageFilter
+ * \class ShanbhagThresholdImageFilter
  * \brief Threshold an image using the Shanbhag Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShanbhagThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(ShanbhagThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

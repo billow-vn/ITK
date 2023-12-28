@@ -42,7 +42,7 @@
 
 namespace itk
 {
-/**\class GDCMImageIOEnums
+/** \class GDCMImageIOEnums
  * \brief
  * \ingroup ITKIOGDCM
  */
@@ -50,7 +50,7 @@ class GDCMImageIOEnums
 {
 public:
   /**
-   *\class Compression
+   * \class Compression
    * \ingroup ITKIOGDCM
    * Set/Get a compression type to use. */
   enum class Compression : uint8_t
@@ -66,7 +66,7 @@ public:
 extern ITKIOGDCM_EXPORT std::ostream &
                         operator<<(std::ostream & out, const GDCMImageIOEnums::Compression value);
 /**
- *\class GDCMImageIO
+ * \class GDCMImageIO
  *
  *  \brief ImageIO class for reading and writing DICOM V3.0 and ACR/NEMA 1&2 uncompressed images.
  *  This class is only an adaptor to the GDCM library.
@@ -120,7 +120,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GDCMImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(GDCMImageIO);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -165,7 +165,7 @@ public:
   itkGetConstMacro(RescaleIntercept, double);
 
   /** Macro to access the DICOM UID prefix. By default this is the ITK
-   * root id. This default can be overriden if the exam is for example
+   * root id. This default can be overridden if the exam is for example
    * part of an existing study. */
   itkGetStringMacro(UIDPrefix);
   itkSetStringMacro(UIDPrefix);
@@ -362,68 +362,68 @@ protected:
   void
   InternalReadImageInformation();
 
-  double m_RescaleSlope;
+  double m_RescaleSlope{};
 
-  double m_RescaleIntercept;
+  double m_RescaleIntercept{};
 
-  std::string m_UIDPrefix;
+  std::string m_UIDPrefix{};
 
-  std::string m_StudyInstanceUID;
+  std::string m_StudyInstanceUID{};
 
-  std::string m_SeriesInstanceUID;
+  std::string m_SeriesInstanceUID{};
 
-  std::string m_FrameOfReferenceInstanceUID;
+  std::string m_FrameOfReferenceInstanceUID{};
 
-  bool m_KeepOriginalUID;
+  bool m_KeepOriginalUID{};
 
-  bool m_LoadPrivateTags;
+  bool m_LoadPrivateTags{};
 
-  bool m_ReadYBRtoRGB;
+  bool m_ReadYBRtoRGB{};
 
 private:
 #if defined(ITKIO_DEPRECATED_GDCM1_API)
-  std::string m_PatientName;
+  std::string m_PatientName{};
 
-  std::string m_PatientID;
+  std::string m_PatientID{};
 
-  std::string m_PatientDOB;
+  std::string m_PatientDOB{};
 
-  std::string m_StudyID;
+  std::string m_StudyID{};
 
-  std::string m_StudyDescription;
+  std::string m_StudyDescription{};
 
-  std::string m_BodyPart;
+  std::string m_BodyPart{};
 
-  std::string m_NumberOfSeriesInStudy;
+  std::string m_NumberOfSeriesInStudy{};
 
-  std::string m_NumberOfStudyRelatedSeries;
+  std::string m_NumberOfStudyRelatedSeries{};
 
-  std::string m_PatientSex;
+  std::string m_PatientSex{};
 
-  std::string m_PatientAge;
+  std::string m_PatientAge{};
 
-  std::string m_StudyDate;
+  std::string m_StudyDate{};
 
-  std::string m_Modality;
+  std::string m_Modality{};
 
-  std::string m_Manufacturer;
+  std::string m_Manufacturer{};
 
-  std::string m_Institution;
+  std::string m_Institution{};
 
-  std::string m_Model;
+  std::string m_Model{};
 
-  std::string m_ScanOptions;
+  std::string m_ScanOptions{};
 #endif
 
-  unsigned int m_GlobalNumberOfDimensions;
+  unsigned int m_GlobalNumberOfDimensions{};
 
-  CompressionEnum m_CompressionType;
+  CompressionEnum m_CompressionType{};
 
-  bool m_SingleBit;
+  bool m_SingleBit{};
 
-  IOComponentEnum m_InternalComponentType;
+  IOComponentEnum m_InternalComponentType{};
 
-  InternalHeader * m_DICOMHeader;
+  InternalHeader * m_DICOMHeader{};
 };
 
 } // end namespace itk

@@ -34,7 +34,7 @@
 namespace itk
 {
 /**
- *\class ScalarImageKmeansImageFilter
+ * \class ScalarImageKmeansImageFilter
  * \brief Classifies the intensity values of a scalar image using the K-Means algorithm.
  *
  * Given an input image with scalar values, it uses the K-Means statistical
@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarImageKmeansImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ScalarImageKmeansImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;
@@ -172,13 +172,13 @@ protected:
 private:
   using MeansContainer = std::vector<RealPixelType>;
 
-  MeansContainer m_InitialMeans;
+  MeansContainer m_InitialMeans{};
 
-  ParametersType m_FinalMeans;
+  ParametersType m_FinalMeans{};
 
   bool m_UseNonContiguousLabels{ false };
 
-  ImageRegionType m_ImageRegion;
+  ImageRegionType m_ImageRegion{};
 
   bool m_ImageRegionDefined{ false };
 };

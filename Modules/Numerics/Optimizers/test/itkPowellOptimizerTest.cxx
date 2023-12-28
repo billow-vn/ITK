@@ -45,7 +45,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(PowellBoundedCostFunction, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(PowellBoundedCostFunction);
 
   enum
   {
@@ -72,7 +72,7 @@ public:
     double y = parameters[1];
 
     std::cout << "      GetValue( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     MeasureType measure = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -177,8 +177,8 @@ itkPowellOptimizerTest(int argc, char * argv[])
 
   ParametersType finalPosition = itkOptimizer->GetCurrentPosition();
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ')' << std::endl;
 
   //
   // check results to see if it is within range
@@ -188,12 +188,13 @@ itkPowellOptimizerTest(int argc, char * argv[])
   for (unsigned int j = 0; j < 2; ++j)
   {
     if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > 0.01)
+    {
       pass = false;
+    }
   }
 
   // Exercise various member functions.
-  std::cout << "CurrentIteration: " << itkOptimizer->GetCurrentIteration();
-  std::cout << std::endl;
+  std::cout << "CurrentIteration: " << itkOptimizer->GetCurrentIteration() << std::endl;
 
   ITK_TEST_EXPECT_EQUAL(itkOptimizer->GetValue(), itkOptimizer->GetCurrentCost());
 

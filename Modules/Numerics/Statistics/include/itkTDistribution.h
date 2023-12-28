@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class TDistribution
+ * \class TDistribution
  * \brief TDistribution class defines the interface for a univariate
  * Student-t distribution (pdfs, cdfs, etc.).
  *
@@ -67,8 +67,8 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Strandard macros */
-  itkTypeMacro(TDistribution, ProbabilityDistribution);
+  /** Standard macros */
+  itkOverrideGetNameOfClassMacro(TDistribution);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

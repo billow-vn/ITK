@@ -106,7 +106,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SignedDanielssonDistanceMapImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(SignedDanielssonDistanceMapImageFilter);
 
   /** Type for input image. */
   using InputImageType = TInputImage;
@@ -232,11 +232,11 @@ protected:
   GenerateData() override;
 
 private:
-  bool m_SquaredDistance;
-  bool m_UseImageSpacing;
-  bool m_InsideIsPositive; // ON is treated as inside pixels
-};                         // end of SignedDanielssonDistanceMapImageFilter
-                           // class
+  bool m_SquaredDistance{};
+  bool m_UseImageSpacing{};
+  bool m_InsideIsPositive{}; // ON is treated as inside pixels
+};                           // end of SignedDanielssonDistanceMapImageFilter
+                             // class
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION

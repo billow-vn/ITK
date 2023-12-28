@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class OneWayEquivalencyTable
+ * \class OneWayEquivalencyTable
  * \brief Hash table to manage integral label equivalencies that are order dependent.
  *
  * OneWayEquivalencyTable is a variation on itk::EquivalencyTable that
@@ -55,7 +55,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(OneWayEquivalencyTable, DataObject);
+  itkOverrideGetNameOfClassMacro(OneWayEquivalencyTable);
 
   /** Define the container type for this table */
   using HashTableType = std::unordered_map<unsigned long, unsigned long>;
@@ -166,7 +166,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  HashTableType m_HashMap;
+  HashTableType m_HashMap{};
 };
 } // end namespace itk
 

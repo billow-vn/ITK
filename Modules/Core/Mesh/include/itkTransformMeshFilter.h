@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformMeshFilter, MeshToMeshFilter);
+  itkOverrideGetNameOfClassMacro(TransformMeshFilter);
 
   /** Get/Set transform. */
   itkSetObjectMacro(Transform, TransformType);
@@ -82,7 +82,7 @@ protected:
   GenerateData() override;
 
   /** Transform to apply to all the mesh points. */
-  typename TransformType::Pointer m_Transform;
+  typename TransformType::Pointer m_Transform{};
 };
 } // end namespace itk
 

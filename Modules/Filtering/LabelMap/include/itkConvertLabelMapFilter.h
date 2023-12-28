@@ -23,8 +23,8 @@
 namespace itk
 {
 /**
- *\class ConvertLabelMapFilter
- * \brief Converts the LabelObjects of a LabelMap to a different type of LabelObejct
+ * \class ConvertLabelMapFilter
+ * \brief Converts the LabelObjects of a LabelMap to a different type of LabelObject
  *
  * The LabelObjects are copied and not simply dynamically casted so the filter ensures
  * that the type of the label objects are of the type specified with TOutputImage.
@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ConvertLabelMapFilter, LabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ConvertLabelMapFilter);
 
 protected:
   ConvertLabelMapFilter() = default;

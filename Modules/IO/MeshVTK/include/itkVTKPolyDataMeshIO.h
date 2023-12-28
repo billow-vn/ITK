@@ -32,10 +32,10 @@
 namespace itk
 {
 /**
- *\class VTKPolyDataMeshIO
+ * \class VTKPolyDataMeshIO
  * \brief This class defines how to read and write vtk legacy file format.
  *
- * \author Wanlin Zhu. Uviversity of New South Wales, Australia.
+ * \author Wanlin Zhu. University of New South Wales, Australia.
  * \ingroup IOFilters
  * \ingroup ITKIOMeshVTK
  */
@@ -63,12 +63,12 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKPolyDataMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(VTKPolyDataMeshIO);
 
   /**-------- This part of the interfaces deals with reading data. ----- */
 
   /** Determine if the file can be read with this MeshIO implementation.
-   * \param FileNameToRead The name of the file to test for reading.
+   * \param fileName The name of the file to test for reading.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can read the file specified.
    */
@@ -94,7 +94,7 @@ public:
 
   /*-------- This part of the interfaces deals with writing data. ----- */
   /** Determine if the file can be written with this MeshIO implementation.
-   * \param FileNameToWrite The name of the file to test for writing.
+   * \param fileName The name of the file to test for writing.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can write the file specified.
    */
@@ -177,7 +177,7 @@ protected:
           numberOfPolygonIndices += nn + 1;
           break;
         default:
-          itkExceptionMacro(<< "Currently we dont support this cell type");
+          itkExceptionMacro("Currently we dont support this cell type");
       }
 
       index += nn;
@@ -435,7 +435,7 @@ protected:
     {
       for (unsigned int jj = 0; jj < this->m_PointDimension - 1; ++jj)
       {
-        outputFile << ConvertNumberToString(buffer[ii * this->m_PointDimension + jj]) << " ";
+        outputFile << ConvertNumberToString(buffer[ii * this->m_PointDimension + jj]) << ' ';
       }
 
       outputFile << ConvertNumberToString(buffer[ii * this->m_PointDimension + this->m_PointDimension - 1]) << '\n';
@@ -449,11 +449,10 @@ protected:
   WritePointsBufferAsBINARY(std::ofstream & outputFile, T * buffer, const StringType & pointComponentType)
   {
     /** 1. Write number of points */
-    outputFile << "POINTS " << this->m_NumberOfPoints;
-    outputFile << pointComponentType << "\n";
+    outputFile << "POINTS " << this->m_NumberOfPoints << pointComponentType << '\n';
     itk::ByteSwapper<T>::SwapWriteRangeFromSystemToBigEndian(
       buffer, this->m_NumberOfPoints * this->m_PointDimension, &outputFile);
-    outputFile << "\n";
+    outputFile << '\n';
 
     return;
   }
@@ -477,7 +476,7 @@ protected:
     if (numberOfVertices)
     {
       ExposeMetaData<unsigned int>(metaDic, "numberOfVertexIndices", numberOfVertexIndices);
-      outputFile << "VERTICES " << numberOfVertices << " " << numberOfVertexIndices << '\n';
+      outputFile << "VERTICES " << numberOfVertices << ' ' << numberOfVertexIndices << '\n';
       for (SizeValueType ii = 0; ii < this->m_NumberOfCells; ++ii)
       {
         auto cellType = static_cast<CellGeometryEnum>(static_cast<int>(buffer[index++]));
@@ -487,7 +486,7 @@ protected:
           outputFile << nn;
           for (unsigned int jj = 0; jj < nn; ++jj)
           {
-            outputFile << " " << buffer[index++];
+            outputFile << ' ' << buffer[index++];
           }
           outputFile << '\n';
         }
@@ -535,14 +534,14 @@ protected:
       numberOfLineIndices += numberOfLines;
       EncapsulateMetaData<unsigned int>(metaDic, "numberOfLines", numberOfLines);
       EncapsulateMetaData<unsigned int>(metaDic, "numberOfLineIndices", numberOfLineIndices);
-      outputFile << "LINES " << numberOfLines << " " << numberOfLineIndices << '\n';
+      outputFile << "LINES " << numberOfLines << ' ' << numberOfLineIndices << '\n';
       for (SizeValueType ii = 0; ii < polylines->Size(); ++ii)
       {
         auto nn = static_cast<unsigned int>(polylines->ElementAt(ii).size());
         outputFile << nn;
         for (unsigned int jj = 0; jj < nn; ++jj)
         {
-          outputFile << " " << polylines->ElementAt(ii)[jj];
+          outputFile << ' ' << polylines->ElementAt(ii)[jj];
         }
         outputFile << '\n';
       }
@@ -554,7 +553,7 @@ protected:
     if (numberOfPolygons)
     {
       ExposeMetaData<unsigned int>(metaDic, "numberOfPolygonIndices", numberOfPolygonIndices);
-      outputFile << "POLYGONS " << numberOfPolygons << " " << numberOfPolygonIndices << '\n';
+      outputFile << "POLYGONS " << numberOfPolygons << ' ' << numberOfPolygonIndices << '\n';
       for (SizeValueType ii = 0; ii < this->m_NumberOfCells; ++ii)
       {
         auto cellType = static_cast<CellGeometryEnum>(static_cast<int>(buffer[index++]));
@@ -565,7 +564,7 @@ protected:
           outputFile << nn;
           for (unsigned int jj = 0; jj < nn; ++jj)
           {
-            outputFile << " " << buffer[index++];
+            outputFile << ' ' << buffer[index++];
           }
           outputFile << '\n';
         }
@@ -596,12 +595,12 @@ protected:
     if (numberOfVertices)
     {
       ExposeMetaData<unsigned int>(metaDic, "numberOfVertexIndices", numberOfVertexIndices);
-      outputFile << "VERTICES " << numberOfVertices << " " << numberOfVertexIndices << '\n';
+      outputFile << "VERTICES " << numberOfVertices << ' ' << numberOfVertexIndices << '\n';
       const auto data = make_unique_for_overwrite<unsigned int[]>(numberOfVertexIndices);
       ReadCellsBuffer(buffer, data.get());
       itk::ByteSwapper<unsigned int>::SwapWriteRangeFromSystemToBigEndian(
         data.get(), numberOfVertexIndices, &outputFile);
-      outputFile << "\n";
+      outputFile << '\n';
     }
 
     /** Write lines */
@@ -641,7 +640,7 @@ protected:
       EncapsulateMetaData<unsigned int>(metaDic, "numberOfLines", numberOfLines);
       EncapsulateMetaData<unsigned int>(metaDic, "numberOfLineIndices", numberOfLineIndices);
 
-      outputFile << "LINES " << numberOfLines << " " << numberOfLineIndices << '\n';
+      outputFile << "LINES " << numberOfLines << ' ' << numberOfLineIndices << '\n';
       const auto    data = make_unique_for_overwrite<unsigned int[]>(numberOfLineIndices);
       unsigned long outputIndex = 0;
       for (SizeValueType ii = 0; ii < polylines->Size(); ++ii)
@@ -655,7 +654,7 @@ protected:
       }
 
       itk::ByteSwapper<unsigned int>::SwapWriteRangeFromSystemToBigEndian(data.get(), numberOfLineIndices, &outputFile);
-      outputFile << "\n";
+      outputFile << '\n';
     }
 
     /** Write polygons */
@@ -664,12 +663,12 @@ protected:
     if (numberOfPolygons)
     {
       ExposeMetaData<unsigned int>(metaDic, "numberOfPolygonIndices", numberOfPolygonIndices);
-      outputFile << "POLYGONS " << numberOfPolygons << " " << numberOfPolygonIndices << '\n';
+      outputFile << "POLYGONS " << numberOfPolygons << ' ' << numberOfPolygonIndices << '\n';
       const auto data = make_unique_for_overwrite<unsigned int[]>(numberOfPolygonIndices);
       ReadCellsBuffer(buffer, data.get());
       itk::ByteSwapper<unsigned int>::SwapWriteRangeFromSystemToBigEndian(
         data.get(), numberOfPolygonIndices, &outputFile);
-      outputFile << "\n";
+      outputFile << '\n';
     }
   }
 
@@ -720,7 +719,7 @@ protected:
       }
       default:
       {
-        itkExceptionMacro(<< "Unknown point pixel type");
+        itkExceptionMacro("Unknown point pixel type");
       }
     }
 
@@ -748,12 +747,10 @@ protected:
           // row 1
           outputFile << ConvertNumberToString(*ptr++) << indent;
           e12 = *ptr++;
-          outputFile << ConvertNumberToString(e12) << indent;
-          outputFile << ConvertNumberToString(zero) << '\n';
+          outputFile << ConvertNumberToString(e12) << indent << ConvertNumberToString(zero) << '\n';
           // row 2
-          outputFile << ConvertNumberToString(e12) << indent;
-          outputFile << ConvertNumberToString(*ptr++) << indent;
-          outputFile << ConvertNumberToString(zero) << '\n';
+          outputFile << ConvertNumberToString(e12) << indent << ConvertNumberToString(*ptr++) << indent
+                     << ConvertNumberToString(zero) << '\n';
           // row 3
           outputFile << ConvertNumberToString(zero) << indent << ConvertNumberToString(zero) << indent
                      << ConvertNumberToString(zero) << "\n\n";
@@ -774,14 +771,12 @@ protected:
           e13 = *ptr++;
           outputFile << ConvertNumberToString(e13) << '\n';
           // row 2
-          outputFile << ConvertNumberToString(e12) << indent;
-          outputFile << ConvertNumberToString(*ptr++) << indent;
+          outputFile << ConvertNumberToString(e12) << indent << ConvertNumberToString(*ptr++) << indent;
           e23 = *ptr++;
           outputFile << ConvertNumberToString(e23) << '\n';
           // row 3
-          outputFile << ConvertNumberToString(e13) << indent;
-          outputFile << ConvertNumberToString(e23) << indent;
-          outputFile << ConvertNumberToString(*ptr++) << "\n\n";
+          outputFile << ConvertNumberToString(e13) << indent << ConvertNumberToString(e23) << indent
+                     << ConvertNumberToString(*ptr++) << "\n\n";
           i += 6;
         }
       }
@@ -801,8 +796,7 @@ protected:
         {
           outputFile << ConvertNumberToString(buffer[ii * this->m_NumberOfPointPixelComponents + jj]) << indent;
         }
-        outputFile << ConvertNumberToString(buffer[ii * this->m_NumberOfPointPixelComponents + jj]);
-        outputFile << '\n';
+        outputFile << ConvertNumberToString(buffer[ii * this->m_NumberOfPointPixelComponents + jj]) << '\n';
       }
     }
 
@@ -816,7 +810,7 @@ protected:
     MetaDataDictionary & metaDic = this->GetMetaDataDictionary();
     StringType           dataName;
 
-    outputFile << "POINT_DATA " << this->m_NumberOfPointPixels << "\n";
+    outputFile << "POINT_DATA " << this->m_NumberOfPointPixels << '\n';
     switch (this->m_PointPixelType)
     {
       case IOPixelEnum::SCALAR:
@@ -856,11 +850,11 @@ protected:
       }
       default:
       {
-        itkExceptionMacro(<< "Unknown point pixel type");
+        itkExceptionMacro("Unknown point pixel type");
       }
     }
 
-    outputFile << pointPixelComponentName << "\n";
+    outputFile << pointPixelComponentName << '\n';
     if (this->m_PointPixelType == IOPixelEnum::SCALAR)
     {
       outputFile << "LOOKUP_TABLE default\n";
@@ -868,7 +862,7 @@ protected:
 
     itk::ByteSwapper<T>::SwapWriteRangeFromSystemToBigEndian(
       buffer, this->m_NumberOfPointPixels * this->m_NumberOfPointPixelComponents, &outputFile);
-    outputFile << "\n";
+    outputFile << '\n';
     return;
   }
 
@@ -919,7 +913,7 @@ protected:
       }
       default:
       {
-        itkExceptionMacro(<< "Unknown cell pixel type");
+        itkExceptionMacro("Unknown cell pixel type");
       }
     }
 
@@ -944,12 +938,9 @@ protected:
           // row 1
           outputFile << *ptr++ << indent;
           e12 = *ptr++;
-          outputFile << e12 << indent;
-          outputFile << zero << '\n';
+          outputFile << e12 << indent << zero << '\n';
           // row 2
-          outputFile << e12 << indent;
-          outputFile << *ptr++ << indent;
-          outputFile << zero << '\n';
+          outputFile << e12 << indent << *ptr++ << indent << zero << '\n';
           // row 3
           outputFile << zero << indent << zero << indent << zero << "\n\n";
           i += 3;
@@ -969,14 +960,11 @@ protected:
           e13 = *ptr++;
           outputFile << e13 << '\n';
           // row 2
-          outputFile << e12 << indent;
-          outputFile << *ptr++ << indent;
+          outputFile << e12 << indent << *ptr++ << indent;
           e23 = *ptr++;
           outputFile << e23 << '\n';
           // row 3
-          outputFile << e13 << indent;
-          outputFile << e23 << indent;
-          outputFile << *ptr++ << "\n\n";
+          outputFile << e13 << indent << e23 << indent << *ptr++ << "\n\n";
           i += 6;
         }
       }
@@ -998,8 +986,7 @@ protected:
         {
           outputFile << buffer[ii * this->m_NumberOfCellPixelComponents + jj] << indent;
         }
-        outputFile << buffer[ii * this->m_NumberOfCellPixelComponents + jj];
-        outputFile << '\n';
+        outputFile << buffer[ii * this->m_NumberOfCellPixelComponents + jj] << '\n';
       }
     }
 
@@ -1013,7 +1000,7 @@ protected:
     MetaDataDictionary & metaDic = this->GetMetaDataDictionary();
     StringType           dataName;
 
-    outputFile << "CELL_DATA " << this->m_NumberOfCellPixels << "\n";
+    outputFile << "CELL_DATA " << this->m_NumberOfCellPixels << '\n';
     switch (this->m_CellPixelType)
     {
       case IOPixelEnum::SCALAR:
@@ -1053,11 +1040,11 @@ protected:
       }
       default:
       {
-        itkExceptionMacro(<< "Unknown cell pixel type");
+        itkExceptionMacro("Unknown cell pixel type");
       }
     }
 
-    outputFile << cellPixelComponentName << "\n";
+    outputFile << cellPixelComponentName << '\n';
     if (this->m_CellPixelType == IOPixelEnum::SCALAR)
     {
       outputFile << "LOOKUP_TABLE default\n";
@@ -1065,7 +1052,7 @@ protected:
 
     itk::ByteSwapper<T>::SwapWriteRangeFromSystemToBigEndian(
       buffer, this->m_NumberOfCells * this->m_NumberOfCellPixelComponents, &outputFile);
-    outputFile << "\n";
+    outputFile << '\n';
     return;
   }
 
@@ -1076,7 +1063,7 @@ protected:
                                 unsigned int    numberOfPixelComponents,
                                 SizeValueType   numberOfPixels)
   {
-    outputFile << numberOfPixelComponents << "\n";
+    outputFile << numberOfPixelComponents << '\n';
     Indent indent(2);
     for (SizeValueType ii = 0; ii < numberOfPixels; ++ii)
     {
@@ -1085,7 +1072,7 @@ protected:
         outputFile << ConvertNumberToString(static_cast<float>(buffer[ii * numberOfPixelComponents + jj])) << indent;
       }
 
-      outputFile << "\n";
+      outputFile << '\n';
     }
 
     return;
@@ -1098,7 +1085,7 @@ protected:
                                  unsigned int    numberOfPixelComponents,
                                  SizeValueType   numberOfPixels)
   {
-    outputFile << numberOfPixelComponents << "\n";
+    outputFile << numberOfPixelComponents << '\n';
     SizeValueType numberOfElements = numberOfPixelComponents * numberOfPixels;
     const auto    data = make_unique_for_overwrite<unsigned char[]>(numberOfElements);
     for (SizeValueType ii = 0; ii < numberOfElements; ++ii)
@@ -1107,12 +1094,12 @@ protected:
     }
 
     outputFile.write(reinterpret_cast<char *>(data.get()), numberOfElements);
-    outputFile << "\n";
+    outputFile << '\n';
     return;
   }
 
   /** Convert cells buffer for output cells buffer, it's user's responsibility to make sure
-  the input cells don't contain any cell type that coule not be written as polygon cell */
+  the input cells don't contain any cell type that could not be written as polygon cell */
   template <typename TInput, typename TOutput>
   void
   ReadCellsBuffer(TInput * input, TOutput * output)

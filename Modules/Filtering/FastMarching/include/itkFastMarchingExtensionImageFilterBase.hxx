@@ -52,9 +52,9 @@ FastMarchingExtensionImageFilterBase<TInput, TOutput, TAuxValue, VAuxDimension>:
 
 
 template <typename TInput, typename TOutput, typename TAuxValue, unsigned int VAuxDimension>
-typename FastMarchingExtensionImageFilterBase<TInput, TOutput, TAuxValue, VAuxDimension>::AuxImageType *
+auto
 FastMarchingExtensionImageFilterBase<TInput, TOutput, TAuxValue, VAuxDimension>::GetAuxiliaryImage(
-  const unsigned int idx)
+  const unsigned int idx) -> AuxImageType *
 {
   if (idx >= AuxDimension || this->GetNumberOfIndexedOutputs() < idx + 2)
   {
@@ -114,20 +114,20 @@ FastMarchingExtensionImageFilterBase<TInput, TOutput, TAuxValue, VAuxDimension>:
 
   if (!m_AuxiliaryAliveValues)
   {
-    itkExceptionMacro(<< "in Initialize(): Null pointer for AuxAliveValues");
+    itkExceptionMacro("in Initialize(): Null pointer for AuxAliveValues");
   }
   if (m_AuxiliaryAliveValues->size() != (this->m_AlivePoints->size()))
   {
-    itkExceptionMacro(<< "in Initialize(): AuxAliveValues is the wrong size");
+    itkExceptionMacro("in Initialize(): AuxAliveValues is the wrong size");
   }
 
   if (!m_AuxiliaryTrialValues)
   {
-    itkExceptionMacro(<< "in Initialize(): Null pointer for AuxTrialValues");
+    itkExceptionMacro("in Initialize(): Null pointer for AuxTrialValues");
   }
   if (m_AuxiliaryTrialValues->size() != this->m_TrialPoints->size())
   {
-    itkExceptionMacro(<< "in Initialize(): AuxTrialValues is the wrong size");
+    itkExceptionMacro("in Initialize(): AuxTrialValues is the wrong size");
   }
 
   // allocate memory for the auxiliary outputs

@@ -38,7 +38,7 @@
 
 namespace itk
 {
-/* Constructor. */
+
 template <typename TInputMesh, typename TOutputMesh>
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::DeformableSimplexMesh3DFilter()
 {
@@ -63,46 +63,26 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::DeformableSimplexMesh3DF
   this->m_Data = nullptr;
 }
 
-/* PrintSelf. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Alpha = " << this->GetAlpha() << std::endl;
-  os << indent << "Beta = " << this->GetBeta() << std::endl;
-  os << indent << "Gamma = " << this->GetGamma() << std::endl;
-  os << indent << "Rigidity = " << this->GetRigidity() << std::endl;
-  os << indent << "Iterations = " << this->GetIterations() << std::endl;
-  os << indent << "Step = " << this->GetStep() << std::endl;
-  os << indent << "ImageDepth = " << this->GetImageDepth() << std::endl;
 
-  const GradientImageType * gradientImage = this->GetGradient();
+  os << indent << "Alpha: " << m_Alpha << std::endl;
+  os << indent << "Beta: " << m_Beta << std::endl;
+  os << indent << "Gamma: " << m_Gamma << std::endl;
+  os << indent << "Damping: " << m_Damping << std::endl;
+  os << indent << "Rigidity: " << m_Rigidity << std::endl;
+  os << indent << "Step: " << m_Step << std::endl;
+  os << indent << "ImageWidth: " << m_ImageWidth << std::endl;
+  os << indent << "ImageHeight: " << m_ImageHeight << std::endl;
+  os << indent << "ImageDepth: " << m_ImageDepth << std::endl;
+  os << indent << "Iterations: " << m_Iterations << std::endl;
 
-  if (gradientImage)
-  {
-    os << indent << "Gradient = " << gradientImage << std::endl;
-  }
-  else
-  {
-    os << indent << "Gradient = "
-       << "(None)" << std::endl;
-  }
-  os << indent << "ImageHeight = " << this->GetImageHeight() << std::endl;
-  os << indent << "ImageWidth = " << this->GetImageWidth() << std::endl;
-  os << indent << "Damping = " << this->GetDamping() << std::endl;
-  if (this->m_Data.IsNotNull())
-  {
-    os << indent << "Data = " << this->GetData() << std::endl;
-  }
-  else
-  {
-    os << indent << "Data = "
-       << "(None)" << std::endl;
-  }
-} /* End PrintSelf. */
+  itkPrintSelfObjectMacro(Data);
+}
 
-/* Generate Data */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::GenerateData()
@@ -145,8 +125,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::GenerateData()
   this->ComputeOutput();
 }
 
-/* Set default value of parameters and initialize local data container
- *  such as forces, displacements and displacement derivatives. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::Initialize()
@@ -200,7 +178,7 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::Initialize()
     data->neighbors[1] = points->GetElement(data->neighborIndices[1]);
     data->neighbors[2] = points->GetElement(data->neighborIndices[2]);
 
-    // store neighborset with a specific radius
+    // store neighbor set with a specific radius
     InputNeighbors * neighborsList = inputMesh->GetNeighbors(pointItr.Index(), m_Rigidity);
     auto             neighborIt = neighborsList->begin();
 
@@ -217,7 +195,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::Initialize()
   }
 }
 
-/* Set the gradient image as an input */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::SetGradient(const GradientImageType * gradientImage)
@@ -225,7 +202,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::SetGradient(const Gradie
   this->SetNthInput(1, const_cast<GradientImageType *>(gradientImage));
 }
 
-/* Get the gradient image as an input */
 template <typename TInputMesh, typename TOutputMesh>
 auto
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::GetGradient() const -> const GradientImageType *
@@ -235,7 +211,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::GetGradient() const -> c
   return gradientImage;
 }
 
-/* Compute normals. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeGeometry()
@@ -339,7 +314,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeDisplacement()
   }
 }
 
-/* */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeInternalForce(SimplexMeshGeometry * data)
@@ -386,7 +360,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeInternalForce(Sim
   }
 }
 
-/** Compute model Displacement according to image gradient forces */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeExternalForce(SimplexMeshGeometry *     data,
@@ -472,7 +445,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeExternalForce(Sim
   data->externalForce[2] = m_Beta * vec_for[2];
 }
 
-/* Copy the content of m_Location into the Output. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeOutput()
@@ -488,7 +460,6 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeOutput()
   output->SetLastCellId(this->GetInput(0)->GetLastCellId());
 }
 
-/*  */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::UpdateReferenceMetrics()
@@ -582,9 +553,10 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::L_Func(const double r,
 }
 
 template <typename TInputMesh, typename TOutputMesh>
-typename DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::PointType
+auto
 DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>::ComputeBarycentricCoordinates(PointType             p,
                                                                                       SimplexMeshGeometry * data)
+  -> PointType
 {
   const PointType a = data->neighbors[0];
   const PointType b = data->neighbors[1];

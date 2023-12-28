@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class MetaSurfaceConverter
+ * \class MetaSurfaceConverter
  *  \brief converts between MetaObject<->SpatialObject.
  *
  *  \sa MetaConverterBase
@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaSurfaceConverter, MetaConverterBase);
+  itkOverrideGetNameOfClassMacro(MetaSurfaceConverter);
 
   using typename Superclass::SpatialObjectType;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;

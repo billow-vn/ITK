@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScaleVersor3DTransform, VersorRigid3DTransform);
+  itkOverrideGetNameOfClassMacro(ScaleVersor3DTransform);
 
   /** Dimension of parameters. */
   static constexpr unsigned int InputSpaceDimension = 3;
@@ -161,7 +161,7 @@ protected:
 
 private:
   /**  Vector containing the scale. */
-  ScaleVectorType m_Scale;
+  ScaleVectorType m_Scale{};
 }; // class ScaleVersor3DTransform
 } // namespace itk
 

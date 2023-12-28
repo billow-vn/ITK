@@ -17,11 +17,9 @@
  *=========================================================================*/
 
 #include "itkBSplineDerivativeKernelFunction.h"
+#include "itkTestingMacros.h"
 
-/*
- * This test exercises the BSpline kernel function
- * of various orders.
- */
+
 int
 itkBSplineKernelFunctionTest(int, char *[])
 {
@@ -61,26 +59,30 @@ itkBSplineKernelFunctionTest(int, char *[])
 
 
   // Testing the output of BSplineKernelFunction
-#define TEST_BSPLINE_KERNEL(ORDERNUM)                                                          \
-  {                                                                                            \
-    using FunctionType = itk::BSplineKernelFunction<ORDERNUM>;                                 \
-    auto function = FunctionType::New();                                                       \
-                                                                                               \
-    function->Print(std::cout);                                                                \
-    for (unsigned int j = 0; j < npoints; ++j)                                                 \
-    {                                                                                          \
-      double results = function->Evaluate(x[j]);                                               \
-      /* compare with external results */                                                      \
-      if (itk::Math::abs(results - b##ORDERNUM[j]) > 1e-6)                                     \
-      {                                                                                        \
-        std::cout << "Error with " << ORDERNUM << " order BSplineKernelFunction" << std::endl; \
-        std::cout << "Expected: " << b##ORDERNUM[j] << " but got " << results;                 \
-        std::cout << " at x = " << x[j] << std::endl;                                          \
-        std::cout << "Test failed" << std::endl;                                               \
-        return EXIT_FAILURE;                                                                   \
-      }                                                                                        \
-    }                                                                                          \
-  }                                                                                            \
+#define TEST_BSPLINE_KERNEL(ORDERNUM)                                               \
+  {                                                                                 \
+    using FunctionType = itk::BSplineKernelFunction<ORDERNUM>;                      \
+    auto function = FunctionType::New();                                            \
+                                                                                    \
+    function->Print(std::cout);                                                     \
+    const double epsilon = 1e-6;                                                    \
+    for (unsigned int j = 0; j < npoints; ++j)                                      \
+    {                                                                               \
+      double results = function->Evaluate(x[j]);                                    \
+      /* compare with external results */                                           \
+      if (itk::Math::abs(results - b##ORDERNUM[j]) > epsilon)                       \
+      {                                                                             \
+        std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon)))); \
+        std::cerr << "Test failed!" << std::endl;                                   \
+        std::cerr << "Error with " << ORDERNUM << " order BSplineKernelFunction ";  \
+        std::cerr << "at index [" << j << "] " << std::endl;                        \
+        std::cerr << "Expected value " << b##ORDERNUM[j] << std::endl;              \
+        std::cerr << " differs from " << results;                                   \
+        std::cerr << " by more than " << epsilon << std::endl;                      \
+        return EXIT_FAILURE;                                                        \
+      }                                                                             \
+    }                                                                               \
+  }                                                                                 \
   ITK_MACROEND_NOOP_STATEMENT
 
   TEST_BSPLINE_KERNEL(0);
@@ -99,12 +101,15 @@ itkBSplineKernelFunctionTest(int, char *[])
     double expectedValue = 0.0;
     double results = derivFunction->Evaluate(xx);
 
-    if (itk::Math::abs(results - expectedValue) > 1e-6)
+    const double epsilon = 1e-6;
+    if (itk::Math::abs(results - expectedValue) > epsilon)
     {
-      std::cout << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction" << std::endl;
-      std::cout << "Expected: " << expectedValue << " but got " << results;
-      std::cout << " at x = " << xx << std::endl;
-      std::cout << "Test failed" << std::endl;
+      std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+      std::cerr << "Test failed!" << std::endl;
+      std::cerr << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction at " << xx << std::endl;
+      std::cerr << "Expected value " << expectedValue << std::endl;
+      std::cerr << " differs from " << results;
+      std::cerr << " by more than " << epsilon << std::endl;
       return EXIT_FAILURE;
     }
   }
@@ -123,12 +128,15 @@ itkBSplineKernelFunctionTest(int, char *[])
       double expectedValue = function->Evaluate(xx + 0.5) - function->Evaluate(xx - 0.5);
       double results = derivFunction->Evaluate(xx);
 
-      if (itk::Math::abs(results - expectedValue) > 1e-6)
+      const double epsilon = 1e-6;
+      if (itk::Math::abs(results - expectedValue) > epsilon)
       {
-        std::cout << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction" << std::endl;
-        std::cout << "Expected: " << expectedValue << " but got " << results;
-        std::cout << " at x = " << xx << std::endl;
-        std::cout << "Test failed" << std::endl;
+        std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+        std::cerr << "Test failed!" << std::endl;
+        std::cerr << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction at " << xx << std::endl;
+        std::cerr << "Expected value " << expectedValue << std::endl;
+        std::cerr << " differs from " << results;
+        std::cerr << " by more than " << epsilon << std::endl;
         return EXIT_FAILURE;
       }
     }
@@ -149,12 +157,15 @@ itkBSplineKernelFunctionTest(int, char *[])
       double expectedValue = function->Evaluate(xx + 0.5) - function->Evaluate(xx - 0.5);
       double results = derivFunction->Evaluate(xx);
 
-      if (itk::Math::abs(results - expectedValue) > 1e-6)
+      const double epsilon = 1e-6;
+      if (itk::Math::abs(results - expectedValue) > epsilon)
       {
-        std::cout << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction" << std::endl;
-        std::cout << "Expected: " << expectedValue << " but got " << results;
-        std::cout << " at x = " << xx << std::endl;
-        std::cout << "Test failed" << std::endl;
+        std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+        std::cerr << "Test failed!" << std::endl;
+        std::cerr << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction at " << xx << std::endl;
+        std::cerr << "Expected value " << expectedValue << std::endl;
+        std::cerr << " differs from " << results;
+        std::cerr << " by more than " << epsilon << std::endl;
         return EXIT_FAILURE;
       }
     }
@@ -175,12 +186,15 @@ itkBSplineKernelFunctionTest(int, char *[])
       double expectedValue = function->Evaluate(xx + 0.5) - function->Evaluate(xx - 0.5);
       double results = derivFunction->Evaluate(xx);
 
-      if (itk::Math::abs(results - expectedValue) > 1e-6)
+      const double epsilon = 1e-6;
+      if (itk::Math::abs(results - expectedValue) > epsilon)
       {
-        std::cout << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction" << std::endl;
-        std::cout << "Expected: " << expectedValue << " but got " << results;
-        std::cout << " at x = " << xx << std::endl;
-        std::cout << "Test failed" << std::endl;
+        std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+        std::cerr << "Test failed!" << std::endl;
+        std::cerr << "Error with " << SplineOrder << " order BSplineDerivativeKernelFunction at " << xx << std::endl;
+        std::cerr << "Expected value " << expectedValue << std::endl;
+        std::cerr << " differs from " << results;
+        std::cerr << " by more than " << epsilon << std::endl;
         return EXIT_FAILURE;
       }
     }
@@ -188,57 +202,21 @@ itkBSplineKernelFunctionTest(int, char *[])
 
   // Testing case of unimplemented spline order
   {
-
     using FunctionType = itk::BSplineKernelFunction<7>;
     auto function = FunctionType::New();
 
-    bool pass = false;
-    try
-    {
-      function->Evaluate(0.0);
-    }
-    catch (const itk::ExceptionObject & err)
-    {
-      std::cout << "Caught expected exception" << std::endl;
-      std::cout << err << std::endl;
-      pass = true;
-    }
-
-    if (!pass)
-    {
-      std::cout << "Did not catch expected exception" << std::endl;
-      std::cout << "Test failed" << std::endl;
-      return EXIT_FAILURE;
-    }
+    ITK_TRY_EXPECT_EXCEPTION(function->Evaluate(0.0));
   }
 
   // Testing case of unimplemented spline order
   {
-
     using FunctionType = itk::BSplineDerivativeKernelFunction<5>;
     auto function = FunctionType::New();
 
-    bool pass = false;
-    try
-    {
-      function->Evaluate(0.0);
-    }
-    catch (const itk::ExceptionObject & err)
-    {
-      std::cout << "Caught expected exception" << std::endl;
-      std::cout << err << std::endl;
-      pass = true;
-    }
-
-    if (!pass)
-    {
-      std::cout << "Did not catch expected exception" << std::endl;
-      std::cout << "Test failed" << std::endl;
-      return EXIT_FAILURE;
-    }
+    ITK_TRY_EXPECT_EXCEPTION(function->Evaluate(0.0));
   }
 
 
-  std::cout << "Test passed. " << std::endl;
+  std::cout << "Test finished. " << std::endl;
   return EXIT_SUCCESS;
 }

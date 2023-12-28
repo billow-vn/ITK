@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MorphologicalWatershedImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(MorphologicalWatershedImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -135,7 +135,7 @@ private:
 
   bool m_MarkWatershedLine{ true };
 
-  InputImagePixelType m_Level;
+  InputImagePixelType m_Level{};
 }; // end of class
 } // end namespace itk
 

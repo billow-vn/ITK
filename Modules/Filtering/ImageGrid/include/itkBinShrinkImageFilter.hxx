@@ -48,7 +48,7 @@ BinShrinkImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, In
   os << indent << "Shrink Factor: ";
   for (unsigned int j = 0; j < ImageDimension; ++j)
   {
-    os << m_ShrinkFactors[j] << " ";
+    os << m_ShrinkFactors[j] << ' ';
   }
   os << std::endl;
 }
@@ -98,7 +98,7 @@ void
 BinShrinkImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   const OutputImageRegionType & outputRegionForThread)
 {
-  itkDebugMacro(<< "BinShrinkImageFilter executing on region:" << outputRegionForThread);
+  itkDebugMacro("BinShrinkImageFilter executing on region:" << outputRegionForThread);
 
   const InputImageType * inputPtr = this->GetInput();
   OutputImageType *      outputPtr = this->GetOutput();
@@ -107,11 +107,7 @@ BinShrinkImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   using OutputPixelType = typename OutputImageType::PixelType;
   using AccumulatePixelType = typename NumericTraits<InputPixelType>::RealType;
 
-  using InputConstIteratorType = ImageScanlineConstIterator<InputImageType>;
-  using OutputIteratorType = ImageScanlineIterator<OutputImageType>;
-
-  InputConstIteratorType inputIterator(inputPtr, inputPtr->GetRequestedRegion());
-  OutputIteratorType     outputIterator(outputPtr, outputRegionForThread);
+  ImageScanlineConstIterator inputIterator(inputPtr, inputPtr->GetRequestedRegion());
 
   // Set up shaped neighbor hood by defining the offsets
   OutputOffsetType negativeOffset, positiveOffset, iOffset;
@@ -157,7 +153,8 @@ BinShrinkImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 
   TotalProgressReporter progress(this, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 
-  while (!outputIterator.IsAtEnd())
+  for (ImageScanlineIterator outputIterator(outputPtr, outputRegionForThread); !outputIterator.IsAtEnd();
+       outputIterator.NextLine())
   {
     const OutputIndexType outputIndex = outputIterator.GetIndex();
 
@@ -207,7 +204,6 @@ BinShrinkImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
       ++outputIterator;
     }
 
-    outputIterator.NextLine();
     progress.Completed(outputRegionForThread.GetSize()[0]);
   }
 }

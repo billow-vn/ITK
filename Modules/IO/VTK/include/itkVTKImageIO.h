@@ -36,11 +36,11 @@
 namespace itk
 {
 /**
- *\class VTKImageIO
+ * \class VTKImageIO
  *
  *  \brief ImageIO class for reading VTK images
  *
- * This implementation was taken fron the Insight Journal:
+ * This implementation was taken from the Insight Journal:
  * https://www.insight-journal.org/browse/publication/729
  *
  * \ingroup IOFilters
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKImageIO, StreamingImageIOBase);
+  itkOverrideGetNameOfClassMacro(VTKImageIO);
 
   // see super class for documentation
   //
@@ -173,7 +173,7 @@ private:
   SizeType
   GetIORegionSizeInComponents() const;
 
-  SizeType m_HeaderSize;
+  SizeType m_HeaderSize{};
 };
 } // end namespace itk
 

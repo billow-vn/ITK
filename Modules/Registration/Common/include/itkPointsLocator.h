@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(PointsLocator, Object);
+  itkOverrideGetNameOfClassMacro(PointsLocator);
 
   /** Hold on to the type information specified by the template parameters. */
   using PointsContainer = TPointsContainer;
@@ -114,10 +114,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  PointsContainerPointer m_Points;
-  SampleAdaptorPointer   m_SampleAdaptor;
-  TreeGeneratorPointer   m_KdTreeGenerator;
-  TreeConstPointer       m_Tree;
+  PointsContainerPointer m_Points{};
+  SampleAdaptorPointer   m_SampleAdaptor{};
+  TreeGeneratorPointer   m_KdTreeGenerator{};
+  TreeConstPointer       m_Tree{};
 };
 
 } // end namespace itk

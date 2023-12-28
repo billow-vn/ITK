@@ -26,9 +26,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedImage, typename TMovingImage>
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::MeanSquaresImageToImageMetric()
 {
@@ -43,19 +41,23 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::MeanSquaresImageToImag
   this->SetUseAllPixels(true);
 }
 
-/**
- * Print out internal information about this class
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+
+  os << indent << "PerThread: ";
+  if (m_PerThread.get() != nullptr)
+  {
+    os << m_PerThread.get() << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
 }
 
-/**
- * Initialize
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::Initialize()
@@ -95,7 +97,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetValue(const Paramet
 
   if (!this->m_FixedImage)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   for (unsigned int i = 0; i < this->m_NumberOfWorkUnits; ++i)
@@ -177,9 +179,6 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetValueAndDerivativeT
   return true;
 }
 
-/**
- * Get the both Value and Derivative Measure
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetValueAndDerivative(const ParametersType & parameters,
@@ -188,7 +187,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetValueAndDerivative(
 {
   if (!this->m_FixedImage)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   // Set up the parameters in the transform
@@ -241,9 +240,6 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetValueAndDerivative(
   }
 }
 
-/**
- * Get the match measure derivative
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetDerivative(const ParametersType & parameters,
@@ -251,7 +247,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>::GetDerivative(const Pa
 {
   if (!this->m_FixedImage)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   MeasureType value;

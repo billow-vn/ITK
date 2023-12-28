@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFeatureImage, typename TOutputPixel>
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ShapePriorMAPCostFunction()
 {
@@ -35,23 +33,19 @@ ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ShapePriorMAPCostFunctio
   m_Weights.Fill(1.0);
 }
 
-/**
- * PrintSelf
- */
 template <typename TFeatureImage, typename TOutputPixel>
 void
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+
   os << indent << "ShapeParameterMeans: " << m_ShapeParameterMeans << std::endl;
-  os << indent << "ShapeParameterStandardDeviations:  ";
-  os << m_ShapeParameterStandardDeviations << std::endl;
+  os << indent << "ShapeParameterStandardDeviations: " << m_ShapeParameterStandardDeviations << std::endl;
   os << indent << "Weights: " << m_Weights << std::endl;
+
+  itkPrintSelfObjectMacro(GaussianFunction);
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
 auto
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogInsideTerm(const ParametersType & parameters) const
@@ -93,13 +87,10 @@ ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogInsideTerm(con
   return output;
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
-typename ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::MeasureType
+auto
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogShapePriorTerm(
-  const ParametersType & parameters) const
+  const ParametersType & parameters) const -> MeasureType
 {
   // assume the shape parameters is from an independent gaussian distributions
   MeasureType measure = 0.0;
@@ -112,9 +103,6 @@ ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogShapePriorTerm
   return measure;
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
 auto
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogGradientTerm(const ParametersType & parameters) const
@@ -145,24 +133,17 @@ ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogGradientTerm(c
   }
 
   sum *= m_Weights[1];
-  //  std::cout << sum << " ";
   return sum;
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
-typename ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::MeasureType
+auto
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::ComputeLogPosePriorTerm(
-  const ParametersType & itkNotUsed(parameters)) const
+  const ParametersType & itkNotUsed(parameters)) const -> MeasureType
 {
   return 0.0;
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
 void
 ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::Initialize()
@@ -172,13 +153,13 @@ ShapePriorMAPCostFunction<TFeatureImage, TOutputPixel>::Initialize()
   // check if the mean and variances array are of the right size
   if (m_ShapeParameterMeans.Size() < this->m_ShapeFunction->GetNumberOfShapeParameters())
   {
-    itkExceptionMacro(<< "ShapeParameterMeans does not have at least "
+    itkExceptionMacro("ShapeParameterMeans does not have at least "
                       << this->m_ShapeFunction->GetNumberOfShapeParameters() << " number of elements.");
   }
 
   if (m_ShapeParameterStandardDeviations.Size() < this->m_ShapeFunction->GetNumberOfShapeParameters())
   {
-    itkExceptionMacro(<< "ShapeParameterStandardDeviations does not have at least "
+    itkExceptionMacro("ShapeParameterStandardDeviations does not have at least "
                       << this->m_ShapeFunction->GetNumberOfShapeParameters() << " number of elements.");
   }
 }

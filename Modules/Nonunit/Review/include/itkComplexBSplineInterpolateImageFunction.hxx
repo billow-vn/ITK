@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TImageType, typename TCoordRep, typename TCoefficientType>
 ComplexBSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>::
   ComplexBSplineInterpolateImageFunction()
@@ -37,20 +35,19 @@ ComplexBSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>:
   this->SetSplineOrder(3);
 }
 
-/**
- * Standard "PrintSelf" method
- */
 template <typename TImageType, typename TCoordRep, typename TCoefficientType>
 void
 ComplexBSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>::PrintSelf(std::ostream & os,
                                                                                            Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Spline Order: " << m_SplineOrder << std::endl;
-  os << indent << "Real Interpolator: " << m_RealInterpolator << std::endl;
-  os << indent << "Imaginary Interpolator: " << m_ImaginaryInterpolator << std::endl;
-  os << indent << "Complex to Real Filter: " << m_RealFilter << std::endl;
-  os << indent << "Complex to Imaginary Filter: " << m_ImaginaryFilter << std::endl;
+
+  os << indent << "SplineOrder: " << m_SplineOrder << std::endl;
+
+  itkPrintSelfObjectMacro(RealInterpolator);
+  itkPrintSelfObjectMacro(ImaginaryInterpolator);
+  itkPrintSelfObjectMacro(RealFilter);
+  itkPrintSelfObjectMacro(ImaginaryFilter);
 }
 
 template <typename TImageType, typename TCoordRep, typename TCoefficientType>
@@ -81,9 +78,9 @@ ComplexBSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>:
 }
 
 template <typename TImageType, typename TCoordRep, typename TCoefficientType>
-typename ComplexBSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>::OutputType
+auto
 ComplexBSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>::EvaluateAtContinuousIndex(
-  const ContinuousIndexType & x) const
+  const ContinuousIndexType & x) const -> OutputType
 {
   typename InterpolatorType::OutputType realPart = m_RealInterpolator->EvaluateAtContinuousIndex(x);
   typename InterpolatorType::OutputType imagPart = m_ImaginaryInterpolator->EvaluateAtContinuousIndex(x);

@@ -58,20 +58,18 @@ ReadFloatingPointsAsASCII(std::ifstream &        inputFile,
         {
           return -NumericLimits::infinity();
         }
-        const auto numberOfChars = str.size();
 
-        if (numberOfChars <= std::numeric_limits<int>::max())
+        const int numberOfChars = Math::CastWithRangeCheck<int>(str.size());
+
+        constexpr auto                                   double_NaN = std::numeric_limits<double>::quiet_NaN();
+        int                                              processedCharCount{ 0 };
+        const double_conversion::StringToDoubleConverter converter(0, double_NaN, double_NaN, "inf", "nan");
+        const auto                                       conversionResult =
+          converter.StringTo<TFloatingPoint>(str.c_str(), numberOfChars, &processedCharCount);
+
+        if (processedCharCount == numberOfChars && !std::isnan(conversionResult))
         {
-          constexpr auto                                   double_NaN = std::numeric_limits<double>::quiet_NaN();
-          int                                              processedCharCount{ 0 };
-          const double_conversion::StringToDoubleConverter converter(0, double_NaN, double_NaN, "inf", "nan");
-          const auto                                       conversionResult =
-            converter.StringTo<TFloatingPoint>(str.c_str(), static_cast<int>(numberOfChars), &processedCharCount);
-
-          if (processedCharCount == static_cast<int>(numberOfChars) && !std::isnan(conversionResult))
-          {
-            return conversionResult;
-          }
+          return conversionResult;
         }
       }
       itkGenericExceptionMacro("Failed to read a floating point component from the specified ASCII input file!"
@@ -84,7 +82,7 @@ ReadFloatingPointsAsASCII(std::ifstream &        inputFile,
 
 
 // Constructor
-VTKPolyDataMeshIO ::VTKPolyDataMeshIO()
+VTKPolyDataMeshIO::VTKPolyDataMeshIO()
 {
   this->AddSupportedWriteExtension(".vtk");
   this->m_ByteOrder = IOByteOrderEnum::BigEndian;
@@ -104,12 +102,12 @@ VTKPolyDataMeshIO::~VTKPolyDataMeshIO() = default;
 
 
 int
-VTKPolyDataMeshIO ::GetNextLine(std::ifstream & ifs, std::string & line, bool lowerCase, SizeValueType count)
+VTKPolyDataMeshIO::GetNextLine(std::ifstream & ifs, std::string & line, bool lowerCase, SizeValueType count)
 {
   // The terminal condition for this recursive calls
   if (count > 5)
   {
-    itkExceptionMacro(<< "Error of GetNextLine due to consecutive 5 empty lines in the given .*vtk file ");
+    itkExceptionMacro("Error of GetNextLine due to consecutive 5 empty lines in the given .*vtk file ");
   }
 
   // Get a next line from a given *.vtk file
@@ -118,7 +116,7 @@ VTKPolyDataMeshIO ::GetNextLine(std::ifstream & ifs, std::string & line, bool lo
   // Check the End-of-File of the file
   if (ifs.eof())
   {
-    itkExceptionMacro(<< "Premature EOF in reading a line");
+    itkExceptionMacro("Premature EOF in reading a line");
   }
 
   // Convert characters of the line to lowercas
@@ -138,7 +136,7 @@ VTKPolyDataMeshIO ::GetNextLine(std::ifstream & ifs, std::string & line, bool lo
 
 
 bool
-VTKPolyDataMeshIO ::CanReadFile(const char * fileName)
+VTKPolyDataMeshIO::CanReadFile(const char * fileName)
 {
   if (!itksys::SystemTools::FileExists(fileName, true))
   {
@@ -175,7 +173,7 @@ VTKPolyDataMeshIO ::CanReadFile(const char * fileName)
 }
 
 bool
-VTKPolyDataMeshIO ::CanWriteFile(const char * fileName)
+VTKPolyDataMeshIO::CanWriteFile(const char * fileName)
 {
   if (itksys::SystemTools::GetFilenameLastExtension(fileName) != ".vtk")
   {
@@ -249,7 +247,7 @@ VTKPolyDataMeshIO::GetComponentTypeFromString(const std::string & pointType)
 }
 
 void
-VTKPolyDataMeshIO ::ReadMeshInformation()
+VTKPolyDataMeshIO::ReadMeshInformation()
 {
   std::ifstream inputFile;
 
@@ -351,7 +349,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
       this->m_PointComponentType = this->GetComponentTypeFromString(pointType);
       if (this->m_PointComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
       {
-        itkExceptionMacro(<< "Unknown point component type");
+        itkExceptionMacro("Unknown point component type");
       }
 
       this->m_UpdatePoints = true;
@@ -385,7 +383,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
       if (numberOfVertexIndices < numberOfVertices)
       {
         itkExceptionMacro("ERROR: numberOfVertexIndices < numberOfVertices\n"
-                          << "numberOfVertexIndices= " << numberOfVertexIndices << "\n"
+                          << "numberOfVertexIndices= " << numberOfVertexIndices << '\n'
                           << "numberOfVertices= " << numberOfVertices);
       }
 
@@ -422,7 +420,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
       if (numberOfLineIndices < numberOfLines)
       {
         itkExceptionMacro("ERROR: numberOfLineIndices < numberOfLines\n"
-                          << "numberOfLineIndices= " << numberOfLineIndices << "\n"
+                          << "numberOfLineIndices= " << numberOfLineIndices << '\n'
                           << "numberOfLines= " << numberOfLines);
       }
 
@@ -459,7 +457,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
       if (numberOfPolygonIndices < numberOfPolygons)
       {
         itkExceptionMacro("ERROR: numberOfPolygonIndices < numberOfPolygons\n"
-                          << "numberOfPolygonIndices= " << numberOfPolygonIndices << "\n"
+                          << "numberOfPolygonIndices= " << numberOfPolygonIndices << '\n'
                           << "numberOfPolygons= " << numberOfPolygons);
       }
 
@@ -513,7 +511,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
           this->m_PointPixelComponentType = this->GetComponentTypeFromString(pointDataComponentType);
           if (this->m_PointPixelComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
           {
-            itkExceptionMacro(<< "Unknown point data component type");
+            itkExceptionMacro("Unknown point data component type");
           }
 
           // Set point pixel type
@@ -567,7 +565,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
         this->m_PointPixelComponentType = this->GetComponentTypeFromString(pointDataComponentType);
         if (this->m_PointPixelComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
         {
-          itkExceptionMacro(<< "Unknown point vector component type");
+          itkExceptionMacro("Unknown point vector component type");
         }
 
         // Set point pixel type
@@ -593,7 +591,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
         this->m_PointPixelComponentType = this->GetComponentTypeFromString(pointDataComponentType);
         if (this->m_PointPixelComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
         {
-          itkExceptionMacro(<< "Unknown point SYMMETRICSECONDRANKTENSOR component type");
+          itkExceptionMacro("Unknown point SYMMETRICSECONDRANKTENSOR component type");
         }
 
         // Set point pixel type
@@ -648,7 +646,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
           this->m_CellPixelComponentType = this->GetComponentTypeFromString(cellDataComponentType);
           if (this->m_CellPixelComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
           {
-            itkExceptionMacro(<< "Unknown cell component type");
+            itkExceptionMacro("Unknown cell component type");
           }
 
           // Set cell pixel type
@@ -700,7 +698,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
         this->m_CellPixelComponentType = this->GetComponentTypeFromString(cellDataComponentType);
         if (this->m_CellPixelComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
         {
-          itkExceptionMacro(<< "Unknown cell normal component type");
+          itkExceptionMacro("Unknown cell normal component type");
         }
 
         // Set cell pixel type
@@ -726,7 +724,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
         this->m_CellPixelComponentType = this->GetComponentTypeFromString(cellDataComponentType);
         if (this->m_CellPixelComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE)
         {
-          itkExceptionMacro(<< "Unknown cell SYMMETRICSECONDRANKTENSOR component type");
+          itkExceptionMacro("Unknown cell SYMMETRICSECONDRANKTENSOR component type");
         }
 
         // Set cell pixel type
@@ -813,7 +811,7 @@ VTKPolyDataMeshIO ::ReadMeshInformation()
   }
 
 void
-VTKPolyDataMeshIO ::ReadPoints(void * buffer)
+VTKPolyDataMeshIO::ReadPoints(void * buffer)
 {
   std::ifstream inputFile;
 
@@ -842,7 +840,7 @@ VTKPolyDataMeshIO ::ReadPoints(void * buffer)
 
       default:
       {
-        itkExceptionMacro(<< "Unknown point component type");
+        itkExceptionMacro("Unknown point component type");
       }
     }
   }
@@ -854,20 +852,20 @@ VTKPolyDataMeshIO ::ReadPoints(void * buffer)
 
       default:
       {
-        itkExceptionMacro(<< "Unknown point component type");
+        itkExceptionMacro("Unknown point component type");
       }
     }
   }
   else
   {
-    itkExceptionMacro(<< "Invalid output file type(not ASCII or BINARY)");
+    itkExceptionMacro("Invalid output file type(not ASCII or BINARY)");
   }
 
   inputFile.close();
 }
 
 void
-VTKPolyDataMeshIO ::ReadCells(void * buffer)
+VTKPolyDataMeshIO::ReadCells(void * buffer)
 {
   std::ifstream inputFile;
 
@@ -882,8 +880,8 @@ VTKPolyDataMeshIO ::ReadCells(void * buffer)
 
   if (!inputFile.is_open())
   {
-    itkExceptionMacro(<< "Unable to open file\n"
-                         "inputFilename= "
+    itkExceptionMacro("Unable to open file\n"
+                      "inputFilename= "
                       << this->m_FileName);
   }
 
@@ -898,7 +896,7 @@ VTKPolyDataMeshIO ::ReadCells(void * buffer)
   }
   else
   {
-    itkExceptionMacro(<< "Unkonw file type");
+    itkExceptionMacro("Unkonw file type");
   }
 
   inputFile.close();
@@ -979,7 +977,7 @@ VTKPolyDataMeshIO::ReadCellsBufferAsASCII(std::ifstream & inputFile, void * buff
 }
 
 void
-VTKPolyDataMeshIO ::ReadCellsBufferAsBINARY(std::ifstream & inputFile, void * buffer)
+VTKPolyDataMeshIO::ReadCellsBufferAsBINARY(std::ifstream & inputFile, void * buffer)
 {
   if (!this->m_CellBufferSize)
   {
@@ -1056,7 +1054,7 @@ VTKPolyDataMeshIO ::ReadCellsBufferAsBINARY(std::ifstream & inputFile, void * bu
 }
 
 void
-VTKPolyDataMeshIO ::ReadPointData(void * buffer)
+VTKPolyDataMeshIO::ReadPointData(void * buffer)
 {
   std::ifstream inputFile;
 
@@ -1071,8 +1069,8 @@ VTKPolyDataMeshIO ::ReadPointData(void * buffer)
 
   if (!inputFile.is_open())
   {
-    itkExceptionMacro(<< "Unable to open file\n"
-                         "inputFilename= "
+    itkExceptionMacro("Unable to open file\n"
+                      "inputFilename= "
                       << this->m_FileName);
   }
 
@@ -1085,7 +1083,7 @@ VTKPolyDataMeshIO ::ReadPointData(void * buffer)
 
       default:
       {
-        itkExceptionMacro(<< "Unknown point pixel component");
+        itkExceptionMacro("Unknown point pixel component");
       }
     }
   }
@@ -1097,20 +1095,20 @@ VTKPolyDataMeshIO ::ReadPointData(void * buffer)
 
       default:
       {
-        itkExceptionMacro(<< "Unknown point pixel component");
+        itkExceptionMacro("Unknown point pixel component");
       }
     }
   }
   else
   {
-    itkExceptionMacro(<< "Unkonw file type");
+    itkExceptionMacro("Unkonw file type");
   }
 
   inputFile.close();
 }
 
 void
-VTKPolyDataMeshIO ::ReadCellData(void * buffer)
+VTKPolyDataMeshIO::ReadCellData(void * buffer)
 {
   std::ifstream inputFile;
 
@@ -1125,8 +1123,8 @@ VTKPolyDataMeshIO ::ReadCellData(void * buffer)
 
   if (!inputFile.is_open())
   {
-    itkExceptionMacro(<< "Unable to open file\n"
-                         "inputFilename= "
+    itkExceptionMacro("Unable to open file\n"
+                      "inputFilename= "
                       << this->m_FileName);
   }
 
@@ -1139,7 +1137,7 @@ VTKPolyDataMeshIO ::ReadCellData(void * buffer)
 
       default:
       {
-        itkExceptionMacro(<< "Unknown cell pixel component");
+        itkExceptionMacro("Unknown cell pixel component");
       }
     }
   }
@@ -1151,20 +1149,20 @@ VTKPolyDataMeshIO ::ReadCellData(void * buffer)
 
       default:
       {
-        itkExceptionMacro(<< "Unknown cell pixel component");
+        itkExceptionMacro("Unknown cell pixel component");
       }
     }
   }
   else
   {
-    itkExceptionMacro(<< "Unkonw file type");
+    itkExceptionMacro("Unkonw file type");
   }
 
   inputFile.close();
 }
 
 void
-VTKPolyDataMeshIO ::WriteMeshInformation()
+VTKPolyDataMeshIO::WriteMeshInformation()
 {
   // Check file name
   if (this->m_FileName.empty())
@@ -1191,27 +1189,22 @@ VTKPolyDataMeshIO ::WriteMeshInformation()
   }
 
   // Write VTK header
-  outputFile << "# vtk DataFile Version 2.0"
-             << "\n";
-  outputFile << "File written by itkPolyDataMeshIO"
-             << "\n";
+  outputFile << "# vtk DataFile Version 2.0" << '\n';
+  outputFile << "File written by itkPolyDataMeshIO" << '\n';
   if (m_FileType == IOFileEnum::ASCII)
   {
-    outputFile << "ASCII"
-               << "\n";
+    outputFile << "ASCII" << '\n';
   }
   else if (m_FileType == IOFileEnum::BINARY)
   {
-    outputFile << "BINARY"
-               << "\n";
+    outputFile << "BINARY" << '\n';
   }
   else
   {
-    itkExceptionMacro(<< "Invalid output file type (not ASCII or BINARY)");
+    itkExceptionMacro("Invalid output file type (not ASCII or BINARY)");
   }
 
-  outputFile << "DATASET POLYDATA"
-             << "\n";
+  outputFile << "DATASET POLYDATA" << '\n';
 
   outputFile.close();
 }
@@ -1284,7 +1277,7 @@ VTKPolyDataMeshIO ::WriteMeshInformation()
   }
 
 void
-VTKPolyDataMeshIO ::WritePoints(void * buffer)
+VTKPolyDataMeshIO::WritePoints(void * buffer)
 {
   // Check file name
   if (this->m_FileName.empty())
@@ -1317,7 +1310,7 @@ VTKPolyDataMeshIO ::WritePoints(void * buffer)
       CASE_INVOKE_WITH_COMPONENT_TYPE(WritePointsBufferAsASCII)
 
       default:
-        itkExceptionMacro(<< "Unknown point component type");
+        itkExceptionMacro("Unknown point component type");
     }
   }
   else if (this->m_FileType == IOFileEnum::BINARY)
@@ -1327,12 +1320,12 @@ VTKPolyDataMeshIO ::WritePoints(void * buffer)
       CASE_INVOKE_WITH_COMPONENT_TYPE(WritePointsBufferAsBINARY)
 
       default:
-        itkExceptionMacro(<< "Unknown point component type");
+        itkExceptionMacro("Unknown point component type");
     }
   }
   else
   {
-    itkExceptionMacro(<< "Invalid output file type(not ASCII or BINARY)");
+    itkExceptionMacro("Invalid output file type(not ASCII or BINARY)");
   }
 
   outputFile.close();
@@ -1419,7 +1412,7 @@ VTKPolyDataMeshIO ::WritePoints(void * buffer)
   }
 
 void
-VTKPolyDataMeshIO ::WriteCells(void * buffer)
+VTKPolyDataMeshIO::WriteCells(void * buffer)
 {
   if (this->m_FileName.empty())
   {
@@ -1451,7 +1444,7 @@ VTKPolyDataMeshIO ::WriteCells(void * buffer)
       CASE_UPDATE_AND_WRITE(WriteCellsBufferAsASCII)
 
       default:
-        itkExceptionMacro(<< "Unknown cell component type");
+        itkExceptionMacro("Unknown cell component type");
     }
   }
   else if (this->m_FileType == IOFileEnum::BINARY)
@@ -1461,19 +1454,19 @@ VTKPolyDataMeshIO ::WriteCells(void * buffer)
       CASE_UPDATE_AND_WRITE(WriteCellsBufferAsBINARY)
 
       default:
-        itkExceptionMacro(<< "Unknown cell component type");
+        itkExceptionMacro("Unknown cell component type");
     }
   }
   else
   {
-    itkExceptionMacro(<< "Invalid output file type(not ASCII or BINARY)");
+    itkExceptionMacro("Invalid output file type(not ASCII or BINARY)");
   }
 
   outputFile.close();
 }
 
 void
-VTKPolyDataMeshIO ::WritePointData(void * buffer)
+VTKPolyDataMeshIO::WritePointData(void * buffer)
 {
   // check file name
   if (this->m_FileName.empty())
@@ -1506,7 +1499,7 @@ VTKPolyDataMeshIO ::WritePointData(void * buffer)
       CASE_INVOKE_WITH_COMPONENT_TYPE(WritePointDataBufferAsASCII)
 
       default:
-        itkExceptionMacro(<< "Unknown point pixel component type");
+        itkExceptionMacro("Unknown point pixel component type");
     }
   }
   else if (this->m_FileType == IOFileEnum::BINARY)
@@ -1516,19 +1509,19 @@ VTKPolyDataMeshIO ::WritePointData(void * buffer)
       CASE_INVOKE_WITH_COMPONENT_TYPE(WritePointDataBufferAsBINARY)
 
       default:
-        itkExceptionMacro(<< "Unknown point pixel component type");
+        itkExceptionMacro("Unknown point pixel component type");
     }
   }
   else
   {
-    itkExceptionMacro(<< "Invalid output file type(not ASCII or BINARY)");
+    itkExceptionMacro("Invalid output file type(not ASCII or BINARY)");
   }
 
   outputFile.close();
 }
 
 void
-VTKPolyDataMeshIO ::WriteCellData(void * buffer)
+VTKPolyDataMeshIO::WriteCellData(void * buffer)
 {
   if (this->m_FileName.empty())
   {
@@ -1559,7 +1552,7 @@ VTKPolyDataMeshIO ::WriteCellData(void * buffer)
       CASE_INVOKE_WITH_COMPONENT_TYPE(WriteCellDataBufferAsASCII)
 
       default:
-        itkExceptionMacro(<< "Unknown cell pixel component type");
+        itkExceptionMacro("Unknown cell pixel component type");
     }
   }
   else if (this->m_FileType == IOFileEnum::BINARY)
@@ -1569,23 +1562,23 @@ VTKPolyDataMeshIO ::WriteCellData(void * buffer)
       CASE_INVOKE_WITH_COMPONENT_TYPE(WriteCellDataBufferAsBINARY)
 
       default:
-        itkExceptionMacro(<< "Unknown cell pixel component type");
+        itkExceptionMacro("Unknown cell pixel component type");
     }
   }
   else
   {
-    itkExceptionMacro(<< "Invalid output file type(not ASCII or BINARY)");
+    itkExceptionMacro("Invalid output file type(not ASCII or BINARY)");
   }
 
   outputFile.close();
 }
 
 void
-VTKPolyDataMeshIO ::Write()
+VTKPolyDataMeshIO::Write()
 {}
 
 void
-VTKPolyDataMeshIO ::PrintSelf(std::ostream & os, Indent indent) const
+VTKPolyDataMeshIO::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 

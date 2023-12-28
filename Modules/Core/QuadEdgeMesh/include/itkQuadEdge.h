@@ -27,21 +27,19 @@
 // FIXME: Maybe variations of these macros should be moved into
 // itkMacro.h
 //
-#define itkQEDebugMacro(x)                                        \
-  {                                                               \
-    std::ostringstream itkmsg;                                    \
-    itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << "\n" \
-           << " (" << this << "): " x << "\n\n";                  \
-    OutputWindowDisplayDebugText(itkmsg.str().c_str());           \
-  }                                                               \
+#define itkQEDebugMacro(x)                                                                              \
+  {                                                                                                     \
+    std::ostringstream itkmsg;                                                                          \
+    itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << '\n' << " (" << this << "): " x << "\n\n"; \
+    OutputWindowDisplayDebugText(itkmsg.str().c_str());                                                 \
+  }                                                                                                     \
   ITK_MACROEND_NOOP_STATEMENT
-#define itkQEWarningMacro(x)                                        \
-  {                                                                 \
-    std::ostringstream itkmsg;                                      \
-    itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << "\n" \
-           << " (" << this << "): " x << "\n\n";                    \
-    OutputWindowDisplayWarningText(itkmsg.str().c_str());           \
-  }                                                                 \
+#define itkQEWarningMacro(x)                                                                              \
+  {                                                                                                       \
+    std::ostringstream itkmsg;                                                                            \
+    itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << '\n' << " (" << this << "): " x << "\n\n"; \
+    OutputWindowDisplayWarningText(itkmsg.str().c_str());                                                 \
+  }                                                                                                       \
   ITK_MACROEND_NOOP_STATEMENT
 
 // -------------------------------------------------------------------------
@@ -117,7 +115,7 @@
 namespace itk
 {
 /**
- *\class QuadEdge
+ * \class QuadEdge
  * \brief Base class for the implementation of a quad-edge data structure as
  * proposed in "Guibas and Stolfi 1985"
  *
@@ -435,8 +433,8 @@ public:
   GetOrder() const;
 
 private:
-  Self * m_Onext; /**< Onext ring */
-  Self * m_Rot;   /**< Rot ring */
+  Self * m_Onext{}; /**< Onext ring */
+  Self * m_Rot{};   /**< Rot ring */
 };
 } // namespace itk
 

@@ -24,9 +24,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 UnaryGeneratorImageFilter<TInputImage, TOutputImage>::UnaryGeneratorImageFilter()
 {
@@ -35,15 +33,6 @@ UnaryGeneratorImageFilter<TInputImage, TOutputImage>::UnaryGeneratorImageFilter(
   this->DynamicMultiThreadingOn();
 }
 
-/**
- * UnaryGeneratorImageFilter can produce an image which is a different resolution
- * than its input image.  As such, UnaryGeneratorImageFilter needs to provide an
- * implementation for GenerateOutputInformation() in order to inform
- * the pipeline execution model.  The original documentation of this
- * method is below.
- *
- * \sa ProcessObject::GenerateOutputInformation()
- */
 template <typename TInputImage, typename TOutputImage>
 void
 UnaryGeneratorImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
@@ -104,11 +93,9 @@ UnaryGeneratorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateDat
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators
-  ImageScanlineConstIterator<TInputImage> inputIt(inputPtr, inputRegionForThread);
-  ImageScanlineIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
+  ImageScanlineConstIterator inputIt(inputPtr, inputRegionForThread);
+  ImageScanlineIterator      outputIt(outputPtr, outputRegionForThread);
 
-  inputIt.GoToBegin();
-  outputIt.GoToBegin();
   while (!inputIt.IsAtEnd())
   {
     while (!inputIt.IsAtEndOfLine())

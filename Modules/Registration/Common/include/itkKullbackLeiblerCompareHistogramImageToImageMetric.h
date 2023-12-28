@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(KullbackLeiblerCompareHistogramImageToImageMetric, HistogramImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(KullbackLeiblerCompareHistogramImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -147,7 +147,7 @@ protected:
   MeasureType
   EvaluateMeasure(HistogramType & histogram) const override;
 
-  double m_Epsilon;
+  double m_Epsilon{};
 };
 } // End namespace itk.
 

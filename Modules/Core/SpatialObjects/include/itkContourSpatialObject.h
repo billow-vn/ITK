@@ -25,16 +25,16 @@
 
 namespace itk
 {
-/***\class ContourSpatialObjectEnums
+/*** \class ContourSpatialObjectEnums
  *
- * \brief Enum classes for the ControuSpatialObject class.
+ * \brief Enum classes for the ContourSpatialObject class.
  *
  * \ingroup ITKSpatialObjects
  */
 class ContourSpatialObjectEnums
 {
 public:
-  /***\class InterpolationMethodEnum
+  /*** \class InterpolationMethodEnum
    * \ingroup ITKSpatialObjects
    * Hold interpolation method type
    */
@@ -61,7 +61,7 @@ extern ITKSpatialObjects_EXPORT std::ostream &
  * \ingroup ITKSpatialObjects
  *
  * \sphinx
- * \sphinxexample{Core/SpatialObjects/{{ContourSpatialObject,Contour Spacial Object}
+ * \sphinxexample{Core/SpatialObjects/ContourSpatialObject,Contour Spatial Object}
  * \endsphinx
  */
 
@@ -105,7 +105,7 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(ContourSpatialObject, PointBasedSpatialObject);
+  itkOverrideGetNameOfClassMacro(ContourSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -126,11 +126,11 @@ public:
     return m_ControlPoints;
   }
 
-  /** Set the list of control points. */
+  /** Set the list of control points defining the contour. */
   void
   SetControlPoints(const ControlPointListType & points);
 
-  /** Set the list of control points. */
+  /** Add a point to the list of control points defining the contour. */
   void
   AddControlPoint(const ControlPointType & point);
 
@@ -204,15 +204,15 @@ protected:
   InternalClone() const override;
 
 private:
-  ContourPointListType m_ControlPoints;
+  ContourPointListType m_ControlPoints{};
 
-  InterpolationMethodEnum m_InterpolationMethod;
-  unsigned int            m_InterpolationFactor;
+  InterpolationMethodEnum m_InterpolationMethod{};
+  unsigned int            m_InterpolationFactor{};
 
-  mutable bool             m_IsClosed;
-  mutable int              m_OrientationInObjectSpace;
-  mutable ModifiedTimeType m_OrientationInObjectSpaceMTime;
-  int                      m_AttachedToSlice;
+  mutable bool             m_IsClosed{};
+  mutable int              m_OrientationInObjectSpace{};
+  mutable ModifiedTimeType m_OrientationInObjectSpaceMTime{};
+  int                      m_AttachedToSlice{};
 };
 } // end namespace itk
 

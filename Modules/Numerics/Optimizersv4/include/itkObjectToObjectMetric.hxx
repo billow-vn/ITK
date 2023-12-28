@@ -25,9 +25,6 @@
 namespace itk
 {
 
-/*
- * constructor
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -35,7 +32,7 @@ template <unsigned int TFixedDimension,
 ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParametersValueType>::ObjectToObjectMetric()
 
 {
-  /* Both transforms default to an identity transform */
+  // Both transforms default to an identity transform.
   using MovingIdentityTransformType = IdentityTransform<TParametersValueType, Self::MovingDimension>;
   using FixedIdentityTransformType = IdentityTransform<TParametersValueType, Self::FixedDimension>;
   this->m_FixedTransform = FixedIdentityTransformType::New();
@@ -46,9 +43,6 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
   this->m_UserHasSetVirtualDomain = false;
 }
 
-/*
- * Initialize
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -90,9 +84,6 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
   }
 }
 
-/*
- * SetTransform
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -104,9 +95,6 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
   this->SetMovingTransform(transform);
 }
 
-/*
- * GetTransform
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -118,9 +106,6 @@ const typename ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualI
   return this->GetMovingTransform();
 }
 
-/*
- * UpdateTransformParameters
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -130,14 +115,11 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
   const DerivativeType & derivative,
   TParametersValueType   factor)
 {
-  /* Rely on transform::UpdateTransformParameters to verify proper
-   * size of derivative */
+  // Rely on transform::UpdateTransformParameters to verify proper
+  // size of derivative.
   this->m_MovingTransform->UpdateTransformParameters(derivative, factor);
 }
 
-/*
- * GetNumberOfParameters
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -150,9 +132,6 @@ typename ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, 
   return this->m_MovingTransform->GetNumberOfParameters();
 }
 
-/*
- * GetParameters
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -164,9 +143,6 @@ const typename ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualI
   return this->m_MovingTransform->GetParameters();
 }
 
-/*
- * SetParameters
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -178,9 +154,6 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
   this->m_MovingTransform->SetParametersByValue(params);
 }
 
-/*
- * GetNumberOfLocalParameters
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -193,9 +166,6 @@ typename ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, 
   return this->m_MovingTransform->GetNumberOfLocalParameters();
 }
 
-/*
- * HasLocalSupport
- */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -551,7 +521,7 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
                   << ", DisplacementField Spacing: " << field->GetSpacing() << std::endl;
     directionString << "Virtual Direction: " << this->GetVirtualDirection()
                     << ", DisplacementField Direction: " << field->GetDirection() << std::endl;
-    itkExceptionMacro(<< "Virtual Domain and DisplacementField do not "
+    itkExceptionMacro("Virtual Domain and DisplacementField do not "
                       << "occupy the same physical space! You may be able to "
                       << "simply call displacementField->CopyInformation( "
                       << "metric->GetVirtualImage() ) to align them. " << std::endl
@@ -593,14 +563,14 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TParamete
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "ObjectToObjectMetric: " << std::endl;
-
   itkPrintSelfObjectMacro(FixedTransform);
   itkPrintSelfObjectMacro(MovingTransform);
   itkPrintSelfObjectMacro(VirtualImage);
 
-  os << indent << "m_UserHasSetVirtualDomain: " << this->m_UserHasSetVirtualDomain << std::endl
-     << indent << "m_NumberOfValidPoints: " << this->m_NumberOfValidPoints << std::endl;
+  os << indent << "UserHasSetVirtualDomain: " << (m_UserHasSetVirtualDomain ? "On" : "Off") << std::endl;
+  os << indent
+     << "NumberOfValidPoints: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfValidPoints)
+     << std::endl;
 }
 
 } // namespace itk

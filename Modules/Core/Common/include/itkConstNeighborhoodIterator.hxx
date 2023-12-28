@@ -200,16 +200,10 @@ template <typename TImage, typename TBoundaryCondition>
 auto
 ConstNeighborhoodIterator<TImage, TBoundaryCondition>::GetBoundingBoxAsImageRegion() const -> RegionType
 {
-  const IndexValueType zero = NumericTraits<IndexValueType>::ZeroValue();
+  const IndexValueType zero{};
   const RegionType     ans(this->GetIndex(zero), this->GetSize());
 
   return ans;
-}
-
-template <typename TImage, typename TBoundaryCondition>
-ConstNeighborhoodIterator<TImage, TBoundaryCondition>::ConstNeighborhoodIterator()
-{
-  m_BoundaryCondition = &m_InternalBoundaryCondition;
 }
 
 template <typename TImage, typename TBoundaryCondition>
@@ -566,6 +560,8 @@ template <typename TImage, typename TBoundaryCondition>
 void
 ConstNeighborhoodIterator<TImage, TBoundaryCondition>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  Superclass::PrintSelf(os, indent);
+
   DimensionValueType i;
 
   os << indent;
@@ -573,57 +569,56 @@ ConstNeighborhoodIterator<TImage, TBoundaryCondition>::PrintSelf(std::ostream & 
   os << ", m_Region = { Start = {";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_Region.GetIndex()[i] << " ";
+    os << m_Region.GetIndex()[i] << ' ';
   }
   os << "}, Size = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_Region.GetSize()[i] << " ";
+    os << m_Region.GetSize()[i] << ' ';
   }
   os << "} }";
   os << ", m_BeginIndex = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_BeginIndex[i] << " ";
+    os << m_BeginIndex[i] << ' ';
   }
   os << "} , m_EndIndex = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_EndIndex[i] << " ";
+    os << m_EndIndex[i] << ' ';
   }
   os << "} , m_Loop = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_Loop[i] << " ";
+    os << m_Loop[i] << ' ';
   }
   os << "}, m_Bound = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_Bound[i] << " ";
+    os << m_Bound[i] << ' ';
   }
   os << "}, m_IsInBounds = {" << m_IsInBounds;
   os << "}, m_IsInBoundsValid = {" << m_IsInBoundsValid;
   os << "}, m_WrapOffset = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_WrapOffset[i] << " ";
+    os << m_WrapOffset[i] << ' ';
   }
   os << ", m_Begin = " << m_Begin;
   os << ", m_End = " << m_End;
-  os << "}" << std::endl;
+  os << '}' << std::endl;
 
   os << indent << ",  m_InnerBoundsLow = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_InnerBoundsLow[i] << " ";
+    os << m_InnerBoundsLow[i] << ' ';
   }
   os << "}, m_InnerBoundsHigh = { ";
   for (i = 0; i < Dimension; ++i)
   {
-    os << m_InnerBoundsHigh[i] << " ";
+    os << m_InnerBoundsHigh[i] << ' ';
   }
   os << "} }" << std::endl;
-  Superclass::PrintSelf(os, indent.GetNextIndent());
 }
 
 template <typename TImage, typename TBoundaryCondition>

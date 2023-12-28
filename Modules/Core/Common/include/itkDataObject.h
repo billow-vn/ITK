@@ -44,7 +44,7 @@ class ITK_FORWARD_EXPORT DataObject;
 /*--------------------Data Object Exceptions---------------------------*/
 
 /**
- *\class DataObjectError
+ * \class DataObjectError
  * \brief Exception object for DataObject exceptions.
  * \ingroup ITKCommon
  */
@@ -72,7 +72,7 @@ public:
   operator=(const DataObjectError & orig) noexcept;
 
   /** Standard type macro */
-  itkTypeMacro(DataObjectError, ExceptionObject);
+  itkOverrideGetNameOfClassMacro(DataObjectError);
 
   /** Set the data object that is throwing this exception. */
   void
@@ -100,7 +100,7 @@ private:
 };
 
 /**
- *\class InvalidRequestRegionError
+ * \class InvalidRequestRegionError
  *  \brief Exception object for invalid requested region.
  *
  * Exception object for invalid requested region.
@@ -130,7 +130,7 @@ public:
   operator=(const InvalidRequestedRegionError & orig) noexcept;
 
   /** Standard type macro */
-  itkTypeMacro(InvalidRequestedRegionError, DataObjectError);
+  itkOverrideGetNameOfClassMacro(InvalidRequestedRegionError);
 
 protected:
   /** Print exception information.  This method can be overridden by
@@ -144,7 +144,7 @@ protected:
 /*----------------------------Data Object--------------------------------*/
 
 /**
- *\class DataObject
+ * \class DataObject
  * \brief Base class for all data objects in ITK.
  *
  * This is the base class for all data objects in the Insight data
@@ -301,7 +301,7 @@ public:
   using DataObjectIdentifierType = std::string;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DataObject, Object);
+  itkOverrideGetNameOfClassMacro(DataObject);
 
   /** Method for creation through the object factory. */
   itkSimpleNewMacro(DataObject);
@@ -556,24 +556,24 @@ protected:
 
 private:
   /** Who generated this data? */
-  WeakPointer<ProcessObject> m_Source;
-  DataObjectIdentifierType   m_SourceOutputName;
+  WeakPointer<ProcessObject> m_Source{};
+  DataObjectIdentifierType   m_SourceOutputName{};
 
   /** When was this data last generated?
    *  This time stamp is an integer number and it is intended to synchronize the
    *  activities of the pipeline. It doesn't relates to the clock time of
    *  acquiring or processing the data. */
-  TimeStamp m_UpdateMTime;
+  TimeStamp m_UpdateMTime{};
 
   /** When, in real time, this data was generated. */
-  RealTimeStamp m_RealTimeStamp;
+  RealTimeStamp m_RealTimeStamp{};
 
-  bool m_ReleaseDataFlag; // Data will release after use by a filter if on
-  bool m_DataReleased;    // Keep track of data release during pipeline execution
+  bool m_ReleaseDataFlag{}; // Data will release after use by a filter if on
+  bool m_DataReleased{};    // Keep track of data release during pipeline execution
 
   /** The maximum MTime of all upstream filters and data objects.
    * This does not include the MTime of this data object. */
-  ModifiedTimeType m_PipelineMTime;
+  ModifiedTimeType m_PipelineMTime{};
 
   /** Static member that controls global data release after use by filter. */
   static bool * m_GlobalReleaseDataFlag;

@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageShapeModelEstimatorBase, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ImageShapeModelEstimatorBase);
 
   /** Type definitions for the training image. */
   using InputImageType = TInputImage;
@@ -73,12 +73,12 @@ protected:
   GenerateData() override;
 
 private:
-  /** The core virtual function to perform ShapeModelling of the input data */
+  /** The core virtual function to perform ShapeModeling of the input data */
   virtual void
   EstimateShapeModels() = 0;
 
   /** Container for holding the training image. */
-  InputImagePointer m_InputImage;
+  InputImagePointer m_InputImage{};
 
 }; // class ImageShapeModelEstimator
 } // namespace itk

@@ -134,7 +134,6 @@ itkDiscreteHessianGaussianImageFunctionTestND(int argc, char * argv[])
   using PointType = typename HessianGaussianImageFunctionType::PointType;
   PointType point;
   using ContinuousIndexType = typename HessianGaussianImageFunctionType::ContinuousIndexType;
-  ContinuousIndexType cindex;
   const unsigned long nop = reader->GetOutput()->GetRequestedRegion().GetNumberOfPixels();
   unsigned long       pixelNumber = 0;
   while (!it.IsAtEnd())
@@ -150,8 +149,11 @@ itkDiscreteHessianGaussianImageFunctionTestND(int argc, char * argv[])
     }
     else
     {
+      using ContinuousIndexValueType = typename ContinuousIndexType::ValueType;
+
       reader->GetOutput()->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-      reader->GetOutput()->TransformPhysicalPointToContinuousIndex(point, cindex);
+      const ContinuousIndexType cindex =
+        reader->GetOutput()->template TransformPhysicalPointToContinuousIndex<ContinuousIndexValueType>(point);
       hessian = function->EvaluateAtContinuousIndex(cindex);
     }
 
@@ -194,9 +196,10 @@ itkDiscreteHessianGaussianImageFunctionTestND(int argc, char * argv[])
   {
     if (varReturned[i] != varChanged[i])
     {
-      std::cout << "Test failed!" << std::endl;
-      std::cout << "Error in GetVariance() at index [" << i << "]" << std::endl;
-      std::cout << "Expected: " << varChanged[i] << ", but got: " << varReturned[i] << std::endl;
+      std::cerr << "Test failed!" << std::endl;
+      std::cerr << "Error in GetVariance at index [" << i << "]" << std::endl;
+      std::cerr << "Expected value " << varChanged[i] << std::endl;
+      std::cerr << " differs from " << varReturned[i] << std::endl;
       return EXIT_FAILURE;
     }
   }
@@ -213,9 +216,10 @@ itkDiscreteHessianGaussianImageFunctionTestND(int argc, char * argv[])
   {
     if (itk::Math::NotAlmostEquals(varReturned[i], itk::Math::pi))
     {
-      std::cout << "Test failed!" << std::endl;
-      std::cout << "Error in GetVariance() at index [" << i << "]" << std::endl;
-      std::cout << "Expected: " << itk::Math::pi << ", but got: " << varReturned[i] << std::endl;
+      std::cerr << "Test failed!" << std::endl;
+      std::cerr << "Error in GetVariance at index [" << i << "]" << std::endl;
+      std::cerr << "Expected value " << itk::Math::pi << std::endl;
+      std::cerr << " differs from " << varReturned[i] << std::endl;
       return EXIT_FAILURE;
     }
   }
@@ -237,6 +241,8 @@ itkDiscreteHessianGaussianImageFunctionTestND(int argc, char * argv[])
     hessian = function->EvaluateAtIndex(index);
     inputImage->TransformIndexToPhysicalPoint(index, point);
     hessian = function->Evaluate(point);
+
+    ContinuousIndexType cindex;
 
     // Exercise the fractional computation of the linear interpolator
     for (unsigned int i = 0; i < Dimension; ++i)

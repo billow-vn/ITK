@@ -47,12 +47,12 @@ public:
   {
     if (object == nullptr)
     {
-      itkExceptionMacro(<< "Command update on null object");
+      itkExceptionMacro("Command update on null object");
     }
     std::cout << "Observing from class " << object->GetNameOfClass();
     if (!object->GetObjectName().empty())
     {
-      std::cout << " \"" << object->GetObjectName() << "\"";
+      std::cout << " \"" << object->GetObjectName() << '"';
     }
     std::cout << std::endl;
     const auto * filter = static_cast<const TFilter *>(object);
@@ -94,7 +94,7 @@ public:
     {
       for (itk::SizeValueType i = 0; i < gradient.GetSize(); i += (gradient.GetSize() / 16))
       {
-        std::cout << gradient[i] << " ";
+        std::cout << gradient[i] << ' ';
       }
     }
     std::cout << std::endl;
@@ -246,8 +246,8 @@ itkSimplePointSetRegistrationTest(int itkNotUsed(argc), char * itkNotUsed(argv)[
     PointType difference;
     difference[0] = transformedMovingPoint[0] - fixedPoint[0];
     difference[1] = transformedMovingPoint[1] - fixedPoint[1];
-    std::cout << fixedPoints->GetPoint(n) << "\t" << movingPoints->GetPoint(n) << "\t" << transformedMovingPoint << "\t"
-              << transformedFixedPoint << "\t" << difference << std::endl;
+    std::cout << fixedPoints->GetPoint(n) << '\t' << movingPoints->GetPoint(n) << '\t' << transformedMovingPoint << '\t'
+              << transformedFixedPoint << '\t' << difference << std::endl;
     if (itk::Math::abs(difference[0]) > tolerance || itk::Math::abs(difference[1]) > tolerance)
     {
       passed = false;

@@ -101,7 +101,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiResolutionPDEDeformableRegistration, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(MultiResolutionPDEDeformableRegistration);
 
   /** Fixed image type. */
   using FixedImageType = TFixedImage;
@@ -237,8 +237,17 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /** Generate output data by performing the registration
-   * at each resolution level. */
+  /** Generate output data by performing the registration at each resolution level.
+   *
+   * Performs a the deformable registration using a multiresolution scheme using an internal mini-pipeline
+   *
+   *  ref_pyramid ->  registrator  ->  field_expander --|| tempField
+   * test_pyramid ->           |                              |
+   *                           |                              |
+   *                           --------------------------------
+   *
+   * A tempField image is used to break the cycle between the registrator and field_expander.
+   */
   void
   GenerateData() override;
 
@@ -278,18 +287,18 @@ protected:
   {}
 
 private:
-  RegistrationPointer       m_RegistrationFilter;
-  FixedImagePyramidPointer  m_FixedImagePyramid;
-  MovingImagePyramidPointer m_MovingImagePyramid;
-  FieldExpanderPointer      m_FieldExpander;
-  DisplacementFieldPointer  m_InitialDisplacementField;
+  RegistrationPointer       m_RegistrationFilter{};
+  FixedImagePyramidPointer  m_FixedImagePyramid{};
+  MovingImagePyramidPointer m_MovingImagePyramid{};
+  FieldExpanderPointer      m_FieldExpander{};
+  DisplacementFieldPointer  m_InitialDisplacementField{};
 
-  unsigned int           m_NumberOfLevels;
-  unsigned int           m_CurrentLevel;
-  NumberOfIterationsType m_NumberOfIterations;
+  unsigned int           m_NumberOfLevels{};
+  unsigned int           m_CurrentLevel{};
+  NumberOfIterationsType m_NumberOfIterations{};
 
   /** Flag to indicate user stop registration request. */
-  bool m_StopRegistrationFlag;
+  bool m_StopRegistrationFlag{};
 };
 } // end namespace itk
 

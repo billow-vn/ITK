@@ -53,7 +53,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryThresholdSpatialFunction, SpatialFunction);
+  itkOverrideGetNameOfClassMacro(BinaryThresholdSpatialFunction);
 
   /** New macro for creation of through the object factory. */
   itkNewMacro(Self);
@@ -87,15 +87,15 @@ public:
   Evaluate(const InputType & point) const override;
 
 protected:
-  BinaryThresholdSpatialFunction();
+  BinaryThresholdSpatialFunction() = default;
   ~BinaryThresholdSpatialFunction() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  FunctionOutputType m_LowerThreshold;
-  FunctionOutputType m_UpperThreshold;
+  FunctionOutputType m_LowerThreshold{ NumericTraits<FunctionOutputType>::NonpositiveMin() };
+  FunctionOutputType m_UpperThreshold{ NumericTraits<FunctionOutputType>::max() };
 
-  typename FunctionType::Pointer m_Function;
+  typename FunctionType::Pointer m_Function{};
 };
 } // end namespace itk
 

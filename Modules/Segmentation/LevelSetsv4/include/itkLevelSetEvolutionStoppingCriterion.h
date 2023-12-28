@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class LevelSetEvolutionStoppingCriterion
+ * \class LevelSetEvolutionStoppingCriterion
  \ingroup ITKLevelSetsv4
  */
 template <typename TLevelSetContainer>
@@ -41,7 +41,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LevelSetEvolutionStoppingCriterion, StoppingCriterionBase);
+  itkOverrideGetNameOfClassMacro(LevelSetEvolutionStoppingCriterion);
 
   using LevelSetContainerType = TLevelSetContainer;
   using LevelSetContainerPointer = typename LevelSetContainerType::Pointer;
@@ -81,10 +81,10 @@ protected:
   /** Destructor */
   ~LevelSetEvolutionStoppingCriterion() override = default;
 
-  LevelSetContainerPointer m_LevelSetContainer;
-  OutputRealType           m_RMSChangeAccumulator;
-  IterationIdType          m_NumberOfIterations;
-  IterationIdType          m_CurrentIteration;
+  LevelSetContainerPointer m_LevelSetContainer{};
+  OutputRealType           m_RMSChangeAccumulator{};
+  IterationIdType          m_NumberOfIterations{};
+  IterationIdType          m_CurrentIteration{};
 };
 } // namespace itk
 #ifndef ITK_MANUAL_INSTANTIATION

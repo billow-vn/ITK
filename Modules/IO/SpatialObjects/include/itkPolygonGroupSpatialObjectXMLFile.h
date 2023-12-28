@@ -49,7 +49,7 @@ public:
   using PolygonPointListType = std::vector<PolygonPointType>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolygonGroupSpatialObjectXMLFileReader, XMLReader);
+  itkOverrideGetNameOfClassMacro(PolygonGroupSpatialObjectXMLFileReader);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,10 +73,10 @@ protected:
   CharacterDataHandler(const char * inData, int inLength) override;
 
 private:
-  GroupSpatialObjectType::Pointer   m_Group;
-  PolygonSpatialObjectType::Pointer m_CurPoly;
-  PolygonPointListType              m_CurPointList;
-  std::string                       m_CurCharacterData;
+  GroupSpatialObjectType::Pointer   m_Group{};
+  PolygonSpatialObjectType::Pointer m_CurPoly{};
+  PolygonPointListType              m_CurPointList{};
+  std::string                       m_CurCharacterData{};
 };
 
 /** \class PolygonGroupSpatialObjectXMLFileWriter
@@ -99,7 +99,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolygonGroupSpatialObjectXMLFileWriter, XMLWriterBase);
+  itkOverrideGetNameOfClassMacro(PolygonGroupSpatialObjectXMLFileWriter);
 
   using GroupType = GroupSpatialObject<3>;
 

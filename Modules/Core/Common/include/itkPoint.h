@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class Point
+ * \class Point
  * \brief A templated class holding a geometric point in n-Dimensional space.
  *
  * Point is a templated class that holds a set of coordinates (components).
@@ -276,7 +276,7 @@ public:
   RealType
   SquaredEuclideanDistanceTo(const Point<TCoordRepB, VPointDimension> & pa) const
   {
-    RealType sum = NumericTraits<RealType>::ZeroValue();
+    RealType sum{};
 
     for (unsigned int i = 0; i < VPointDimension; ++i)
     {
@@ -309,7 +309,7 @@ std::istream &
 operator>>(std::istream & is, Point<T, VPointDimension> & vct);
 
 /**
- *\class BarycentricCombination
+ * \class BarycentricCombination
  *  \brief Computes the barycentric combination of an array of N points.
  *
  * This class computes the barycentric combination of an array of N points.
@@ -365,14 +365,8 @@ template <typename TValue, typename... TVariadic>
 auto
 MakePoint(const TValue firstValue, const TVariadic... otherValues)
 {
-  // Assert that the other values have the same type as the first value.
-  const auto assertSameType = [](const auto value) {
-    static_assert(std::is_same<decltype(value), const TValue>::value, "Each value must have the same type!");
-    return true;
-  };
-  const bool assertions[] = { true, assertSameType(otherValues)... };
-  (void)assertions;
-  (void)assertSameType;
+  static_assert(std::conjunction_v<std::is_same<TVariadic, TValue>...>,
+                "The other values should have the same type as the first value.");
 
   constexpr unsigned int              dimension{ 1 + sizeof...(TVariadic) };
   const std::array<TValue, dimension> stdArray{ { firstValue, otherValues... } };

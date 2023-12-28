@@ -96,7 +96,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CompositeTransform, Transform);
+  itkOverrideGetNameOfClassMacro(CompositeTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -334,7 +334,7 @@ public:
 
   /** Get/Set Parameter functions work on the current list of transforms
       that are set to be optimized (active) using the
-      'Set[Nth|All]TransformToOptimze' routines.
+      'Set[Nth|All]TransformToOptimize' routines.
       The parameter data from each active transform is
       concatenated into a single ParametersType object.
       \note The sub-transforms are read in \b reverse queue order,
@@ -407,7 +407,7 @@ public:
                                                           JacobianType &         cacheJacobian) const override;
 
 protected:
-  CompositeTransform();
+  CompositeTransform() = default;
   ~CompositeTransform() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -450,11 +450,11 @@ protected:
   const TransformQueueType &
   GetTransformsToOptimizeQueue() const;
 
-  mutable TransformQueueType    m_TransformsToOptimizeQueue;
-  TransformsToOptimizeFlagsType m_TransformsToOptimizeFlags;
+  mutable TransformQueueType    m_TransformsToOptimizeQueue{};
+  TransformsToOptimizeFlagsType m_TransformsToOptimizeFlags{};
 
 private:
-  mutable ModifiedTimeType m_PreviousTransformsToOptimizeUpdateTime;
+  mutable ModifiedTimeType m_PreviousTransformsToOptimizeUpdateTime{};
 };
 
 } // end namespace itk

@@ -69,10 +69,7 @@ public:
 int
 itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
 {
-
-  //------------------------------------------------------------
   // Create a simple image
-  //------------------------------------------------------------
 
   // Allocate Images
   using PixelType = short;
@@ -146,9 +143,7 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
   imgTarget->SetOrigin(transCenter);
 
 
-  /**
-   * Setup a multi-resolution pyramid
-   */
+  // Setup a multi-resolution pyramid
   using PyramidType = itk::RecursiveMultiResolutionPyramidImageFilter<InputImageType, OutputImageType>;
   using ScheduleType = PyramidType::ScheduleType;
   auto pyramid = PyramidType::New();
@@ -184,11 +179,11 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
 
   if (schedule != pyramid->GetSchedule())
   {
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in GetSchedule" << std::endl;
+    std::cerr << "Expected value " << schedule << std::endl;
+    std::cerr << " differs from " << pyramid->GetSchedule() << std::endl;
     pass = false;
-    std::cout << "Schedule should be: " << std::endl;
-    std::cout << schedule << std::endl;
-    std::cout << "instead of: " << std::endl;
-    std::cout << pyramid->GetSchedule();
   }
 
   // set schedule by specifying the starting shrink factors
@@ -216,11 +211,11 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
 
   if (schedule != pyramid->GetSchedule())
   {
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in GetSchedule" << std::endl;
+    std::cerr << "Expected value " << schedule << std::endl;
+    std::cerr << " differs from " << pyramid->GetSchedule() << std::endl;
     pass = false;
-    std::cout << "Schedule should be: " << std::endl;
-    std::cout << schedule << std::endl;
-    std::cout << "instead of: " << std::endl;
-    std::cout << pyramid->GetSchedule();
   }
 
   // test start factors
@@ -277,7 +272,9 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
     }
     unsigned int sz = inputSize[j] / schedule[testLevel][j];
     if (sz == 0)
+    {
       sz = 1;
+    }
     if (outputSize[j] != sz)
     {
       break;
@@ -293,8 +290,7 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
 
 
   // run in streamed mode
-  std::cout << "Run ImagePyramid with streamer";
-  std::cout << std::endl;
+  std::cout << "Run ImagePyramid with streamer" << std::endl;
 
   using CasterType = itk::CastImageFilter<InputImageType, InputImageType>;
   auto caster = CasterType::New();
@@ -321,9 +317,10 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
   {
     if (!itk::Math::FloatAlmostEqual(iter1.Get(), iter2.Get(), 2))
     {
-      std::cout << "Expected: " << iter1.Get() << " but got: " << iter2.Get() << std::endl;
-      std::cout << "\t@: " << iter1.GetIndex() << std::endl;
-      std::cout << "Streamed output is different!!!" << std::endl;
+      std::cerr << "Test failed!" << std::endl;
+      std::cerr << "Error in streamed output at index [" << iter1.GetIndex() << "]" << std::endl;
+      std::cerr << "Expected value " << iter1.Get() << std::endl;
+      std::cerr << " differs from " << iter2.Get() << std::endl;
       pass = false;
       // break;
     }
@@ -343,6 +340,7 @@ itkRecursiveMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
   pyramid->SetSchedule(schedule);
   pyramid->Update();
 
-  std::cout << "Test passed." << std::endl;
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

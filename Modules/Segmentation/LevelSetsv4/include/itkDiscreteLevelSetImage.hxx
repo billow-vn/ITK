@@ -221,7 +221,7 @@ template <typename TOutput, unsigned int VDimension>
 auto
 DiscreteLevelSetImage<TOutput, VDimension>::EvaluateLaplacian(const InputType & inputIndex) const -> OutputRealType
 {
-  OutputRealType oLaplacian = NumericTraits<OutputRealType>::ZeroValue();
+  OutputRealType oLaplacian{};
 
   const auto centerValue = static_cast<OutputRealType>(this->Evaluate(inputIndex));
 
@@ -440,7 +440,7 @@ template <typename TOutput, unsigned int VDimension>
 auto
 DiscreteLevelSetImage<TOutput, VDimension>::EvaluateMeanCurvature(const InputType & inputIndex) const -> OutputRealType
 {
-  OutputRealType oValue = NumericTraits<OutputRealType>::ZeroValue();
+  OutputRealType oValue{};
 
   HessianType  hessian = this->EvaluateHessian(inputIndex);
   GradientType grad = this->EvaluateGradient(inputIndex);
@@ -682,8 +682,8 @@ DiscreteLevelSetImage<TOutput, VDimension>::CopyInformation(const DataObject * d
   if (!LevelSet)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::DiscreteLevelSetImage::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(Self *).name());
+    itkExceptionMacro("itk::DiscreteLevelSetImage::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                                   << typeid(Self *).name());
   }
 }
 
@@ -698,8 +698,8 @@ DiscreteLevelSetImage<TOutput, VDimension>::Graft(const DataObject * data)
   if (!LevelSet)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::DiscreteLevelSetImage::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(Self *).name());
+    itkExceptionMacro("itk::DiscreteLevelSetImage::CopyInformation() cannot cast " << typeid(data).name() << " to "
+                                                                                   << typeid(Self *).name());
   }
 
   this->m_NeighborhoodScales = LevelSet->m_NeighborhoodScales;

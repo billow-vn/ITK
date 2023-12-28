@@ -46,7 +46,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageRegionSplitterDirection, ImageRegionSplitterBase);
+  itkOverrideGetNameOfClassMacro(ImageRegionSplitterDirection);
 
   /** Get the direction in which not to split the image.*
    *
@@ -77,7 +77,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int m_Direction;
+  unsigned int m_Direction{};
 };
 } // end namespace itk
 

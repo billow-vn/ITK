@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class SphereSignedDistanceFunction
+ * \class SphereSignedDistanceFunction
  * \brief Compute the signed distance from a N-dimensional sphere.
  *
  * A instance of sphere is defined by a set parameters. The first parameter
@@ -54,7 +54,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SphereSignedDistanceFunction, ShapeSignedDistancFunction);
+  itkOverrideGetNameOfClassMacro(SphereSignedDistanceFunction);
 
   /** New macro for creation of through the object factory. */
   itkNewMacro(Self);
@@ -62,7 +62,7 @@ public:
   /** OutputType type alias support */
   using typename Superclass::OutputType;
 
-  /** InputeType type alias support */
+  /** InputType type alias support */
   using typename Superclass::InputType;
 
   /** Dimension underlying input image. */
@@ -107,8 +107,8 @@ protected:
 private:
   using VectorType = Vector<CoordRepType, Self::SpaceDimension>;
 
-  VectorType m_Translation;
-  double     m_Radius;
+  VectorType m_Translation{};
+  double     m_Radius{};
 };
 } // end namespace itk
 

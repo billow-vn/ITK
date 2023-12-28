@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class SpatialObjectToImageFilter
+ * \class SpatialObjectToImageFilter
  * \brief Base class for filters that take a SpatialObject
  *        as input and produce an image as output.
  *  By default, if the user does not specify the size of the output image,
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpatialObjectToImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(SpatialObjectToImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageRegionType;
@@ -78,7 +78,7 @@ public:
 
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
-  /** Set/Get the image input of this process object.  */
+  /** Set/Get the input spatial object. */
   using Superclass::SetInput;
   virtual void
   SetInput(const InputSpatialObjectType * input);
@@ -196,18 +196,18 @@ protected:
   void
   GenerateData() override;
 
-  IndexType     m_Index;
-  SizeType      m_Size;
-  double        m_Spacing[OutputImageDimension];
-  double        m_Origin[OutputImageDimension];
-  DirectionType m_Direction;
+  IndexType     m_Index{};
+  SizeType      m_Size{};
+  double        m_Spacing[OutputImageDimension]{};
+  double        m_Origin[OutputImageDimension]{};
+  DirectionType m_Direction{};
 
-  unsigned int m_ChildrenDepth;
+  unsigned int m_ChildrenDepth{};
 
-  ValueType m_InsideValue;
-  ValueType m_OutsideValue;
+  ValueType m_InsideValue{};
+  ValueType m_OutsideValue{};
 
-  bool m_UseObjectValue;
+  bool m_UseObjectValue{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

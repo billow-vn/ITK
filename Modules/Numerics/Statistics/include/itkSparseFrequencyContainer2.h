@@ -30,7 +30,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class SparseFrequencyContainer2
+ * \class SparseFrequencyContainer2
  *  \brief his class is a container for an histogram.
  *
  *  This class uses an map to store histogram. If your histogram is dense
@@ -51,7 +51,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(SparseFrequencyContainer2, Object);
+  itkOverrideGetNameOfClassMacro(SparseFrequencyContainer2);
   itkNewMacro(Self);
 
   /** instance identifier alias */
@@ -111,8 +111,8 @@ protected:
 
 private:
   // Container of histogram
-  FrequencyContainerType     m_FrequencyContainer;
-  TotalAbsoluteFrequencyType m_TotalFrequency;
+  FrequencyContainerType     m_FrequencyContainer{};
+  TotalAbsoluteFrequencyType m_TotalFrequency{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

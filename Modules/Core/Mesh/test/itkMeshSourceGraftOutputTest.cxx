@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshSourceGraftOutputFilter, MeshToMeshFilter);
+  itkOverrideGetNameOfClassMacro(MeshSourceGraftOutputFilter);
 
   /** Get/Set transform. */
   itkSetObjectMacro(Transform, TransformType);
@@ -106,12 +106,12 @@ MeshSourceGraftOutputFilter<TInputMesh, TOutputMesh, TTransform>::GenerateData()
 
   if (!inputMesh)
   {
-    itkExceptionMacro(<< "Missing Input Mesh");
+    itkExceptionMacro("Missing Input Mesh");
   }
 
   if (!outputMesh)
   {
-    itkExceptionMacro(<< "Missing Output Mesh");
+    itkExceptionMacro("Missing Output Mesh");
   }
 
   // Declare the type for the filter

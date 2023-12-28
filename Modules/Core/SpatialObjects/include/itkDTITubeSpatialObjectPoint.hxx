@@ -22,7 +22,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TPointDimension>
 DTITubeSpatialObjectPoint<TPointDimension>::DTITubeSpatialObjectPoint()
 {
@@ -36,7 +36,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::DTITubeSpatialObjectPoint()
   m_TensorMatrix[5] = 1;
 }
 
-/** Copy Constructor */
 template <unsigned int TPointDimension>
 DTITubeSpatialObjectPoint<TPointDimension>::DTITubeSpatialObjectPoint(const DTITubeSpatialObjectPoint & other)
   : Superclass(other)
@@ -60,9 +59,12 @@ void
 DTITubeSpatialObjectPoint<TPointDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+
+  os << indent << "TensorMatrix: " << m_TensorMatrix << std::endl;
+  // ToDo
+  // os << indent << "Fields: " << m_Fields << std::endl;
 }
 
-/** Translate the enumerated types to a string */
 template <unsigned int TPointDimension>
 std::string
 DTITubeSpatialObjectPoint<TPointDimension>::TranslateEnumToChar(DTITubeSpatialObjectPointFieldEnum name) const
@@ -83,7 +85,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::TranslateEnumToChar(DTITubeSpatialOb
   return std::string("");
 }
 
-/** Add a field to the point list */
 template <unsigned int TPointDimension>
 void
 DTITubeSpatialObjectPoint<TPointDimension>::AddField(const char * name, float value)
@@ -93,7 +94,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::AddField(const char * name, float va
   m_Fields.push_back(field);
 }
 
-/** Set a field value to the point list */
 template <unsigned int TPointDimension>
 void
 DTITubeSpatialObjectPoint<TPointDimension>::SetField(const char * name, float value)
@@ -110,7 +110,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::SetField(const char * name, float va
   }
 }
 
-/** Set a value to a field in the point list */
 template <unsigned int TPointDimension>
 void
 DTITubeSpatialObjectPoint<TPointDimension>::SetField(DTITubeSpatialObjectPointFieldEnum name, float value)
@@ -127,7 +126,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::SetField(DTITubeSpatialObjectPointFi
   }
 }
 
-/** Add a field to the point list */
 template <unsigned int TPointDimension>
 void
 DTITubeSpatialObjectPoint<TPointDimension>::AddField(DTITubeSpatialObjectPointFieldEnum name, float value)
@@ -145,7 +143,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::AddField(DTITubeSpatialObjectPointFi
   }
 }
 
-/** Return the value of the given field */
 template <unsigned int TPointDimension>
 float
 DTITubeSpatialObjectPoint<TPointDimension>::GetField(const char * name) const
@@ -163,7 +160,6 @@ DTITubeSpatialObjectPoint<TPointDimension>::GetField(const char * name) const
   return -1;
 }
 
-/** Add a field to the point list */
 template <unsigned int TPointDimension>
 float
 DTITubeSpatialObjectPoint<TPointDimension>::GetField(DTITubeSpatialObjectPointFieldEnum name) const

@@ -27,14 +27,14 @@ namespace itk
 {
 namespace Statistics
 {
-/**\class ExpectationMaximizationMixtureModelEstimatorEnums
+/** \class ExpectationMaximizationMixtureModelEstimatorEnums
  * \brief Contains all enum classes used by ExpectationMaximizationMixtureModelEstimator class.
  * \ingroup ITKStatistics
  */
 class ExpectationMaximizationMixtureModelEstimatorEnums
 {
 public:
-  /**\class TERMINATION_CODE
+  /** \class TERMINATION_CODE
    * \ingroup ITKStatistics
    * Termination status after running optimization */
   enum class TERMINATION_CODE : uint8_t
@@ -48,7 +48,7 @@ extern ITKStatistics_EXPORT std::ostream &
                             operator<<(std::ostream & out, const ExpectationMaximizationMixtureModelEstimatorEnums::TERMINATION_CODE value);
 
 /**
- *\class ExpectationMaximizationMixtureModelEstimator
+ * \class ExpectationMaximizationMixtureModelEstimator
  *  \brief This class generates the parameter estimates for a mixture
  *  model using expectation maximization strategy.
  *
@@ -92,7 +92,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(ExpectationMaximizationMixtureModelEstimator, Object);
+  itkOverrideGetNameOfClassMacro(ExpectationMaximizationMixtureModelEstimator);
   itkNewMacro(Self);
 
   /** TSample template argument related type alias */
@@ -226,18 +226,18 @@ protected:
 
 private:
   /** Target data sample pointer*/
-  const TSample * m_Sample;
+  const TSample * m_Sample{};
 
   int m_MaxIteration{ 100 };
   int m_CurrentIteration{ 0 };
 
   TERMINATION_CODE_ENUM m_TerminationCode{ TERMINATION_CODE_ENUM::NOT_CONVERGED };
-  ComponentVectorType   m_ComponentVector;
-  ProportionVectorType  m_InitialProportions;
-  ProportionVectorType  m_Proportions;
+  ComponentVectorType   m_ComponentVector{};
+  ProportionVectorType  m_InitialProportions{};
+  ProportionVectorType  m_Proportions{};
 
-  MembershipFunctionVectorObjectPointer  m_MembershipFunctionsObject;
-  MembershipFunctionsWeightsArrayPointer m_MembershipFunctionsWeightArrayObject;
+  MembershipFunctionVectorObjectPointer  m_MembershipFunctionsObject{};
+  MembershipFunctionsWeightsArrayPointer m_MembershipFunctionsWeightArrayObject{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

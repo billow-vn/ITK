@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class VideoSource
+ * \class VideoSource
  * \brief A TemporalProcessObject that produces a VideoStream
  *
  * VideoSource acts as the base class for all TemporalProcess objects that
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VideoSource, TemporalProcessObject);
+  itkOverrideGetNameOfClassMacro(VideoSource);
 
   /*-PUBLIC METHODS----------------------------------------------------------*/
 
@@ -155,7 +155,7 @@ protected:
   AllocateOutputs();
 
   /** Method that gets called before threads are dispatched from
-   * TemporalStreamingGeneratData */
+   * TemporalStreamingGenerateData */
   virtual void
   BeforeThreadedGenerateData()
   {}

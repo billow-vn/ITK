@@ -29,7 +29,7 @@ namespace itk
 {
 
 /**
- *\class GaussianInterpolateImageFunction
+ * \class GaussianInterpolateImageFunction
  * \brief Evaluates the Gaussian interpolation of an image.
  *
  * This class defines an N-dimensional Gaussian interpolation function using
@@ -63,7 +63,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianInterpolateImageFunction, InterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(GaussianInterpolateImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -196,13 +196,13 @@ private:
   virtual OutputType
   EvaluateAtContinuousIndex(const ContinuousIndexType &, OutputType *) const;
 
-  ArrayType m_Sigma;
-  RealType  m_Alpha;
+  ArrayType m_Sigma{};
+  RealType  m_Alpha{};
 
-  ArrayType m_BoundingBoxStart;
-  ArrayType m_BoundingBoxEnd;
-  ArrayType m_ScalingFactor;
-  ArrayType m_CutOffDistance;
+  ArrayType m_BoundingBoxStart{};
+  ArrayType m_BoundingBoxEnd{};
+  ArrayType m_ScalingFactor{};
+  ArrayType m_CutOffDistance{};
 };
 
 } // end namespace itk

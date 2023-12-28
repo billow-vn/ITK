@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class DemoImageSource
+ * \class DemoImageSource
  *
  * \brief Streamable process that will generate image regions from the write requests
  *
@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DemoImageSource, GenerateImageSource);
+  itkOverrideGetNameOfClassMacro(DemoImageSource);
 
   /** Set the value to fill the image. */
   itkSetMacro(Value, typename TOutputImage::PixelType);
@@ -122,7 +122,9 @@ HDF5ReadWriteTest2(const char * fileName)
 
   // Check streaming regions.
   if (!writerMonitor->VerifyInputFilterExecutedStreaming(5))
+  {
     return EXIT_FAILURE;
+  }
   typename ImageType::RegionType expectedRegion;
   expectedRegion.SetIndex(0, 0);
   expectedRegion.SetIndex(1, 0);
@@ -195,14 +197,16 @@ HDF5ReadWriteTest2(const char * fileName)
     const TPixel origValue(idx[2] * 100 + idx[1] * 10 + idx[0]);
     if (itk::Math::NotAlmostEquals(it.Get(), origValue))
     {
-      std::cout << "Original Pixel (" << origValue << ") doesn't match read-in Pixel (" << it.Get() << ")" << std::endl;
+      std::cout << "Original Pixel (" << origValue << ") doesn't match read-in Pixel (" << it.Get() << ')' << std::endl;
       return EXIT_FAILURE;
     }
   }
 
   // Check number of streaming regions.
   if (!readerMonitor->VerifyInputFilterExecutedStreaming(5))
+  {
     return EXIT_FAILURE;
+  }
 
   // Check streaming regions.
   typename MonitorFilterType::RegionVectorType readerRegionVector = readerMonitor->GetUpdatedBufferedRegions();

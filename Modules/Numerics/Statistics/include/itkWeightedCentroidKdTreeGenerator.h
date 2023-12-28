@@ -28,7 +28,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class WeightedCentroidKdTreeGenerator
+ * \class WeightedCentroidKdTreeGenerator
  *  \brief This class generates a KdTree object with centroid information.
  *
  * The KdTree object stores measurement vectors in a k-d tree structure
@@ -76,7 +76,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(WeightedCentroidKdTreeGenerator, KdTreeGenerator);
+  itkOverrideGetNameOfClassMacro(WeightedCentroidKdTreeGenerator);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -108,9 +108,9 @@ protected:
                           unsigned int            level) override;
 
 private:
-  MeasurementVectorType m_TempLowerBound;
-  MeasurementVectorType m_TempUpperBound;
-  MeasurementVectorType m_TempMean;
+  MeasurementVectorType m_TempLowerBound{};
+  MeasurementVectorType m_TempUpperBound{};
+  MeasurementVectorType m_TempMean{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

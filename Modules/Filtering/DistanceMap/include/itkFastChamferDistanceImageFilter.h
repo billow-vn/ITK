@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class FastChamferDistanceImageFilter
+ * \class FastChamferDistanceImageFilter
  * \brief This class compute the signed (positive and negative) chamfer distance in a narrow band
  *
  * \par OVERVIEW
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastChamferDistanceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(FastChamferDistanceImageFilter);
 
   /** Type for input image. */
   using InputImageType = TInputImage;
@@ -157,15 +157,15 @@ protected:
   GenerateData() override;
 
 private:
-  float m_MaximumDistance;
+  float m_MaximumDistance{};
 
   /** coefficients of the Chamfer distance for each kind of neighbor. */
-  WeightsType m_Weights;
+  WeightsType m_Weights{};
 
-  NarrowBandPointer m_NarrowBand;
+  NarrowBandPointer m_NarrowBand{};
 
   /** Region in the image to process.  */
-  RegionType m_RegionToProcess;
+  RegionType m_RegionToProcess{};
 }; // end of FastChamferDistanceImageFilter class
 } // end namespace itk
 

@@ -132,7 +132,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AntiAliasBinaryImageFilter, SparseFieldLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(AntiAliasBinaryImageFilter);
 
   /** Get the upper and lower binary values in the input image. */
   itkGetConstMacro(UpperBinaryValue, BinaryValueType);
@@ -181,12 +181,12 @@ protected:
   GenerateData() override;
 
 private:
-  BinaryValueType m_UpperBinaryValue;
-  BinaryValueType m_LowerBinaryValue;
+  BinaryValueType m_UpperBinaryValue{};
+  BinaryValueType m_LowerBinaryValue{};
 
-  typename CurvatureFunctionType::Pointer m_CurvatureFunction;
+  typename CurvatureFunctionType::Pointer m_CurvatureFunction{};
 
-  const TInputImage * m_InputImage;
+  const TInputImage * m_InputImage{};
 };
 } // end namespace itk
 

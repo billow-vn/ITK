@@ -36,7 +36,7 @@ namespace itk
  * \author Tom Vercauteren, INRIA & Mauna Kea Technologies
  *
  * This implementation was taken from the Insight Journal paper:
- * https://hdl.handle.net/1926/510
+ * https://www.insight-journal.org/browse/publication/154
  *
  * \ingroup Operators
  * \ingroup ITKReview
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WarpHarmonicEnergyCalculator, Object);
+  itkOverrideGetNameOfClassMacro(WarpHarmonicEnergyCalculator);
 
   /** Type definition for the input image. */
   using ImageType = TInputImage;
@@ -139,16 +139,16 @@ protected:
 
 private:
   double            m_HarmonicEnergy{ 0.0 };
-  ImageConstPointer m_Image;
+  ImageConstPointer m_Image{};
 
-  RegionType m_Region;
+  RegionType m_Region{};
   bool       m_RegionSetByUser{ false };
 
   bool m_UseImageSpacing{ true };
 
-  WeightsType m_DerivativeWeights;
+  WeightsType m_DerivativeWeights{};
 
-  RadiusType m_NeighborhoodRadius;
+  RadiusType m_NeighborhoodRadius{};
 };
 } // end namespace itk
 

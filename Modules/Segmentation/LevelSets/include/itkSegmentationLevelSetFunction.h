@@ -56,7 +56,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(SegmentationLevelSetFunction, LevelSetFunction);
+  itkOverrideGetNameOfClassMacro(SegmentationLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using typename Superclass::ImageType;
@@ -163,19 +163,19 @@ public:
 
 protected:
   /** The image whose features will be used to create a speed image */
-  typename FeatureImageType::ConstPointer m_FeatureImage;
+  typename FeatureImageType::ConstPointer m_FeatureImage{};
 
   /** The image holding the speed values for front propagation */
-  typename ImageType::Pointer m_SpeedImage;
+  typename ImageType::Pointer m_SpeedImage{};
 
   /** The image holding the advection field for front propagation */
-  typename VectorImageType::Pointer m_AdvectionImage;
+  typename VectorImageType::Pointer m_AdvectionImage{};
 
   /** Returns the propagation speed from the precalculated speed image.*/
   ScalarValueType
   PropagationSpeed(const NeighborhoodType &, const FloatOffsetType &, GlobalDataStruct * gd) const override;
 
-  /** Advection field.  Returns a vector from the computed advectionfield.*/
+  /** Advection field.  Returns a vector from the computed advection field.*/
   VectorType
   AdvectionField(const NeighborhoodType &, const FloatOffsetType &, GlobalDataStruct * gd) const override;
 
@@ -188,9 +188,9 @@ protected:
     m_VectorInterpolator = VectorInterpolatorType::New();
   }
 
-  typename InterpolatorType::Pointer m_Interpolator;
+  typename InterpolatorType::Pointer m_Interpolator{};
 
-  typename VectorInterpolatorType::Pointer m_VectorInterpolator;
+  typename VectorInterpolatorType::Pointer m_VectorInterpolator{};
 };
 } // namespace itk
 

@@ -36,7 +36,7 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>::CopyInputToOutput()
 
   if (!input || !output)
   {
-    itkExceptionMacro(<< "Either input and/or output is nullptr.");
+    itkExceptionMacro("Either input and/or output is nullptr.");
   }
 
   // Check if we are doing in-place filtering
@@ -206,10 +206,10 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>::ThreadedApplyUpdate
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>::TimeStepType
+auto
 DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>::ThreadedCalculateChange(
   const ThreadRegionType & regionToProcess,
-  ThreadIdType)
+  ThreadIdType) -> TimeStepType
 {
   using SizeType = typename OutputImageType::SizeType;
   using NeighborhoodIteratorType = typename FiniteDifferenceFunctionType::NeighborhoodType;

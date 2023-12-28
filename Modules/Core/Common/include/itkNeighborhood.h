@@ -64,7 +64,7 @@ public:
   static constexpr unsigned int NeighborhoodDimension = VDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacroNoParent(Neighborhood);
+  itkVirtualGetNameOfClassMacro(Neighborhood);
 
   /** External support for pixel type. */
   using PixelType = TPixel;
@@ -85,7 +85,7 @@ public:
   /** Offset type used to reference neighbor locations */
   using OffsetType = Offset<VDimension>;
 
-  /** External slice iterator type type alias support */
+  /** External slice iterator type alias support */
   using SliceIteratorType = SliceIterator<TPixel, Self>;
 
   /** Type used to refer to space dimensions */
@@ -313,24 +313,24 @@ private:
   SizeType m_Size{ { 0 } };
 
   /** The buffer in which data is stored. */
-  AllocatorType m_DataBuffer;
+  AllocatorType m_DataBuffer{};
 
   /** A lookup table for keeping track of stride lengths in a neighborhood
       i.e. the memory offsets between pixels along each dimensional axis */
   OffsetValueType m_StrideTable[VDimension]{ 0 };
 
   /** */
-  std::vector<OffsetType> m_OffsetTable;
+  std::vector<OffsetType> m_OffsetTable{};
 };
 
 template <typename TPixel, unsigned int VDimension, typename TContainer>
 std::ostream &
 operator<<(std::ostream & os, const Neighborhood<TPixel, VDimension, TContainer> & neighborhood)
 {
-  os << "Neighborhood:" << std::endl;
-  os << "    Radius:" << neighborhood.GetRadius() << std::endl;
-  os << "    Size:" << neighborhood.GetSize() << std::endl;
-  os << "    DataBuffer:" << neighborhood.GetBufferReference() << std::endl;
+  os << "Neighborhood: " << std::endl;
+  os << "    Radius: " << neighborhood.GetRadius() << std::endl;
+  os << "    Size: " << neighborhood.GetSize() << std::endl;
+  os << "    DataBuffer: " << neighborhood.GetBufferReference() << std::endl;
 
   return os;
 }

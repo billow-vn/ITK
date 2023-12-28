@@ -23,24 +23,18 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TImage>
 BinaryMinMaxCurvatureFlowFunction<TImage>::BinaryMinMaxCurvatureFlowFunction()
 {
   m_Threshold = 0.0;
 }
 
-/**
- * Update the solution at pixels which does not lie on the
- * data boundary.
- */
 template <typename TImage>
-typename BinaryMinMaxCurvatureFlowFunction<TImage>::PixelType
+auto
 BinaryMinMaxCurvatureFlowFunction<TImage>::ComputeUpdate(const NeighborhoodType & it,
                                                          void *                   globalData,
-                                                         const FloatOffsetType &  offset)
+                                                         const FloatOffsetType &  offset) -> PixelType
 {
   using CurvatureFlowFunctionType = CurvatureFlowFunction<TImage>;
   PixelType update = this->CurvatureFlowFunctionType::ComputeUpdate(it, globalData, offset);

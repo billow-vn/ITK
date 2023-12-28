@@ -66,17 +66,17 @@ VectorGradientNDAnisotropicDiffusionFunction<TImage>::VectorGradientNDAnisotropi
   }
 
   // Allocate the derivative operator.
-  m_DerivativeOperator.SetDirection(0); // Not relelevant, we'll apply in a slice-based
+  m_DerivativeOperator.SetDirection(0); // Not relevant, we'll apply in a slice-based
                                         // fashion
   m_DerivativeOperator.SetOrder(1);
   m_DerivativeOperator.CreateDirectional();
 }
 
 template <typename TImage>
-typename VectorGradientNDAnisotropicDiffusionFunction<TImage>::PixelType
+auto
 VectorGradientNDAnisotropicDiffusionFunction<TImage>::ComputeUpdate(const NeighborhoodType & it,
                                                                     void *,
-                                                                    const FloatOffsetType &)
+                                                                    const FloatOffsetType &) -> PixelType
 {
   unsigned int i, j, k;
   PixelType    delta;

@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DisplacementFieldToBSplineImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(DisplacementFieldToBSplineImageFilter);
 
   /** Extract dimension from input image. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -198,7 +198,7 @@ public:
   /* Set/Get b-spline domain direction. */
   itkGetConstMacro(BSplineDomainDirection, DirectionType);
 
-  /* Use input field to define the B-spline doain. */
+  /* Use input field to define the B-spline domain. */
   itkSetMacro(UseInputFieldToDefineTheBSplineDomain, bool);
   itkGetConstMacro(UseInputFieldToDefineTheBSplineDomain, bool);
   itkBooleanMacro(UseInputFieldToDefineTheBSplineDomain);
@@ -295,16 +295,16 @@ private:
   bool         m_EstimateInverse{ false };
   bool         m_EnforceStationaryBoundary{ true };
   unsigned int m_SplineOrder{ 3 };
-  ArrayType    m_NumberOfControlPoints;
-  ArrayType    m_NumberOfFittingLevels;
+  ArrayType    m_NumberOfControlPoints{};
+  ArrayType    m_NumberOfFittingLevels{};
 
-  typename WeightsContainerType::Pointer m_PointWeights;
+  typename WeightsContainerType::Pointer m_PointWeights{};
   bool                                   m_UsePointWeights{ false };
 
-  OriginType    m_BSplineDomainOrigin;
-  SpacingType   m_BSplineDomainSpacing;
-  SizeType      m_BSplineDomainSize;
-  DirectionType m_BSplineDomainDirection;
+  OriginType    m_BSplineDomainOrigin{};
+  SpacingType   m_BSplineDomainSpacing{};
+  SizeType      m_BSplineDomainSize{};
+  DirectionType m_BSplineDomainDirection{};
 
   bool m_BSplineDomainIsDefined{ true };
   bool m_UseInputFieldToDefineTheBSplineDomain{ false };

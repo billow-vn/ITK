@@ -32,7 +32,7 @@ namespace fem
  * \class Element2DC1Beam
  * \brief 1D Beam (spring that also bends) finite element in 2D space.
  *
- * The Displacements at each node are modelled with two translational,
+ * The Displacements at each node are modeled with two translational,
  * and one rotational, degree of freedom.
  * \ingroup ITKFEM
  */
@@ -50,7 +50,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Element2DC1Beam, TemplatedParentClass);
+  itkOverrideGetNameOfClassMacro(Element2DC1Beam);
 
   /** CreateAnother method will clone the existing instance of this type,
    * including its internal member variables. */

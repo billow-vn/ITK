@@ -61,7 +61,7 @@ ImageSink<TInputImage>::GetInput(unsigned int idx) const -> const InputImageType
 
   if (in == nullptr && this->ProcessObject::GetInput(idx) != nullptr)
   {
-    itkWarningMacro(<< "Unable to convert input number " << idx << " to type " << typeid(InputImageType).name());
+    itkWarningMacro("Unable to convert input number " << idx << " to type " << typeid(InputImageType).name());
   }
   return in;
 }
@@ -75,7 +75,7 @@ ImageSink<TInputImage>::GetInput(const DataObjectIdentifierType & key) const -> 
 
   if (in == nullptr && this->ProcessObject::GetInput(key) != nullptr)
   {
-    itkWarningMacro(<< "Unable to convert input \"" << key << "\" to type " << typeid(InputImageType).name());
+    itkWarningMacro("Unable to convert input \"" << key << "\" to type " << typeid(InputImageType).name());
   }
   return in;
 }
@@ -236,8 +236,9 @@ ImageSink<TInputImage>::VerifyInputInformation() ITKv5_CONST
                           << " Direction: " << inputPtrN->GetDirection() << std::endl;
           directionString << "\tTolerance: " << this->m_DirectionTolerance << std::endl;
         }
-        itkExceptionMacro(<< "Inputs do not occupy the same physical space! " << std::endl
-                          << originString.str() << spacingString.str() << directionString.str());
+        itkExceptionMacro("Inputs do not occupy the same physical space! " << std::endl
+                                                                           << originString.str() << spacingString.str()
+                                                                           << directionString.str());
       }
     }
   }

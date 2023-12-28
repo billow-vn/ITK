@@ -36,7 +36,7 @@ namespace itk
 {
 
 /**
- *\class SimpleFastMutexLock
+ * \class SimpleFastMutexLock
  * \brief Critical section locking class that can be allocated on the stack.
  *
  * SimpleFastMutexLock is used by FastMutexLock to perform mutex locking.
@@ -64,7 +64,7 @@ public:
   Lock() const;
 
   /** Non-blocking Lock access.
-   \return bool - true if lock is captured, false if it was already heald by someone else.
+   \return bool - true if lock is captured, false if it was already held by someone else.
    */
   bool
   TryLock() const;

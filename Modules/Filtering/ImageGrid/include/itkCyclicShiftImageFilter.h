@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(CyclicShiftImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(CyclicShiftImageFilter);
 
   /** Set/get the shift. Shifts may be positive or negative. */
   itkSetMacro(Shift, OffsetType);
@@ -101,7 +101,7 @@ protected:
 
   /** Protected so that subclasses may set it without calling
   Modified(). */
-  OffsetType m_Shift;
+  OffsetType m_Shift{};
 }; // end of class
 } // end namespace itk
 

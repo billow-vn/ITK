@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(DivideOrZeroOutImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(DivideOrZeroOutImageFilter);
 
   /** Print internal ivars */
   void
@@ -124,7 +124,7 @@ private:
     return m_Functor;
   }
 
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 };
 
 } // end namespace itk

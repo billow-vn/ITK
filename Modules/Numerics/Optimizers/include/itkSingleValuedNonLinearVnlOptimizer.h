@@ -46,7 +46,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SingleValuedNonLinearVnlOptimizer, SingleValueNonLinearOptimizer);
+  itkOverrideGetNameOfClassMacro(SingleValuedNonLinearVnlOptimizer);
 
   /** Command observer that will interact with the ITKVNL cost-function
    * adaptor in order to generate iteration events. This will allow to overcome
@@ -101,6 +101,15 @@ public:
   itkGetConstReferenceMacro(CachedDerivative, DerivativeType);
   itkGetConstReferenceMacro(CachedCurrentPosition, ParametersType);
 
+  /** Returns true if derived optimizer supports using scales.
+   * For optimizers that do not support scaling, this
+   * default function is overridden to return false.*/
+  virtual bool
+  CanUseScales() const
+  {
+    return true;
+  }
+
 protected:
   SingleValuedNonLinearVnlOptimizer();
   ~SingleValuedNonLinearVnlOptimizer() override;
@@ -130,15 +139,15 @@ private:
   void
   IterationReport(const EventObject & event);
 
-  CostFunctionAdaptorType * m_CostFunctionAdaptor;
+  CostFunctionAdaptorType * m_CostFunctionAdaptor{};
 
-  bool m_Maximize;
+  bool m_Maximize{};
 
-  CommandType::Pointer m_Command;
+  CommandType::Pointer m_Command{};
 
-  mutable ParametersType m_CachedCurrentPosition;
-  mutable MeasureType    m_CachedValue;
-  mutable DerivativeType m_CachedDerivative;
+  mutable ParametersType m_CachedCurrentPosition{};
+  mutable MeasureType    m_CachedValue{};
+  mutable DerivativeType m_CachedDerivative{};
 };
 } // end namespace itk
 

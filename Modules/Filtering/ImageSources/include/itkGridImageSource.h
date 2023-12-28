@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class GridImageSource
+ * \class GridImageSource
  * \brief Generate an n-dimensional image of a grid.
  *
  * GridImageSource generates an image of a grid.
@@ -67,7 +67,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GridImageSource, GenerateImageSource);
+  itkOverrideGetNameOfClassMacro(GridImageSource);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -133,17 +133,17 @@ protected:
 
 private:
   /** Internal variable to speed up the calculation of pixel values. */
-  typename PixelArrayContainerType::Pointer m_PixelArrays;
+  typename PixelArrayContainerType::Pointer m_PixelArrays{};
 
-  typename KernelFunctionType::Pointer m_KernelFunction;
+  typename KernelFunctionType::Pointer m_KernelFunction{};
 
-  ArrayType m_Sigma;
+  ArrayType m_Sigma{};
 
-  ArrayType m_GridSpacing;
+  ArrayType m_GridSpacing{};
 
-  ArrayType m_GridOffset;
+  ArrayType m_GridOffset{};
 
-  BoolArrayType m_WhichDimensions;
+  BoolArrayType m_WhichDimensions{};
 
   RealType m_Scale{ 255.0 };
 };

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class BinaryThresholdImageFunction
+ * \class BinaryThresholdImageFunction
  * \brief Returns true is the value of an image lies within a range
  *        of thresholds
  * This ImageFunction returns true (or false) if the pixel value lies
@@ -53,7 +53,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryThresholdImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(BinaryThresholdImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -152,8 +152,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  PixelType m_Lower;
-  PixelType m_Upper;
+  PixelType m_Lower{};
+  PixelType m_Upper{};
 };
 } // end namespace itk
 

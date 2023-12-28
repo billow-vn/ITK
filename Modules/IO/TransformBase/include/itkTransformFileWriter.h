@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformFileWriterTemplate, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(TransformFileWriterTemplate);
 
   /** Set the filename  */
   itkSetStringMacro(FileName);
@@ -67,18 +67,23 @@ public:
   /** Get the filename */
   itkGetStringMacro(FileName);
 
-  /** Set/Get the write mode (append/overwrite) for the Filter */
+#if !defined(ITK_FUTURE_LEGACY_REMOVE)
+  /** Set/Get the write mode (append/overwrite) for the Filter.
+   * Deprecated. */
   void
   SetAppendOff();
 
   void
   SetAppendOn();
 
-  void
-  SetAppendMode(bool mode);
-
   bool
   GetAppendMode();
+#endif
+
+  /** Set/Get the write mode (append/overwrite) for the filter. */
+  itkSetMacro(AppendMode, bool);
+  itkGetConstMacro(AppendMode, bool);
+  itkBooleanMacro(AppendMode);
 
   /** Set/Get a boolean to use the compression or not. */
   itkSetMacro(UseCompression, bool);
@@ -115,12 +120,12 @@ private:
   void
   PushBackTransformList(const Object * transObj);
 
-  std::string            m_FileName;
-  ConstTransformListType m_TransformList;
+  std::string            m_FileName{};
+  ConstTransformListType m_TransformList{};
   bool                   m_AppendMode{ false };
   /** Should we compress the data? */
   bool                              m_UseCompression{ false };
-  typename TransformIOType::Pointer m_TransformIO;
+  typename TransformIOType::Pointer m_TransformIO{};
 };
 
 /** This helps to meet backward compatibility */

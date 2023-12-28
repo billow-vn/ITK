@@ -80,7 +80,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Element, FEMLightObject);
+  itkOverrideGetNameOfClassMacro(Element);
 
   /**
    * Floating point type used in all Element classes.
@@ -172,7 +172,7 @@ public:
     }
 
     /** Run-time type information (and related methods). */
-    itkTypeMacro(Node, FEMLightObject);
+    itkOverrideGetNameOfClassMacro(Node);
 
     /** CreateAnother method will clone the existing instance of this type,
      * including its internal member variables. */
@@ -545,7 +545,7 @@ public:
   GetNode(unsigned int n) const = 0;
 
   /**
-   * Sets the pointe of n-th node in an element to node.
+   * Sets the pointer of n-th node in an element to node.
    */
   virtual void
   SetNode(unsigned int n, NodeIDType node) = 0;
@@ -717,7 +717,7 @@ public:
 
 protected:
   // to store edge connectivity data
-  std::vector<std::vector<int>> m_EdgeIds;
+  std::vector<std::vector<int>> m_EdgeIds{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

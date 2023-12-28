@@ -86,7 +86,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShapePriorSegmentationLevelSetImageFilter, SegmentationLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(ShapePriorSegmentationLevelSetImageFilter);
 
   /** Inherited type alias from the superclass. */
   using typename Superclass::ValueType;
@@ -191,13 +191,13 @@ protected:
   ExtractActiveRegion(NodeContainerType * ptr);
 
 private:
-  ShapeFunctionPointer m_ShapeFunction;
-  CostFunctionPointer  m_CostFunction;
-  OptimizerPointer     m_Optimizer;
-  ParametersType       m_InitialParameters;
-  ParametersType       m_CurrentParameters;
+  ShapeFunctionPointer m_ShapeFunction{};
+  CostFunctionPointer  m_CostFunction{};
+  OptimizerPointer     m_Optimizer{};
+  ParametersType       m_InitialParameters{};
+  ParametersType       m_CurrentParameters{};
 
-  ShapePriorSegmentationFunctionType * m_ShapePriorSegmentationFunction;
+  ShapePriorSegmentationFunctionType * m_ShapePriorSegmentationFunction{};
 };
 } // end namespace itk
 

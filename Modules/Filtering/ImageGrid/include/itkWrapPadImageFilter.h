@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class WrapPadImageFilter
+ * \class WrapPadImageFilter
  * \brief Increase the image size by padding with replicants of the
  * input image value.
  *
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WrapPadImageFilter, PadImageFilter);
+  itkOverrideGetNameOfClassMacro(WrapPadImageFilter);
 
   using typename Superclass::InputImageType;
   using typename Superclass::OutputImageType;
@@ -102,7 +102,7 @@ protected:
   ~WrapPadImageFilter() override = default;
 
 private:
-  PeriodicBoundaryCondition<TInputImage, TOutputImage> m_InternalBoundaryCondition;
+  PeriodicBoundaryCondition<TInputImage, TOutputImage> m_InternalBoundaryCondition{};
 };
 } // end namespace itk
 

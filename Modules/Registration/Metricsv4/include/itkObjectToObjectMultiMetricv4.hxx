@@ -23,7 +23,6 @@
 namespace itk
 {
 
-/** Constructor */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -37,7 +36,6 @@ ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TI
   this->m_MovingTransform = nullptr;
 }
 
-/** Add a metric to the queue. */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -49,7 +47,6 @@ ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TI
   this->m_MetricQueue.push_back(metric);
 }
 
-/** Clear the queue */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -61,7 +58,6 @@ ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TI
   this->m_MetricQueue.clear();
 }
 
-/** Get the number of metrics */
 template <unsigned int TFixedDimension,
           unsigned int TMovingDimension,
           typename TVirtualImage,
@@ -137,7 +133,7 @@ ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TI
                         << this->m_MetricWeights.Size());
     }
     /* normalize the weights */
-    WeightValueType sum = NumericTraits<WeightValueType>::ZeroValue();
+    WeightValueType sum{};
     for (SizeValueType j = 0; j < this->GetNumberOfMetrics(); ++j)
     {
       sum += this->m_MetricWeights[j];
@@ -186,7 +182,7 @@ ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TI
       {
         itkExceptionMacro(
           "Expected exactly one transform set to be optimized within the composite transform. Error with metric "
-          << j << ".");
+          << j << '.');
       }
     }
 
@@ -296,17 +292,17 @@ ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TI
   derivativeResult.Fill(NumericTraits<DerivativeValueType>::ZeroValue());
 
   DerivativeType metricDerivative;
-  MeasureType    metricValue = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType    metricValue{};
 
   // Loop over metrics
-  DerivativeValueType totalMagnitude = NumericTraits<DerivativeValueType>::ZeroValue();
+  DerivativeValueType totalMagnitude{};
   for (SizeValueType j = 0; j < this->GetNumberOfMetrics(); ++j)
   {
     this->m_MetricQueue[j]->GetValueAndDerivative(metricValue, metricDerivative);
     this->m_MetricValueArray[j] = metricValue;
 
     DerivativeValueType magnitude = metricDerivative.magnitude();
-    DerivativeValueType weightOverMagnitude = NumericTraits<DerivativeValueType>::ZeroValue();
+    DerivativeValueType weightOverMagnitude{};
     totalMagnitude += magnitude;
 
     if (magnitude > NumericTraits<DerivativeValueType>::epsilon())
@@ -355,7 +351,7 @@ typename ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtual
   ObjectToObjectMultiMetricv4<TFixedDimension, TMovingDimension, TVirtualImage, TInternalComputationValueType>::
     GetWeightedValue() const
 {
-  MeasureType value = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType value{};
 
   for (SizeValueType j = 0; j < this->GetNumberOfMetrics(); ++j)
   {

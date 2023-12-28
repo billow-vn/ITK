@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MovingHistogramMorphologyImageFilter, MovingHistogramImageFilter);
+  itkOverrideGetNameOfClassMacro(MovingHistogramMorphologyImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -115,7 +115,7 @@ protected:
   void
   ConfigureHistogram(THistogram & histogram) override;
 
-  PixelType m_Boundary;
+  PixelType m_Boundary{};
 }; // end of class
 } // end namespace itk
 

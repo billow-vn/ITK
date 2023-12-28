@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class InverseDeconvolutionImageFilter
+ * \class InverseDeconvolutionImageFilter
  * \brief The direct linear inverse deconvolution filter.
  *
  * The inverse filter is the most straightforward deconvolution
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(InverseDeconvolutionImageFilter, FFTConvolutionImageFilter);
+  itkOverrideGetNameOfClassMacro(InverseDeconvolutionImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -118,7 +118,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_KernelZeroMagnitudeThreshold;
+  double m_KernelZeroMagnitudeThreshold{};
 };
 
 namespace Functor
@@ -142,7 +142,7 @@ public:
   operator()(const TInput1 & I, const TInput2 & H) const
   {
     const double absH = itk::Math::abs(H);
-    TOutput      value = NumericTraits<TOutput>::ZeroValue();
+    TOutput      value{};
     if (absH >= m_KernelZeroMagnitudeThreshold)
     {
       value = static_cast<TOutput>(I / H);

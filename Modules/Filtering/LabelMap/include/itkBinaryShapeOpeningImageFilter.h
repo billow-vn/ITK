@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class BinaryShapeOpeningImageFilter
+ * \class BinaryShapeOpeningImageFilter
  * \brief Remove objects based on the value of their shape attribute.
  *
  * The BinaryShapeOpeningImageFilter removes the objects in a binary image
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryShapeOpeningImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryShapeOpeningImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -170,12 +170,12 @@ protected:
   GenerateData() override;
 
 private:
-  bool                 m_FullyConnected;
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
-  double               m_Lambda;
-  bool                 m_ReverseOrdering;
-  AttributeType        m_Attribute;
+  bool                 m_FullyConnected{};
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
+  double               m_Lambda{};
+  bool                 m_ReverseOrdering{};
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

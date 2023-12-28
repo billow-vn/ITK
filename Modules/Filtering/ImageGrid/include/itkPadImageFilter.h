@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class PadImageFilter
+ * \class PadImageFilter
  * \brief Increase the image size by padding. Superclass for filters that fill
  * in extra pixels.
  *
@@ -80,7 +80,7 @@ public:
   using BoundaryConditionPointerType = BoundaryConditionType *;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PadImageFilter, PadImageFilterBase);
+  itkOverrideGetNameOfClassMacro(PadImageFilter);
 
   /** ImageDimension enumeration. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -117,8 +117,8 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  SizeType m_PadLowerBound;
-  SizeType m_PadUpperBound;
+  SizeType m_PadLowerBound{};
+  SizeType m_PadUpperBound{};
 };
 } // end namespace itk
 

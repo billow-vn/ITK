@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BinaryThinningImageFilter
+ * \class BinaryThinningImageFilter
  *
  * \brief This filter computes one-pixel-wide edges of the input image.
  *
@@ -74,12 +74,12 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryThinningImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryThinningImageFilter);
 
   /** Type for input image. */
   using InputImageType = TInputImage;
 
-  /** Type for output image: Skelenton of the object.  */
+  /** Type for output image: Skeleton of the object.  */
   using OutputImageType = TOutputImage;
 
   /** Type for the region of the input image. */
@@ -106,7 +106,7 @@ public:
   /** Neighborhood iterator type */
   using NeighborhoodIteratorType = NeighborhoodIterator<TInputImage>;
 
-  /** Get Skelenton by thinning image. */
+  /** Get Skeleton by thinning image. */
   OutputImageType *
   GetThinning();
 

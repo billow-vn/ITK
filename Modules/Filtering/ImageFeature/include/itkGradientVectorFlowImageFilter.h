@@ -29,7 +29,7 @@
 namespace itk
 {
 /**
- *\class GradientVectorFlowImageFilter
+ * \class GradientVectorFlowImageFilter
  * \brief
  * This class computes a diffusion of the gradient vectors for graylevel or binary
  * edge map derive from the image. It enlarges the capture range of the gradient
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientVectorFlowImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GradientVectorFlowImageFilter);
 
   /** Some type alias. */
   using InputImageType = TInputImage;
@@ -145,22 +145,22 @@ protected:
 
 private:
   // parameters;
-  double m_TimeStep;                               // the timestep of each
-                                                   // iteration
-  double m_Steps[Superclass::InputImageDimension]; // set to be 1 in all
-                                                   // directions in most cases
-  double m_NoiseLevel;                             // the noise level of the
-                                                   // image
-  int m_IterationNum;                              // the iteration number
+  double m_TimeStep{};                               // the timestep of each
+                                                     // iteration
+  double m_Steps[Superclass::InputImageDimension]{}; // set to be 1 in all
+                                                     // directions in most cases
+  double m_NoiseLevel{};                             // the noise level of the
+                                                     // image
+  int m_IterationNum{};                              // the iteration number
 
-  LaplacianFilterPointer                 m_LaplacianFilter;
-  typename Superclass::InputImagePointer m_IntermediateImage;
+  LaplacianFilterPointer                 m_LaplacianFilter{};
+  typename Superclass::InputImagePointer m_IntermediateImage{};
 
-  InternalImagePointer m_InternalImages[Superclass::InputImageDimension];
-  InternalImagePointer m_BImage; // store the "b" value for every pixel
+  InternalImagePointer m_InternalImages[Superclass::InputImageDimension]{};
+  InternalImagePointer m_BImage{}; // store the "b" value for every pixel
 
-  typename Superclass::InputImagePointer m_CImage; // store the $c_i$ value for
-                                                   // every pixel
+  typename Superclass::InputImagePointer m_CImage{}; // store the $c_i$ value for
+                                                     // every pixel
 };
 } // end namespace itk
 

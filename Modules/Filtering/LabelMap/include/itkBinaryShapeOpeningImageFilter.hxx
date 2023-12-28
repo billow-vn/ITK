@@ -115,7 +115,7 @@ BinaryShapeOpeningImageFilter<TInputImage>::PrintSelf(std::ostream & os, Indent 
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
   os << indent
      << "BackgroundValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue)
      << std::endl;
@@ -124,7 +124,7 @@ BinaryShapeOpeningImageFilter<TInputImage>::PrintSelf(std::ostream & os, Indent 
      << std::endl;
   os << indent << "Lambda: " << m_Lambda << std::endl;
   os << indent << "ReverseOrdering: " << m_ReverseOrdering << std::endl;
-  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ")"
+  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ')'
      << std::endl;
 }
 } // end namespace itk

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ComplexToPhaseImageFilter
+ * \class ComplexToPhaseImageFilter
  * \brief Computes pixel-wise the modulus of a complex image.
  *
  * \ingroup IntensityImageFilters  MultiThreaded
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ComplexToPhaseImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(ComplexToPhaseImageFilter);
 
   using InputPixelType = typename TInputImage::PixelType;
   using OutputPixelType = typename TOutputImage::PixelType;

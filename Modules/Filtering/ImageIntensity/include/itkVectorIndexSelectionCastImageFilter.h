@@ -107,7 +107,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(VectorIndexSelectionCastImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorIndexSelectionCastImageFilter);
 
   /** Get/Set methods for the index */
   void
@@ -161,8 +161,8 @@ protected:
 
     if (index >= numberOfComponents)
     {
-      itkExceptionMacro(<< "Selected index = " << index
-                        << " is greater than the number of components = " << numberOfComponents);
+      itkExceptionMacro("Selected index = " << index
+                                            << " is greater than the number of components = " << numberOfComponents);
     }
   }
 };

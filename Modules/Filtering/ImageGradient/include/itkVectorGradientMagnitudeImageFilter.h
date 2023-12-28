@@ -30,7 +30,7 @@
 namespace itk
 {
 /**
- *\class VectorGradientMagnitudeImageFilter
+ * \class VectorGradientMagnitudeImageFilter
  *
  * \brief Computes a scalar, gradient magnitude image from a multiple channel
  * (pixels are vectors) input.
@@ -149,7 +149,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(VectorGradientMagnitudeImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorGradientMagnitudeImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -438,8 +438,8 @@ protected:
     }
     else
     {
-      itkExceptionMacro(<< "Undefined condition. Cubic root solver returned " << numberOfDistinctRoots
-                        << " distinct roots.");
+      itkExceptionMacro("Undefined condition. Cubic root solver returned " << numberOfDistinctRoots
+                                                                           << " distinct roots.");
     }
 
     return ans;
@@ -494,12 +494,12 @@ protected:
   ComponentWeightsType m_SqrtComponentWeights = ComponentWeightsType::Filled(1);
 
 private:
-  bool m_UseImageSpacing;
-  bool m_UsePrincipleComponents;
+  bool m_UseImageSpacing{};
+  bool m_UsePrincipleComponents{};
 
-  ThreadIdType m_RequestedNumberOfWorkUnits;
+  ThreadIdType m_RequestedNumberOfWorkUnits{};
 
-  typename RealVectorImageType::ConstPointer m_RealValuedInputImage;
+  typename RealVectorImageType::ConstPointer m_RealValuedInputImage{};
 };
 } // end namespace itk
 

@@ -83,7 +83,7 @@ public:
   using Superclass = Command;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
-  itkTypeMacro(NBRMSCommand, Command);
+  itkOverrideGetNameOfClassMacro(NBRMSCommand);
   itkNewMacro(Self);
 
   /** Standard Command virtual methods */
@@ -142,9 +142,13 @@ itkNarrowBandThresholdSegmentationLevelSetImageFilterTest(int, char *[])
         for (i = 0; i < 3; ++i)
         {
           if (idx[i] < 32)
+          {
             val += idx[i];
+          }
           else
+          {
             val += 64 - idx[i];
+          }
         }
         inputImage->SetPixel(idx, val);
       }

@@ -51,7 +51,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
 
-  itkTypeMacro(itkLBFGSOptimizerv4TestMetric, ObjectToObjectMetricBase);
+  itkOverrideGetNameOfClassMacro(itkLBFGSOptimizerv4TestMetric);
 
   enum
   {
@@ -91,7 +91,7 @@ public:
     derivative[0] = -(3 * x + 2 * y - 2);
     derivative[1] = -(2 * x + 6 * y + 8);
 
-    std::cout << "(" << derivative[0] << " , " << derivative[1] << ")" << std::endl;
+    std::cout << '(' << derivative[0] << " , " << derivative[1] << ')' << std::endl;
   }
 
   void
@@ -191,6 +191,12 @@ itkLBFGSOptimizerv4Test(int, char *[])
   itkOptimizer->SetDefaultStepLength(defaultStepLength);
   ITK_TEST_SET_GET_VALUE(defaultStepLength, itkOptimizer->GetDefaultStepLength());
 
+  OptimizerType::DerivativeType cachedDerivative{};
+  ITK_TEST_EXPECT_EQUAL(cachedDerivative, itkOptimizer->GetCachedDerivative());
+
+  OptimizerType::ParametersType cachedCurrentPos{};
+  ITK_TEST_EXPECT_EQUAL(cachedCurrentPos, itkOptimizer->GetCachedCurrentPosition());
+
   std::cout << "GetValue() before optimizer starts: " << itkOptimizer->GetValue() << std::endl;
   std::cout << "SetMetric." << std::endl;
   itkOptimizer->SetMetric(metric);
@@ -253,7 +259,7 @@ itkLBFGSOptimizerv4Test(int, char *[])
   OptimizerType::ParametersType finalPosition;
   finalPosition = itkOptimizer->GetCurrentPosition();
 
-  std::cout << "Solution        = (" << finalPosition[0] << "," << finalPosition[1] << ")" << std::endl;
+  std::cout << "Solution        = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
 
   std::cout << "End condition   = " << itkOptimizer->GetStopConditionDescription() << std::endl;
   std::cout << "NumberOfIterations  = " << itkOptimizer->GetCurrentIteration() << std::endl;
@@ -308,7 +314,7 @@ itkLBFGSOptimizerv4Test(int, char *[])
     return EXIT_FAILURE;
   }
 
-  std::cout << "Solution        = (" << finalPosition[0] << "," << finalPosition[1] << ")" << std::endl;
+  std::cout << "Solution        = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
   std::cout << "NumberOfIterations  = " << itkOptimizer->GetCurrentIteration() << std::endl;
 
   if (itkOptimizer->GetCurrentIteration() != 5)
@@ -345,7 +351,7 @@ itkLBFGSOptimizerv4Test(int, char *[])
 
   std::cout << "Scales after optimization: " << itkOptimizer->GetScales() << std::endl;
   finalPosition = itkOptimizer->GetCurrentPosition();
-  std::cout << "Solution        = (" << finalPosition[0] << "," << finalPosition[1] << ")" << std::endl;
+  std::cout << "Solution        = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
 
   // check results to see if it is within range
   pass = true;

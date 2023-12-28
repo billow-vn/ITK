@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageSeriesReader, ImageSource);
+  itkOverrideGetNameOfClassMacro(ImageSeriesReader);
 
   /** The size of the output image. */
   using SizeType = typename TOutputImage::SizeType;
@@ -114,7 +114,7 @@ public:
     this->Modified();
   }
 
-  /** ReverseOrderOn changes the order of travesal of the file names
+  /** ReverseOrderOn changes the order of traversal of the file names
    * from last to first */
   itkSetMacro(ReverseOrder, bool);
   itkGetConstMacro(ReverseOrder, bool);
@@ -138,7 +138,7 @@ public:
    *
    * By default this is enabled. It may be advantageous to disable
    * this feature when streaming, if this array is not need, as it may
-   * redure the number of times each file is read.
+   * reduce the number of times each file is read.
    *
    * /sa GetMetaDataDictionaryArray()
    */
@@ -187,7 +187,7 @@ protected:
   GenerateData() override;
 
   /** The image format, 0 will use the factory mechanism. */
-  ImageIOBase::Pointer m_ImageIO;
+  ImageIOBase::Pointer m_ImageIO{};
 
   /** Select the traversal order. */
   bool m_ReverseOrder{ false };
@@ -196,7 +196,7 @@ protected:
   bool m_ForceOrthogonalDirection{ true };
 
   /** A list of filenames to be processed. */
-  FileNamesContainer m_FileNames;
+  FileNamesContainer m_FileNames{};
 
   /** The number of independent variables in the images that comprise
    *  the series. This is also used as the slice moving dimension
@@ -207,7 +207,7 @@ protected:
 
   /** Array of MetaDataDictionaries. This allows to hold information from the
    * ImageIO objects after reading every sub image in the series */
-  DictionaryArrayType m_MetaDataDictionaryArray;
+  DictionaryArrayType m_MetaDataDictionaryArray{};
 
   bool m_UseStreaming{ true };
 
@@ -222,7 +222,7 @@ private:
   ComputeMovingDimensionIndex(ReaderType * reader);
 
   /** Modified time of the MetaDataDictionaryArray */
-  TimeStamp m_MetaDataDictionaryArrayMTime;
+  TimeStamp m_MetaDataDictionaryArrayMTime{};
 
   /** Indicated if the MMDA should be updated */
   bool m_MetaDataDictionaryArrayUpdate{ true };

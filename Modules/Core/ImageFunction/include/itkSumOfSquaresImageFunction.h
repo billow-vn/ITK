@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SumOfSquaresImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(SumOfSquaresImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -70,7 +70,7 @@ public:
   /** InputPixel type alias support */
   using typename Superclass::InputPixelType;
 
-  /** OutputType typdef support. */
+  /** OutputType typedef support. */
   using typename Superclass::OutputType;
 
   /** Index type alias support */
@@ -91,7 +91,7 @@ public:
   /** Datatype used for the variance */
   using RealType = typename NumericTraits<typename InputImageType::PixelType>::RealType;
 
-  /** Evalulate the function at specified index */
+  /** Evaluate the function at specified index */
   RealType
   EvaluateAtIndex(const IndexType & index) const override;
 
@@ -135,8 +135,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int m_NeighborhoodRadius;
-  unsigned int m_NeighborhoodSize;
+  unsigned int m_NeighborhoodRadius{};
+  unsigned int m_NeighborhoodSize{};
 
   std::vector<Offset<ImageDimension>> m_NeighborhoodOffsets{ GenerateRectangularImageNeighborhoodOffsets(
     ImageSizeType::Filled(1)) };

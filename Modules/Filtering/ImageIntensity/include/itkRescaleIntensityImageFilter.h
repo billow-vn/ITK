@@ -38,13 +38,6 @@ public:
     m_Offset = 0.0;
     m_Minimum = NumericTraits<TOutput>::NonpositiveMin();
     m_Maximum = NumericTraits<TOutput>::max();
-#if defined(__GNUC__) && (__GNUC__ == 5) && (__GNUC_MINOR__ == 2) && defined(NDEBUG) && defined(__i386__)
-    m_EpsilonCompensation = static_cast<RealType>(std::numeric_limits<TOutput>::epsilon());
-    if (m_EpsilonCompensation == 0)
-    {
-      m_EpsilonCompensation = std::numeric_limits<RealType>::epsilon();
-    }
-#endif
   }
 
   ~IntensityLinearTransform() = default;
@@ -81,13 +74,9 @@ public:
   inline TOutput
   operator()(const TInput & x) const
   {
-#if defined(__GNUC__) && (__GNUC__ == 5) && (__GNUC_MINOR__ == 2) && defined(NDEBUG) && defined(__i386__)
-    RealType value = static_cast<RealType>(x) * m_Factor + m_Offset + m_EpsilonCompensation;
-    TOutput  result = static_cast<TOutput>(value) - static_cast<TOutput>(m_EpsilonCompensation);
-#else
     RealType value = static_cast<RealType>(x) * m_Factor + m_Offset;
     auto     result = static_cast<TOutput>(value);
-#endif
+
     result = (result > m_Maximum) ? m_Maximum : result;
     result = (result < m_Minimum) ? m_Minimum : result;
     return result;
@@ -98,14 +87,11 @@ private:
   RealType m_Offset;
   TOutput  m_Maximum;
   TOutput  m_Minimum;
-#if defined(__GNUC__) && (__GNUC__ == 5) && (__GNUC_MINOR__ == 2) && defined(NDEBUG) && defined(__i386__)
-  RealType m_EpsilonCompensation;
-#endif
 };
 } // end namespace Functor
 
 /**
- *\class RescaleIntensityImageFilter
+ * \class RescaleIntensityImageFilter
  * \brief Applies a linear transformation to the intensity levels of the
  * input Image.
  *
@@ -171,7 +157,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RescaleIntensityImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(RescaleIntensityImageFilter);
 
   itkSetMacro(OutputMinimum, OutputPixelType);
   itkSetMacro(OutputMaximum, OutputPixelType);
@@ -211,14 +197,14 @@ protected:
   ~RescaleIntensityImageFilter() override = default;
 
 private:
-  RealType m_Scale;
-  RealType m_Shift;
+  RealType m_Scale{};
+  RealType m_Shift{};
 
-  InputPixelType m_InputMinimum;
-  InputPixelType m_InputMaximum;
+  InputPixelType m_InputMinimum{};
+  InputPixelType m_InputMaximum{};
 
-  OutputPixelType m_OutputMinimum;
-  OutputPixelType m_OutputMaximum;
+  OutputPixelType m_OutputMinimum{};
+  OutputPixelType m_OutputMaximum{};
 };
 } // end namespace itk
 

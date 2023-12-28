@@ -28,7 +28,7 @@ PrintShapedNeighborhood(const itk::ConstShapedNeighborhoodIterator<TestImageType
   {
     std::cout << it.Get();
   }
-  std::cout << "]" << std::endl;
+  std::cout << ']' << std::endl;
 }
 
 int
@@ -304,7 +304,7 @@ itkConstShapedNeighborhoodIteratorTest(int, char *[])
   itk::ConstShapedNeighborhoodIterator<TestImageType>::IndexListType ::const_iterator ali = l.begin();
   while (ali != l.end())
   {
-    std::cout << *ali << " ";
+    std::cout << *ali << ' ';
     ++ali;
   }
   std::cout << std::endl;

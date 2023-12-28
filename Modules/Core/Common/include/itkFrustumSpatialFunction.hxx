@@ -22,12 +22,6 @@
 namespace itk
 {
 template <unsigned int VDimension, typename TInput>
-FrustumSpatialFunction<VDimension, TInput>::FrustumSpatialFunction()
-{
-  m_Apex.Fill(0.0f);
-}
-
-template <unsigned int VDimension, typename TInput>
 auto
 FrustumSpatialFunction<VDimension, TInput>::Evaluate(const InputType & position) const -> OutputType
 {
@@ -112,7 +106,7 @@ FrustumSpatialFunction<VDimension, TInput>::Evaluate(const InputType & position)
   }
   else
   {
-    itkExceptionMacro(<< "Rotation plane not set or set to an unsupported value!");
+    itkExceptionMacro("Rotation plane not set or set to an unsupported value!");
   }
 }
 

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class WienerDeconvolutionImageFilter
+ * \class WienerDeconvolutionImageFilter
  * \brief The Wiener deconvolution image filter is designed to restore an
  * image convolved with a blurring kernel while keeping noise
  * enhancement to a minimum.
@@ -92,7 +92,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(WienerDeconvolutionImageFilter, InverseDeconvolutionImageFilter);
+  itkOverrideGetNameOfClassMacro(WienerDeconvolutionImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -138,7 +138,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_NoiseVariance;
+  double m_NoiseVariance{};
 };
 
 namespace Functor
@@ -173,7 +173,7 @@ public:
     TPixel Pf = std::norm(I);
 
     TPixel denominator = std::norm(H) + (Pn / (Pf - Pn));
-    TPixel value = NumericTraits<TPixel>::ZeroValue();
+    TPixel value{};
     if (itk::Math::abs(denominator) >= m_KernelZeroMagnitudeThreshold)
     {
       value = I * (std::conj(H) / denominator);

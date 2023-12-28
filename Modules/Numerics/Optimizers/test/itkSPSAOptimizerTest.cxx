@@ -66,7 +66,7 @@ public:
     double y = parameters[1];
 
     std::cout << "GetValue( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     MeasureType measure = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -83,7 +83,7 @@ public:
     double y = parameters[1];
 
     std::cout << "GetDerivative( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     derivative = DerivativeType(SpaceDimension);
@@ -192,7 +192,7 @@ itkSPSAOptimizerTest(int, char *[])
     return EXIT_FAILURE;
   }
   std::cout << "\nEstimated parameter: a = " << itkOptimizer->Geta();
-  std::cout << "\nEstimated parameter: A = " << itkOptimizer->GetA() << "\n" << std::endl;
+  std::cout << "\nEstimated parameter: A = " << itkOptimizer->GetA() << '\n' << std::endl;
 
   try
   {
@@ -210,8 +210,8 @@ itkSPSAOptimizerTest(int, char *[])
 
   ParametersType finalPosition = itkOptimizer->GetCurrentPosition();
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ')' << std::endl;
 
   std::cout << "StateOfConvergence in last iteration: " << itkOptimizer->GetStateOfConvergence() << std::endl;
   std::cout << "NumberOfIterations: " << itkOptimizer->GetCurrentIteration() << std::endl;
@@ -230,7 +230,9 @@ itkSPSAOptimizerTest(int, char *[])
   for (unsigned int j = 0; j < 2; ++j)
   {
     if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > 0.01)
+    {
       pass = false;
+    }
   }
   if (itkOptimizer->GetStopCondition() == itk::SPSAOptimizer::StopConditionSPSAOptimizerEnum::Unknown)
   {

@@ -86,10 +86,10 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
   }
 
   outputFile.imbue(std::locale::classic());
-  outputFile << "# vtk DataFile Version 2.0" << std::endl;
-  outputFile << "File written by itkVTKPolyDataWriter" << std::endl;
-  outputFile << "ASCII" << std::endl;
-  outputFile << "DATASET POLYDATA" << std::endl;
+  outputFile << "# vtk DataFile Version 2.0" << std::endl
+             << "File written by itkVTKPolyDataWriter" << std::endl
+             << "ASCII" << std::endl
+             << "DATASET POLYDATA" << std::endl;
 
   // POINTS go first
 
@@ -110,16 +110,15 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
     {
       PointType point = pointIterator.Value();
 
-      outputFile << point[0] << " " << point[1];
+      outputFile << point[0] << ' ' << point[1];
 
       if (TInputMesh::PointDimension > 2)
       {
-        outputFile << " " << point[2];
+        outputFile << ' ' << point[2];
       }
       else
       {
-        outputFile << " "
-                   << "0.0";
+        outputFile << ' ' << "0.0";
       }
 
       outputFile << std::endl;
@@ -171,8 +170,7 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
     // LINES
     if (numberOfEdges)
     {
-      outputFile << "LINES " << numberOfEdges << " " << 3 * numberOfEdges;
-      outputFile << std::endl;
+      outputFile << "LINES " << numberOfEdges << ' ' << 3 * numberOfEdges << std::endl;
 
       cellIterator = cells->Begin();
       while (cellIterator != cellEnd)
@@ -188,7 +186,7 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
             outputFile << cellPointer->GetNumberOfPoints();
             while (pointIdIterator != pointIdEnd)
             {
-              outputFile << " " << IdMap[*pointIdIterator];
+              outputFile << ' ' << IdMap[*pointIdIterator];
               ++pointIdIterator;
             }
             outputFile << std::endl;
@@ -208,7 +206,7 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
       // mesh can be saved.
       cellIterator = cells->Begin();
 
-      PointIdentifier totalNumberOfPointsInPolygons = NumericTraits<PointIdentifier>::ZeroValue();
+      PointIdentifier totalNumberOfPointsInPolygons{};
       while (cellIterator != cells->End())
       {
         CellType * cellPointer = cellIterator.Value();
@@ -219,8 +217,8 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
         }
         ++cellIterator;
       }
-      outputFile << "POLYGONS " << numberOfPolygons << " ";
-      outputFile << totalNumberOfPointsInPolygons + numberOfPolygons; // FIXME: Is this right ?
+      outputFile << "POLYGONS " << numberOfPolygons << ' '
+                 << totalNumberOfPointsInPolygons + numberOfPolygons; // FIXME: Is this right ?
       outputFile << std::endl;
 
       cellIterator = cells->Begin();
@@ -239,7 +237,7 @@ VTKPolyDataWriter<TInputMesh>::GenerateData()
             outputFile << cellPointer->GetNumberOfPoints();
             while (pointIdIterator != pointIdEnd)
             {
-              outputFile << " " << IdMap[*pointIdIterator];
+              outputFile << ' ' << IdMap[*pointIdIterator];
               ++pointIdIterator;
             }
             outputFile << std::endl;

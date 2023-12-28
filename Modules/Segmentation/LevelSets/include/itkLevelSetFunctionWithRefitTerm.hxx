@@ -67,9 +67,9 @@ LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::ComputeGlobalTimeSt
 }
 
 template <typename TImageType, typename TSparseImageType>
-typename LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::ScalarValueType
+auto
 LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::ComputeCurvature(
-  const NeighborhoodType & neighborhood) const
+  const NeighborhoodType & neighborhood) const -> ScalarValueType
 {
   unsigned int              j, k;
   unsigned int              counterN, counterP;
@@ -147,10 +147,11 @@ LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::ComputeCurvature(
 }
 
 template <typename TImageType, typename TSparseImageType>
-typename LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::ScalarValueType
+auto
 LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::PropagationSpeed(const NeighborhoodType & neighborhood,
                                                                               const FloatOffsetType &  offset,
                                                                               GlobalDataStruct *       globaldata) const
+  -> ScalarValueType
 {
   IndexType       idx = neighborhood.GetIndex();
   NodeType *      targetnode = m_SparseTargetImage->GetPixel(idx);
@@ -160,11 +161,11 @@ LevelSetFunctionWithRefitTerm<TImageType, TSparseImageType>::PropagationSpeed(co
   {
     if (targetnode == nullptr)
     {
-      itkExceptionMacro(<< "required node has null pointer\n");
+      itkExceptionMacro("required node has null pointer\n");
     }
     else
     {
-      itkExceptionMacro(<< "required node has CurvatureFlag = false\n");
+      itkExceptionMacro("required node has CurvatureFlag = false\n");
     }
   }
   else

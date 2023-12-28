@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(StreamingImageFilter);
 
   /** Some type alias for the input and output. */
   using InputImageType = TInputImage;
@@ -100,7 +100,7 @@ public:
 
   /** Override PropagateRequestedRegion from ProcessObject
    *  Since inside UpdateOutputData we iterate over streaming pieces
-   *  we don't need to proapage up the pipeline
+   *  we don't need to propagate up the pipeline
    */
   void
   PropagateRequestedRegion(DataObject * output) override;
@@ -119,8 +119,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int          m_NumberOfStreamDivisions;
-  RegionSplitterPointer m_RegionSplitter;
+  unsigned int          m_NumberOfStreamDivisions{};
+  RegionSplitterPointer m_RegionSplitter{};
 };
 } // end namespace itk
 

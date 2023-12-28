@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class DilateObjectMorphologyImageFilter
+ * \class DilateObjectMorphologyImageFilter
  * \brief dilation of an object in an image
  *
  * Dilate an image using binary morphology.
@@ -61,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support */
-  itkTypeMacro(DilateObjectMorphologyImageFilter, ObjectMorphologyImageFilter);
+  itkOverrideGetNameOfClassMacro(DilateObjectMorphologyImageFilter);
 
   /** duplicates from base class to avoid compiler warnings */
   using typename Superclass::PixelType;
@@ -102,7 +102,7 @@ protected:
 private:
   // Default boundary condition for dilation filter, defaults to
   // NumericTraits<PixelType>::NonpositiveMin()
-  DefaultBoundaryConditionType m_DilateBoundaryCondition;
+  DefaultBoundaryConditionType m_DilateBoundaryCondition{};
 }; // end of class
 } // end namespace itk
 

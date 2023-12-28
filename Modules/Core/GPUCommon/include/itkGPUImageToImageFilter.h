@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GPUImageToImageFilter, TParentImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUImageToImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::DataObjectIdentifierType;
@@ -98,7 +98,7 @@ protected:
   {}
 
   // GPU kernel manager
-  typename GPUKernelManager::Pointer m_GPUKernelManager;
+  typename GPUKernelManager::Pointer m_GPUKernelManager{};
 
   // GPU kernel handle - kernel should be defined in specific filter (not in the
   // base class)

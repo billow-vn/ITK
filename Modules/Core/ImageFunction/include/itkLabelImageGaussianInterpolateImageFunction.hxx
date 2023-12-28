@@ -34,10 +34,10 @@ namespace itk
 {
 
 template <typename TInputImage, typename TCoordRep, typename TPixelCompare>
-typename LabelImageGaussianInterpolateImageFunction<TInputImage, TCoordRep, TPixelCompare>::OutputType
+auto
 LabelImageGaussianInterpolateImageFunction<TInputImage, TCoordRep, TPixelCompare>::EvaluateAtContinuousIndex(
   const ContinuousIndexType & cindex,
-  OutputType *                itkNotUsed(grad)) const
+  OutputType *                itkNotUsed(grad)) const -> OutputType
 {
   vnl_vector<RealType> erfArray[ImageDimension];
   vnl_vector<RealType> gerfArray[ImageDimension];
@@ -51,7 +51,7 @@ LabelImageGaussianInterpolateImageFunction<TInputImage, TCoordRep, TPixelCompare
   }
 
   RealType   wmax = 0.0;
-  OutputType Vmax = NumericTraits<OutputType>::ZeroValue();
+  OutputType Vmax{};
 
   // Create a map object to store weights for each label encountered
   // inside the search region. This is not as efficient as having a
@@ -60,8 +60,7 @@ LabelImageGaussianInterpolateImageFunction<TInputImage, TCoordRep, TPixelCompare
   using WeightMapType = std::map<OutputType, RealType, TPixelCompare>;
   WeightMapType weightMap;
 
-  ImageRegionConstIteratorWithIndex<InputImageType> It(this->GetInputImage(), region);
-  for (It.GoToBegin(); !It.IsAtEnd(); ++It)
+  for (ImageRegionConstIteratorWithIndex<InputImageType> It(this->GetInputImage(), region); !It.IsAtEnd(); ++It)
   {
     unsigned int j = It.GetIndex()[0] - region.GetIndex()[0];
     RealType     w = erfArray[0][j];

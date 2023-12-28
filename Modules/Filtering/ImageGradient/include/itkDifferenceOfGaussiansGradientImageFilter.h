@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class DifferenceOfGaussiansGradientImageFilter
+ * \class DifferenceOfGaussiansGradientImageFilter
  * \brief Performs difference-of-gaussians gradient detection
  *
  * \ingroup ImageEnhancement
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DifferenceOfGaussiansGradientImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(DifferenceOfGaussiansGradientImageFilter);
 
   /** Image size type alias. */
   using SizeType = Size<Self::NDimensions>;
@@ -95,7 +95,7 @@ protected:
   GenerateData() override;
 
 private:
-  unsigned int m_Width;
+  unsigned int m_Width{};
 };
 } // end namespace itk
 

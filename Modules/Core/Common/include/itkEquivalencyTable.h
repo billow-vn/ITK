@@ -52,7 +52,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(EquivalencyTable, DataObject);
+  itkOverrideGetNameOfClassMacro(EquivalencyTable);
 
   /** Define the container type for the table. */
   using HashTableType = std::unordered_map<unsigned long, unsigned long, std::hash<unsigned long>>;
@@ -179,7 +179,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  HashTableType m_HashMap;
+  HashTableType m_HashMap{};
 };
 } // end namespace itk
 

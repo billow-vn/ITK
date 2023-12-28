@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpatialFunctionImageEvaluatorFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(SpatialFunctionImageEvaluatorFilter);
 
   /** Number of dimensions. */
   static constexpr unsigned int NDimensions = TInputImage::ImageDimension;
@@ -101,7 +101,7 @@ protected:
 
 private:
   /** The function that will be evaluated over the image */
-  FunctionType * m_PixelFunction;
+  FunctionType * m_PixelFunction{};
 };
 } // end namespace itk
 

@@ -24,6 +24,7 @@
 #include "itkVector.h"
 #include "itkDefaultDynamicMeshTraits.h"
 
+#include <memory> // For unique_ptr.
 
 namespace itk
 {
@@ -125,7 +126,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BlockMatchingImageFilter, MeshToMeshFilter);
+  itkOverrideGetNameOfClassMacro(BlockMatchingImageFilter);
 
   /** set/get half size */
   itkSetMacro(BlockRadius, ImageSizeType);
@@ -197,9 +198,11 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /** Static function used as a "callback" by the MultiThreaderBase.  The threading
-   * library will call this routine for each thread, which will delegate the
-   * control to DynamicThreadedGenerateData(). */
+  /** Static function used as a "callback" by the MultiThreaderBase.
+   *
+   * The threading library will call this routine for each thread, which will delegate the control to
+   * DynamicThreadedGenerateData() after setting the correct region for the thread.
+   */
   static ITK_THREAD_RETURN_FUNCTION_CALL_CONVENTION
   ThreaderCallback(void * arg);
 
@@ -212,13 +215,13 @@ protected:
 
 private:
   // algorithm parameters
-  ImageSizeType m_BlockRadius;
-  ImageSizeType m_SearchRadius;
+  ImageSizeType m_BlockRadius{};
+  ImageSizeType m_SearchRadius{};
 
   // temporary dynamic arrays for storing threads outputs
-  SizeValueType         m_PointsCount;
-  DisplacementsVector * m_DisplacementsVectorsArray;
-  SimilaritiesValue *   m_SimilaritiesValuesArray;
+  SizeValueType                          m_PointsCount{};
+  std::unique_ptr<DisplacementsVector[]> m_DisplacementsVectorsArray;
+  std::unique_ptr<SimilaritiesValue[]>   m_SimilaritiesValuesArray;
 };
 } // end namespace itk
 

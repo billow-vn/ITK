@@ -94,7 +94,7 @@ ImageSource<TOutputImage>::GetOutput(unsigned int idx) -> OutputImageType *
 
   if (out == nullptr && this->ProcessObject::GetOutput(idx) != nullptr)
   {
-    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(OutputImageType).name());
+    itkWarningMacro("Unable to convert output number " << idx << " to type " << typeid(OutputImageType).name());
   }
   return out;
 }
@@ -112,7 +112,7 @@ ImageSource<TOutputImage>::GraftOutput(const DataObjectIdentifierType & key, Dat
 {
   if (!graft)
   {
-    itkExceptionMacro(<< "Requested to graft output that is a nullptr pointer");
+    itkExceptionMacro("Requested to graft output that is a nullptr pointer");
   }
 
   // we use the process object method since all out output may not be
@@ -129,8 +129,8 @@ ImageSource<TOutputImage>::GraftNthOutput(unsigned int idx, DataObject * graft)
 {
   if (idx >= this->GetNumberOfIndexedOutputs())
   {
-    itkExceptionMacro(<< "Requested to graft output " << idx << " but this filter only has "
-                      << this->GetNumberOfIndexedOutputs() << " indexed Outputs.");
+    itkExceptionMacro("Requested to graft output " << idx << " but this filter only has "
+                                                   << this->GetNumberOfIndexedOutputs() << " indexed Outputs.");
   }
   this->GraftOutput(this->MakeNameFromOutputIndex(idx), graft);
 }
@@ -254,8 +254,8 @@ ImageSource<TOutputImage>::ThreadedGenerateData(const OutputImageRegionType &
 #if !defined(ITK_LEGACY_REMOVE)
   this->DynamicThreadedGenerateData(region);
 #else
-  itkExceptionMacro("With DynamicMultiThreadingOff subclass should override this method. \
-The signature of ThreadedGenerateData() has been changed in ITK v4 to use the new ThreadIdType.");
+  itkExceptionMacro("With DynamicMultiThreadingOff subclass should override this method. The signature of "
+                    "ThreadedGenerateData() has been changed in ITK v4 to use the new ThreadIdType.");
 #endif
 }
 
@@ -264,9 +264,9 @@ template <typename TOutputImage>
 void
 ImageSource<TOutputImage>::DynamicThreadedGenerateData(const OutputImageRegionType &)
 {
-  itkExceptionMacro("Subclass should override this method!!! \
-If old behavior is desired invoke this->DynamicMultiThreadingOff(); \
-before Update() is called. The best place is in class constructor.");
+  itkExceptionMacro(
+    "Subclass should override this method!!! If old behavior is desired invoke this->DynamicMultiThreadingOff(); "
+    "before Update() is called. The best place is in class constructor.");
 }
 
 // Callback routine used by the classic threading library. This routine just calls

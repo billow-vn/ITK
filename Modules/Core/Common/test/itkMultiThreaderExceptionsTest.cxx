@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DummyImageSource, ImageSource);
+  itkOverrideGetNameOfClassMacro(DummyImageSource);
 
   /** Index for which exception is thrown. */
   itkSetMacro(ExceptionIndex, IndexValueType);
@@ -66,7 +66,7 @@ protected:
     if (outputRegionForThread.GetIndex(0) == m_ExceptionIndex)
     {
       std::cout << "Exception launched" << std::endl;
-      itkGenericExceptionMacro(<< "Error");
+      itkGenericExceptionMacro("Error");
     }
   }
 

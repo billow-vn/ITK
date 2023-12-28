@@ -38,6 +38,8 @@
 #endif
 #include <cassert>
 #include "vnl/vnl_export.h"
+#include "vnl/vnl_rational_traits.h"
+#include "vnl/vnl_decnum_traits.h"
 
 //: Evaluation of polynomials.
 //  vnl_polynomial<T> represents a univariate polynomial with
@@ -62,7 +64,7 @@ class VNL_EXPORT vnl_polynomial
   // An assertion makes sure that the input vector is in normalised form, i.e.,
   // that it is either empty or that the highest order coefficient is nonzero.
    vnl_polynomial(std::vector<T> a) : coeffs_(std::move(a)) {
-     assert(a.begin() == a.end() || a.back() != T(0));
+     assert(coeffs_.begin() == coeffs_.end() || coeffs_.back() != T(0));
    }
 
   //: Initialize polynomial from C array, highest order first.
@@ -88,7 +90,7 @@ class VNL_EXPORT vnl_polynomial
   bool operator==(vnl_polynomial<T> const& p) const { return p.coefficients() == coeffs_; }
 
   //: Returns negative of this polynomial
-  vnl_polynomial<T> operator-() const;
+  vnl_polynomial<typename vnl_numeric_traits<T>::signed_t> operator-() const;
 
   //: Returns polynomial which is sum of this with polynomial f
   vnl_polynomial<T> operator+(vnl_polynomial<T> const& f) const;

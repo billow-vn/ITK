@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class BinShrinkImageFilter
+ * \class BinShrinkImageFilter
  * \brief Reduce the size of an image by an integer factor in each
  * dimension while performing averaging of an input neighborhood.
  *
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinShrinkImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinShrinkImageFilter);
 
   /** Typedef to images */
   using OutputImageType = TOutputImage;
@@ -132,7 +132,7 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 private:
-  ShrinkFactorsType m_ShrinkFactors;
+  ShrinkFactorsType m_ShrinkFactors{};
 
   /** Round different pixel types. */
   template <class TOutputType, class TInputType>

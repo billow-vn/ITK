@@ -32,6 +32,7 @@
 #include "itkObjectFactory.h"
 #include "itkNumericTraits.h"
 #include "itkThreadSupport.h"
+#include "itkIntTypes.h"
 #include <vector>
 #include <map>
 #include <set>
@@ -147,7 +148,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ProcessObject, Object);
+  itkOverrideGetNameOfClassMacro(ProcessObject);
 
   /** Smart Pointer type to a DataObject. */
   using DataObjectPointer = DataObject::Pointer;
@@ -779,11 +780,11 @@ protected:
    * correctly, that all required inputs are set, and needed parameters
    * are set appropriately. If not valid an exceptions will be thrown.
    *
-   * This method is called before UpdateOutputInformation is
+   * This method is called before UpdateOutputInformation() is
    * propagated to the inputs.
    *
    * The ProcessObject's implementation verifies that the
-   * NumberOfRequiredInputs are set and not null.
+   * #m_NumberOfRequiredInputs are set and not null.
    *
    */
   virtual void
@@ -930,10 +931,10 @@ protected:
 
   /** This flag indicates when the pipeline is executing.
    * It prevents infinite recursion when pipelines have loops. */
-  bool m_Updating;
+  bool m_Updating{};
 
   /** Time when GenerateOutputInformation was last called. */
-  TimeStamp m_OutputInformationMTime;
+  TimeStamp m_OutputInformationMTime{};
 
 private:
   DataObjectIdentifierType MakeNameFromIndex(DataObjectPointerArraySizeType) const;
@@ -945,40 +946,40 @@ private:
 
 
   /** Named input and outputs containers */
-  DataObjectPointerMap m_Inputs;
-  DataObjectPointerMap m_Outputs;
+  DataObjectPointerMap m_Inputs{};
+  DataObjectPointerMap m_Outputs{};
 
-  std::vector<DataObjectPointerMap::iterator> m_IndexedInputs;
-  std::vector<DataObjectPointerMap::iterator> m_IndexedOutputs;
+  std::vector<DataObjectPointerMap::iterator> m_IndexedInputs{};
+  std::vector<DataObjectPointerMap::iterator> m_IndexedOutputs{};
 
   /** An array that caches the ReleaseDataFlags of the inputs */
-  std::map<DataObjectIdentifierType, bool> m_CachedInputReleaseDataFlags;
+  std::map<DataObjectIdentifierType, bool> m_CachedInputReleaseDataFlags{};
 
-  DataObjectPointerArraySizeType m_NumberOfRequiredInputs;
-  DataObjectPointerArraySizeType m_NumberOfRequiredOutputs;
+  DataObjectPointerArraySizeType m_NumberOfRequiredInputs{};
+  DataObjectPointerArraySizeType m_NumberOfRequiredOutputs{};
 
   /** STL map to store the named inputs and outputs */
   using NameSet = std::set<DataObjectIdentifierType>;
 
   /** The required inputs */
-  NameSet m_RequiredInputNames;
+  NameSet m_RequiredInputNames{};
 
   /** These support the progress method and aborting filter execution. */
-  bool                  m_AbortGenerateData;
-  std::atomic<uint32_t> m_Progress;
+  bool                  m_AbortGenerateData{};
+  std::atomic<uint32_t> m_Progress{};
 
 
-  std::thread::id m_UpdateThreadID;
+  std::thread::id m_UpdateThreadID{};
 
   /** Support processing data in multiple threads. Used by subclasses
    * (e.g., ImageSource). */
   itk::SmartPointer<MultiThreaderType> m_MultiThreader;
-  ThreadIdType                         m_NumberOfWorkUnits;
+  ThreadIdType                         m_NumberOfWorkUnits{};
 
   bool m_ThreaderUpdateProgress{ true };
 
   /** Memory management ivars */
-  bool m_ReleaseDataBeforeUpdateFlag;
+  bool m_ReleaseDataBeforeUpdateFlag{};
 
   /** Friends of ProcessObject */
   friend class DataObject;

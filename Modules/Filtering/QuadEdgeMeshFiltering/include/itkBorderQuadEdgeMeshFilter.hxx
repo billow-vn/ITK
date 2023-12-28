@@ -62,7 +62,7 @@ BorderQuadEdgeMeshFilter<TInputMesh, TOutputMesh>::ComputeBoundary()
       bdryEdge = ComputeLargestBorder();
       break;
     default:
-      itkWarningMacro(<< "Unknown Border to be picked...");
+      itkWarningMacro("Unknown Border to be picked...");
       break;
   }
 
@@ -104,7 +104,7 @@ BorderQuadEdgeMeshFilter<TInputMesh, TOutputMesh>::ComputeLongestBorder() -> Inp
 
   if (!list || list->empty())
   {
-    itkGenericExceptionMacro(<< "This filter requires at least one boundary");
+    itkGenericExceptionMacro("This filter requires at least one boundary");
   }
 
   InputCoordRepType max_length(0.0), length(0.0);
@@ -154,7 +154,7 @@ BorderQuadEdgeMeshFilter<TInputMesh, TOutputMesh>::ComputeLargestBorder() -> Inp
 
   if (!list || list->empty())
   {
-    itkGenericExceptionMacro(<< "This filter requires at least one boundary");
+    itkGenericExceptionMacro("This filter requires at least one boundary");
   }
 
   SizeValueType max_id = 0L;

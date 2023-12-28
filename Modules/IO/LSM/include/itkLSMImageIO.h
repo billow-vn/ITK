@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class LSMImageIO
+ * \class LSMImageIO
  *
  *  \brief ImageIO class for reading LSM (Zeiss) images
  * LSM is a line of confocal laser scanning microscopes produced by the Zeiss company
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LSMImageIO, TIFFImageIO);
+  itkOverrideGetNameOfClassMacro(LSMImageIO);
 
   /*-------- This part of the interface deals with reading data. ------ */
 

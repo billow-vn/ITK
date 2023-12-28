@@ -137,19 +137,16 @@ namespace itk
  *
  *      "Cell Tracking using Coupled Active Surfaces for Nuclei and Membranes"
  *      https://www.insight-journal.org/browse/publication/642
- *      https://hdl.handle.net/10380/3055
  *
  *  That is based on the papers:
  *
  *      "Level Set Segmentation: Active Contours without edge"
  *      https://www.insight-journal.org/browse/publication/322
- *      https://hdl.handle.net/1926/1532
  *
  *      and
  *
  *      "Level set segmentation using coupled active surfaces"
  *      https://www.insight-journal.org/browse/publication/323
- *      https://hdl.handle.net/1926/1533
  *
  *
  * \ingroup ImageFilter
@@ -174,7 +171,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MultiphaseFiniteDifferenceImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(MultiphaseFiniteDifferenceImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TOutputImage::ImageDimension;
@@ -398,22 +395,22 @@ protected:
 
   ~MultiphaseFiniteDifferenceImageFilter() override = default;
 
-  IdCellType                     m_FunctionCount;
-  std::vector<InputImagePointer> m_LevelSet;
-  VectorIdCellType               m_Lookup;
-  KdTreePointer                  m_KdTree;
+  IdCellType                     m_FunctionCount{};
+  std::vector<InputImagePointer> m_LevelSet{};
+  VectorIdCellType               m_Lookup{};
+  KdTreePointer                  m_KdTree{};
 
-  unsigned int m_ElapsedIterations;
-  double       m_MaximumRMSError;
-  double       m_RMSChange;
-  unsigned int m_NumberOfIterations;
+  unsigned int m_ElapsedIterations{};
+  double       m_MaximumRMSError{};
+  double       m_RMSChange{};
+  unsigned int m_NumberOfIterations{};
 
   /** The function that will be used in calculating updates for each pixel. */
-  std::vector<FiniteDifferenceFunctionPointer> m_DifferenceFunctions;
+  std::vector<FiniteDifferenceFunctionPointer> m_DifferenceFunctions{};
 
   /** Control whether derivatives use spacing of the input image in its
    * calculation. */
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -516,7 +513,7 @@ protected:
    *        calls to ThreadedGenerateData.
    *
    * \param valid The set of flags indicating which of "timeStepList" elements are
-   *  valid. Although they are uint8_t, they should be treated like bools.
+   *  valid. Although they are uint8_t, they should be treated like booleans.
    *
    * The default is to return the minimum value in the list. */
   inline TimeStepType
@@ -531,10 +528,10 @@ protected:
 private:
   /** Indicates whether the filter automatically resets to UNINITIALIZED state
       after completing, or whether filter must be manually reset */
-  bool m_ManualReinitialization;
+  bool m_ManualReinitialization{};
 
   /** State that the filter is in, i.e. UNINITIALIZED or INITIALIZED */
-  bool m_InitializedState;
+  bool m_InitializedState{};
 };
 } // end namespace itk
 

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BYUMeshIOFactory
+ * \class BYUMeshIOFactory
  * \brief Create instances of BYUMeshIO objects using an object factory.
  * \ingroup ITKIOMeshBYU
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BYUMeshIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(BYUMeshIOFactory);
 
   /** Register one factory of this type  */
   static void

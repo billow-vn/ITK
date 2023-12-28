@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ImageClassifierBase
+ * \class ImageClassifierBase
  * \brief Base class for the ImageClassifierBase object.
  *
  * itkImageClassifierBase is the base class for algorithms
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageClassifierBase, ClassifierBase);
+  itkOverrideGetNameOfClassMacro(ImageClassifierBase);
 
   /** Type definition for the input image. */
   using InputImageType = TInputImage;
@@ -151,10 +151,10 @@ protected:
 private:
   using InputImageSizeType = typename TInputImage::SizeType;
 
-  InputImageConstPointer m_InputImage;
-  ClassifiedImagePointer m_ClassifiedImage;
+  InputImageConstPointer m_InputImage{};
+  ClassifiedImagePointer m_ClassifiedImage{};
 
-  /** Define a virtual Classifier function to classify the whole image. */
+  /** Define a virtual classifier function to classify the whole image. */
   virtual void
   Classify();
 }; // class ImageClassifierBase

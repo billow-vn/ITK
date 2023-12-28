@@ -208,8 +208,8 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>::DynamicThreadedGe
   else
   {
     VectorType inverseSpacing;
-    RealType   localMean = NumericTraits<RealType>::ZeroValue();
-    RealType   localMax = NumericTraits<RealType>::ZeroValue();
+    RealType   localMean{};
+    RealType   localMax{};
     for (unsigned int d = 0; d < ImageDimension; ++d)
     {
       inverseSpacing[d] = 1.0 / this->m_DisplacementFieldSpacing[d];
@@ -234,7 +234,7 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>::DynamicThreadedGe
       ItE.Set(-displacement);
     }
     {
-      std::lock_guard<std::mutex> holder(m_Mutex);
+      const std::lock_guard<std::mutex> lockGuard(m_Mutex);
       this->m_MeanErrorNorm += localMean;
       if (this->m_MaxErrorNorm < localMax)
       {
@@ -252,9 +252,9 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>::PrintSelf(std::os
 
   itkPrintSelfObjectMacro(Interpolator);
 
-  os << "Maximum number of iterations: " << this->m_MaximumNumberOfIterations << std::endl;
-  os << "Max error tolerance threshold: " << this->m_MaxErrorToleranceThreshold << std::endl;
-  os << "Mean error tolerance threshold: " << this->m_MeanErrorToleranceThreshold << std::endl;
+  os << indent << "Maximum number of iterations: " << this->m_MaximumNumberOfIterations << std::endl;
+  os << indent << "Max error tolerance threshold: " << this->m_MaxErrorToleranceThreshold << std::endl;
+  os << indent << "Mean error tolerance threshold: " << this->m_MeanErrorToleranceThreshold << std::endl;
 }
 
 } // end namespace itk

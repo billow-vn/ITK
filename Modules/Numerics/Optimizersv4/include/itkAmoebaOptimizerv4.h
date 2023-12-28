@@ -21,11 +21,12 @@
 #include "itkSingleValuedNonLinearVnlOptimizerv4.h"
 #include "vnl/algo/vnl_amoeba.h"
 #include "ITKOptimizersv4Export.h"
+#include <memory> // For unique_ptr.
 
 namespace itk
 {
 /**
- *\class AmoebaOptimizerv4
+ * \class AmoebaOptimizerv4
  * \brief Wrap of the vnl_amoeba algorithm
  *
  * AmoebaOptimizerv4 is a wrapper around the vnl_amoeba algorithm which
@@ -44,7 +45,7 @@ namespace itk
  * automatically (by constructing a very small simplex around the
  * initial position) or uses a user supplied simplex size.
  *
- * The method SetOptimizeWithRestarts() indicates that the amoeabe algorithm
+ * The method SetOptimizeWithRestarts() indicates that the amoeba algorithm
  * should be rerun after if converges. This heuristic increases the chances
  * of escaping from a local optimum. Each time the simplex is initialized with
  * the best solution obtained by the previous runs. The edge length is half of
@@ -73,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AmoebaOptimizerv4, SingleValuedNonLinearVnlOptimizerv4);
+  itkOverrideGetNameOfClassMacro(AmoebaOptimizerv4);
 
   /**  Parameters type.
    *  It defines a position in the optimization search space. */
@@ -153,14 +154,14 @@ private:
   void
   ValidateSettings();
 
-  ParametersType::ValueType m_ParametersConvergenceTolerance;
-  MeasureType               m_FunctionConvergenceTolerance;
-  bool                      m_AutomaticInitialSimplex;
-  ParametersType            m_InitialSimplexDelta;
-  bool                      m_OptimizeWithRestarts;
-  vnl_amoeba *              m_VnlOptimizer;
+  ParametersType::ValueType   m_ParametersConvergenceTolerance{};
+  MeasureType                 m_FunctionConvergenceTolerance{};
+  bool                        m_AutomaticInitialSimplex{};
+  ParametersType              m_InitialSimplexDelta{};
+  bool                        m_OptimizeWithRestarts{};
+  std::unique_ptr<vnl_amoeba> m_VnlOptimizer;
 
-  std::ostringstream m_StopConditionDescription;
+  std::ostringstream m_StopConditionDescription{};
 };
 } // end namespace itk
 

@@ -30,7 +30,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class ImageToHistogramFilter
+ * \class ImageToHistogramFilter
  *  \brief This class generates a histogram from an image.
  *
  *  The concept of Histogram in ITK is quite generic. It has been designed to
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToHistogramFilter, ImageSink);
+  itkOverrideGetNameOfClassMacro(ImageToHistogramFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -173,12 +173,12 @@ protected:
   virtual void
   ThreadedMergeHistogram(HistogramPointer && histogram);
 
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 
-  HistogramPointer m_MergeHistogram;
+  HistogramPointer m_MergeHistogram{};
 
-  HistogramMeasurementVectorType m_Minimum;
-  HistogramMeasurementVectorType m_Maximum;
+  HistogramMeasurementVectorType m_Minimum{};
+  HistogramMeasurementVectorType m_Maximum{};
 
 private:
   void

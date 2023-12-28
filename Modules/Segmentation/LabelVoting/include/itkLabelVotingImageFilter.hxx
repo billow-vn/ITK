@@ -106,8 +106,7 @@ LabelVotingImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 
   std::vector<unsigned int> votesByLabel(this->m_TotalLabelCount);
 
-  OutIteratorType out = OutIteratorType(output, outputRegionForThread);
-  for (out.GoToBegin(); !out.IsAtEnd(); ++out)
+  for (OutIteratorType out(output, outputRegionForThread); !out.IsAtEnd(); ++out)
   {
     // Reset number of votes per label for all labels
     std::fill_n(votesByLabel.begin(), this->m_TotalLabelCount, 0);
@@ -151,8 +150,10 @@ LabelVotingImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, 
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "m_HasLabelForUndecidedPixels = " << this->m_HasLabelForUndecidedPixels << std::endl;
-  os << indent << "m_LabelForUndecidedPixels = " << this->m_LabelForUndecidedPixels << std::endl;
+  os << indent << "LabelForUndecidedPixels: "
+     << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_HasLabelForUndecidedPixels) << std::endl;
+  os << indent << "HasLabelForUndecidedPixels: " << (m_HasLabelForUndecidedPixels ? "On" : "Off") << std::endl;
+  os << indent << "TotalLabelCount: " << m_TotalLabelCount << std::endl;
 }
 } // end namespace itk
 

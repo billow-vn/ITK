@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class OtsuThresholdImageFilter
+ * \class OtsuThresholdImageFilter
  * \brief Threshold an image using the Otsu Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -47,7 +47,7 @@ namespace itk
  * \ingroup ITKThresholding
  *
  * \sphinx
- * \sphinxexample{Filtering/Thresholding/SeparateGroundUsingOtsu,Separate Foreround And Background Using Otsu Method}
+ * \sphinxexample{Filtering/Thresholding/SeparateGroundUsingOtsu,Separate Foreground And Background Using Otsu Method}
  * \endsphinx
  */
 
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(OtsuThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(OtsuThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;
@@ -124,7 +124,7 @@ protected:
     Superclass::VerifyPreconditions();
     if (dynamic_cast<const CalculatorType *>(Superclass::GetCalculator()) == nullptr)
     {
-      itkExceptionMacro(<< "Invalid OtsuThresholdCalculator.");
+      itkExceptionMacro("Invalid OtsuThresholdCalculator.");
     }
   }
 

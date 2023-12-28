@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class VnlRealToHalfHermitianForwardFFTImageFilter
+ * \class VnlRealToHalfHermitianForwardFFTImageFilter
  *
  * \brief VNL-based forward Fast Fourier Transform.
  *
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VnlRealToHalfHermitianForwardFFTImageFilter, RealToHalfHermitianForwardFFTImageFilter);
+  itkOverrideGetNameOfClassMacro(VnlRealToHalfHermitianForwardFFTImageFilter);
 
   /** Extract the dimensionality of the images. They are assumed to be
    * the same. */

@@ -30,8 +30,8 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MaximumRatioDecisionRule
- *  \brief A decision rule that operates as a frequentist's
+ * \class MaximumRatioDecisionRule
+ *  \brief A decision rule that operates as a frequentest's
  *  approximation to Bayes rule.
  *
  * MaximumRatioDecisionRule returns the class label using a Bayesian
@@ -67,7 +67,7 @@ public:
   using Pointer = SmartPointer<Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MaximumRatioDecisionRule, DecisionRule);
+  itkOverrideGetNameOfClassMacro(MaximumRatioDecisionRule);
 
   /** Standard New() method support */
   itkNewMacro(Self);
@@ -111,7 +111,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  PriorProbabilityVectorType m_PriorProbabilities;
+  PriorProbabilityVectorType m_PriorProbabilities{};
 
 }; // end of class
 } // namespace Statistics

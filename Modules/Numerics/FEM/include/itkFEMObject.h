@@ -46,7 +46,7 @@ namespace fem
  * \par Overview
  * FEMObject was created to provide an object in ITK that specifies
  * the entire FE model. This model can then be passed to the itk::fem::Solver
- * to generate a solution for the model. The design for this class was modelled
+ * to generate a solution for the model. The design for this class was modeled
  * after the itk::Mesh structure. Presently, no direct I/O support for
  * the FEMObject exists. This must be done using the FEMSpatialObject.
  * The FEMObject simply serves as a storage container for the FE model.
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(FEMObject, DataObject);
+  itkOverrideGetNameOfClassMacro(FEMObject);
 
   static constexpr unsigned int FEMDimension = VDimension;
   static constexpr unsigned int MaxDimensions = 3;
@@ -372,18 +372,18 @@ protected:
   /**
    * Number of global degrees of freedom in a system
    */
-  unsigned int m_NGFN;
+  unsigned int m_NGFN{};
 
   /**
    * Number of multi freedom constraints in a system.
    * This member is set in a AssembleK function.
    */
-  unsigned int m_NMFC;
+  unsigned int m_NMFC{};
 
-  ElementContainerPointer  m_ElementContainer;
-  NodeContainerPointer     m_NodeContainer;
-  LoadContainerPointer     m_LoadContainer;
-  MaterialContainerPointer m_MaterialContainer;
+  ElementContainerPointer  m_ElementContainer{};
+  NodeContainerPointer     m_NodeContainer{};
+  LoadContainerPointer     m_LoadContainer{};
+  MaterialContainerPointer m_MaterialContainer{};
 
 private:
   void

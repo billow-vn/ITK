@@ -22,9 +22,6 @@
 namespace itk
 {
 
-//
-// Constructor
-//
 template <typename TImageToImageFilter>
 ImageFilterToVideoFilterWrapper<TImageToImageFilter>::ImageFilterToVideoFilterWrapper()
 {
@@ -38,28 +35,15 @@ ImageFilterToVideoFilterWrapper<TImageToImageFilter>::ImageFilterToVideoFilterWr
   m_ImageFilter = nullptr;
 }
 
-//
-// PrintSelf
-//
 template <typename TImageToImageFilter>
 void
 ImageFilterToVideoFilterWrapper<TImageToImageFilter>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  if (m_ImageFilter)
-  {
-    os << indent << "ImageFilter:" << std::endl;
-    m_ImageFilter->Print(os, indent.GetNextIndent());
-  }
-  else
-  {
-    os << indent << "ImageFilterType: " << typeid(ImageFilterType).name() << std::endl;
-  }
+
+  itkPrintSelfObjectMacro(ImageFilter);
 }
 
-//
-// TemporalStreamingGenerateData
-//
 template <typename TImageToImageFilter>
 void
 ImageFilterToVideoFilterWrapper<TImageToImageFilter>::TemporalStreamingGenerateData()

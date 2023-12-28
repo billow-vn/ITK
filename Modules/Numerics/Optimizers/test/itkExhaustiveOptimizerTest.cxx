@@ -69,7 +69,7 @@ public:
     double y = parameters[1];
 
     std::cout << "GetValue( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     MeasureType measure = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -87,7 +87,7 @@ public:
     double y = parameters[1];
 
     std::cout << "GetDerivative( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     derivative = DerivativeType(SpaceDimension);
@@ -228,8 +228,8 @@ itkExhaustiveOptimizerTest(int, char *[])
 
   ParametersType finalPosition = itkOptimizer->GetMinimumMetricValuePosition();
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ')' << std::endl;
 
   bool                       visitedIndicesPass = true;
   std::vector<unsigned long> visitedIndices = idxObserver->m_VisitedIndices;

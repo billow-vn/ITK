@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultipleValuedNonLinearOptimizer, NonLinearOptimizer);
+  itkOverrideGetNameOfClassMacro(MultipleValuedNonLinearOptimizer);
 
   /**  Parameters type.
    *  It defines a position in the optimization search space. */
@@ -63,7 +63,7 @@ public:
 
   /**  Derivative type.
    *  It defines a type used to return the cost function derivative.
-   *  Here a bidimensional Array is used for Multivalued functions   */
+   *  Here a bi-dimensional Array is used for Multivalued functions   */
   using DerivativeType = Array2D<double>;
 
   /** Set the cost function. */
@@ -76,7 +76,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  CostFunctionPointer m_CostFunction;
+  CostFunctionPointer m_CostFunction{};
 };
 } // end namespace itk
 

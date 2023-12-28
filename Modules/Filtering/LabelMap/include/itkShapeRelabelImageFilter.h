@@ -27,11 +27,11 @@
 namespace itk
 {
 /**
- *\class ShapeRelabelImageFilter
+ * \class ShapeRelabelImageFilter
  * \brief relabel objects according to their shape attributes
  *
  * ShapeRelabelImageFilter relabel a labeled image according to the shape attributes of
- * the objects. The label produced are always consecutives.
+ * the objects. The label produced are always consecutive.
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShapeRelabelImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ShapeRelabelImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -143,9 +143,9 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  bool                 m_ReverseOrdering;
-  AttributeType        m_Attribute;
+  OutputImagePixelType m_BackgroundValue{};
+  bool                 m_ReverseOrdering{};
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

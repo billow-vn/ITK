@@ -178,7 +178,7 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>::ThreadedStreamedGenerateDa
 
   ImageLinearConstIteratorWithIndex<TInputImage> it(this->GetInput(), outputRegionForThread);
 
-  ImageScanlineConstIterator<TLabelImage> labelIt(this->GetLabelInput(), outputRegionForThread);
+  ImageScanlineConstIterator labelIt(this->GetLabelInput(), outputRegionForThread);
 
   auto mapIt = localStatistics.end();
 
@@ -257,28 +257,23 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>::ThreadedStreamedGenerateDa
   // local copy, this thread may do multiple merges.
   while (true)
   {
-
+    MapType tomerge{};
     {
-      std::unique_lock<std::mutex> lock(m_Mutex);
+      const std::lock_guard<std::mutex> lockGuard(m_Mutex);
 
       if (m_LabelStatistics.empty())
       {
         swap(m_LabelStatistics, localStatistics);
         break;
       }
-      else
-      {
-        // copy the output map to thread local storage
-        MapType tomerge;
-        swap(m_LabelStatistics, tomerge);
 
-        // allow other threads to merge data
-        lock.unlock();
+      // Move the data of the output map to the local `tomerge` and clear the output map.
+      swap(m_LabelStatistics, tomerge);
 
-        // Merge tomerge into localStatistics, locally
-        MergeMap(localStatistics, tomerge);
-      }
-    } // release lock
+    } // release lock, allow other threads to merge data
+
+    // Merge tomerge into localStatistics, locally
+    MergeMap(localStatistics, tomerge);
   }
 }
 
@@ -520,12 +515,21 @@ template <typename TImage, typename TLabelImage>
 void
 LabelStatisticsImageFilter<TImage, TLabelImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Number of labels: " << m_LabelStatistics.size() << std::endl;
-  os << indent << "Use Histograms: " << m_UseHistograms << std::endl;
-  os << indent << "Histogram Lower Bound: " << m_LowerBound << std::endl;
-  os << indent << "Histogram Upper Bound: " << m_UpperBound << std::endl;
+  os << indent << "LabelStatistics: " << std::endl;
+  for (auto const & pair : m_LabelStatistics)
+  {
+    os << indent.GetNextIndent() << "{" << pair.first << ": " << pair.second << "}" << std::endl;
+  }
+
+  os << indent << "ValidLabelValues: " << m_ValidLabelValues << std::endl;
+  os << indent << "UseHistograms: " << (m_UseHistograms ? "On" : "Off") << std::endl;
+  os << indent << "NumBins: " << m_NumBins << std::endl;
+  os << indent << "LowerBound: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_LowerBound) << std::endl;
+  os << indent << "UpperBound: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_UpperBound) << std::endl;
 }
 } // end namespace itk
 #endif

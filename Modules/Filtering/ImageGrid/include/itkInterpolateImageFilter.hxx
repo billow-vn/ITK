@@ -72,18 +72,13 @@ InterpolateImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, 
   os << indent << "Distance: " << m_Distance << std::endl;
 }
 
-/**
- * Setup state of filter before multi-threading.
- * InterpolatorType::SetInputImage is not thread-safe and hence
- * has to be setup before ThreadedGenerateData
- */
 template <typename TInputImage, typename TOutputImage>
 void
 InterpolateImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator not set");
+    itkExceptionMacro("Interpolator not set");
   }
 
   // Create intermediate image
@@ -153,7 +148,6 @@ InterpolateImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 {
   OutputImagePointer outputPtr = this->GetOutput();
   using OutputIterator = ImageRegionIteratorWithIndex<TOutputImage>;
-  OutputIterator outIt(outputPtr, outputRegionForThread);
 
   using OutputPixelType = typename TOutputImage::PixelType;
   using IndexType = typename TOutputImage::IndexType;
@@ -165,7 +159,7 @@ InterpolateImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   TotalProgressReporter progress(this, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 
   // Walk the output region
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(outputPtr, outputRegionForThread); !outIt.IsAtEnd(); ++outIt)
   {
     // Determine the intermediate image index
     outputIndex = outIt.GetIndex();
@@ -183,10 +177,9 @@ InterpolateImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
     else
     {
       // should never be in here
-      itkExceptionMacro(<< "Index not within the intermediate buffer");
+      itkExceptionMacro("Index not within the intermediate buffer");
     }
 
-    ++outIt;
     progress.CompletedPixel();
   }
 }

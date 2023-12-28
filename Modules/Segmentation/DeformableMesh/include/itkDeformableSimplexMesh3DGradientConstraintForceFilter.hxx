@@ -20,13 +20,13 @@
 
 #include "itkNumericTraits.h"
 #include "itkMath.h"
-#include "itkMath.h"
+#include "itkPrintHelper.h"
 
 #include <set>
 
 namespace itk
 {
-/* Constructore  */
+
 template <typename TInputMesh, typename TOutputMesh>
 DeformableSimplexMesh3DGradientConstraintForceFilter<TInputMesh, TOutputMesh>::
   DeformableSimplexMesh3DGradientConstraintForceFilter()
@@ -47,9 +47,26 @@ void
 DeformableSimplexMesh3DGradientConstraintForceFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os,
                                                                                          Indent         indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
-  os << indent << "Range = " << m_Range << std::endl;
-  os << indent << "Image = " << m_Image << std::endl;
+
+  os << indent << "Range: " << m_Range << std::endl;
+
+  os << indent << "StartVoxel: ";
+  if (m_StartVoxel != nullptr)
+  {
+    os << *m_StartVoxel << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "Positive: " << m_Positive << std::endl;
+  os << indent << "Negative: " << m_Negative << std::endl;
+
+  itkPrintSelfObjectMacro(Image);
 }
 
 template <typename TInputMesh, typename TOutputMesh>
@@ -218,7 +235,7 @@ DeformableSimplexMesh3DGradientConstraintForceFilter<TInputMesh, TOutputMesh>::C
       ic[2] < this->m_ImageDepth)
   {
     bool     stop;
-    SIDEEnum side = SIDEEnum::BOTH; // make sure you can set half segment as well but for noe
+    SIDEEnum side = SIDEEnum::BOTH; // make sure you can set half segment as well but for now
                                     // we just set it to full segment
     int    vpos[3];
     int    ii;

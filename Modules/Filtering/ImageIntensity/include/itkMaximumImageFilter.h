@@ -59,7 +59,7 @@ public:
 } // namespace Functor
 
 /**
- *\class MaximumImageFilter
+ * \class MaximumImageFilter
  * \brief Implements a pixel-wise operator Max(a,b) between two images.
  *
  * The pixel values of the output image are the maximum between the
@@ -97,7 +97,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MaximumImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(MaximumImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

@@ -35,7 +35,7 @@ ShapeUniqueLabelMapFilter<TImage>::GenerateData()
 {
   switch (m_Attribute)
   {
-    itkShapeLabelMapFilterDispatchMacro() default : itkExceptionMacro(<< "Unknown attribute type");
+    itkShapeLabelMapFilterDispatchMacro() default : itkExceptionMacro("Unknown attribute type");
     break;
   }
 }
@@ -47,7 +47,7 @@ ShapeUniqueLabelMapFilter<TImage>::PrintSelf(std::ostream & os, Indent indent) c
   Superclass::PrintSelf(os, indent);
 
   os << indent << "ReverseOrdering: " << m_ReverseOrdering << std::endl;
-  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ")"
+  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ')'
      << std::endl;
 }
 } // end namespace itk

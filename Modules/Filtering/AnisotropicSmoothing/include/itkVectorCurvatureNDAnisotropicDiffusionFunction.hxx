@@ -66,17 +66,17 @@ VectorCurvatureNDAnisotropicDiffusionFunction<TImage>::VectorCurvatureNDAnisotro
   }
 
   // Allocate the derivative operator.
-  m_DerivativeOperator.SetDirection(0); // Not relelevant, we'll apply in a slice-based
+  m_DerivativeOperator.SetDirection(0); // Not relevant, we'll apply in a slice-based
                                         // fashion
   m_DerivativeOperator.SetOrder(1);
   m_DerivativeOperator.CreateDirectional();
 }
 
 template <typename TImage>
-typename VectorCurvatureNDAnisotropicDiffusionFunction<TImage>::PixelType
+auto
 VectorCurvatureNDAnisotropicDiffusionFunction<TImage>::ComputeUpdate(const NeighborhoodType & it,
                                                                      void *,
-                                                                     const FloatOffsetType &)
+                                                                     const FloatOffsetType &) -> PixelType
 {
   unsigned int i, j, k;
   double       speed;
@@ -90,7 +90,7 @@ VectorCurvatureNDAnisotropicDiffusionFunction<TImage>::ComputeUpdate(const Neigh
   double       Cx[ImageDimension];
   double       Cxd[ImageDimension];
 
-  const ScalarValueType ScalarValueTypeZero = NumericTraits<ScalarValueType>::ZeroValue();
+  const ScalarValueType ScalarValueTypeZero{};
 
   PixelType dx_forward[ImageDimension];
   PixelType dx_backward[ImageDimension];

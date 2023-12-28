@@ -81,7 +81,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(DenseFiniteDifferenceImageFilter, FiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(DenseFiniteDifferenceImageFilter);
 
   /** Convenient type alias */
   using typename Superclass::InputImageType;
@@ -188,7 +188,7 @@ private:
   CalculateChangeThreaderCallback(void * arg);
 
   /** The buffer that holds the updates for an iteration of the algorithm. */
-  typename UpdateBufferType::Pointer m_UpdateBuffer;
+  typename UpdateBufferType::Pointer m_UpdateBuffer{};
 };
 } // end namespace itk
 

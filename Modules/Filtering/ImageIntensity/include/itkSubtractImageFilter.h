@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class SubtractImageFilter
+ * \class SubtractImageFilter
  * \brief Pixel-wise subtraction of two images.
  *
  * Subtract each pixel from image2 from its corresponding pixel in
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SubtractImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(SubtractImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

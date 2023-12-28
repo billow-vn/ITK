@@ -36,7 +36,7 @@ namespace itk
  * \author Ivan Macia, Vicomtech, Spain, https://www.vicomtech.org/en
  *
  * This implementation was taken from the Insight Journal paper:
- * https://hdl.handle.net/1926/1290
+ * https://www.insight-journal.org/browse/publication/179
  *
  * \sa NeighborhoodOperator
  * \sa ImageFunction
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(DiscreteHessianGaussianImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(DiscreteHessianGaussianImageFunction);
 
   /** Image dependent types */
   using typename Superclass::InputImageType;
@@ -107,7 +107,7 @@ public:
 #endif
 
 public:
-  /** Evalutate the  in the given dimension at specified point */
+  /** Evaluate the  in the given dimension at specified point */
   OutputType
   Evaluate(const PointType & point) const override;
 
@@ -206,7 +206,7 @@ protected:
 
 private:
   /** Desired variance of the discrete Gaussian function */
-  VarianceArrayType m_Variance;
+  VarianceArrayType m_Variance{};
 
   /** Difference between the areas under the curves of the continuous and
    * discrete Gaussian functions */
@@ -221,15 +221,15 @@ private:
    * First N zero-order operators are stored, then N first-order and
    * then N second-order making 3*N operators altogether where
    * N=ImageDimension. */
-  mutable GaussianDerivativeOperatorArrayType m_OperatorArray;
+  mutable GaussianDerivativeOperatorArrayType m_OperatorArray{};
 
   /** Array of N-dimensional kernels which are the result of
    * convolving the operators for calculating hessian matrix
    * derivatives */
-  KernelArrayType m_KernelArray;
+  KernelArrayType m_KernelArray{};
 
   /** OperatorImageFunction */
-  OperatorImageFunctionPointer m_OperatorImageFunction;
+  OperatorImageFunctionPointer m_OperatorImageFunction{};
 
   /** Flag for scale-space normalization of derivatives */
   bool m_NormalizeAcrossScale{ true };

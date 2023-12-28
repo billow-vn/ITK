@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class SubsamplerBase
+ * \class SubsamplerBase
  * \brief This is the base subsampler class which defines the subsampler API.
  *
  * This class will search a Sample provided by SetSample and return a
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(SubsamplerBase, Object);
+  itkOverrideGetNameOfClassMacro(SubsamplerBase);
 
   /** implement type-specific clone method */
   itkCloneMacro(Self);
@@ -129,10 +129,10 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  SampleConstPointer m_Sample;
-  bool               m_RequestMaximumNumberOfResults;
-  bool               m_CanSelectQuery;
-  SeedType           m_Seed;
+  SampleConstPointer m_Sample{};
+  bool               m_RequestMaximumNumberOfResults{};
+  bool               m_CanSelectQuery{};
+  SeedType           m_Seed{};
 }; // end of class SubsamplerBase
 
 } // end of namespace Statistics

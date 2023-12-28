@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class OtsuMultipleThresholdsCalculator
+ * \class OtsuMultipleThresholdsCalculator
  * \brief Computes Otsu's multiple thresholds for a histogram.
  *
  * You plug in the target histogram using SetInputHistogram method and
@@ -71,7 +71,7 @@ public:
   using InstanceIdentifierVectorType = std::vector<InstanceIdentifierType>;
 
   /**Standard Macros */
-  itkTypeMacro(OtsuMultipleThresholdsCalculator, HistogramAlgorithmsBase);
+  itkOverrideGetNameOfClassMacro(OtsuMultipleThresholdsCalculator);
   itkNewMacro(Self);
 
   /** Typedef for the thresholds output */
@@ -116,7 +116,7 @@ protected:
 
 private:
   SizeValueType m_NumberOfThresholds{ 1 };
-  OutputType    m_Output;
+  OutputType    m_Output{};
   bool          m_ValleyEmphasis{ false };
 #if defined(ITKV4_COMPATIBILITY)
   bool m_ReturnBinMidpoint{ true };

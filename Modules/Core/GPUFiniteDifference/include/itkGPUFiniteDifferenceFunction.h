@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(GPUFiniteDifferenceFunction, FiniteDifferenceFunction);
+  itkOverrideGetNameOfClassMacro(GPUFiniteDifferenceFunction);
 
   /** Extract some parameters from the image type */
   using typename Superclass::ImageType;
@@ -91,7 +91,7 @@ public:
                 void *                   itkNotUsed(globalData),
                 const FloatOffsetType &  itkNotUsed(offset = FloatOffsetType(0.0))) override
   {
-    PixelType pix = itk::NumericTraits<PixelType>::ZeroValue();
+    PixelType pix{};
     return pix;
   }
 #endif
@@ -117,10 +117,10 @@ protected:
   ~GPUFiniteDifferenceFunction() override = default;
 
   /** GPU kernel manager for GPUFiniteDifferenceFunction class */
-  typename GPUKernelManager::Pointer m_GPUKernelManager;
+  typename GPUKernelManager::Pointer m_GPUKernelManager{};
 
   /** GPU kernel handle for GPUComputeUpdate() */
-  int m_ComputeUpdateGPUKernelHandle;
+  int m_ComputeUpdateGPUKernelHandle{};
 };
 } // end namespace itk
 

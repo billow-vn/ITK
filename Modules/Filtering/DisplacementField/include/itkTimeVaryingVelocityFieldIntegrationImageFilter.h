@@ -38,7 +38,7 @@ namespace itk
  * \f]
  *
  * In this class, the input is the time-varying velocity field and an initial
- * diffeomorophism.  The output diffeomorphism is produced using fourth order
+ * diffeomorphism.  The output diffeomorphism is produced using fourth order
  * Runge-Kutta.
  *
  * \warning The output deformation field needs to have dimensionality of 1
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(TimeVaryingVelocityFieldIntegrationImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(TimeVaryingVelocityFieldIntegrationImageFilter);
 
   /**
    * Dimensionality of input data is assumed to be one more than the output
@@ -176,21 +176,21 @@ protected:
   VectorType
   IntegrateVelocityAtPoint(const PointType & initialSpatialPoint, const TimeVaryingVelocityFieldType * inputField);
 
-  RealType m_LowerTimeBound;
-  RealType m_UpperTimeBound;
+  RealType m_LowerTimeBound{};
+  RealType m_UpperTimeBound{};
 
-  DisplacementFieldPointer m_InitialDiffeomorphism;
+  DisplacementFieldPointer m_InitialDiffeomorphism{};
 
-  unsigned int m_NumberOfIntegrationSteps;
+  unsigned int m_NumberOfIntegrationSteps{};
 
-  unsigned int m_NumberOfTimePoints;
+  unsigned int m_NumberOfTimePoints{};
 
-  DisplacementFieldInterpolatorPointer m_DisplacementFieldInterpolator;
+  DisplacementFieldInterpolatorPointer m_DisplacementFieldInterpolator{};
 
   bool m_TimeBoundsAsRates{ true };
 
 private:
-  VelocityFieldInterpolatorPointer m_VelocityFieldInterpolator;
+  VelocityFieldInterpolatorPointer m_VelocityFieldInterpolator{};
 };
 } // namespace itk
 

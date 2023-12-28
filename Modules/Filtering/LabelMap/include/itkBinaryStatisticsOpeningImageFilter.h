@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class BinaryStatisticsOpeningImageFilter
+ * \class BinaryStatisticsOpeningImageFilter
  * \brief Remove objects based on the value of their Statistics attribute.
  *
  * The BinaryStatisticsOpeningImageFilter removes the objects in a binary image
@@ -94,7 +94,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryStatisticsOpeningImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryStatisticsOpeningImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -206,12 +206,12 @@ protected:
   GenerateData() override;
 
 private:
-  bool                 m_FullyConnected;
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
-  double               m_Lambda;
-  bool                 m_ReverseOrdering;
-  AttributeType        m_Attribute;
+  bool                 m_FullyConnected{};
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
+  double               m_Lambda{};
+  bool                 m_ReverseOrdering{};
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

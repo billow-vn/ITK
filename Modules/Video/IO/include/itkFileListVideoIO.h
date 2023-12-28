@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class FileListVideoIO
+ * \class FileListVideoIO
  *
  * \brief VideoIO object for reading and writing videos as a sequence of frame
  *  files.
@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FileListVideoIO, VideoIOBase);
+  itkOverrideGetNameOfClassMacro(FileListVideoIO);
 
   /** Get the internal ImageIOBase object. */
   itkGetConstObjectMacro(ImageIO, ImageIOBase);
@@ -196,9 +196,9 @@ protected:
   VerifyExtensions(const std::vector<std::string> & fileList) const;
 
 private:
-  ImageIOBase::Pointer m_ImageIO;
+  ImageIOBase::Pointer m_ImageIO{};
 
-  std::vector<std::string> m_FileNames;
+  std::vector<std::string> m_FileNames{};
 };
 } // end namespace itk
 

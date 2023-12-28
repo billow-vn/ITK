@@ -67,7 +67,7 @@ PowellOptimizerv4<TInternalComputationValueType>::GetLineValue(double x, Paramet
     tempCoord[i] = this->m_LineOrigin[i] + x * this->m_LineDirection[i];
   }
   this->m_Metric->SetParameters(tempCoord);
-  itkDebugMacro(<< "x = " << x);
+  itkDebugMacro("x = " << x);
   double val;
   try
   {
@@ -84,7 +84,7 @@ PowellOptimizerv4<TInternalComputationValueType>::GetLineValue(double x, Paramet
       throw;
     }
   }
-  itkDebugMacro(<< "val = " << val);
+  itkDebugMacro("val = " << val);
   return val;
 }
 
@@ -200,7 +200,7 @@ PowellOptimizerv4<TInternalComputationValueType>::LineBracket(double *         x
     *f3 = this->GetLineValue(*x3, tempCoord);
   }
 
-  itkDebugMacro(<< "Initial: " << *x1 << ", " << *x2 << ", " << *x3);
+  itkDebugMacro("Initial: " << *x1 << ", " << *x2 << ", " << *x3);
   //
   // Report the central point as the minimum
   //
@@ -277,9 +277,9 @@ PowellOptimizerv4<TInternalComputationValueType>::BracketedLineOptimize(double  
       *extX = x;
       *extVal = functionValueOfX;
       this->SetCurrentLinePoint(x, functionValueOfX);
-      itkDebugMacro(<< "x = " << *extX);
-      itkDebugMacro(<< "val = " << *extVal);
-      itkDebugMacro(<< "return 1");
+      itkDebugMacro("x = " << *extX);
+      itkDebugMacro("val = " << *extVal);
+      itkDebugMacro("return 1");
       return; /* Acceptable approx. is found  */
     }
 
@@ -295,14 +295,14 @@ PowellOptimizerv4<TInternalComputationValueType>::BracketedLineOptimize(double  
       double q; /* ted as p/q; division operation*/
       q = (x - v) * (functionValueOfX - functionValueOfW);
 
-      double p; /* Interpolation step is calcula-*/
+      double p; /* Interpolation step is calculated */
       p = (x - v) * q - (x - w) * t;
 
       q = 2 * (q - t);
 
-      if (q > 0.0) /* q was calculated with the op-*/
+      if (q > 0.0) /* q was calculated with the */
       {
-        p = -p; /* posite sign; make q positive  */
+        p = -p; /* opposite sign; make q positive  */
       }
       else /* and assign possible minus to  */
       {
@@ -390,9 +390,9 @@ PowellOptimizerv4<TInternalComputationValueType>::BracketedLineOptimize(double  
 
   *extX = x;
   *extVal = functionValueOfX;
-  itkDebugMacro(<< "x = " << *extX);
-  itkDebugMacro(<< "val = " << *extVal);
-  itkDebugMacro(<< "return 2");
+  itkDebugMacro("x = " << *extX);
+  itkDebugMacro("val = " << *extVal);
+  itkDebugMacro("return 2");
 
   this->SetCurrentLinePoint(x, functionValueOfX);
 }
@@ -473,7 +473,7 @@ PowellOptimizerv4<TInternalComputationValueType>::StartOptimization(bool /* doOn
     {
       m_StopConditionDescription << "Cost function values at the current parameter (" << fx
                                  << ") and at the local extrema (" << fp << ") are within Value Tolerance ("
-                                 << m_ValueTolerance << ")";
+                                 << m_ValueTolerance << ')';
       this->InvokeEvent(EndEvent());
       return;
     }

@@ -20,6 +20,7 @@
 #include "itkNeighborhoodOperatorImageFunction.h"
 
 #include "itkGaussianOperator.h"
+#include "itkTestingMacros.h"
 
 int
 itkNeighborhoodOperatorImageFunctionTest(int, char *[])
@@ -28,7 +29,7 @@ itkNeighborhoodOperatorImageFunctionTest(int, char *[])
   constexpr unsigned int Dimension = 3;
   using PixelType = float;
   using ImageType = itk::Image<PixelType, Dimension>;
-  using NeighborhoodOperatorType = itk::GaussianOperator<PixelType, 3>;
+  using NeighborhoodOperatorType = itk::GaussianOperator<PixelType, Dimension>;
   using FunctionType = itk::NeighborhoodOperatorImageFunction<ImageType, PixelType>;
 
   // Create and allocate the image
@@ -54,6 +55,10 @@ itkNeighborhoodOperatorImageFunctionTest(int, char *[])
 
 
   auto function = FunctionType::New();
+
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(function, NeighborhoodOperatorImageFunction, ImageFunction);
+
+
   function->SetInputImage(image);
 
   auto * oper = new NeighborhoodOperatorType;
@@ -102,6 +107,6 @@ itkNeighborhoodOperatorImageFunctionTest(int, char *[])
 
   std::cout << function << std::endl;
 
-  std::cout << "[TEST DONE] " << std::endl;
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

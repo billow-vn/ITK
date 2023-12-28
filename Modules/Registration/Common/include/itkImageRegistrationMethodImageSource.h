@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageRegistrationMethodImageSource, Object);
+  itkOverrideGetNameOfClassMacro(ImageRegistrationMethodImageSource);
 
 
   using MovingImageType = itk::Image<TMovingPixelType, VDimension>;
@@ -148,10 +148,10 @@ protected:
   }
 
 private:
-  typename FixedImageType::Pointer  m_FixedImage;
-  typename MovingImageType::Pointer m_MovingImage;
+  typename FixedImageType::Pointer  m_FixedImage{};
+  typename MovingImageType::Pointer m_MovingImage{};
 
-  ParametersType m_Parameters;
+  ParametersType m_Parameters{};
 };
 
 } // end namespace testhelper

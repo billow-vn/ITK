@@ -45,7 +45,7 @@ template <typename TInputImage, typename TOutputImage, typename ResamplerType>
 void
 BSplineUpsampleImageFilter<TInputImage, TOutputImage, ResamplerType>::GenerateData()
 {
-  itkDebugMacro(<< "Actually executing");
+  itkDebugMacro("Actually executing");
 
   // Get the input and output pointers
   InputImagePointer  inputPtr = const_cast<TInputImage *>(this->GetInput());
@@ -58,7 +58,7 @@ BSplineUpsampleImageFilter<TInputImage, TOutputImage, ResamplerType>::GenerateDa
   outputPtr->Allocate();
 
   // Iterator for walking the output region is defined in the Superclass
-  OutputImageIterator outIt = OutputImageIterator(outputPtr, outputPtr->GetRequestedRegion());
+  OutputImageIterator outIt(outputPtr, outputPtr->GetRequestedRegion());
 
   // Calculate actual output
   // TODO:  Need to verify outIt is correctly sized.
@@ -170,7 +170,7 @@ BSplineUpsampleImageFilter<TInputImage, TOutputImage, ResamplerType>::EnlargeOut
   else
   {
     // pointer could not be cast to TLevelSet *
-    itkWarningMacro(<< "itk::BSplineUpsampleImageFilter"
+    itkWarningMacro("itk::BSplineUpsampleImageFilter"
                     << "::EnlargeOutputRequestedRegion cannot cast " << typeid(output).name() << " to "
                     << typeid(TOutputImage *).name());
   }

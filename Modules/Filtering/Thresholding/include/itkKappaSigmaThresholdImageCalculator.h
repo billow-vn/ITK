@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class KappaSigmaThresholdImageCalculator
+ * \class KappaSigmaThresholdImageCalculator
  * \brief Computes a Kappa-Sigma-Clipping threshold for an image.
  *
  * When an image is mostly composed of background pixels, most of the automatic
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(KappaSigmaThresholdImageCalculator, Object);
+  itkOverrideGetNameOfClassMacro(KappaSigmaThresholdImageCalculator);
 
   /** Extract the dimension of the image. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -120,13 +120,13 @@ protected:
 
 private:
   bool           m_Valid{ false }; // Have moments been computed yet?
-  MaskPixelType  m_MaskValue;
+  MaskPixelType  m_MaskValue{};
   double         m_SigmaFactor{ 2 };
   unsigned int   m_NumberOfIterations{ 2 };
-  InputPixelType m_Output;
+  InputPixelType m_Output{};
 
-  InputImageConstPointer m_Image;
-  MaskImageConstPointer  m_Mask;
+  InputImageConstPointer m_Image{};
+  MaskImageConstPointer  m_Mask{};
 };
 } // end namespace itk
 

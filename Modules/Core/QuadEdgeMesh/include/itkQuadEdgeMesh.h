@@ -118,7 +118,7 @@ public:
   using typename Superclass::PointCellLinksContainer;
   using typename Superclass::PointCellLinksContainerIterator;
 
-  // BoundaryAssignMents section:
+  // BoundaryAssignments section:
   using typename Superclass::BoundaryAssignmentsContainer;
   using typename Superclass::BoundaryAssignmentsContainerPointer;
   using typename Superclass::BoundaryAssignmentsContainerVector;
@@ -165,7 +165,7 @@ public:
 public:
   /** Basic Object interface. */
   itkNewMacro(Self);
-  itkTypeMacro(QuadEdgeMesh, Mesh);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMesh);
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** FrontIterator definitions */
@@ -492,15 +492,15 @@ protected:
   virtual void
   ClearCellsContainer();
 
-  CellsContainerPointer m_EdgeCellsContainer;
+  CellsContainerPointer m_EdgeCellsContainer{};
 
 private:
-  CellIdentifier m_NumberOfFaces;
-  CellIdentifier m_NumberOfEdges;
+  CellIdentifier m_NumberOfFaces{};
+  CellIdentifier m_NumberOfEdges{};
 
 protected:
-  FreePointIndexesType m_FreePointIndexes;
-  FreeCellIndexesType  m_FreeCellIndexes;
+  FreePointIndexesType m_FreePointIndexes{};
+  FreeCellIndexesType  m_FreeCellIndexes{};
 };
 } // namespace itk
 

@@ -56,7 +56,7 @@ LevelSetEquationTermBase<TInputImage, TLevelSetContainer>::SetLevelSetContainer(
   }
   else
   {
-    itkGenericExceptionMacro(<< "iContainer is nullptr");
+    itkGenericExceptionMacro("iContainer is nullptr");
   }
 }
 
@@ -79,9 +79,10 @@ LevelSetEquationTermBase<TInputImage, TLevelSetContainer>::Evaluate(const LevelS
 
 // ----------------------------------------------------------------------------
 template <typename TInputImage, typename TLevelSetContainer>
-typename LevelSetEquationTermBase<TInputImage, TLevelSetContainer>::LevelSetOutputRealType
+auto
 LevelSetEquationTermBase<TInputImage, TLevelSetContainer>::Evaluate(const LevelSetInputIndexType & iP,
                                                                     const LevelSetDataType &       iData)
+  -> LevelSetOutputRealType
 {
   if (itk::Math::abs(this->m_Coefficient) > NumericTraits<LevelSetOutputRealType>::epsilon())
   {
@@ -105,19 +106,19 @@ LevelSetEquationTermBase<TInputImage, TLevelSetContainer>::SetUp()
   {
     if (this->m_LevelSetContainer.IsNull())
     {
-      itkGenericExceptionMacro(<< "m_LevelSetContainer is nullptr");
+      itkGenericExceptionMacro("m_LevelSetContainer is nullptr");
     }
     this->m_CurrentLevelSetPointer = this->m_LevelSetContainer->GetLevelSet(this->m_CurrentLevelSetId);
 
     if (this->m_CurrentLevelSetPointer.IsNull())
     {
-      itkWarningMacro(<< "m_CurrentLevelSetId does not exist in the level set container");
+      itkWarningMacro("m_CurrentLevelSetId does not exist in the level set container");
     }
   }
 
   if (!this->m_Heaviside.IsNotNull())
   {
-    itkWarningMacro(<< "m_Heaviside is nullptr");
+    itkWarningMacro("m_Heaviside is nullptr");
   }
 }
 // ----------------------------------------------------------------------------

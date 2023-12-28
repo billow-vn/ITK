@@ -38,7 +38,7 @@ void
 DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
   os << indent << "Variance: " << m_Variance << std::endl;
   os << indent << "Order: " << m_Order << std::endl;
@@ -78,7 +78,7 @@ DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::RecomputeGaussian
     {
       if (this->GetInputImage()->GetSpacing()[direction] == 0.0)
       {
-        itkExceptionMacro(<< "Pixel spacing cannot be zero");
+        itkExceptionMacro("Pixel spacing cannot be zero");
       }
       else
       {
@@ -191,9 +191,9 @@ DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::Evaluate(const Po
 
 /** Evaluate the function at specified ContinuousIndex position.*/
 template <typename TInputImage, typename TOutput>
-typename DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::OutputType
+auto
 DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::EvaluateAtContinuousIndex(
-  const ContinuousIndexType & cindex) const
+  const ContinuousIndexType & cindex) const -> OutputType
 {
   if (m_InterpolationMode == InterpolationModeEnum::NearestNeighbourInterpolation)
   {
@@ -222,8 +222,8 @@ DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::EvaluateAtContinu
     // Interpolated value is the weighted sum of each of the surrounding
     // neighbors. The weight for each neighbor is the fraction overlap
     // of the neighbor pixel with respect to a pixel centered on point.
-    TOutput value = NumericTraits<TOutput>::ZeroValue();
-    TOutput totalOverlap = NumericTraits<TOutput>::ZeroValue();
+    TOutput value{};
+    TOutput totalOverlap{};
 
     for (NumberOfNeighborsType counter = 0; counter < numberOfNeighbors; ++counter)
     {

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class NearestNeighborInterpolateImageFunction
+ * \class NearestNeighborInterpolateImageFunction
  * \brief Nearest neighbor interpolation of a scalar image.
  *
  * NearestNeighborInterpolateImageFunction interpolates image intensity at
@@ -49,7 +49,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NearestNeighborInterpolateImageFunction, InterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(NearestNeighborInterpolateImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

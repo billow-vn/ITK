@@ -41,7 +41,7 @@ namespace itk
 struct ITKIOMINC_HIDDEN MINCImageIOPImpl;
 
 /**
- *\class MINCImageIO
+ * \class MINCImageIO
  *
  * \author Leila Baghdadi
  * \brief Class that defines how to read MINC file format.
@@ -51,7 +51,7 @@ struct ITKIOMINC_HIDDEN MINCImageIOPImpl;
  * Note, like ITK, MINC is N dimensional and dimensions
  * can be submitted in any arbitrary order. Here we make sure the
  * dimensions are ordered as xspace, yspace, zspace, time and
- * vector_dimension and so on or xfrequencey, yfrequency, zfrequency,
+ * vector_dimension and so on or xfrequency, yfrequency, zfrequency,
  * tfrequency and vector_dimension and so on NOTE** This class only
  * reads the regularly sampled dimensions as I am not sure how to deal
  * with "irregularly sampled" dimensions yet!
@@ -81,7 +81,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MINCImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(MINCImageIO);
 
   /** Right now MINC supports up to 3D with multiple components */
   bool
@@ -146,9 +146,9 @@ protected:
   CloseVolume();
 
 private:
-  MINCImageIOPImpl * m_MINCPImpl;
+  MINCImageIOPImpl * m_MINCPImpl{};
 
-  MatrixType m_DirectionCosines;
+  MatrixType m_DirectionCosines{};
 
   // complex type images, composed of complex numbers
   // int m_Complex;

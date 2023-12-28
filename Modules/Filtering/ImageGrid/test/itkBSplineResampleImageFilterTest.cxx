@@ -67,7 +67,7 @@ PrintImageData(ImageTypePtr2D imgPtr)
     std::cout << imgPtr->GetSpacing()[n] << ", ";
   }
   std::cout << std::endl;
-  Iterator outIt = Iterator(imgPtr, imgPtr->GetLargestPossibleRegion());
+  Iterator outIt(imgPtr, imgPtr->GetLargestPossibleRegion());
   outIt.SetDirection(0);
 
   SizeType2D size = imgPtr->GetLargestPossibleRegion().GetSize();
@@ -645,7 +645,9 @@ itkBSplineResampleImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv)[
     passed = true;
   }
   if (!passed)
+  {
     std::cout << "*** " << flag << " expected exception was not caught." << std::endl;
+  }
   passed = false;
 
   try
@@ -660,7 +662,9 @@ itkBSplineResampleImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv)[
     passed = true;
   }
   if (!passed)
+  {
     std::cout << "*** " << flag << " expected exception was not caught." << std::endl;
+  }
   passed = false;
 
   try
@@ -675,7 +679,9 @@ itkBSplineResampleImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv)[
     passed = true;
   }
   if (!passed)
+  {
     std::cout << "*** " << flag << " expected exception was not caught." << std::endl;
+  }
   passed = false;
 
   try
@@ -690,7 +696,9 @@ itkBSplineResampleImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv)[
     passed = true;
   }
   if (!passed)
+  {
     std::cout << "*** " << flag << " expected exception was not caught." << std::endl;
+  }
 
   std::cout << "dummyflag: " << dummyflag << std::endl;
   // Return results of test

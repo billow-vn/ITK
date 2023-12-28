@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class MetaConverterBase
+ * \class MetaConverterBase
  *  \brief Base class for MetaObject<->SpatialObject converters
  *
  *  SpatialObject scenes are written and read using the MetaIO
@@ -49,7 +49,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaConverterBase, Object);
+  itkOverrideGetNameOfClassMacro(MetaConverterBase);
 
   using SpatialObjectType = SpatialObject<VDimension>;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;

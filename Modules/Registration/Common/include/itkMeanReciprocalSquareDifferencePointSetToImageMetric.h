@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeanReciprocalSquareDifferencePointSetToImageMetric, Object);
+  itkOverrideGetNameOfClassMacro(MeanReciprocalSquareDifferencePointSetToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -107,7 +107,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_Lambda;
+  double m_Lambda{};
 };
 } // end namespace itk
 

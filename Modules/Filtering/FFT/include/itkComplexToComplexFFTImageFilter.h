@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/**\class ComplexToComplexFFTImageFilterEnums
+/** \class ComplexToComplexFFTImageFilterEnums
  * \brief Contains enum classes used by ComplexToComplexFFTImageFilter class
  * \ingroup ITKFFT
  * \ingroup FourierTransform
@@ -34,7 +34,7 @@ class ComplexToComplexFFTImageFilterEnums
 {
 public:
   /**
-   *\class TransformDirection
+   * \class TransformDirection
    * \ingroup ITKFFT
    * \ingroup FourierTransform
    * */
@@ -49,12 +49,10 @@ extern ITKFFT_EXPORT std::ostream &
                      operator<<(std::ostream & out, const ComplexToComplexFFTImageFilterEnums::TransformDirection value);
 
 /**
- *\class ComplexToComplexFFTImageFilter
+ * \class ComplexToComplexFFTImageFilter
  *
  * \brief Implements an API to enable the Fourier transform or the inverse
  * Fourier transform of images with complex valued voxels to be computed.
- *
- * \ingroup FourierTransform
  *
  * \author Simon K. Warfield simon.warfield\@childrens.harvard.edu
  *
@@ -69,9 +67,9 @@ extern ITKFFT_EXPORT std::ostream &
  * https://www.insight-journal.org/browse/publication/128
  *
  * \ingroup FourierTransform
+ * \ingroup ITKFFT
  *
  * \sa ForwardFFTImageFilter
- * \ingroup ITKFFT
  */
 template <typename TInputImage, typename TOutputImage = TInputImage>
 class ITK_TEMPLATE_EXPORT ComplexToComplexFFTImageFilter : public ImageToImageFilter<TInputImage, TOutputImage>
@@ -93,7 +91,7 @@ public:
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComplexToComplexFFTImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ComplexToComplexFFTImageFilter);
 
   /** Customized object creation methods that support configuration-based
    * selection of FFT implementation.
@@ -109,7 +107,7 @@ public:
   static constexpr TransformDirectionEnum INVERSE = TransformDirectionEnum::INVERSE;
 #endif
 
-  /** Image type type alias support */
+  /** Image type alias support */
   using ImageSizeType = typename ImageType::SizeType;
 
   /** Set/Get the direction in which the transform will be applied.

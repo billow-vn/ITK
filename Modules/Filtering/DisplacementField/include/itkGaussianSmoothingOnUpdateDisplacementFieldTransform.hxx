@@ -126,10 +126,10 @@ GaussianSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimen
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
-typename GaussianSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimension>::DisplacementFieldPointer
+auto
 GaussianSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimension>::GaussianSmoothDisplacementField(
   DisplacementFieldType * field,
-  ScalarType              variance)
+  ScalarType              variance) -> DisplacementFieldPointer
 {
   if (variance <= 0.0)
   {
@@ -225,7 +225,7 @@ GaussianSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimen
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   //
@@ -246,11 +246,13 @@ GaussianSmoothingOnUpdateDisplacementFieldTransform<TParametersValueType, VDimen
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Gaussian smoothing parameters: " << std::endl
-     << indent << "m_GaussianSmoothingVarianceForTheUpdateField: " << this->m_GaussianSmoothingVarianceForTheUpdateField
-     << std::endl
-     << indent << "m_GaussianSmoothingVarianceForTheTotalField: " << this->m_GaussianSmoothingVarianceForTheTotalField
+  os << indent << "GaussianSmoothingVarianceForTheUpdateField: "
+     << static_cast<typename NumericTraits<ScalarType>::PrintType>(m_GaussianSmoothingVarianceForTheUpdateField)
      << std::endl;
+  os << indent << "GaussianSmoothingVarianceForTheTotalField: "
+     << static_cast<typename NumericTraits<ScalarType>::PrintType>(m_GaussianSmoothingVarianceForTheTotalField)
+     << std::endl;
+  os << indent << "GaussianSmoothingOperator: " << m_GaussianSmoothingOperator << std::endl;
 }
 } // namespace itk
 

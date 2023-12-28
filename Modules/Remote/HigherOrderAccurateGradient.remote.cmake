@@ -42,13 +42,15 @@
 #       Code style enforced by clang-format on 2020-02-19, and clang-tidy modernizations completed
 
 # Contact: Matt McCormick <matt.mccormick@kitware.com>
-itk_fetch_module(HigherOrderAccurateGradient
+itk_fetch_module(
+  HigherOrderAccurateGradient
   "This module contains a filter to compute higher order
   accurate numerical derivatives and gradients from an input scalar image.
-  field from a displacement field image.
   Higher Order Accurate Derivative and Gradient Calculation in ITK
   https://www.insight-journal.org/browse/publication/775"
-  MODULE_COMPLIANCE_LEVEL 2
-  GIT_REPOSITORY ${git_protocol}://github.com/InsightSoftwareConsortium/ITKHigherOrderAccurateGradient.git
-  GIT_TAG 0a40f5c99ca21ef4b9cbf2b47b1be149046905e6
-  )
+  MODULE_COMPLIANCE_LEVEL
+  2
+  GIT_REPOSITORY
+  ${git_protocol}://github.com/InsightSoftwareConsortium/ITKHigherOrderAccurateGradient.git
+  GIT_TAG
+  f90bb7ec83c7842c03e4e68d58957b965870497e)

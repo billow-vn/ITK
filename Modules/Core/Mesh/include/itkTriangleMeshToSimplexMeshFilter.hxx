@@ -265,13 +265,32 @@ TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::CreateNewEdge(CellIden
   }
 }
 
-/* PrintSelf. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "ToDo: implement PrinSelf!!!";
+
+  os << indent << "FaceSet: " << m_FaceSet << std::endl;
+
+  itkPrintSelfObjectMacro(Edges);
+  itkPrintSelfObjectMacro(EdgeNeighborList);
+  itkPrintSelfObjectMacro(VertexNeighborList);
+  itkPrintSelfObjectMacro(LineCellIndices);
+
+  os << indent << "IdOffset: " << static_cast<typename NumericTraits<PointIdentifier>::PrintType>(m_IdOffset)
+     << std::endl;
+  os << indent << "EdgeCellId: " << static_cast<typename NumericTraits<CellIdentifier>::PrintType>(m_EdgeCellId)
+     << std::endl;
+  os << indent
+     << "HandledEdgeIds: " << static_cast<typename NumericTraits<IdVectorPointer>::PrintType>(m_HandledEdgeIds)
+     << std::endl;
+  os << indent << "IdOffset: " << static_cast<typename NumericTraits<PointIdentifier>::PrintType>(m_IdOffset)
+     << std::endl;
+
+  // ToDo
+  // os << indent << "NewInputMeshCellPointer: " << m_NewInputMeshCellPointer << std::endl;
+  // os << indent << "NewSimplexCellPointer: " << m_NewSimplexCellPointer << std::endl;
 }
 
 template <typename TInputMesh, typename TOutputMesh>
@@ -334,7 +353,7 @@ TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::CreateCells()
 
     // create a new cell
     m_NewSimplexCellPointer.TakeOwnership(new OutputPolygonType);
-    PointIdentifier       vertexIdx = NumericTraits<PointIdentifier>::ZeroValue();
+    PointIdentifier       vertexIdx{};
     CellIdentifier        nextIdx = startIdx;
     CellFeatureIdentifier featureId = 0;
 
@@ -348,7 +367,7 @@ TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::CreateCells()
       EdgeIdentifierType line = std::make_pair(nextIdx, newIdx);
       EdgeIdentifierType lineInv = std::make_pair(newIdx, nextIdx);
 
-      CellIdentifier edgeIdx = NumericTraits<CellIdentifier>::ZeroValue();
+      CellIdentifier edgeIdx{};
 
       if (m_LineCellIndices->IndexExists(line))
       {
@@ -379,9 +398,10 @@ TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::CreateCells()
 }
 
 template <typename TInputMesh, typename TOutputMesh>
-typename TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::InputPointType
+auto
 TriangleMeshToSimplexMeshFilter<TInputMesh, TOutputMesh>::ComputeFaceCenter(CellIdentifier        faceId,
                                                                             const InputMeshType * inputMesh)
+  -> InputPointType
 {
   InputPointType v1, v2, v3;
 

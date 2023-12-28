@@ -87,10 +87,8 @@ itkVectorExpandImageFilterTest(int, char *[])
   };
   using ImageType = itk::Image<PixelType, ImageDimension>;
 
-  bool testPassed = true;
+  int testPassed = EXIT_SUCCESS;
 
-
-  //=============================================================
 
   std::cout << "Create the input image pattern." << std::endl;
   ImageType::RegionType region;
@@ -128,10 +126,8 @@ itkVectorExpandImageFilterTest(int, char *[])
     inIter.Set(pixel);
   }
 
-  //=============================================================
 
-  std::cout << "Run ExpandImageFilter in standalone mode with progress.";
-  std::cout << std::endl;
+  std::cout << "Run ExpandImageFilter in standalone mode with progress." << std::endl;
   using ExpanderType = itk::VectorExpandImageFilter<ImageType, ImageType>;
   auto expander = ExpanderType::New();
 
@@ -139,6 +135,10 @@ itkVectorExpandImageFilterTest(int, char *[])
 
   using InterpolatorType = itk::VectorNearestNeighborInterpolateImageFunction<ImageType, double>;
   auto interpolator = InterpolatorType::New();
+
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(
+    interpolator, VectorNearestNeighborInterpolateImageFunction, VectorInterpolateImageFunction);
+
 
   expander->SetInterpolator(interpolator);
   ITK_TEST_SET_GET_VALUE(interpolator, expander->GetInterpolator());
@@ -165,7 +165,6 @@ itkVectorExpandImageFilterTest(int, char *[])
 
   ImageType * expanderOutput = expander->GetOutput();
 
-  //=============================================================
 
   std::cout << "Checking the output against expected." << std::endl;
   Iterator outIter(expanderOutput, expanderOutput->GetBufferedRegion());
@@ -198,8 +197,11 @@ itkVectorExpandImageFilterTest(int, char *[])
       }
       if (k < VectorDimension)
       {
-        testPassed = false;
-        std::cout << "Error at Index: " << index << std::endl;
+        std::cerr << "Test failed!" << std::endl;
+        std::cerr << "Error in vector dimension at index [" << index << "]" << std::endl;
+        std::cerr << "Expected value less than " << VectorDimension << std::endl;
+        std::cerr << " differs from " << k << std::endl;
+        testPassed = EXIT_FAILURE;
       }
     }
     else
@@ -214,17 +216,17 @@ itkVectorExpandImageFilterTest(int, char *[])
       }
       if (k < VectorDimension)
       {
-        testPassed = false;
-        std::cout << "Error at Index: " << index << std::endl;
+        std::cerr << "Test failed!" << std::endl;
+        std::cerr << "Error in vector dimension at index [" << index << "]" << std::endl;
+        std::cerr << "Expected value less than " << VectorDimension << std::endl;
+        std::cerr << " differs from " << k << std::endl;
+        testPassed = EXIT_FAILURE;
       }
     }
   }
 
 
-  //=============================================================
-
-  std::cout << "Run ExpandImageFilter with streamer";
-  std::cout << std::endl;
+  std::cout << "Run ExpandImageFilter with streamer" << std::endl;
 
   using CasterType = itk::CastImageFilter<ImageType, ImageType>;
   auto caster = CasterType::New();
@@ -245,7 +247,6 @@ itkVectorExpandImageFilterTest(int, char *[])
   streamer->Update();
 
 
-  //=============================================================
   std::cout << "Compare standalone and streamed outputs" << std::endl;
 
   Iterator streamIter(streamer->GetOutput(), streamer->GetOutput()->GetBufferedRegion());
@@ -260,7 +261,11 @@ itkVectorExpandImageFilterTest(int, char *[])
     {
       if (itk::Math::NotExactlyEquals(outIter.Get()[k], streamIter.Get()[k]))
       {
-        testPassed = false;
+        std::cerr << "Test failed!" << std::endl;
+        std::cerr << "Error in vector dimension at index [" << k << "]" << std::endl;
+        std::cerr << "Expected value " << outIter.Get()[k] << std::endl;
+        std::cerr << " differs from " << streamIter.Get()[k] << std::endl;
+        testPassed = EXIT_FAILURE;
       }
     }
 
@@ -268,57 +273,25 @@ itkVectorExpandImageFilterTest(int, char *[])
     ++streamIter;
   }
 
-  if (!testPassed)
-  {
-    std::cout << "Test failed." << std::endl;
-    return EXIT_FAILURE;
-  }
-
   // Test error handling
+  std::cout << "Setting Input to nullptr" << std::endl;
 
-  try
-  {
-    testPassed = false;
-    std::cout << "Setting Input to nullptr" << std::endl;
-    expander->SetInput(nullptr);
-    expander->Update();
-  }
-  catch (const itk::ExceptionObject & err)
-  {
-    std::cout << err << std::endl;
-    expander->ResetPipeline();
-    expander->SetInput(input);
-    testPassed = true;
-  }
-
-  if (!testPassed)
-  {
-    std::cout << "Test failed." << std::endl;
-    return EXIT_FAILURE;
-  }
+  expander->SetInput(nullptr);
+  ITK_TRY_EXPECT_EXCEPTION(expander->Update());
 
 
-  try
-  {
-    testPassed = false;
-    std::cout << "Setting Interpolator to nullptr" << std::endl;
-    expander->SetInterpolator(nullptr);
-    expander->Update();
-  }
-  catch (const itk::ExceptionObject & err)
-  {
-    std::cout << err << std::endl;
-    expander->ResetPipeline();
-    expander->SetInterpolator(interpolator);
-    testPassed = true;
-  }
+  expander->ResetPipeline();
+  expander->SetInput(input);
 
-  if (!testPassed)
-  {
-    std::cout << "Test failed." << std::endl;
-    return EXIT_FAILURE;
-  }
+  std::cout << "Setting Interpolator to nullptr" << std::endl;
+  expander->SetInterpolator(nullptr);
+  ITK_TRY_EXPECT_EXCEPTION(expander->Update());
 
-  std::cout << "Test passed." << std::endl;
-  return EXIT_SUCCESS;
+
+  expander->ResetPipeline();
+  expander->SetInterpolator(interpolator);
+
+
+  std::cout << "Test finished." << std::endl;
+  return testPassed;
 }

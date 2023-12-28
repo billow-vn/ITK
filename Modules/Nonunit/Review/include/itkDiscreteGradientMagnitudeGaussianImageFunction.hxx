@@ -36,7 +36,7 @@ void
 DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
   os << indent << "Variance: " << m_Variance << std::endl;
   os << indent << "MaximumError: " << m_MaximumError << std::endl;
@@ -81,7 +81,7 @@ DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::RecomputeG
       {
         if (this->GetInputImage()->GetSpacing()[direction] == 0.0)
         {
-          itkExceptionMacro(<< "Pixel spacing cannot be zero");
+          itkExceptionMacro("Pixel spacing cannot be zero");
         }
         else
         {
@@ -182,7 +182,7 @@ auto
 DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::EvaluateAtIndex(const IndexType & index) const
   -> OutputType
 {
-  OutputType gradientMagnitude = itk::NumericTraits<OutputType>::ZeroValue();
+  OutputType gradientMagnitude{};
   OutputType temp;
 
   for (unsigned int i = 0; i < m_KernelArray.Size(); ++i)
@@ -225,9 +225,9 @@ DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::Evaluate(c
 
 /** Evaluate the function at specified ContinuousIndex position.*/
 template <typename TInputImage, typename TOutput>
-typename DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::OutputType
+auto
 DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::EvaluateAtContinuousIndex(
-  const ContinuousIndexType & cindex) const
+  const ContinuousIndexType & cindex) const -> OutputType
 {
   if (m_InterpolationMode == InterpolationModeEnum::NearestNeighbourInterpolation)
   {
@@ -256,8 +256,8 @@ DiscreteGradientMagnitudeGaussianImageFunction<TInputImage, TOutput>::EvaluateAt
     // Interpolated value is the weighted sum of each of the surrounding
     // neighbors. The weight for each neighbor is the fraction overlap
     // of the neighbor pixel with respect to a pixel centered on point.
-    TOutput value = NumericTraits<TOutput>::ZeroValue();
-    TOutput totalOverlap = NumericTraits<TOutput>::ZeroValue();
+    TOutput value{};
+    TOutput totalOverlap{};
 
     for (NumberOfNeighborsType counter = 0; counter < neighbors; ++counter)
     {

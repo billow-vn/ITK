@@ -29,7 +29,7 @@ namespace itk
 {
 
 /**
- *\class LevelSetEvolutionComputeIterationThreader
+ * \class LevelSetEvolutionComputeIterationThreader
  * \brief Thread the ComputeIteration method.
  *
  * Thread the \c ComputeIteration method of the LevelSetEvolution class
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run time type information. */
-  itkTypeMacro(LevelSetEvolutionComputeIterationThreader, DomainThreader);
+  itkOverrideGetNameOfClassMacro(LevelSetEvolutionComputeIterationThreader);
 
   /** Standard New macro. */
   itkNewMacro(Self);
@@ -116,7 +116,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run time type information. */
-  itkTypeMacro(LevelSetEvolutionComputeIterationThreader, DomainThreader);
+  itkOverrideGetNameOfClassMacro(LevelSetEvolutionComputeIterationThreader);
 
   /** Standard New macro. */
   itkNewMacro(Self);
@@ -171,7 +171,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run time type information. */
-  itkTypeMacro(LevelSetEvolutionComputeIterationThreader, DomainThreader);
+  itkOverrideGetNameOfClassMacro(LevelSetEvolutionComputeIterationThreader);
 
   /** Standard New macro. */
   itkNewMacro(Self);
@@ -207,7 +207,7 @@ protected:
   AfterThreadedExecution() override;
 
   using NodePairsPerThreadType = std::vector<std::vector<NodePairType>>;
-  NodePairsPerThreadType m_NodePairsPerThread;
+  NodePairsPerThreadType m_NodePairsPerThread{};
 };
 
 } // namespace itk

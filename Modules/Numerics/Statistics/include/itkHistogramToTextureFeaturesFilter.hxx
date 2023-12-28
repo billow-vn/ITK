@@ -21,8 +21,7 @@
 
 #include "itkNumericTraits.h"
 #include "itkMath.h"
-#include "itkMath.h"
-#include "itkMakeUniqueForOverwrite.h"
+#include <memory> // For make_unique.
 
 namespace itk
 {
@@ -95,16 +94,16 @@ HistogramToTextureFeaturesFilter<THistogram>::GenerateData()
   this->ComputeMeansAndVariances(pixelMean, marginalMean, marginalDevSquared, pixelVariance);
 
   // Finally compute the texture features. Another one pass.
-  MeasurementType energy = NumericTraits<MeasurementType>::ZeroValue();
-  MeasurementType entropy = NumericTraits<MeasurementType>::ZeroValue();
-  MeasurementType correlation = NumericTraits<MeasurementType>::ZeroValue();
+  MeasurementType energy{};
+  MeasurementType entropy{};
+  MeasurementType correlation{};
 
-  MeasurementType inverseDifferenceMoment = NumericTraits<MeasurementType>::ZeroValue();
+  MeasurementType inverseDifferenceMoment{};
 
-  MeasurementType inertia = NumericTraits<MeasurementType>::ZeroValue();
-  MeasurementType clusterShade = NumericTraits<MeasurementType>::ZeroValue();
-  MeasurementType clusterProminence = NumericTraits<MeasurementType>::ZeroValue();
-  MeasurementType haralickCorrelation = NumericTraits<MeasurementType>::ZeroValue();
+  MeasurementType inertia{};
+  MeasurementType clusterShade{};
+  MeasurementType clusterProminence{};
+  MeasurementType haralickCorrelation{};
 
   double pixelVarianceSquared = pixelVariance * pixelVariance;
   // Variance is only used in correlation. If variance is 0, then
@@ -184,11 +183,7 @@ HistogramToTextureFeaturesFilter<THistogram>::ComputeMeansAndVariances(double & 
 
   // Initialize everything
   typename HistogramType::SizeValueType binsPerAxis = inputHistogram->GetSize(0);
-  const auto                            marginalSums = make_unique_for_overwrite<double[]>(binsPerAxis);
-  for (double * ms_It = marginalSums.get(); ms_It < marginalSums.get() + binsPerAxis; ++ms_It)
-  {
-    *ms_It = 0;
-  }
+  const auto                            marginalSums = std::make_unique<double[]>(binsPerAxis);
   pixelMean = 0;
 
   typename RelativeFrequencyContainerType::const_iterator rFreqIterator = m_RelativeFrequencyContainer.begin();
@@ -206,7 +201,7 @@ HistogramToTextureFeaturesFilter<THistogram>::ComputeMeansAndVariances(double & 
     ++rFreqIterator;
   }
 
-  /*  Now get the mean and deviaton of the marginal sums.
+  /*  Now get the mean and deviation of the marginal sums.
       Compute incremental mean and SD, a la Knuth, "The  Art of Computer
       Programming, Volume 2: Seminumerical Algorithms",  section 4.2.2.
       Compute mean and standard deviation using the recurrence relation:

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class RGBToVectorImageAdaptor
+ * \class RGBToVectorImageAdaptor
  * \brief Presents an image of pixel type RGBPixel as being and image of
  * Vectors.
  *
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RGBToVectorImageAdaptor, ImageAdaptor);
+  itkOverrideGetNameOfClassMacro(RGBToVectorImageAdaptor);
 
   /** PixelContainer type alias support Used to construct a container for
    * the pixel data. */

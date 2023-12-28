@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class HilbertPath
+ * \class HilbertPath
  * \brief  Represent an n-dimensional Hilbert path for a given order
  *
  * This class is used to construct a Hilbert spacing-filling curve
@@ -63,7 +63,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HilbertPath, Path);
+  itkOverrideGetNameOfClassMacro(HilbertPath);
 
   /** New() method for dynamic construction */
   itkNewMacro(Self);
@@ -202,7 +202,7 @@ private:
   GetBitRange(const PathIndexType, const PathIndexType, const PathIndexType, const PathIndexType);
 
   HilbertOrderType m_HilbertOrder{ 1 };
-  HilbertPathType  m_HilbertPath;
+  HilbertPathType  m_HilbertPath{};
 };
 } // end namespace itk
 

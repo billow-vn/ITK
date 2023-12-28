@@ -41,7 +41,7 @@
 namespace itk
 {
 /**
- *\class DeformableSimplexMesh3DFilter
+ * \class DeformableSimplexMesh3DFilter
  * \brief Three-dimensional deformable model for image segmentation
  *
  * DeformableSimplexMesh3DFilter is a discrete three-dimensional deformable model, which
@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DeformableSimplexMesh3DFilter, MeshToMeshFilter);
+  itkOverrideGetNameOfClassMacro(DeformableSimplexMesh3DFilter);
 
   /** Some type alias. */
   using InputMeshType = TInputMesh;
@@ -141,67 +141,46 @@ public:
   using GeometryMapPointer = typename GeometryMapType::Pointer;
   using GeometryMapIterator = typename GeometryMapType::Iterator;
 
-  /** Routines. */
 
-  /** Set/Get routines. */
-
-  /**
-   *  Setter for gradient image
-   */
+  /** Set/Get the gradient image as an input. */
   void
   SetGradient(const GradientImageType * gradientImage);
-
-  /**
-   *  Getter for gradient image
-   */
   const GradientImageType *
   GetGradient() const;
 
-  /**
-   * Set number of iterations for deformation process
-   */
+  /** Set/Get the number of iterations for the deformation process. */
   itkSetMacro(Iterations, int);
   itkGetConstMacro(Iterations, int);
 
-  /** Set scalar factor for internal force */
+  /** Set/Get internal force scaling factor. */
   itkSetMacro(Alpha, double);
-
-  /** Get internal force scaling factor */
   itkGetConstMacro(Alpha, double);
 
-  /** Set external force scaling factor */
+  /** Set/Get external force scaling factor. */
   itkSetMacro(Beta, double);
-
-  /** Get external force scaling factor */
   itkGetConstMacro(Beta, double);
 
-  /** Set reference metrics update scaling factor */
+  /** Set/Get reference metrics update scaling factor. */
   itkSetMacro(Gamma, double);
-
-  /** Get reference metrics update scaling factor */
   itkGetConstMacro(Gamma, double);
 
-  /** Set reference metrics update scaling factor */
+  /** Set/Get reference metrics update scaling factor. */
   itkSetMacro(Damping, double);
-
-  /** Get reference metrics update scaling factor */
   itkGetConstMacro(Damping, double);
 
-  /** control smoothness of the mesh */
+  /** Set/Get the mesh smoothness value. */
   itkSetMacro(Rigidity, unsigned int);
-
-  /** control smoothness of the mesh */
   itkGetConstMacro(Rigidity, unsigned int);
 
   itkSetObjectMacro(Data, GeometryMapType);
   itkGetModifiableObjectMacro(Data, GeometryMapType);
 
-  /** Width, height and depth of image */
+  /** Get the width, height and depth of image. */
   itkGetConstMacro(ImageWidth, int);
   itkGetConstMacro(ImageHeight, int);
   itkGetConstMacro(ImageDepth, int);
 
-  /** current iteration number */
+  /** Get the current iteration number. */
   itkGetConstMacro(Step, int);
 
 protected:
@@ -215,7 +194,7 @@ protected:
   GenerateData() override;
 
   /**
-   * Initializes the datastructures necessary for mesh
+   * Initializes the data structures necessary for mesh
    * deformation with the values from the passed input
    * mesh.
    */
@@ -245,8 +224,9 @@ protected:
   ComputeInternalForce(SimplexMeshGeometry * data);
 
   /**
-   * Compute the external force component
-   * Pass in the gradient image, to avoid inner loop calls to GetGradient()
+   * Compute the external force component.
+   * Computes the model displacement according to image gradient forces.
+   * Passes in the gradient image, to avoid inner loop calls to GetGradient().
    */
   virtual void
   ComputeExternalForce(SimplexMeshGeometry * data, const GradientImageType * gradientImage);
@@ -283,7 +263,7 @@ protected:
    * Values should lie between 0.001 and 0.3. Higher values
    * increase the stiffness of the mesh
    */
-  double m_Alpha;
+  double m_Alpha{};
 
   /**
    * Scalar defining the influence of the external force components
@@ -291,7 +271,7 @@ protected:
    * data. Typical value range from 0.00001 to 0.3
    *
    */
-  double m_Beta;
+  double m_Beta{};
 
   /**
    * Gamma influences the distribution of the mesh points. It should
@@ -299,33 +279,33 @@ protected:
    * more regular. When increasing gamma, mesh points will have higher
    * density in places of high curvature.
    */
-  double m_Gamma;
-  double m_Damping;
+  double m_Gamma{};
+  double m_Damping{};
   /**
    * This scalar determines the smoothness of the surface model. Values
    * should range from 0 to 10. It determines the radius of the neighborhood
    * during internal force computation using the curvature shape constraint.
    * The higher the rigidity the higher the smoothness.
    */
-  unsigned int m_Rigidity;
+  unsigned int m_Rigidity{};
 
   // definition of internal parameters
   /** Number of iterations */
-  int m_Step;
+  int m_Step{};
   /** Image size */
-  int m_ImageWidth;
+  int m_ImageWidth{};
   /** Image size */
-  int m_ImageHeight;
+  int m_ImageHeight{};
   /** Image size */
-  int m_ImageDepth;
+  int m_ImageDepth{};
 
   /** This threshold decides when to stop the model. */
-  int m_Iterations;
+  int m_Iterations{};
 
   /**
    * map stores a Geometry object for every mesh point
    */
-  GeometryMapPointer m_Data;
+  GeometryMapPointer m_Data{};
 
 }; // end of class
 } // end namespace itk

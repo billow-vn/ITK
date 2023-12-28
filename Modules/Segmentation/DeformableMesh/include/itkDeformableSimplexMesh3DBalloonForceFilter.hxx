@@ -34,7 +34,7 @@
 
 namespace itk
 {
-/* Constructor. */
+
 template <typename TInputMesh, typename TOutputMesh>
 DeformableSimplexMesh3DBalloonForceFilter<TInputMesh, TOutputMesh>::DeformableSimplexMesh3DBalloonForceFilter()
 
@@ -42,16 +42,15 @@ DeformableSimplexMesh3DBalloonForceFilter<TInputMesh, TOutputMesh>::DeformableSi
   m_Kappa = 0.1;
 }
 
-/* PrintSelf. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DBalloonForceFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Kappa = " << m_Kappa << std::endl;
-} /* End PrintSelf. */
 
-/** Compute model Displacement according to image gradient forces */
+  os << indent << "Kappa: " << m_Kappa << std::endl;
+}
+
 template <typename TInputMesh, typename TOutputMesh>
 void
 DeformableSimplexMesh3DBalloonForceFilter<TInputMesh, TOutputMesh>::ComputeExternalForce(

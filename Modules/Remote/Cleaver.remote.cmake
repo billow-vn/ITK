@@ -42,9 +42,12 @@
 #       Code style enforced by clang-format on 2020-02-19, and clang-tidy modernizations completed
 
 # Contact: Matt McCormick <matt.mccormick@kitware.com>
-itk_fetch_module(Cleaver
+itk_fetch_module(
+  Cleaver
   "ITK module wrapping Cleaver functionalities used for MultiMaterial Tetrahedral Meshing."
-  MODULE_COMPLIANCE_LEVEL 3
-  GIT_REPOSITORY ${git_protocol}://github.com/SCIInstitute/ITKCleaver.git
-  GIT_TAG a12f62a7f7f5329525f1ab0b22823bb8aa8a2df0
-  )
+  MODULE_COMPLIANCE_LEVEL
+  3
+  GIT_REPOSITORY
+  ${git_protocol}://github.com/SCIInstitute/ITKCleaver.git
+  GIT_TAG
+  0ece368f2e8a8b8d619abf0157d288b1dfd080ac)

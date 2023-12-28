@@ -338,7 +338,7 @@ itkMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
     //  {
     //  break;
     //  }
-    // std::cout << "TEST:  "<< j<< " " << OutputCenterOfMass << " != " << InputCenterOfMass << std::endl;
+    // std::cout << "TEST:  "<< j<< ' ' << OutputCenterOfMass << " != " << InputCenterOfMass << std::endl;
     // if( OutputCenterOfMass != InputCenterOfMass )
     {
       OutputImageType::PointType::VectorType ErrorCenterOfMass = OutputCenterOfMass - InputCenterOfMass;
@@ -347,20 +347,20 @@ itkMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
         (ErrorCenterOfMass.GetNorm() / pyramid->GetOutput(testLevel)->GetSpacing().GetNorm());
       if (ErrorPercentage > CenterOfMassEpsilonAllowed)
       {
-        std::cout << "ERROR:  " << testLevel << " " << OutputCenterOfMass << " != " << InputCenterOfMass
+        std::cout << "ERROR:  " << testLevel << ' ' << OutputCenterOfMass << " != " << InputCenterOfMass
                   << " at pixel spacing level "
                   << pyramid->GetOutput(testLevel)->GetDirection() * pyramid->GetOutput(testLevel)->GetSpacing()
                   << std::endl;
-        std::cout << "ERROR PERCENT:  " << ErrorCenterOfMass.GetNorm() << "/"
+        std::cout << "ERROR PERCENT:  " << ErrorCenterOfMass.GetNorm() << '/'
                   << pyramid->GetOutput(testLevel)->GetSpacing().GetNorm() << " = " << ErrorPercentage << std::endl;
       }
       else
       {
-        std::cout << "WITHIN TOLERANCE PASSED:  " << testLevel << " " << OutputCenterOfMass
+        std::cout << "WITHIN TOLERANCE PASSED:  " << testLevel << ' ' << OutputCenterOfMass
                   << " != " << InputCenterOfMass << " at pixel spacing level "
                   << pyramid->GetOutput(testLevel)->GetDirection() * pyramid->GetOutput(testLevel)->GetSpacing()
                   << std::endl;
-        std::cout << "OFFSET DIFF PERCENT:  " << ErrorCenterOfMass.GetNorm() << "/"
+        std::cout << "OFFSET DIFF PERCENT:  " << ErrorCenterOfMass.GetNorm() << '/'
                   << pyramid->GetOutput(testLevel)->GetSpacing().GetNorm() << " = " << ErrorPercentage << std::endl;
       }
       // break;
@@ -373,7 +373,9 @@ itkMultiResolutionPyramidImageFilterTest(int argc, char * argv[])
       }
       unsigned int sz = inputSize[j] / schedule[testLevel][j];
       if (sz == 0)
+      {
         sz = 1;
+      }
       if (outputSize[j] != sz)
       {
         break;

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class OBJMeshIOFactory
+ * \class OBJMeshIOFactory
  * \brief Create instances of OBJMeshIO objects using an object factory.
  * \ingroup ITKIOMeshOBJ
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OBJMeshIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(OBJMeshIOFactory);
 
   /** Register one factory of this type  */
   static void

@@ -37,7 +37,7 @@ namespace itk
  * \author Tom Vercauteren, INRIA & Mauna Kea Technologies
  *
  * This implementation was taken from the Insight Journal paper:
- * https://hdl.handle.net/1926/510
+ * https://www.insight-journal.org/browse/publication/154
  *
  * \deprecated Please use CentralDifferenceImageFunction instead.
  *
@@ -68,7 +68,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorCentralDifferenceImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(VectorCentralDifferenceImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -76,7 +76,7 @@ public:
   /** InputImageType type alias support */
   using InputImageType = TInputImage;
 
-  /** OutputType typdef support. */
+  /** OutputType typedef support. */
   using typename Superclass::OutputType;
 
   /** Index type alias support */
@@ -88,7 +88,7 @@ public:
   /** Point type alias support */
   using typename Superclass::PointType;
 
-  /** Evalulate the image derivative by central differencing at specified index.
+  /** Evaluate the image derivative by central differencing at specified index.
    *
    *  No bounds checking is done.
    *  The point is assume to lie within the image buffer.
@@ -98,7 +98,7 @@ public:
   OutputType
   EvaluateAtIndex(const IndexType & index) const override;
 
-  /** Evalulate the image derivative by central differencing at non-integer
+  /** Evaluate the image derivative by central differencing at non-integer
    *  positions.
    *
    *  No bounds checking is done.
@@ -147,7 +147,7 @@ protected:
 private:
   // flag to take or not the image direction into account
   // when computing the derivatives.
-  bool m_UseImageDirection;
+  bool m_UseImageDirection{};
 };
 } // end namespace itk
 

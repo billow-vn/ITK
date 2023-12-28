@@ -105,7 +105,7 @@ public:
   static constexpr unsigned int ImageDimension = TFixedImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TimeVaryingVelocityFieldImageRegistrationMethodv4, ImageRegistrationMethodv4);
+  itkOverrideGetNameOfClassMacro(TimeVaryingVelocityFieldImageRegistrationMethodv4);
 
   /** Input type alias for the images and transforms. */
   using FixedImageType = TFixedImage;
@@ -170,17 +170,20 @@ protected:
   void
   ThreadedGenerateData(const RegionType &, ThreadIdType);
 
-  /** Handle optimization internally */
+  /** Start the optimization at each level.
+   *
+   * Performs a basic gradient descent operation.
+   */
   virtual void
   StartOptimization();
 
 private:
-  RealType m_LearningRate;
+  RealType m_LearningRate{};
 
-  RealType     m_ConvergenceThreshold;
+  RealType     m_ConvergenceThreshold{};
   unsigned int m_ConvergenceWindowSize{ 10 };
 
-  NumberOfIterationsArrayType m_NumberOfIterationsPerLevel;
+  NumberOfIterationsArrayType m_NumberOfIterationsPerLevel{};
 };
 } // end namespace itk
 

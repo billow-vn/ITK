@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class FFTWComplexToComplexFFTImageFilter
+ * \class FFTWComplexToComplexFFTImageFilter
  *
  *  \brief Implements an API to enable the Fourier transform or the inverse
  *  Fourier transform of images with complex valued voxels to be computed using
@@ -86,11 +86,11 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWComplexToComplexFFTImageFilter, ComplexToComplexFFTImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTWComplexToComplexFFTImageFilter);
 
   static constexpr unsigned int ImageDimension = ImageType::ImageDimension;
 
-  /** Image type type alias support */
+  /** Image type alias support */
   using ImageSizeType = typename ImageType::SizeType;
 
   /**
@@ -143,9 +143,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  bool m_CanUseDestructiveAlgorithm;
+  bool m_CanUseDestructiveAlgorithm{};
 
-  int m_PlanRigor;
+  int m_PlanRigor{};
 };
 
 

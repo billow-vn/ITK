@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class ThresholdImageFilter
+ * \class ThresholdImageFilter
  * \brief Set image values to a user-specified value if they are below,
  * above, or between simple threshold values.
  *
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ThresholdImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(ThresholdImageFilter);
 
   /** Typedef to describe the type of pixel. */
   using PixelType = typename TImage::PixelType;
@@ -155,9 +155,9 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 private:
-  PixelType m_OutsideValue;
-  PixelType m_Lower;
-  PixelType m_Upper;
+  PixelType m_OutsideValue{};
+  PixelType m_Lower{};
+  PixelType m_Upper{};
 };
 } // end namespace itk
 

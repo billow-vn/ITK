@@ -28,14 +28,14 @@
 
 namespace itk
 {
-/**\class LaplacianDeformationQuadEdgeMeshFilterEnums
+/** \class LaplacianDeformationQuadEdgeMeshFilterEnums
  * \brief Contains all enum classes used by LaplacianDeformationQuadEdgeMeshFilter class.
  * \ingroup ITKQuadEdgeMeshFiltering
  */
 class LaplacianDeformationQuadEdgeMeshFilterEnums
 {
 public:
-  /**\class Area
+  /** \class Area
    * \ingroup ITKQuadEdgeMeshFiltering
    * Type of area*/
   enum class Area : uint8_t
@@ -124,7 +124,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(LaplacianDeformationQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(LaplacianDeformationQuadEdgeMeshFilter);
 
   /** Input types. */
   using InputMeshType = TInputMesh;
@@ -229,12 +229,12 @@ protected:
   using RowIterator = typename RowType::iterator;
   using RowConstIterator = typename RowType::const_iterator;
 
-  OutputMapPointIdentifier m_InternalMap;
-  ConstraintMapType        m_Constraints;
-  CoefficientMapType       m_CoefficientMap;
-  AreaMapType              m_MixedAreaMap;
+  OutputMapPointIdentifier m_InternalMap{};
+  ConstraintMapType        m_Constraints{};
+  CoefficientMapType       m_CoefficientMap{};
+  AreaMapType              m_MixedAreaMap{};
 
-  CoefficientsComputationType * m_CoefficientsMethod;
+  CoefficientsComputationType * m_CoefficientsMethod{};
 
   unsigned int m_Order{ 1 };
   AreaEnum     m_AreaComputationType{ AreaEnum::NONE };
@@ -264,7 +264,7 @@ protected:
   FillMatrix(MatrixType & iM, VectorType & iBx, VectorType & iBy, VectorType & iBz);
 
   /**
-   *  \brief Solve linears systems : \f$ iM \cdot oX = iBx \f$ and
+   *  \brief Solve linear systems : \f$ iM \cdot oX = iBx \f$ and
    * \f$ iM \cdot oY = iBy \f$ and \f$ iM \cdot oZ = iBz \f$
    *
    *  \param[in] iM

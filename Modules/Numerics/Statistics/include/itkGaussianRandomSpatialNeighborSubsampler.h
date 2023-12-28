@@ -25,7 +25,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class GaussianRandomSpatialNeighborSubsampler
+ * \class GaussianRandomSpatialNeighborSubsampler
  * \brief A subsampler that randomly selects points
  * according to a gaussian distribution
  * within the specified radius of the query point.
@@ -59,7 +59,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(GaussianRandomSpatialNeighborSubsampler, UniformRandomSpatialNeighborSubsampler);
+  itkOverrideGetNameOfClassMacro(GaussianRandomSpatialNeighborSubsampler);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -117,7 +117,7 @@ protected:
   RandomIntType
   GetIntegerVariate(RandomIntType lowerBound, RandomIntType upperBound, RandomIntType mean) override;
 
-  RealType m_Variance;
+  RealType m_Variance{};
 }; // end of class GaussianRandomSpatialNeighborSubsampler
 
 } // end of namespace Statistics

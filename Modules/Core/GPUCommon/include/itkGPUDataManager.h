@@ -53,7 +53,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
-  itkTypeMacro(GPUDataManager, Object);
+  itkOverrideGetNameOfClassMacro(GPUDataManager);
 
   using MutexHolderType = std::lock_guard<std::mutex>;
 
@@ -147,25 +147,25 @@ protected:
 protected:
   /* NOTE: ivars are protected instead of private to improve performance access in child classes*/
 
-  unsigned int m_BufferSize; // # of bytes
+  unsigned int m_BufferSize{}; // # of bytes
 
-  GPUContextManager * m_ContextManager;
+  GPUContextManager * m_ContextManager{};
 
-  int m_CommandQueueId;
+  int m_CommandQueueId{};
 
   /** buffer type */
-  cl_mem_flags m_MemFlags;
+  cl_mem_flags m_MemFlags{};
 
   /** buffer pointers */
-  cl_mem m_GPUBuffer;
-  void * m_CPUBuffer;
+  cl_mem m_GPUBuffer{};
+  void * m_CPUBuffer{};
 
   /** checks if buffer needs to be updated */
-  bool m_IsGPUBufferDirty;
-  bool m_IsCPUBufferDirty;
+  bool m_IsGPUBufferDirty{};
+  bool m_IsCPUBufferDirty{};
 
   /** Mutex lock to prevent r/w hazard for multithreaded code */
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 };
 
 } // namespace itk

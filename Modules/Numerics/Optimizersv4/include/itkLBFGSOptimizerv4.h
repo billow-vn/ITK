@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LBFGSOptimizerv4
+ * \class LBFGSOptimizerv4
  * \brief Wrap of the vnl_lbfgs algorithm for use in ITKv4 registration framework.
  * The vnl_lbfgs is a wrapper for the NETLIB fortran code by Nocedal [1].
  *
@@ -102,7 +102,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LBFGSOptimizerv4, LBFGSOptimizerBasev4);
+  itkOverrideGetNameOfClassMacro(LBFGSOptimizerv4);
 
   /** Start optimization with an initial value. */
   void

@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class HuangThresholdCalculator
+ * \class HuangThresholdCalculator
  * \brief Computes the Huang's threshold for an image.
  *
  * This calculator computes the Huang's fuzzy threshold which separates an image
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HuangThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(HuangThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;
@@ -91,9 +91,9 @@ protected:
   using MeasurementType = typename HistogramType::MeasurementType;
 
 private:
-  InstanceIdentifier m_FirstBin;
-  InstanceIdentifier m_LastBin;
-  SizeValueType      m_Size;
+  InstanceIdentifier m_FirstBin{};
+  InstanceIdentifier m_LastBin{};
+  SizeValueType      m_Size{};
 };
 
 } // end namespace itk

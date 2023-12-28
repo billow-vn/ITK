@@ -22,7 +22,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 ContourSpatialObject<TDimension>::ContourSpatialObject()
 {
@@ -104,7 +104,6 @@ ContourSpatialObject<TDimension>::GetOrientationInObjectSpace() const
   return m_OrientationInObjectSpace;
 }
 
-/** Set the control points which are defining the contour */
 template <unsigned int TDimension>
 void
 ContourSpatialObject<TDimension>::SetControlPoints(const ContourPointListType & points)
@@ -122,7 +121,6 @@ ContourSpatialObject<TDimension>::SetControlPoints(const ContourPointListType & 
   this->Modified();
 }
 
-/** Add a control point which is defining the contour */
 template <unsigned int TDimension>
 void
 ContourSpatialObject<TDimension>::AddControlPoint(const ContourPointType & point)
@@ -132,7 +130,6 @@ ContourSpatialObject<TDimension>::AddControlPoint(const ContourPointType & point
   this->Modified();
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 ContourSpatialObject<TDimension>::InternalClone() const
@@ -144,7 +141,7 @@ ContourSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
   rval->SetInterpolationMethod(this->GetInterpolationMethod());
   rval->SetInterpolationFactor(this->GetInterpolationFactor());
@@ -156,23 +153,23 @@ ContourSpatialObject<TDimension>::InternalClone() const
   return loPtr;
 }
 
-/** Print the contour spatial object */
 template <unsigned int TDimension>
 void
 ContourSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  os << indent << "ContourSpatialObject(" << this << ")" << std::endl;
-  os << indent << "#Control Points: " << static_cast<SizeValueType>(m_ControlPoints.size()) << std::endl;
-  os << indent << "Interpolation type: " << m_InterpolationMethod << std::endl;
-  os << indent << "Contour closed: " << m_IsClosed << std::endl;
-  os << indent << "Orientation In Object Space: " << m_OrientationInObjectSpace << std::endl;
-  os << indent << "Orientation time: " << m_OrientationInObjectSpaceMTime << std::endl;
-  os << indent << "Pin to slice : " << m_AttachedToSlice << std::endl;
   Superclass::PrintSelf(os, indent);
+
+  // ToDo
+  // os << indent << "ControlPoints: " << m_ControlPoints << std::endl;
+  os << indent << "InterpolationMethod: " << m_InterpolationMethod << std::endl;
+  os << indent << "InterpolationFactor: " << m_InterpolationFactor << std::endl;
+  os << indent << "IsClosed: " << (m_IsClosed ? "On" : "Off") << std::endl;
+  os << indent << "OrientationInObjectSpace: " << m_OrientationInObjectSpace << std::endl;
+  os << indent << "OrientationInObjectSpaceMTime: "
+     << static_cast<typename NumericTraits<ModifiedTimeType>::PrintType>(m_OrientationInObjectSpaceMTime) << std::endl;
+  os << indent << "AttachedToSlice: " << m_AttachedToSlice << std::endl;
 }
 
-
-/** Print the contour spatial object */
 template <unsigned int TDimension>
 void
 ContourSpatialObject<TDimension>::Update()
@@ -187,7 +184,7 @@ ContourSpatialObject<TDimension>::Update()
     case InterpolationMethodEnum::BEZIER_INTERPOLATION:
       // TODO: Implement bezier interpolation
       {
-        itkExceptionMacro(<< "Bezier interpolation type not yet defined.");
+        itkExceptionMacro("Bezier interpolation type not yet defined.");
       }
       break;
     case InterpolationMethodEnum::LINEAR_INTERPOLATION:

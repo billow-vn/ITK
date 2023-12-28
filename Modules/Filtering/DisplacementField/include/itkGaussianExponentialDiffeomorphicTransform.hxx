@@ -133,10 +133,10 @@ GaussianExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::Upd
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
-typename GaussianExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::ConstantVelocityFieldPointer
+auto
 GaussianExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::GaussianSmoothConstantVelocityField(
   ConstantVelocityFieldType * field,
-  ScalarType                  variance)
+  ScalarType                  variance) -> ConstantVelocityFieldPointer
 {
   if (variance <= 0.0)
   {
@@ -223,9 +223,6 @@ GaussianExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::Gau
   return field;
 }
 
-/**
- * Standard "PrintSelf" method
- */
 template <typename TParametersValueType, unsigned int VDimension>
 void
 GaussianExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::PrintSelf(std::ostream & os,
@@ -233,12 +230,12 @@ GaussianExponentialDiffeomorphicTransform<TParametersValueType, VDimension>::Pri
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Calculate number of integration steps automatically = "
-     << this->m_CalculateNumberOfIntegrationStepsAutomatically << std::endl;
-  os << indent
-     << "Gaussian variance for the velocity field = " << this->m_GaussianSmoothingVarianceForTheConstantVelocityField
+  os << indent << "GaussianSmoothingVarianceForTheConstantVelocityField: "
+     << static_cast<typename NumericTraits<ScalarType>::PrintType>(
+          m_GaussianSmoothingVarianceForTheConstantVelocityField)
      << std::endl;
-  os << indent << "Gaussian variance for the update field = " << this->m_GaussianSmoothingVarianceForTheUpdateField
+  os << indent << "GaussianSmoothingVarianceForTheUpdateField: "
+     << static_cast<typename NumericTraits<ScalarType>::PrintType>(m_GaussianSmoothingVarianceForTheUpdateField)
      << std::endl;
 }
 

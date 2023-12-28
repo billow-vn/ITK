@@ -61,7 +61,7 @@ public:
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExampleImageSource, GaussianImageSource);
+  itkOverrideGetNameOfClassMacro(ExampleImageSource);
 
   /** Set the parameters for this source. Setting the parameters does
    * not mark the image source as modified; subclasses should override
@@ -216,7 +216,7 @@ itkParametricBlindLeastSquaresDeconvolutionImageFilterTest(int argc, char * argv
   if (itk::Math::abs(kernelSource->GetParameters()[0] - expectedSigmaX) > 1e-5)
   {
     std::cerr << "Kernel parameter[0] should have been " << expectedSigmaX << ", was "
-              << kernelSource->GetParameters()[0] << "." << std::endl;
+              << kernelSource->GetParameters()[0] << '.' << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -224,7 +224,7 @@ itkParametricBlindLeastSquaresDeconvolutionImageFilterTest(int argc, char * argv
   if (itk::Math::abs(kernelSource->GetParameters()[1] - expectedSigmaY) > 1e-5)
   {
     std::cerr << "Kernel parameter[1] should have been " << expectedSigmaY << ", was "
-              << kernelSource->GetParameters()[0] << "." << std::endl;
+              << kernelSource->GetParameters()[0] << '.' << std::endl;
     return EXIT_FAILURE;
   }
 

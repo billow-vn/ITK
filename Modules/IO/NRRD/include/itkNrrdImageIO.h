@@ -28,7 +28,7 @@ struct NrrdEncoding_t;
 namespace itk
 {
 /**
- *\class NrrdImageIO
+ * \class NrrdImageIO
  *
  * \brief Read and write the "Nearly Raw Raster Data" (Nrrd) image format.
  * The Nrrd format was developed as part of the Teem package
@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NrrdImageIO, ImageIOBase);
+  itkOverrideGetNameOfClassMacro(NrrdImageIO);
 
   /** The different types of ImageIO's can support data of varying
    * dimensionality. For example, some file formats are strictly 2D

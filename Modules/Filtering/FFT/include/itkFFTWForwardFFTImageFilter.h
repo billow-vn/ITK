@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class FFTWForwardFFTImageFilter
+ * \class FFTWForwardFFTImageFilter
  *
  * \brief FFTW-based forward Fast Fourier Transform.
  *
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWForwardFFTImageFilter, ForwardFFTImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTWForwardFFTImageFilter);
 
   /** Define the image dimension. */
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
@@ -130,9 +130,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  bool m_CanUseDestructiveAlgorithm;
+  bool m_CanUseDestructiveAlgorithm{};
 
-  int m_PlanRigor;
+  int m_PlanRigor{};
 };
 
 // Describe whether input/output are real- or complex-valued

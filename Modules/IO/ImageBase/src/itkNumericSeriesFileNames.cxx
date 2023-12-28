@@ -32,11 +32,11 @@ NumericSeriesFileNames::GetFileNames()
   // validate the indices
   if (m_StartIndex > m_EndIndex)
   {
-    itkExceptionMacro(<< "StartIndex " << m_StartIndex << " is greater than EndIndex " << m_EndIndex);
+    itkExceptionMacro("StartIndex " << m_StartIndex << " is greater than EndIndex " << m_EndIndex);
   }
   if (m_IncrementIndex == 0)
   {
-    itkExceptionMacro(<< "IncrementIndex is zero.");
+    itkExceptionMacro("IncrementIndex is zero.");
   }
 
   // clear the file names vector
@@ -62,7 +62,7 @@ NumericSeriesFileNames::GetFileNames()
     {
       std::stringstream message_cache;
       message_cache << "The filename is too long for temp buffer."
-                    << " Truncated form: " << temp.get() << "." << std::endl
+                    << " Truncated form: " << temp.get() << '.' << std::endl
                     << "nchars: " << nchars << " bufflen: " << bufflen << " result: " << result;
       itkExceptionMacro(<< message_cache.str());
     }

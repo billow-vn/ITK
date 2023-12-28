@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class LevelSetDomainPartitionMesh
+ * \class LevelSetDomainPartitionMesh
  *
  * \brief Helper class used to partition domain and efficiently compute overlap.
  *  \ingroup ITKLevelSetsv4
@@ -42,7 +42,7 @@ public:
 
   static constexpr unsigned int PointDimension = TMesh::PointDimension;
 
-  itkTypeMacro(LevelSetDomainPartitionMesh, LevelSetDomainPartitionBase);
+  itkOverrideGetNameOfClassMacro(LevelSetDomainPartitionMesh);
 
   using MeshType = TMesh;
   using MeshPointer = typename MeshType::Pointer;
@@ -74,8 +74,8 @@ protected:
   AllocateListDomain();
 
 private:
-  MeshPointer  m_Mesh;
-  ListMeshType m_ListDomain;
+  MeshPointer  m_Mesh{};
+  ListMeshType m_ListDomain{};
 };
 
 } // end namespace itk

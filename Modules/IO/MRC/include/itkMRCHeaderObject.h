@@ -27,7 +27,7 @@ namespace itk
 {
 
 /**
- *\class MRCHeaderObject
+ * \class MRCHeaderObject
  * \brief This class is a light wrapper for a couple of plain old data
  * structures, so that they can be utilized in a MetaDataDictionary.
  *
@@ -164,8 +164,8 @@ public:
     float zorg;
 
     char cmap[4];  /**< Contains "MAP "  */
-    char stamp[4]; /**< First byte has 17 for big- or 68 for
-                     little-endian  */
+    char stamp[4]; /**< First two bytes have 17 and 17 for big-endian or
+                        68 and 68 for little-endian */
     float rms;
 
     // ALL HEADERS:
@@ -218,7 +218,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MRCHeaderObject, LightObject);
+  itkOverrideGetNameOfClassMacro(MRCHeaderObject);
 
   void
   DeepCopy(ConstPointer h);
@@ -270,8 +270,8 @@ public:
   IsOriginalHeaderBigEndian() const;
 
   /** Public available data : FIXME : NO MEMBER VARIABLES SHOULD BE PUBLIC. */
-  Header m_Header; // FIXME : This should be private and
-                   // should have Get/Set Methods.
+  Header m_Header{}; // FIXME : This should be private and
+                     // should have Get/Set Methods.
 
 protected:
   MRCHeaderObject();
@@ -291,7 +291,7 @@ private:
 
   FeiExtendedHeader * m_ExtendedFeiHeader{ nullptr };
 
-  bool m_BigEndianHeader;
+  bool m_BigEndianHeader{};
 };
 } // namespace itk
 

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class RealToHalfHermitianForwardFFTImageFilter
+ * \class RealToHalfHermitianForwardFFTImageFilter
  *
  * \brief Base class for specialized real-to-complex forward Fast Fourier Transform.
  *
@@ -76,7 +76,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RealToHalfHermitianForwardFFTImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(RealToHalfHermitianForwardFFTImageFilter);
 
   /** Customized object creation methods that support configuration-based
    * selection of FFT implementation.

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class MRASlabIdentifier
+ * \class MRASlabIdentifier
  * \brief Identifies slabs in MR images comparing minimum intensity averages.
  *
  * This class is templated over the type of image.
@@ -47,19 +47,20 @@ namespace itk
  * For this identifier, a slice means 2D image data which is extracted from
  * the input image along one of three axes \f$(x, y, z)\f$. Users can specify
  * the slicing axis using the SetSlicingDirection(int dimension) member, where
- * the \p dimension variable follows the convention \f{X, Y, Z} : {0, 1, 2}\f$.
+ * the \p dimension variable follows the convention \f${X, Y, Z} : {0, 1, 2}\f$.
  *
  * The identification scheme used works according to the following steps:
- * -# Users should specify how many pixels per slice the identifier
- *    will sample.
- * -# For each slice, the identifier searches the specified number of pixels
- *    of which intensity values are greater than 0 and less than those
- *    of the other pixels in the slice.
- * -# The identifier calculates the average for each slice and the overall
- *    average using the search results.
- * -# For each slice, it subtracts the overall average from the slice average.
- *    If the sign of the subtraction result changes, then it assumes that a
- *    slab ends and another slab begins.
+ *   -# Users should specify how many pixels per slice the identifier
+ *      will sample.
+ *   -# For each slice, the identifier searches the specified number of pixels
+ *      of which intensity values are greater than 0 and less than those
+ *      of the other pixels in the slice.
+ *   -# The identifier calculates the average for each slice and the overall
+ *      average using the search results.
+ *   -# For each slice, it subtracts the overall average from the slice average.
+ *      If the sign of the subtraction result changes, then it assumes that a
+ *      slab ends and another slab begins.
+ *
  * \ingroup ITKBiasCorrection
  */
 template <typename TInputImage>
@@ -75,7 +76,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MRASlabIdentifier, Object);
+  itkOverrideGetNameOfClassMacro(MRASlabIdentifier);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -134,16 +135,16 @@ protected:
 
 private:
   /** Target image pointer that MRASlabIdentifier will use. */
-  ImageConstPointer m_Image;
+  ImageConstPointer m_Image{};
 
   /** The number of pixels per slice which will be included
    * for average calculation. In a sense, it's sampling size per slice. */
-  unsigned int m_NumberOfSamples;
+  unsigned int m_NumberOfSamples{};
 
-  int                  m_SlicingDirection;
-  ImagePixelType       m_BackgroundMinimumThreshold;
-  double               m_Tolerance;
-  SlabRegionVectorType m_Slabs;
+  int                  m_SlicingDirection{};
+  ImagePixelType       m_BackgroundMinimumThreshold{};
+  double               m_Tolerance{};
+  SlabRegionVectorType m_Slabs{};
 };
 } // end namespace itk
 

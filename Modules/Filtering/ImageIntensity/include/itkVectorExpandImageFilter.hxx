@@ -57,7 +57,7 @@ VectorExpandImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os,
   {
     os << m_ExpandFactors[j] << ", ";
   }
-  os << m_ExpandFactors[j] << "]" << std::endl;
+  os << m_ExpandFactors[j] << ']' << std::endl;
 
   os << indent << "Interpolator: ";
   os << m_Interpolator.GetPointer() << std::endl;
@@ -98,7 +98,7 @@ VectorExpandImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   if (!m_Interpolator || !this->GetInput())
   {
-    itkExceptionMacro(<< "Interpolator and/or Input not set");
+    itkExceptionMacro("Interpolator and/or Input not set");
   }
 
   // Connect input image to interpolator
@@ -113,7 +113,6 @@ VectorExpandImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 {
   OutputImagePointer outputPtr = this->GetOutput();
   using OutputIterator = ImageRegionIteratorWithIndex<TOutputImage>;
-  OutputIterator outIt(outputPtr, outputRegionForThread);
 
   TotalProgressReporter progress(this, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 
@@ -128,7 +127,7 @@ VectorExpandImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   InterpolatedType interpolatedValue;
 
   // Walk the output region, and interpolate the input image
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(outputPtr, outputRegionForThread); !outIt.IsAtEnd(); ++outIt)
   {
     // Determine the index of the output pixel
     outputIndex = outIt.GetIndex();
@@ -155,9 +154,8 @@ VectorExpandImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
     }
     else
     {
-      itkExceptionMacro(<< "Interpolator outside buffer should never occur ");
+      itkExceptionMacro("Interpolator outside buffer should never occur ");
     }
-    ++outIt;
     progress.CompletedPixel();
   }
 }

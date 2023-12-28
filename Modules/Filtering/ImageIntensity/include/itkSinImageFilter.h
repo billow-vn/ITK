@@ -62,7 +62,7 @@ public:
  * \ingroup ITKImageIntensity
  *
  * \sphinx
- * \sphinxexample{Filtering/ImageIntensity/ApplySinImageFilter,Apply Sin Image Filter.}
+ * \sphinxexample{Filtering/ImageIntensity/ApplySinImageFilter,Apply Sin Image Filter}
  * \endsphinx
  */
 template <typename TInputImage, typename TOutputImage>
@@ -82,7 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SinImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(SinImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

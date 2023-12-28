@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetEquationContainer, Object);
+  itkOverrideGetNameOfClassMacro(LevelSetEquationContainer);
 
   using TermContainerType = TTermContainer;
   using TermContainerPointer = typename TermContainerType::Pointer;
@@ -288,9 +288,9 @@ protected:
   LevelSetEquationContainer() = default;
   ~LevelSetEquationContainer() override = default;
 
-  LevelSetContainerPointer m_LevelSetContainer;
-  MapContainerType         m_Container;
-  InputImagePointer        m_Input;
+  LevelSetContainerPointer m_LevelSetContainer{};
+  MapContainerType         m_Container{};
+  InputImagePointer        m_Input{};
 };
 } // namespace itk
 

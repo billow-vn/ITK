@@ -21,12 +21,11 @@
 #include "itkNeighborhoodBinaryThresholdImageFunction.h"
 #include "itkFloodFilledImageFunctionConditionalIterator.h"
 #include "itkProgressReporter.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::NeighborhoodConnectedImageFilter()
 {
@@ -63,14 +62,15 @@ NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::AddSeed(const Index
   this->Modified();
 }
 
-/**
- * Standard PrintSelf method.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  this->Superclass::PrintSelf(os, indent);
+  using namespace print_helper;
+
+  Superclass::PrintSelf(os, indent);
+
+  os << indent << "Seeds: " << m_Seeds << std::endl;
   os << indent << "Upper: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_Upper)
      << std::endl;
   os << indent << "Lower: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_Lower)
@@ -120,7 +120,7 @@ NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   function->SetInputImage(inputImage);
   function->ThresholdBetween(m_Lower, m_Upper);
   function->SetRadius(m_Radius);
-  IteratorType it = IteratorType(outputImage, function, m_Seeds);
+  IteratorType it(outputImage, function, m_Seeds);
 
   ProgressReporter progress(this, 0, outputImage->GetRequestedRegion().GetNumberOfPixels());
   while (!it.IsAtEnd())

@@ -46,8 +46,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianExponentialDiffeomorphicTransformParametersAdaptor,
-               ConstantVelocityFieldTransformParametersAdaptor);
+  itkOverrideGetNameOfClassMacro(GaussianExponentialDiffeomorphicTransformParametersAdaptor);
 
   using TransformType = TTransform;
   using ScalarType = typename TransformType::ScalarType;
@@ -75,8 +74,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ScalarType       m_GaussianSmoothingVarianceForTheConstantVelocityField;
-  ScalarType       m_GaussianSmoothingVarianceForTheUpdateField;
+  ScalarType       m_GaussianSmoothingVarianceForTheConstantVelocityField{};
+  ScalarType       m_GaussianSmoothingVarianceForTheUpdateField{};
   ModifiedTimeType m_GaussianSmoothingVarianceForTheConstantVelocityFieldSetTime{ 0 };
   ModifiedTimeType m_GaussianSmoothingVarianceForTheUpdateFieldSetTime{ 0 };
 

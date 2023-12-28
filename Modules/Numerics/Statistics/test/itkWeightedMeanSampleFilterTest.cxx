@@ -36,7 +36,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Standard macros. */
-  itkTypeMacro(WeightedMeanTestFunction, FunctionBase);
+  itkOverrideGetNameOfClassMacro(WeightedMeanTestFunction);
   itkNewMacro(Self);
 
   /** Input type */
@@ -110,9 +110,7 @@ itkWeightedMeanSampleFilterTest(int, char *[])
   try
   {
     filter->Update();
-    std::cerr << "Exception should have been thrown since \
-                    Update() is invoked without setting an input "
-              << std::endl;
+    std::cerr << "Exception should have been thrown since Update() is invoked without setting an input " << std::endl;
     return EXIT_FAILURE;
   }
   catch (const itk::ExceptionObject & excp)
@@ -122,9 +120,7 @@ itkWeightedMeanSampleFilterTest(int, char *[])
 
   if (filter->GetInput() != nullptr)
   {
-    std::cerr << "GetInput() should return nullptr if the input \
-                     has not been set"
-              << std::endl;
+    std::cerr << "GetInput() should return nullptr if the input has not been set" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -154,7 +150,7 @@ itkWeightedMeanSampleFilterTest(int, char *[])
   if ((itk::Math::abs(meanOutput[0] - mean[0]) > epsilon) || (itk::Math::abs(meanOutput[1] - mean[1]) > epsilon))
   {
     std::cerr << "Wrong result " << std::endl;
-    std::cerr << meanOutput[0] << " " << mean[0] << " " << meanOutput[1] << " " << mean[1] << " " << std::endl;
+    std::cerr << meanOutput[0] << ' ' << mean[0] << ' ' << meanOutput[1] << ' ' << mean[1] << ' ' << std::endl;
     std::cerr << "The result is not what is expected" << std::endl;
     return EXIT_FAILURE;
   }
@@ -183,7 +179,7 @@ itkWeightedMeanSampleFilterTest(int, char *[])
   if ((itk::Math::abs(meanOutput[0] - mean[0]) > epsilon) || (itk::Math::abs(meanOutput[1] - mean[1]) > epsilon))
   {
     std::cerr << "Wrong result " << std::endl;
-    std::cerr << meanOutput[0] << " " << mean[0] << " " << meanOutput[1] << " " << mean[1] << " " << std::endl;
+    std::cerr << meanOutput[0] << ' ' << mean[0] << ' ' << meanOutput[1] << ' ' << mean[1] << ' ' << std::endl;
     std::cerr << "The result is not what is expected" << std::endl;
     return EXIT_FAILURE;
   }
@@ -210,7 +206,7 @@ itkWeightedMeanSampleFilterTest(int, char *[])
   if ((itk::Math::abs(meanOutput[0] - mean[0]) > epsilon) || (itk::Math::abs(meanOutput[1] - mean[1]) > epsilon))
   {
     std::cerr << "Wrong result" << std::endl;
-    std::cerr << meanOutput[0] << " " << mean[0] << " " << meanOutput[1] << " " << mean[1] << " " << std::endl;
+    std::cerr << meanOutput[0] << ' ' << mean[0] << ' ' << meanOutput[1] << ' ' << mean[1] << ' ' << std::endl;
 
     std::cerr << "The result is not what is expected" << std::endl;
     return EXIT_FAILURE;
@@ -238,7 +234,7 @@ itkWeightedMeanSampleFilterTest(int, char *[])
   if ((itk::Math::abs(meanOutput[0] - mean[0]) > epsilon) || (itk::Math::abs(meanOutput[1] - mean[1]) > epsilon))
   {
     std::cerr << "Wrong result" << std::endl;
-    std::cerr << meanOutput[0] << " " << mean[0] << " " << meanOutput[1] << " " << mean[1] << " " << std::endl;
+    std::cerr << meanOutput[0] << ' ' << mean[0] << ' ' << meanOutput[1] << ' ' << mean[1] << ' ' << std::endl;
     std::cerr << "The result is not what is expected" << std::endl;
     return EXIT_FAILURE;
   }

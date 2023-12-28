@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class LabelShapeKeepNObjectsImageFilter
+ * \class LabelShapeKeepNObjectsImageFilter
  * \brief keep N objects according to their shape attributes
  *
  * LabelShapeKeepNObjectsImageFilter keep the N objects in a labeled image
@@ -89,7 +89,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelShapeKeepNObjectsImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelShapeKeepNObjectsImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -155,10 +155,10 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  SizeValueType        m_NumberOfObjects;
-  bool                 m_ReverseOrdering;
-  AttributeType        m_Attribute;
+  OutputImagePixelType m_BackgroundValue{};
+  SizeValueType        m_NumberOfObjects{};
+  bool                 m_ReverseOrdering{};
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

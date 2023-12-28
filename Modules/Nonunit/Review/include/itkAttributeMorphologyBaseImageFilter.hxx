@@ -31,7 +31,6 @@
  *
  * "Grayscale morphological attribute operations"
  * by Beare R.
- * https://hdl.handle.net/1926/1316
  * https://www.insight-journal.org/browse/publication/203
  *
  */
@@ -91,8 +90,8 @@ AttributeMorphologyBaseImageFilter<TInputImage, TOutputImage, TAttribute, TFunct
   kernelRadius.Fill(1);
   using FaceCalculatorType = itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>;
   FaceCalculatorType                        faceCalculator;
-  typename FaceCalculatorType::FaceListType faceList;
-  faceList = faceCalculator(input, output->GetRequestedRegion(), kernelRadius);
+  typename FaceCalculatorType::FaceListType faceList =
+    faceCalculator(input, output->GetRequestedRegion(), kernelRadius);
   typename FaceCalculatorType::FaceListType::iterator fit;
   ProgressReporter                                    progress(this, 0, buffsize * 4); // pretend we have 4 steps
 
@@ -238,7 +237,7 @@ AttributeMorphologyBaseImageFilter<TInputImage, TOutputImage, TAttribute, TFunct
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
   os << indent << "Lambda: " << static_cast<typename NumericTraits<AttributeType>::PrintType>(m_Lambda) << std::endl;
 }
 } // end namespace itk

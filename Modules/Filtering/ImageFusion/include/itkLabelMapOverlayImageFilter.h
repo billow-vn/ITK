@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class LabelMapOverlayImageFilter
+ * \class LabelMapOverlayImageFilter
  * \brief Apply a colormap to a label map and superimpose it on an image.
  *
  * Apply a colormap to a label map and put it on top of the feature
@@ -104,7 +104,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapOverlayImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapOverlayImageFilter);
 
   /** Set the feature image */
   void
@@ -201,8 +201,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double      m_Opacity;
-  FunctorType m_Functor;
+  double      m_Opacity{};
+  FunctorType m_Functor{};
 
 }; // end of class
 

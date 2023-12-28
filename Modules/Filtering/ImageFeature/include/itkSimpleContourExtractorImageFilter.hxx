@@ -55,21 +55,19 @@ SimpleContourExtractorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGen
   typename InputImageType::ConstPointer input = this->GetInput();
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                        bC;
-  faceList = bC(input, outputRegionForThread, this->GetRadius());
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList =
+    bC(input, outputRegionForThread, this->GetRadius());
 
   TotalProgressReporter progress(this, output->GetRequestedRegion().GetNumberOfPixels());
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    bit = ConstNeighborhoodIterator<InputImageType>(this->GetRadius(), input, *fit);
+    bit = ConstNeighborhoodIterator<InputImageType>(this->GetRadius(), input, face);
     unsigned int neighborhoodSize = bit.Size();
-    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    it = ImageRegionIterator<OutputImageType>(output, face);
 
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
@@ -95,7 +93,7 @@ SimpleContourExtractorImageFilter<TInputImage, TOutputImage>::DynamicThreadedGen
           }
         }
 
-        // set pixel center pixel value weither it is or not on contour
+        // set pixel center pixel value whether it is or not on contour
         if (bIsOnContour)
         {
           it.Set(m_OutputForegroundValue);

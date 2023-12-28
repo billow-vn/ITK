@@ -87,7 +87,7 @@ itkSymmetricSecondRankTensorTest(int, char *[])
   }
 
   std::cout << "std::cout << pixel << std::endl;" << std::endl;
-  std::cout << "\t" << pixel << std::endl;
+  std::cout << '\t' << pixel << std::endl;
 
   for (unsigned int j = 0; j < 2; ++j)
   {
@@ -388,7 +388,7 @@ itkSymmetricSecondRankTensorTest(int, char *[])
     tensor3D(2, 1) = 0.0; // overrides (1,2)
     tensor3D(2, 2) = 29.0;
 
-    AccumulateValueType expectedTrace = itk::NumericTraits<AccumulateValueType>::ZeroValue();
+    AccumulateValueType expectedTrace{};
 
     expectedTrace += tensor3D(0, 0);
     expectedTrace += tensor3D(1, 1);

@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianDerivativeSpatialFunction, SpatialFunction);
+  itkOverrideGetNameOfClassMacro(GaussianDerivativeSpatialFunction);
 
   /** Input type for the function. */
   using typename Superclass::InputType;
@@ -91,26 +91,26 @@ public:
   itkGetConstMacro(Direction, unsigned int);
 
 protected:
-  GaussianDerivativeSpatialFunction();
+  GaussianDerivativeSpatialFunction() = default;
   ~GaussianDerivativeSpatialFunction() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
   /** Current direction */
-  mutable unsigned int m_Direction;
+  mutable unsigned int m_Direction{};
 
   /** The standard deviation in each direction. */
-  ArrayType m_Sigma;
+  ArrayType m_Sigma{ ArrayType::Filled(1.0) };
 
   /** The mean in each direction. */
-  ArrayType m_Mean;
+  ArrayType m_Mean{};
 
   /** A scale factor multiplied by the true value of the Gaussian. */
-  double m_Scale;
+  double m_Scale{ 1.0 };
 
   /** Whether or not to normalize the Gaussian. */
-  bool m_Normalized;
+  bool m_Normalized{};
 };
 } // end namespace itk
 

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class PolylineMaskImageFilter
+ * \class PolylineMaskImageFilter
  * \brief Implements image masking operation constrained by a polyline on a plane
  * perpendicular to certain viewing direction.
  *
@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolylineMaskImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(PolylineMaskImageFilter);
 
   /** Number of dimensions. */
   static constexpr unsigned int NDimensions = TInputImage::ImageDimension;
@@ -132,14 +132,14 @@ protected:
   GenerateData() override;
 
 private:
-  VectorType m_ViewVector;
-  VectorType m_UpVector;
+  VectorType m_ViewVector{};
+  VectorType m_UpVector{};
 
-  MatrixType m_RotationMatrix;
+  MatrixType m_RotationMatrix{};
 
-  PointType m_CameraCenterPoint;
+  PointType m_CameraCenterPoint{};
 
-  ProjPlanePointType m_FocalPoint;
+  ProjPlanePointType m_FocalPoint{};
 
   double m_FocalDistance{ 0.0 };
 };

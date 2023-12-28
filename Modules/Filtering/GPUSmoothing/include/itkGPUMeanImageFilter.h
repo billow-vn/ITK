@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class GPUMeanImageFilter
+ * \class GPUMeanImageFilter
  *
  * \brief GPU-enabled implementation of the MeanImageFilter.
  *
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GPUMeanImageFilter, GPUBoxImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUMeanImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageRegionType;
@@ -90,11 +90,11 @@ protected:
   GPUGenerateData() override;
 
 private:
-  int m_MeanFilterGPUKernelHandle;
+  int m_MeanFilterGPUKernelHandle{};
 };
 
 /**
- *\class GPUMeanImageFilterFactory
+ * \class GPUMeanImageFilterFactory
  *
  * \brief Object Factory implementation for GPUMeanImageFilter
  * \ingroup ITKGPUSmoothing
@@ -125,7 +125,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GPUMeanImageFilterFactory, itk::ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(GPUMeanImageFilterFactory);
 
   /** Register one factory of this type  */
   static void

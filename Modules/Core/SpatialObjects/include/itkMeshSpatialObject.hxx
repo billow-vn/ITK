@@ -22,7 +22,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <typename TMesh>
 MeshSpatialObject<TMesh>::MeshSpatialObject()
 {
@@ -48,9 +48,6 @@ MeshSpatialObject<TMesh>::Clear()
   this->Modified();
 }
 
-/** Test whether a point is inside or outside the object
- *  For computational speed purposes, it is faster if the method does not
- *  check the name of the class and the current depth */
 template <typename TMesh>
 bool
 MeshSpatialObject<TMesh>::IsInsideInObjectSpace(const PointType & point) const
@@ -94,7 +91,6 @@ MeshSpatialObject<TMesh>::IsInsideInObjectSpace(const PointType & point) const
   return false;
 }
 
-/** Compute the bounds of the object which is the same as the internal mesh */
 template <typename TMesh>
 void
 MeshSpatialObject<TMesh>::ComputeMyBoundingBox()
@@ -112,7 +108,6 @@ MeshSpatialObject<TMesh>::ComputeMyBoundingBox()
   this->GetModifiableMyBoundingBoxInObjectSpace()->ComputeBoundingBox();
 }
 
-/** Set the Mesh in the spatial object */
 template <typename TMesh>
 void
 MeshSpatialObject<TMesh>::SetMesh(MeshType * mesh)
@@ -124,7 +119,6 @@ MeshSpatialObject<TMesh>::SetMesh(MeshType * mesh)
   }
 }
 
-/** Get the Mesh inside the spatial object */
 template <typename TMesh>
 auto
 MeshSpatialObject<TMesh>::GetMesh() -> MeshType *
@@ -139,7 +133,6 @@ MeshSpatialObject<TMesh>::GetMesh() const -> const MeshType *
   return m_Mesh.GetPointer();
 }
 
-/** InternalClone */
 template <typename TMesh>
 typename LightObject::Pointer
 MeshSpatialObject<TMesh>::InternalClone() const
@@ -151,7 +144,7 @@ MeshSpatialObject<TMesh>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
   rval->SetMesh(this->GetMesh()->Clone());
   rval->SetIsInsidePrecisionInObjectSpace(this->GetIsInsidePrecisionInObjectSpace());
@@ -159,18 +152,20 @@ MeshSpatialObject<TMesh>::InternalClone() const
   return loPtr;
 }
 
-/** Print the object */
 template <typename TMesh>
 void
 MeshSpatialObject<TMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "Mesh: " << std::endl;
-  os << "m_IsInsidePrecisionInObjectSpace: " << m_IsInsidePrecisionInObjectSpace << std::endl;
-  os << indent << m_Mesh << std::endl;
+
+  itkPrintSelfObjectMacro(Mesh);
+
+#if !defined(ITK_LEGACY_REMOVE)
+  os << indent << "PixelType: " << m_PixelType << std::endl;
+#endif
+  os << indent << "IsInsidePrecisionInObjectSpace: " << m_IsInsidePrecisionInObjectSpace << std::endl;
 }
 
-/** Get the modification time */
 template <typename TMesh>
 ModifiedTimeType
 MeshSpatialObject<TMesh>::GetMTime() const

@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class BSplineResampleImageFunction
+ * \class BSplineResampleImageFunction
  * \brief Resample image intensity from a BSpline coefficient image.
  *
  * This class resample the image intensity at a non-integer position
@@ -68,7 +68,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineResampleImageFunction, BSplineInterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(BSplineResampleImageFunction);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);

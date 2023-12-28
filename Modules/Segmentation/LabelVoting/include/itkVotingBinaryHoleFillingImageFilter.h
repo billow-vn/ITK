@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VotingBinaryHoleFillingImageFilter
+ * \class VotingBinaryHoleFillingImageFilter
  * \brief Fills in holes and cavities by applying a voting operation on each pixel.
  *
  *
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VotingBinaryHoleFillingImageFilter, VotingBinaryImageFilter);
+  itkOverrideGetNameOfClassMacro(VotingBinaryHoleFillingImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;
@@ -77,7 +77,7 @@ public:
   /** Majority threshold. It is the number of pixels over 50% that will decide
    * whether an OFF pixel will become ON or not. For example, if the
    * neighborhood of a pixel has 124 pixels (excluding itself), the 50% will be
-   * 62, and if you set upd a Majority threshold of 5, that means that the
+   * 62, and if you set up a Majority threshold of 5, that means that the
    * filter will require 67 or more neighbor pixels to be ON in order to switch
    * the current OFF pixel to ON. The default value is 1. */
   itkGetConstReferenceMacro(MajorityThreshold, unsigned int);
@@ -132,7 +132,7 @@ protected:
     itkExceptionMacro("This class requires threadId so it must use classic multi-threading model");
   }
 
-  /** Methods to be called before and after the invokation of
+  /** Methods to be called before and after the invocation of
    * ThreadedGenerateData(). */
   void
   BeforeThreadedGenerateData() override;
@@ -141,12 +141,12 @@ protected:
   AfterThreadedGenerateData() override;
 
 private:
-  unsigned int m_MajorityThreshold;
+  unsigned int m_MajorityThreshold{};
 
-  SizeValueType m_NumberOfPixelsChanged;
+  SizeValueType m_NumberOfPixelsChanged{};
 
   // Auxiliary array for multi-threading
-  Array<SizeValueType> m_Count;
+  Array<SizeValueType> m_Count{};
 };
 } // end namespace itk
 

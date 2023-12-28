@@ -26,7 +26,7 @@ namespace Testing
 {
 
 /**
- *\class StretchIntensityImageFilter
+ * \class StretchIntensityImageFilter
  *
  * \brief Applies a linear transformation to the intensity levels of the
  * input Image.
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StretchIntensityImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(StretchIntensityImageFilter);
 
   itkSetMacro(OutputMinimum, OutputPixelType);
   itkSetMacro(OutputMaximum, OutputPixelType);
@@ -119,14 +119,14 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 private:
-  RealType m_Scale;
-  RealType m_Shift;
+  RealType m_Scale{};
+  RealType m_Shift{};
 
-  InputPixelType m_InputMinimum;
-  InputPixelType m_InputMaximum;
+  InputPixelType m_InputMinimum{};
+  InputPixelType m_InputMaximum{};
 
-  OutputPixelType m_OutputMinimum;
-  OutputPixelType m_OutputMaximum;
+  OutputPixelType m_OutputMinimum{};
+  OutputPixelType m_OutputMaximum{};
 };
 } // end namespace Testing
 } // end namespace itk

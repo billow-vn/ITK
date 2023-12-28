@@ -32,9 +32,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
   GPUPDEDeformableRegistrationFilter()
@@ -46,7 +44,7 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
 
   m_TempField = DisplacementFieldType::New();
 
-  /** Build GPU Program */
+  // Build GPU program
 
   std::ostringstream defines;
 
@@ -55,7 +53,7 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
     itkExceptionMacro("GPUDenseFiniteDifferenceImageFilter supports 1/2/3D image.");
   }
 
-  defines << "#define DIM_" << TDisplacementField::ImageDimension << "\n";
+  defines << "#define DIM_" << TDisplacementField::ImageDimension << '\n';
 
   // PixelType is a Vector
   defines << "#define OUTPIXELTYPE ";
@@ -75,9 +73,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
 #endif
 }
 
-/*
- * Standard PrintSelf method.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::PrintSelf(
@@ -85,11 +80,72 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   Indent         indent) const
 {
   GPUSuperclass::PrintSelf(os, indent);
+
+  itkPrintSelfObjectMacro(TempField);
+
+  os << indent << "SmoothingKernelSizes: ";
+  for (unsigned d = 0; d < ImageDimension; ++d)
+  {
+    os << indent.GetNextIndent() << m_SmoothingKernelSizes[d] << std::endl;
+  }
+
+  os << indent << "SmoothingKernels: ";
+  if (m_SmoothingKernels != nullptr)
+  {
+    for (unsigned d = 0; d < ImageDimension; ++d)
+    {
+      os << indent.GetNextIndent() << m_SmoothingKernels[d] << std::endl;
+    }
+  }
+
+  os << indent << "GPUSmoothingKernels: ";
+  if (m_GPUSmoothingKernels != nullptr)
+  {
+    for (unsigned d = 0; d < ImageDimension; ++d)
+    {
+      os << indent.GetNextIndent() << m_GPUSmoothingKernels[d] << std::endl;
+    }
+  }
+
+  os << indent << "UpdateFieldSmoothingKernelSizes: ";
+  for (unsigned d = 0; d < ImageDimension; ++d)
+  {
+    os << indent.GetNextIndent() << m_UpdateFieldSmoothingKernelSizes[d] << std::endl;
+  }
+
+  os << indent << "UpdateFieldSmoothingKernels: ";
+  if (m_UpdateFieldSmoothingKernels != nullptr)
+  {
+    for (unsigned d = 0; d < ImageDimension; ++d)
+    {
+      os << indent.GetNextIndent() << m_UpdateFieldSmoothingKernels[d] << std::endl;
+    }
+  }
+
+  os << indent << "UpdateFieldGPUSmoothingKernels: ";
+  if (m_UpdateFieldGPUSmoothingKernels != nullptr)
+  {
+    for (unsigned d = 0; d < ImageDimension; ++d)
+    {
+      os << indent.GetNextIndent() << m_UpdateFieldGPUSmoothingKernels[d] << std::endl;
+    }
+  }
+
+  os << indent << "ImageSizes: ";
+  if (m_ImageSizes != nullptr)
+  {
+    os << *m_ImageSizes << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  itkPrintSelfObjectMacro(GPUImageSizes);
+
+  os << indent << "SmoothDisplacementFieldGPUKernelHandle: " << m_SmoothDisplacementFieldGPUKernelHandle << std::endl;
 }
 
-/*
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -100,7 +156,7 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
 
   if (!movingPtr || !fixedPtr)
   {
-    itkExceptionMacro(<< "Fixed and/or moving image not set");
+    itkExceptionMacro("Fixed and/or moving image not set");
   }
 
   // update variables in the equation object
@@ -108,7 +164,7 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
 
   if (!f)
   {
-    itkExceptionMacro(<< "FiniteDifferenceFunction not of type PDEDeformableRegistrationFilterFunction");
+    itkExceptionMacro("FiniteDifferenceFunction not of type PDEDeformableRegistrationFilterFunction");
   }
 
   f->SetFixedImage(fixedPtr);
@@ -117,12 +173,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   this->GPUSuperclass::InitializeIteration();
 }
 
-/*
- * Override the default implementation for the case when the
- * initial deformation is not set.
- * If the initial deformation is not set, the output is
- * fill with zero vectors.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -174,7 +224,7 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   }
   else if (this->GetFixedImage())
   {
-    // Initial deforamtion field is not set.
+    // Initial deformation field is not set.
     // Copy information from the fixed image.
     for (unsigned int idx = 0; idx < this->GetNumberOfOutputs(); ++idx)
     {
@@ -219,9 +269,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   }
 }
 
-/*
- * Release memory of internal buffers
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -258,9 +305,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   this->GetOutput()->GetBufferPointer();
 }
 
-/*
- * Initialize flags
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::Initialize()
@@ -276,9 +320,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   f->GPUAllocateMetricData(numPixels);
 }
 
-/*
- * Smooth deformation using a separable Gaussian kernel
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -406,9 +447,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   }
 }
 
-/*
- * Smooth deformation using a separable Gaussian kernel
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -419,9 +457,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   this->m_SmoothFieldTime.Stop();
 }
 
-/*
- * Smooth deformation using a separable Gaussian kernel
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::
@@ -433,9 +468,6 @@ GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField
   this->m_SmoothFieldTime.Stop();
 }
 
-/*
- * Smooth deformation using a separable Gaussian kernel
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField, typename TParentImageFilter>
 void
 GPUPDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField, TParentImageFilter>::

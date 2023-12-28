@@ -170,8 +170,8 @@ public:
     return NumericTraits<typename Self::LuminanceType>::IsNonnegative(val.GetLuminance());
   }
 
-  static constexpr bool IsSigned = std::is_signed<ValueType>::value;
-  static constexpr bool IsInteger = std::is_integral<ValueType>::value;
+  static constexpr bool IsSigned = std::is_signed_v<ValueType>;
+  static constexpr bool IsInteger = std::is_integral_v<ValueType>;
   static constexpr bool IsComplex = NumericTraits<ValueType>::IsComplex;
 
   /** RGB pixels must have 3 components, so the size cannot be
@@ -182,8 +182,8 @@ public:
   {
     if (s != 3)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a RGBPixel to anything other "
-                                  "than 3.");
+      itkGenericExceptionMacro("Cannot set the size of a RGBPixel to anything other "
+                               "than 3.");
     }
     m.Fill(NumericTraits<T>::ZeroValue());
   }

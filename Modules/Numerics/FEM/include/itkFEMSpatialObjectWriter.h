@@ -42,13 +42,13 @@ public:
   using Pointer = SmartPointer<Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Superclass, Self);
+  itkOverrideGetNameOfClassMacro(Superclass);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
 protected:
-  std::string m_FileName;
+  std::string m_FileName{};
 
   FEMSpatialObjectWriter();
   ~FEMSpatialObjectWriter() override = default;

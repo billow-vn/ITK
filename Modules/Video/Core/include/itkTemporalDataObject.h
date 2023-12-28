@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/**\class TemporalDataObjectEnums
+/** \class TemporalDataObjectEnums
  * \brief Contains all enum classes used by TemporalUnit class.
  * \ingroup ITKVideoCore
  */
@@ -49,7 +49,7 @@ extern ITKVideoCore_EXPORT std::ostream &
                            operator<<(std::ostream & out, TemporalDataObjectEnums::TemporalUnit value);
 
 /**
- *\class TemporalDataObject
+ * \class TemporalDataObject
  * \brief DataObject subclass with knowledge of temporal region
  *
  * This class represents a data object that relies on temporal regions. It uses
@@ -90,13 +90,13 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TemporalDataObject, DataObject);
+  itkOverrideGetNameOfClassMacro(TemporalDataObject);
 
   /** Get the type of temporal units we care about (Defaults to Frame)*/
   virtual TemporalUnitType
   GetTemporalUnit() const;
 
-  /** Explicity set temporal units (Defaults to Frame)*/
+  /** Explicitly set temporal units (Defaults to Frame)*/
   virtual void
   SetTemporalUnitToFrame();
   virtual void
@@ -154,12 +154,12 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Buffer for holding component data objects */
-  BufferType::Pointer m_DataObjectBuffer;
+  BufferType::Pointer m_DataObjectBuffer{};
 
   /** We want to keep track of our regions in time. **/
-  TemporalRegionType m_LargestPossibleTemporalRegion;
-  TemporalRegionType m_RequestedTemporalRegion;
-  TemporalRegionType m_BufferedTemporalRegion;
+  TemporalRegionType m_LargestPossibleTemporalRegion{};
+  TemporalRegionType m_RequestedTemporalRegion{};
+  TemporalRegionType m_BufferedTemporalRegion{};
 
   TemporalUnitEnum m_TemporalUnit{ TemporalUnitEnum::Frame };
 }; // end class TemporalDataObject

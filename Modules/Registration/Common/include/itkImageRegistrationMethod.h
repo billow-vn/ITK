@@ -82,7 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageRegistrationMethod, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageRegistrationMethod);
 
   /**  Type of the Fixed image. */
   using FixedImageType = TFixedImage;
@@ -139,7 +139,7 @@ public:
   itkSetObjectMacro(Metric, MetricType);
   itkGetModifiableObjectMacro(Metric, MetricType);
 
-  /** Set/Get the Transfrom. */
+  /** Set/Get the Transform. */
   itkSetObjectMacro(Transform, TransformType);
   itkGetModifiableObjectMacro(Transform, TransformType);
 
@@ -214,25 +214,25 @@ protected:
   /** Provides derived classes with the ability to set this private var */
   itkSetMacro(LastTransformParameters, ParametersType);
 
-  /* Start the Optimization */
+  /** Start the optimization. */
   void
   StartOptimization();
 
 private:
-  MetricPointer          m_Metric;
-  OptimizerType::Pointer m_Optimizer;
+  MetricPointer          m_Metric{};
+  OptimizerType::Pointer m_Optimizer{};
 
-  MovingImageConstPointer m_MovingImage;
-  FixedImageConstPointer  m_FixedImage;
+  MovingImageConstPointer m_MovingImage{};
+  FixedImageConstPointer  m_FixedImage{};
 
-  TransformPointer    m_Transform;
-  InterpolatorPointer m_Interpolator;
+  TransformPointer    m_Transform{};
+  InterpolatorPointer m_Interpolator{};
 
-  ParametersType m_InitialTransformParameters;
-  ParametersType m_LastTransformParameters;
+  ParametersType m_InitialTransformParameters{};
+  ParametersType m_LastTransformParameters{};
 
-  bool                 m_FixedImageRegionDefined;
-  FixedImageRegionType m_FixedImageRegion;
+  bool                 m_FixedImageRegionDefined{};
+  FixedImageRegionType m_FixedImageRegion{};
 };
 } // end namespace itk
 

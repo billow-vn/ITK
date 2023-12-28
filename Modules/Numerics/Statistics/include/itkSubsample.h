@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class Subsample
+ * \class Subsample
  * \brief This class stores a subset of instance identifiers from another sample
  * object. You can create a subsample out of another sample object or another
  * subsample object. The class is useful when storing or extracting a portion
@@ -51,7 +51,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Subsample, TSample);
+  itkOverrideGetNameOfClassMacro(Subsample);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -249,7 +249,7 @@ public:
 
   protected:
     // To ensure const-correctness these method must not be in the public API.
-    // The are purposly not implemented, since they should never be called.
+    // The are purposely not implemented, since they should never be called.
     Iterator();
     Iterator(const Self * sample);
     Iterator(typename InstanceIdentifierHolder::const_iterator iter, const Self * classSample);
@@ -308,10 +308,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  const TSample *            m_Sample;
-  InstanceIdentifierHolder   m_IdHolder;
-  unsigned int               m_ActiveDimension;
-  TotalAbsoluteFrequencyType m_TotalFrequency;
+  const TSample *            m_Sample{};
+  InstanceIdentifierHolder   m_IdHolder{};
+  unsigned int               m_ActiveDimension{};
+  TotalAbsoluteFrequencyType m_TotalFrequency{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

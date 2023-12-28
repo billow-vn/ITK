@@ -50,7 +50,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run time information. */
-  itkTypeMacro(TorusInteriorExteriorSpatialFunction, InteriorExteriorSpatialFunction);
+  itkOverrideGetNameOfClassMacro(TorusInteriorExteriorSpatialFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -79,13 +79,13 @@ public:
   itkSetMacro(MinorRadius, double);
 
 protected:
-  TorusInteriorExteriorSpatialFunction();
+  TorusInteriorExteriorSpatialFunction() = default;
   ~TorusInteriorExteriorSpatialFunction() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  InputType m_Origin;
+  InputType m_Origin{};
   double    m_MajorRadius{ 3.0 };
   double    m_MinorRadius{ 1.0 };
 };

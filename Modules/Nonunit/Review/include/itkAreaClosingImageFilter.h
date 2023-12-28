@@ -36,7 +36,6 @@ namespace itk
  *
  * "Grayscale morphological attribute operations"
  * by Beare R.
- * https://hdl.handle.net/1926/1316
  * https://www.insight-journal.org/browse/publication/203
  *
  * \author Richard Beare. Department of Medicine, Monash University, Melbourne, Australia.
@@ -84,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AreaClosingImageFilter, AttributeMorphologyBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(AreaClosingImageFilter);
 
   /**
    * Set/Get whether the image spacing is used or not - defaults to true.
@@ -122,11 +121,11 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
-    os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+    os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   }
 
 private:
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 };
 } // namespace itk
 #endif

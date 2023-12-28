@@ -25,9 +25,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -70,9 +68,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   m_StopRegistrationFlag = false;
 }
 
-/*
- * Set the moving image image.
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -92,9 +87,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   this->ProcessObject::SetNthInput(2, const_cast<MovingImageType *>(ptr));
 }
 
-/*
- * Get the moving image image.
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -120,9 +112,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   return dynamic_cast<const MovingImageType *>(this->ProcessObject::GetInput(2));
 }
 
-/*
- * Set the fixed image.
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -142,9 +131,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   this->ProcessObject::SetNthInput(1, const_cast<FixedImageType *>(ptr));
 }
 
-/*
- * Get the fixed image.
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -170,9 +156,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   return dynamic_cast<const FixedImageType *>(this->ProcessObject::GetInput(1));
 }
 
-/*
- *
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -204,9 +187,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   return num;
 }
 
-/**
- * Set the number of multi-resolution levels
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -240,9 +220,6 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   }
 }
 
-/**
- * Standard PrintSelf method.
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -260,6 +237,13 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
                                          TDefaultRegistrationType>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+
+  itkPrintSelfObjectMacro(RegistrationFilter);
+  itkPrintSelfObjectMacro(MovingImagePyramid);
+  itkPrintSelfObjectMacro(FixedImagePyramid);
+  itkPrintSelfObjectMacro(FieldExpander);
+  itkPrintSelfObjectMacro(InitialDisplacementField);
+
   os << indent << "NumberOfLevels: " << m_NumberOfLevels << std::endl;
   os << indent << "CurrentLevel: " << m_CurrentLevel << std::endl;
 
@@ -269,35 +253,11 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   {
     os << m_NumberOfIterations[ilevel] << ", ";
   }
-  os << m_NumberOfIterations[ilevel] << "]" << std::endl;
+  os << m_NumberOfIterations[ilevel] << ']' << std::endl;
 
-  os << indent << "RegistrationFilter: ";
-  os << m_RegistrationFilter.GetPointer() << std::endl;
-  os << indent << "MovingImagePyramid: ";
-  os << m_MovingImagePyramid.GetPointer() << std::endl;
-  os << indent << "FixedImagePyramid: ";
-  os << m_FixedImagePyramid.GetPointer() << std::endl;
-
-  os << indent << "FieldExpander: ";
-  os << m_FieldExpander.GetPointer() << std::endl;
-
-  os << indent << "StopRegistrationFlag: ";
-  os << m_StopRegistrationFlag << std::endl;
+  os << indent << "StopRegistrationFlag: " << (m_StopRegistrationFlag ? "On" : "Off") << std::endl;
 }
 
-/*
- * Perform a the deformable registration using a multiresolution scheme
- * using an internal mini-pipeline
- *
- *  ref_pyramid ->  registrator  ->  field_expander --|| tempField
- * test_pyramid ->           |                              |
- *                           |                              |
- *                           --------------------------------
- *
- * A tempField image is used to break the cycle between the
- * registrator and field_expander.
- *
- */
 template <typename TFixedImage,
           typename TMovingImage,
           typename TDisplacementField,
@@ -320,22 +280,22 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
 
   if (!movingImage || !fixedImage)
   {
-    itkExceptionMacro(<< "Fixed and/or moving image not set");
+    itkExceptionMacro("Fixed and/or moving image not set");
   }
 
   if (!m_MovingImagePyramid || !m_FixedImagePyramid)
   {
-    itkExceptionMacro(<< "Fixed and/or moving pyramid not set");
+    itkExceptionMacro("Fixed and/or moving pyramid not set");
   }
 
   if (!m_RegistrationFilter)
   {
-    itkExceptionMacro(<< "Registration filter not set");
+    itkExceptionMacro("Registration filter not set");
   }
 
   if (this->m_InitialDisplacementField && this->GetInput(0))
   {
-    itkExceptionMacro(<< "Only one initial deformation can be given. "
+    itkExceptionMacro("Only one initial deformation can be given. "
                       << "SetInitialDisplacementField should not be used in "
                       << "cunjunction with SetArbitraryInitialDisplacementField "
                       << "or SetInput.");
@@ -602,7 +562,7 @@ MultiResolutionPDEDeformableRegistration<TFixedImage,
   }
   else if (this->GetFixedImage())
   {
-    // Initial deforamtion field is not set.
+    // Initial deformation field is not set.
     // Copy information from the fixed image.
     for (unsigned int idx = 0; idx < this->GetNumberOfIndexedOutputs(); ++idx)
     {

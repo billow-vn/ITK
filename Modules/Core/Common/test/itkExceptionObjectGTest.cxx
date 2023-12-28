@@ -38,7 +38,7 @@ TEST(ExceptionObject, TestDescriptionFromExceptionMacro)
     TestClass() = default;
     virtual ~TestClass() = default;
 
-    itkTypeMacroNoParent(TestClass);
+    itkVirtualGetNameOfClassMacro(TestClass);
 
     void
     CallExceptionMacro(const std::string & message) const
@@ -60,7 +60,7 @@ TEST(ExceptionObject, TestDescriptionFromExceptionMacro)
     ASSERT_NE(actualDescription, nullptr);
 
     std::ostringstream expectedDescription;
-    expectedDescription << "ITK ERROR: " << testObject.GetNameOfClass() << "(" << &testObject << "): " << message;
+    expectedDescription << "ITK ERROR: " << testObject.GetNameOfClass() << '(' << &testObject << "): " << message;
 
     EXPECT_EQ(actualDescription, expectedDescription.str());
   }

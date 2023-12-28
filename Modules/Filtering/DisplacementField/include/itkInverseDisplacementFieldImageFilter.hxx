@@ -156,7 +156,6 @@ InverseDisplacementFieldImageFilter<TInputImage, TOutputImage>::PrepareKernelBas
   unsigned int landmarkId = 0;
 
   IteratorType ot(sampledInput, subsampledRegion);
-  ot.GoToBegin();
 
   OutputPixelType               value;
   Point<double, ImageDimension> sourcePoint;
@@ -183,16 +182,16 @@ InverseDisplacementFieldImageFilter<TInputImage, TOutputImage>::PrepareKernelBas
     ++ot;
   }
 
-  itkDebugMacro(<< "Number of Landmarks created = " << numberOfLandmarks);
+  itkDebugMacro("Number of Landmarks created = " << numberOfLandmarks);
 
   m_KernelTransform->GetModifiableTargetLandmarks()->SetPoints(target);
   m_KernelTransform->GetModifiableSourceLandmarks()->SetPoints(source);
 
-  itkDebugMacro(<< "Before ComputeWMatrix() ");
+  itkDebugMacro("Before ComputeWMatrix() ");
 
   m_KernelTransform->ComputeWMatrix();
 
-  itkDebugMacro(<< "After ComputeWMatrix() ");
+  itkDebugMacro("After ComputeWMatrix() ");
 }
 
 /**
@@ -206,7 +205,7 @@ InverseDisplacementFieldImageFilter<TInputImage, TOutputImage>::GenerateData()
   // the KernelBased spline.
   this->PrepareKernelBaseSpline();
 
-  itkDebugMacro(<< "Actually executing");
+  itkDebugMacro("Actually executing");
 
   // Get the output pointers
   OutputImageType * outputPtr = this->GetOutput();
@@ -218,8 +217,6 @@ InverseDisplacementFieldImageFilter<TInputImage, TOutputImage>::GenerateData()
   using OutputIterator = ImageRegionIteratorWithIndex<TOutputImage>;
 
   OutputImageRegionType region = outputPtr->GetRequestedRegion();
-
-  OutputIterator outIt(outputPtr, region);
 
   // Define a few indices that will be used to translate from an input pixel
   // to an output pixel
@@ -233,10 +230,8 @@ InverseDisplacementFieldImageFilter<TInputImage, TOutputImage>::GenerateData()
   // Support for progress methods/callbacks
   ProgressReporter progress(this, 0, region.GetNumberOfPixels(), 10);
 
-  outIt.GoToBegin();
-
   // Walk the output region
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(outputPtr, region); !outIt.IsAtEnd(); ++outIt)
   {
     // Determine the index of the current output pixel
     outputIndex = outIt.GetIndex();
@@ -253,7 +248,6 @@ InverseDisplacementFieldImageFilter<TInputImage, TOutputImage>::GenerateData()
     }
 
     outIt.Set(inverseDisplacement); // set inverse displacement.
-    ++outIt;
     progress.CompletedPixel();
   }
 }

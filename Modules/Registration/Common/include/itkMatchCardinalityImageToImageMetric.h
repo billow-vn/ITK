@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MatchCardinalityImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(MatchCardinalityImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -101,13 +101,13 @@ public:
   void
   GetDerivative(const TransformParametersType &, DerivativeType & derivative) const override
   {
-    itkWarningMacro(<< "This metric does not provide metric derivatives.");
+    itkWarningMacro("This metric does not provide metric derivatives.");
     derivative.Fill(NumericTraits<typename DerivativeType::ValueType>::ZeroValue());
   }
 
   /**  Get the value of the metric at a particular parameter
    *  setting. The metric value is the number of pixel matches (or
-   *  mis-matches, see SetMeasureMatches()) normalized by the number
+   *  mismatches, see SetMeasureMatches()) normalized by the number
    *  of pixels under consideration (within the buffer and if
    *  specified within a mask). In other words, the metric measure the
    *  percentage of pixel matches or mismatches. */
@@ -162,7 +162,10 @@ protected:
 
   /** Static function used as a "callback" by the MultiThreaderBase.  The threading
    * library will call this routine for each thread, which will delegate the
-   * control to ThreadedGetValue(). */
+   * control to ThreadedGetValue.
+   *
+   * Calls the ThreadedGenerateData method after setting the correct region for this thread.
+   */
   static ITK_THREAD_RETURN_FUNCTION_CALL_CONVENTION
   ThreaderCallback(void * arg);
 
@@ -176,8 +179,8 @@ protected:
 private:
   // default to measure percentage of pixel matches
   bool                       m_MeasureMatches{ true };
-  std::vector<MeasureType>   m_ThreadMatches;
-  std::vector<SizeValueType> m_ThreadCounts;
+  std::vector<MeasureType>   m_ThreadMatches{};
+  std::vector<SizeValueType> m_ThreadCounts{};
 
   /** Support processing data in multiple threads. Used by subclasses
    * (e.g., ImageSource). */

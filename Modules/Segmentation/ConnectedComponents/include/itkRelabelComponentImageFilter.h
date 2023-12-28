@@ -47,7 +47,7 @@ namespace itk
  * extract the largest object or the "k" largest objects. Any
  * particular object can be extracted from the relabeled output using
  * a BinaryThresholdImageFilter. A group of objects can be extracted
- * from the relabled output using a ThresholdImageFilter.
+ * from the relabeled output using a ThresholdImageFilter.
  *
  * Once all the objects are relabeled, the application can query the
  * number of objects and the size of each object. Object sizes are
@@ -124,7 +124,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(RelabelComponentImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(RelabelComponentImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -287,13 +287,13 @@ private:
   ObjectSizeType m_MinimumObjectSize{ 0 };
   bool           m_SortByObjectSize{ true };
 
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 
   using MapType = std::map<LabelType, RelabelComponentObjectType>;
-  MapType m_SizeMap;
+  MapType m_SizeMap{};
 
-  ObjectSizeInPixelsContainerType        m_SizeOfObjectsInPixels;
-  ObjectSizeInPhysicalUnitsContainerType m_SizeOfObjectsInPhysicalUnits;
+  ObjectSizeInPixelsContainerType        m_SizeOfObjectsInPixels{};
+  ObjectSizeInPhysicalUnitsContainerType m_SizeOfObjectsInPhysicalUnits{};
 };
 } // end namespace itk
 

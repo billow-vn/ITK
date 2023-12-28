@@ -79,32 +79,21 @@ ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Pr
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "UseGradientType: ";
-  os << m_UseGradientType << std::endl;
-  os << indent << "MaximumUpdateStepLength: ";
-  os << m_MaximumUpdateStepLength << std::endl;
+  os << indent << "UseGradientType: " << m_UseGradientType << std::endl;
+  os << indent << "MaximumUpdateStepLength: " << m_MaximumUpdateStepLength << std::endl;
 
-  os << indent << "MovingImageIterpolator: ";
-  os << m_MovingImageInterpolator.GetPointer() << std::endl;
-  os << indent << "FixedImageGradientCalculator: ";
-  os << m_FixedImageGradientCalculator.GetPointer() << std::endl;
-  os << indent << "MappedMovingImageGradientCalculator: ";
-  os << m_MappedMovingImageGradientCalculator.GetPointer() << std::endl;
-  os << indent << "DenominatorThreshold: ";
-  os << m_DenominatorThreshold << std::endl;
-  os << indent << "IntensityDifferenceThreshold: ";
-  os << m_IntensityDifferenceThreshold << std::endl;
+  itkPrintSelfObjectMacro(MovingImageInterpolator);
+  itkPrintSelfObjectMacro(FixedImageGradientCalculator);
+  itkPrintSelfObjectMacro(MappedMovingImageGradientCalculator);
 
-  os << indent << "Metric: ";
-  os << m_Metric << std::endl;
-  os << indent << "SumOfSquaredDifference: ";
-  os << m_SumOfSquaredDifference << std::endl;
-  os << indent << "NumberOfPixelsProcessed: ";
-  os << m_NumberOfPixelsProcessed << std::endl;
-  os << indent << "RMSChange: ";
-  os << m_RMSChange << std::endl;
-  os << indent << "SumOfSquaredChange: ";
-  os << m_SumOfSquaredChange << std::endl;
+  os << indent << "DenominatorThreshold: " << m_DenominatorThreshold << std::endl;
+  os << indent << "IntensityDifferenceThreshold: " << m_IntensityDifferenceThreshold << std::endl;
+
+  os << indent << "Metric: " << m_Metric << std::endl;
+  os << indent << "SumOfSquaredDifference: " << m_SumOfSquaredDifference << std::endl;
+  os << indent << "NumberOfPixelsProcessed: " << m_NumberOfPixelsProcessed << std::endl;
+  os << indent << "RMSChange: " << m_RMSChange << std::endl;
+  os << indent << "SumOfSquaredChange: " << m_SumOfSquaredChange << std::endl;
 }
 
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
@@ -128,7 +117,7 @@ ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::In
 {
   if (!this->GetMovingImage() || !this->GetFixedImage() || !m_MovingImageInterpolator)
   {
-    itkExceptionMacro(<< "MovingImage, FixedImage and/or Interpolator not set");
+    itkExceptionMacro("MovingImage, FixedImage and/or Interpolator not set");
   }
 
   // cache fixed image information
@@ -176,11 +165,11 @@ ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::In
 }
 
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
-typename ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PixelType
+auto
 ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ComputeUpdate(
   const NeighborhoodType & it,
   void *                   gd,
-  const FloatOffsetType &  itkNotUsed(offset))
+  const FloatOffsetType &  itkNotUsed(offset)) -> PixelType
 {
   auto *    globalData = (GlobalDataStruct *)gd;
   PixelType update;
@@ -324,7 +313,7 @@ ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Co
     }
     else
     {
-      itkExceptionMacro(<< "Unknown gradient type");
+      itkExceptionMacro("Unknown gradient type");
     }
   }
   else if (this->m_UseGradientType == GradientEnum::Fixed)
@@ -349,7 +338,7 @@ ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Co
   }
   else
   {
-    itkExceptionMacro(<< "Unknown gradient type");
+    itkExceptionMacro("Unknown gradient type");
   }
 
   const auto usedGradientTimes2 =
@@ -418,9 +407,9 @@ template <typename TFixedImage, typename TMovingImage, typename TDisplacementFie
 void
 ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ReleaseGlobalDataPointer(void * gd) const
 {
-  auto * globalData = (GlobalDataStruct *)gd;
+  const std::unique_ptr<const GlobalDataStruct> globalData(static_cast<GlobalDataStruct *>(gd));
 
-  m_MetricCalculationLock.lock();
+  const std::lock_guard<std::mutex> lockGuard(m_MetricCalculationMutex);
   m_SumOfSquaredDifference += globalData->m_SumOfSquaredDifference;
   m_NumberOfPixelsProcessed += globalData->m_NumberOfPixelsProcessed;
   m_SumOfSquaredChange += globalData->m_SumOfSquaredChange;
@@ -429,9 +418,6 @@ ESMDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Re
     m_Metric = m_SumOfSquaredDifference / static_cast<double>(m_NumberOfPixelsProcessed);
     m_RMSChange = std::sqrt(m_SumOfSquaredChange / static_cast<double>(m_NumberOfPixelsProcessed));
   }
-  m_MetricCalculationLock.unlock();
-
-  delete globalData;
 }
 } // end namespace itk
 

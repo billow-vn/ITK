@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ContourMeanDistanceImageFilter
+ * \class ContourMeanDistanceImageFilter
  * \brief Computes the Mean distance between the boundaries of
  * non-zero regions of two images.
  *
@@ -32,9 +32,8 @@ namespace itk
  * set non-zero pixels of two images using the following formula:
  * \f[ H(A,B) = \max(h(A,B),h(B,A)) \f]
  * where
- * \f[ h(A,B) = \mathrm{mean}_{a \in A} \min_{b \in B} \| a - b\| \f] is the dir
-ected
- * Mean distance
+ * \f[ h(A,B) = \mathrm{mean}_{a \in A} \min_{b \in B} \| a - b\| \f]
+ * is the directed mean distance
  * and \f$A\f$ and \f$B\f$ are respectively the set of non-zero pixels
  * in the first and second input images.
  *
@@ -83,7 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ContourMeanDistanceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ContourMeanDistanceImageFilter);
 
   /** Image related type alias. */
   using InputImage1Type = TInputImage1;
@@ -155,8 +154,8 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * data) override;
 
 private:
-  RealType m_MeanDistance;
-  bool     m_UseImageSpacing;
+  RealType m_MeanDistance{};
+  bool     m_UseImageSpacing{};
 }; // end of class
 } // end namespace itk
 

@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class GenerateImageSource
+ * \class GenerateImageSource
  * \brief a Base class for image sources which need to have image
  * size, and other meta-data set.
  *
@@ -68,7 +68,7 @@ public:
   static constexpr unsigned int NDimensions = TOutputImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GenerateImageSource, ImageSource);
+  itkOverrideGetNameOfClassMacro(GenerateImageSource);
 
   itkSetMacro(UseReferenceImage, bool);
   itkBooleanMacro(UseReferenceImage);
@@ -134,11 +134,11 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  SizeType      m_Size; // size of the output image
-  SpacingType   m_Spacing;
-  PointType     m_Origin;
-  DirectionType m_Direction;
-  IndexType     m_StartIndex;
+  SizeType      m_Size{}; // size of the output image
+  SpacingType   m_Spacing{};
+  PointType     m_Origin{};
+  DirectionType m_Direction{};
+  IndexType     m_StartIndex{};
   bool          m_UseReferenceImage{ false };
 };
 

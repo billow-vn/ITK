@@ -26,7 +26,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <typename TInputImage, typename TInputSpatialObject, unsigned int TSampleDimension>
 SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSampleDimension>::
   SpatialObjectToImageStatisticsCalculator()
@@ -43,7 +43,6 @@ SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSamp
   m_Sample = SampleType::New();
 }
 
-/** Compute Statistics from the Sample vector */
 template <typename TInputImage, typename TInputSpatialObject, unsigned int TSampleDimension>
 bool
 SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSampleDimension>::ComputeStatistics()
@@ -78,7 +77,6 @@ SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSamp
   return true;
 }
 
-/** */
 template <typename TInputImage, typename TInputSpatialObject, unsigned int TSampleDimension>
 void
 SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSampleDimension>::Update()
@@ -189,7 +187,7 @@ SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSamp
     const RegionType region(indMin, size);
 
     using IteratorType = ImageRegionConstIteratorWithIndex<ImageType>;
-    IteratorType it = IteratorType(m_Image, region);
+    IteratorType it(m_Image, region);
     it.GoToBegin();
     IndexType  ind;
     PointType  pnt;
@@ -225,16 +223,25 @@ SpatialObjectToImageStatisticsCalculator<TInputImage, TInputSpatialObject, TSamp
   Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Image: " << m_Image << std::endl;
-  os << indent << "SpatialObject: " << m_SpatialObject << std::endl;
+
+  itkPrintSelfObjectMacro(Image);
+  itkPrintSelfObjectMacro(SpatialObject);
+
   os << indent << "Mean: " << m_Mean << std::endl;
-  os << indent << "Covariance Matrix: " << m_CovarianceMatrix << std::endl;
-  os << indent << "Sum: " << m_Sum << std::endl;
-  os << indent << "m_NumberOfPixels: " << m_NumberOfPixels << std::endl;
-  os << indent << "Internal Image Time: " << m_InternalImageTime << std::endl;
-  os << indent << "Internal Spatial Object Time: " << m_InternalSpatialObjectTime << std::endl;
+  os << indent << "Sum: " << static_cast<typename NumericTraits<AccumulateType>::PrintType>(m_Sum) << std::endl;
+  os << indent << "NumberOfPixels: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfPixels)
+     << std::endl;
+  os << indent << "CovarianceMatrix: " << m_CovarianceMatrix << std::endl;
   os << indent << "SampleDirection: " << m_SampleDirection << std::endl;
-  os << indent << "Sample: " << m_Sample << std::endl;
+  os << indent
+     << "InternalImageTime: " << static_cast<typename NumericTraits<ModifiedTimeType>::PrintType>(m_InternalImageTime)
+     << std::endl;
+  os << indent << "InternalSpatialObjectTime: "
+     << static_cast<typename NumericTraits<ModifiedTimeType>::PrintType>(m_InternalSpatialObjectTime) << std::endl;
+  os << indent << "ModifiedTime: " << static_cast<typename NumericTraits<TimeStamp>::PrintType>(m_ModifiedTime)
+     << std::endl;
+
+  itkPrintSelfObjectMacro(Sample);
 }
 
 } // end namespace itk

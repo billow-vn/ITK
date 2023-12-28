@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class StatisticsUniqueLabelMapFilter
+ * \class StatisticsUniqueLabelMapFilter
  * \brief Remove some pixels in the label object according to the value of
  * their statistics attribute to ensure that a pixel is not in multiple
  * objects.
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsUniqueLabelMapFilter, ShapeUniqueLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(StatisticsUniqueLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

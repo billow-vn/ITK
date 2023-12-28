@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AnchorErodeDilateImageFilter, KernelImageFilter);
+  itkOverrideGetNameOfClassMacro(AnchorErodeDilateImageFilter);
 
   /** Set/Get the boundary value. */
   itkSetMacro(Boundary, InputImagePixelType);
@@ -85,7 +85,7 @@ protected:
 
 
   // should be set by the meta filter
-  InputImagePixelType m_Boundary;
+  InputImagePixelType m_Boundary{};
 
 private:
   using BresType = BresenhamLine<Self::InputImageDimension>;

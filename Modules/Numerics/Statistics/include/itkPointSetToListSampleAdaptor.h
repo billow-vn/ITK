@@ -29,7 +29,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class PointSetToListSampleAdaptor
+ * \class PointSetToListSampleAdaptor
  *  \brief This class provides ListSample interface to ITK PointSet
  *
  * After calling SetPointSet(PointSet*) method to plug-in
@@ -56,7 +56,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetToListSampleAdaptor, ListSample);
+  itkOverrideGetNameOfClassMacro(PointSetToListSampleAdaptor);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -109,7 +109,7 @@ public:
   GetTotalFrequency() const override;
 
   /**
-   *\class ConstIterator
+   * \class ConstIterator
    * \ingroup ITKStatistics
    */
   class ConstIterator
@@ -182,7 +182,7 @@ public:
   };
 
   /**
-   *\class Iterator
+   * \class Iterator
    * \ingroup ITKStatistics
    */
   class Iterator : public ConstIterator
@@ -266,14 +266,14 @@ protected:
 
 private:
   /** the PointSet data source pointer */
-  PointSetConstPointer m_PointSet;
+  PointSetConstPointer m_PointSet{};
 
   /** the points container which will be actually used for storing
    * measurement vectors */
-  PointsContainerConstPointer m_PointsContainer;
+  PointsContainerConstPointer m_PointsContainer{};
 
   /** temporary points for conversions */
-  mutable PointType m_TempPoint;
+  mutable PointType m_TempPoint{};
 }; // end of class PointSetToListSampleAdaptor
 } // end of namespace Statistics
 } // end of namespace itk

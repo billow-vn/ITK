@@ -19,7 +19,7 @@
 
 namespace itk
 {
-KLMSegmentationBorder ::KLMSegmentationBorder()
+KLMSegmentationBorder::KLMSegmentationBorder()
 {
   m_Lambda = 0.0;
   m_Region1 = nullptr;
@@ -28,63 +28,78 @@ KLMSegmentationBorder ::KLMSegmentationBorder()
 
 KLMSegmentationBorder::~KLMSegmentationBorder() = default;
 
-/**
- * PrintSelf
- */
 void
 KLMSegmentationBorder::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Lambda  = " << m_Lambda << std::endl;
-  os << indent << "Region1 = " << m_Region1 << std::endl;
-  os << indent << "Region2 = " << m_Region2 << std::endl;
-} // end PrintSelf
+
+  os << indent << "Lambda: " << m_Lambda << std::endl;
+
+  os << indent << "Region1: ";
+  if (m_Region1 != nullptr)
+  {
+    os << m_Region1 << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+
+  os << indent << "Region2: ";
+  if (m_Region2 != nullptr)
+  {
+    os << m_Region2 << std::endl;
+  }
+  else
+  {
+    os << "(null)" << std::endl;
+  }
+}
 
 void
 KLMSegmentationBorder::SetRegion1(KLMSegmentationRegion * Region1)
 {
   m_Region1 = Region1;
-} // end SetRegion1
+}
 
 KLMSegmentationRegion *
 KLMSegmentationBorder::GetRegion1()
 {
   return m_Region1;
-} // end GetRegion2
+}
 
 void
 KLMSegmentationBorder::SetRegion2(KLMSegmentationRegion * Region2)
 {
   m_Region2 = Region2;
-} // end SetRegion2
+}
 
 KLMSegmentationRegion *
 KLMSegmentationBorder::GetRegion2()
 {
   return m_Region2;
-} // end GetRegion2
+}
 
 void
 KLMSegmentationBorder::EvaluateLambda()
 {
   m_Lambda = m_Region1->EnergyFunctional(m_Region2) / this->GetBorderLength();
-} // end EvaluateLambda()
+}
 
 void
 KLMSegmentationBorder::PrintBorderInfo()
 {
-  itkDebugMacro(<< "------------------------------");
-  itkDebugMacro(<< "Location      : " << this);
-  itkDebugMacro(<< "Lambda        : " << m_Lambda);
-  itkDebugMacro(<< "Region1       : " << this->GetRegion1());
-  itkDebugMacro(<< "Region 1 Label: " << (this->GetRegion1()->GetRegionLabel()));
-  itkDebugMacro(<< "Region2       : " << this->GetRegion2());
-  itkDebugMacro(<< "Region 2 Label: " << (this->GetRegion2()->GetRegionLabel()));
-  itkDebugMacro(<< "++++++++++++++++++++++++++++++");
-  itkDebugMacro(<< "------------------------------");
-  itkDebugMacro(<< "------------------------------");
+  itkDebugMacro("------------------------------");
+  itkDebugMacro("Location      : " << this);
+  itkDebugMacro("Lambda        : " << m_Lambda);
+  itkDebugMacro("Region1       : " << this->GetRegion1());
+  itkDebugMacro("Region 1 Label: " << (this->GetRegion1()->GetRegionLabel()));
+  itkDebugMacro("Region2       : " << this->GetRegion2());
+  itkDebugMacro("Region 2 Label: " << (this->GetRegion2()->GetRegionLabel()));
+  itkDebugMacro("++++++++++++++++++++++++++++++");
+  itkDebugMacro("------------------------------");
+  itkDebugMacro("------------------------------");
 
-  std::cout << "Location      : " << this << std::endl;
-  std::cout << "Lambda        : " << m_Lambda << std::endl;
+  std::cout << "Location      : " << this << std::endl << "Lambda        : " << m_Lambda << std::endl;
 }
 } // namespace itk

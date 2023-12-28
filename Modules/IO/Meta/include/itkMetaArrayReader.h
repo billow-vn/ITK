@@ -40,7 +40,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaArrayReader, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(MetaArrayReader);
 
   /** Set the filename. */
   itkSetStringMacro(FileName);
@@ -117,8 +117,8 @@ public:
    *  buffer into which the data was directly read (a copy does not occur).
    *  If _letVectorManageData is true, the buffer persists even after this
    *  MetaArrayReader is destroyed. Otherwise, the buffer (and therefore
-   *  the validity of the dat ain the Array) is destroyed when the
-   *  MetaArrayReader is dstroyed. */
+   *  the validity of the data in the Array) is destroyed when the
+   *  MetaArrayReader is destroyed. */
   template <typename TValue>
   void
   GetOutput(MET_ValueEnumType _metaElementType, Array<TValue> * _array, bool _letArrayManageData = true)
@@ -151,7 +151,7 @@ public:
     return false;
   }
 
-  /** Get an itkVectort.
+  /** Get an itkVector.
    *  Specify the MetaType of the elements of the itkVector and provide
    *  a pointer to the itkVector into which the data should be copied. */
   template <typename TValue, unsigned int VLength>
@@ -197,8 +197,8 @@ public:
    *  was directly read (a copy does not occur).
    *  If _letVectorManageData is true, the buffer persists even after this
    *  MetaArrayReader is destroyed. Otherwise, the buffer (and therefore
-   *  the validity of the dat ain the VariableLengthVector) is destroyed
-   *  when the MetaArrayReader is dstroyed. */
+   *  the validity of the data in the VariableLengthVector) is destroyed
+   *  when the MetaArrayReader is destroyed. */
   template <typename TValue>
   void
   GetOutput(MET_ValueEnumType              _metaElementType,
@@ -249,9 +249,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  MetaArray m_MetaArray;
+  MetaArray m_MetaArray{};
 
-  std::string m_FileName;
+  std::string m_FileName{};
 
   void * m_Buffer{ nullptr };
 };

@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class LabelSelectionLabelMapFilter
+ * \class LabelSelectionLabelMapFilter
  * \brief remove the objects according to the value of their attribute
  *
  * LabelSelectionLabelMapFilter removes the objects in a label collection image
@@ -86,7 +86,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelSelectionLabelMapFilter, AttributeSelectionLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(LabelSelectionLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

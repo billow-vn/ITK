@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class BinaryMedianImageFilter
+ * \class BinaryMedianImageFilter
  * \brief Applies a version of the median filter optimized for binary images.
  *
  * This filter was contributed by Bjorn Hanch Sollie after identifying that
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryMedianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryMedianImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;
@@ -137,10 +137,10 @@ protected:
 
 
 private:
-  InputSizeType m_Radius;
+  InputSizeType m_Radius{};
 
-  InputPixelType m_ForegroundValue;
-  InputPixelType m_BackgroundValue;
+  InputPixelType m_ForegroundValue{};
+  InputPixelType m_BackgroundValue{};
 };
 } // end namespace itk
 

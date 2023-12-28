@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class NrrdImageIOFactory
+ * \class NrrdImageIOFactory
  * \brief Create instances of NrrdImageIO objects using an object factory.
  * \ingroup ITKIONRRD
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NrrdImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(NrrdImageIOFactory);
 
   /** Register one factory of this type  */
   static void

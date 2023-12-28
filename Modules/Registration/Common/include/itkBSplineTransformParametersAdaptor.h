@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineTransformParametersAdaptor, TransformParametersAdaptor);
+  itkOverrideGetNameOfClassMacro(BSplineTransformParametersAdaptor);
 
   /** Typedefs associated with the transform */
   using TransformType = TTransform;
@@ -150,10 +150,10 @@ private:
   void
   UpdateRequiredFixedParameters();
 
-  MeshSizeType           m_RequiredTransformDomainMeshSize;
-  OriginType             m_RequiredTransformDomainOrigin;
-  DirectionType          m_RequiredTransformDomainDirection;
-  PhysicalDimensionsType m_RequiredTransformDomainPhysicalDimensions;
+  MeshSizeType           m_RequiredTransformDomainMeshSize{};
+  OriginType             m_RequiredTransformDomainOrigin{};
+  DirectionType          m_RequiredTransformDomainDirection{};
+  PhysicalDimensionsType m_RequiredTransformDomainPhysicalDimensions{};
 
 }; // class BSplineTransformParametersAdaptor
 } // namespace itk

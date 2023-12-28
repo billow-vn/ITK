@@ -42,13 +42,12 @@ LevelSetDomainPartitionImage<TImage>::PopulateListDomain()
   this->AllocateListDomain();
 
   const ListRegionType & region = this->m_ListDomain->GetLargestPossibleRegion();
-  ListIteratorType       lIt(this->m_ListDomain, region);
 
-  for (lIt.GoToBegin(); !lIt.IsAtEnd(); ++lIt)
+  for (ListIteratorType lIt(this->m_ListDomain, region); !lIt.IsAtEnd(); ++lIt)
   {
     ListIndexType      listIndex = lIt.GetIndex();
     IdentifierListType identifierList;
-    IdentifierType     i = NumericTraits<IdentifierType>::ZeroValue();
+    IdentifierType     i{};
     while (i < this->m_NumberOfLevelSetFunctions)
     {
       if (this->m_LevelSetDomainRegionVector[i].IsInside(listIndex))

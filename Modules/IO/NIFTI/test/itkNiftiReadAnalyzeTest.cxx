@@ -212,7 +212,7 @@ ReadImage(const std::string &                     fileName,
     catch (const itk::ExceptionObject & err)
     {
       std::cout << "Caught an exception: " << std::endl;
-      std::cout << err << " " << __FILE__ << " " << __LINE__ << std::endl;
+      std::cout << err << ' ' << __FILE__ << ' ' << __LINE__ << std::endl;
       throw;
     }
     catch (...)
@@ -277,7 +277,9 @@ itkNiftiAnalyzeContentsAndCoordinatesTest(char *                                
   catch (...)
   {
     if (analyze_mode == itk::NiftiImageIOEnums::Analyze75Flavor::AnalyzeReject)
+    {
       std::cerr << "Failure is expected" << std::endl << std::endl;
+    }
     return EXIT_FAILURE;
   }
 

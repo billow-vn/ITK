@@ -53,7 +53,7 @@ public:
 } // namespace Functor
 
 /**
- *\class AcosImageFilter
+ * \class AcosImageFilter
  * \brief Computes the inverse cosine of each pixel.
  *
  * This filter is templated over the pixel type of the input image
@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AcosImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(AcosImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

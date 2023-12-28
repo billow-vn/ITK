@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class IntermodesThresholdImageFilter
+ * \class IntermodesThresholdImageFilter
  * \brief Threshold an image using the Intermodes Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(IntermodesThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(IntermodesThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;
@@ -123,7 +123,7 @@ protected:
     Superclass::VerifyPreconditions();
     if (dynamic_cast<const CalculatorType *>(Superclass::GetCalculator()) == nullptr)
     {
-      itkExceptionMacro(<< "Invalid IntermodesCalculator.");
+      itkExceptionMacro("Invalid IntermodesCalculator.");
     }
   }
 

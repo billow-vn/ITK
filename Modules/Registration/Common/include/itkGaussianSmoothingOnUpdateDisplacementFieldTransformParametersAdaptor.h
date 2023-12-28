@@ -46,8 +46,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor,
-               DisplacementFieldTransformParametersAdaptor);
+  itkOverrideGetNameOfClassMacro(GaussianSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor);
 
   using TransformType = TTransform;
   using ScalarType = typename TransformType::ScalarType;
@@ -76,8 +75,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ScalarType m_GaussianSmoothingVarianceForTheUpdateField;
-  ScalarType m_GaussianSmoothingVarianceForTheTotalField;
+  ScalarType m_GaussianSmoothingVarianceForTheUpdateField{};
+  ScalarType m_GaussianSmoothingVarianceForTheTotalField{};
 
   ModifiedTimeType m_GaussianSmoothingVarianceForTheUpdateFieldSetTime{ 0 };
   ModifiedTimeType m_GaussianSmoothingVarianceForTheTotalFieldSetTime{ 0 };

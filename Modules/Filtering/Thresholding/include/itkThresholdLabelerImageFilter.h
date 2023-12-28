@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ThresholdLabelerImageFilter
+ * \class ThresholdLabelerImageFilter
  *
  * \brief Label an input image according to a set of thresholds.
  *
@@ -132,7 +132,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ThresholdLabelerImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(ThresholdLabelerImageFilter);
 
   /** Pixel types. */
   using InputPixelType = typename TInputImage::PixelType;
@@ -215,9 +215,9 @@ protected:
   BeforeThreadedGenerateData() override;
 
 private:
-  ThresholdVector     m_Thresholds;
-  RealThresholdVector m_RealThresholds;
-  OutputPixelType     m_LabelOffset;
+  ThresholdVector     m_Thresholds{};
+  RealThresholdVector m_RealThresholds{};
+  OutputPixelType     m_LabelOffset{};
 };
 } // end namespace itk
 

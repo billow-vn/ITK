@@ -48,7 +48,6 @@ SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>::GenerateData()
   this->ComputeCellParameters();
 }
 
-//
 template <typename TInputMesh, typename TOutputMesh>
 void
 SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>::Initialize()
@@ -246,7 +245,7 @@ SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>::ComputeCellParameters()
       outputMesh->AddEdge(firstNewIndex, secondNewIndex);
 
       // splitting cell
-      PointIdentifier      newPointIndex = NumericTraits<PointIdentifier>::ZeroValue();
+      PointIdentifier      newPointIndex{};
       auto *               polygon = new OutputPolygonType;
       InputCellAutoPointer newPolygonPointer1;
       newPolygonPointer1.TakeOwnership(polygon);
@@ -342,7 +341,7 @@ SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>::ModifyNeighborCells(Cel
     {
       m_NewSimplexCellPointer.TakeOwnership(new OutputPolygonType);
       InputPolygonPointIdIterator pointIt = nextCell->PointIdsBegin();
-      PointIdentifier             cnt = NumericTraits<PointIdentifier>::ZeroValue();
+      PointIdentifier             cnt{};
       PointIdentifier             first = *pointIt++;
       PointIdentifier             startId = first;
 
@@ -375,15 +374,22 @@ SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>::ModifyNeighborCells(Cel
   outputMesh->BuildCellLinks();
 }
 
-/* PrintSelf. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+
+  os << indent << "IdOffset: " << static_cast<typename NumericTraits<CellIdentifier>::PrintType>(m_IdOffset)
+     << std::endl;
   os << indent << "Threshold: " << m_Threshold << std::endl;
   os << indent << "SelectionMethod: " << m_SelectionMethod << std::endl;
   os << indent << "ModifiedCount: " << m_ModifiedCount << std::endl;
+
+  itkPrintSelfObjectMacro(Output);
+
+  // ToDo
+  // os << indent << "NewSimplexCellPointer: " << m_NewSimplexCellPointer << std::endl;
 }
 
 template <typename TInputMesh, typename TOutputMesh>

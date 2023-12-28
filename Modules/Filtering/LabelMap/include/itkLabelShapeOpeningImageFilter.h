@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class LabelShapeOpeningImageFilter
+ * \class LabelShapeOpeningImageFilter
  * \brief remove the objects according to the value of their shape attribute
  *
  * LabelShapeOpeningImageFilter removes the objects in a labeled image
@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelShapeOpeningImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelShapeOpeningImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -152,10 +152,10 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  double               m_Lambda;
-  bool                 m_ReverseOrdering;
-  AttributeType        m_Attribute;
+  OutputImagePixelType m_BackgroundValue{};
+  double               m_Lambda{};
+  bool                 m_ReverseOrdering{};
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

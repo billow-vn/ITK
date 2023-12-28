@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class AggregateLabelMapFilter
+ * \class AggregateLabelMapFilter
  * \brief Collapses all labels into the first label.
  *
  * This filter takes a label map as input and visits the pixels of all labels
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AggregateLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(AggregateLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

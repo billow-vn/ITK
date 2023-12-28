@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ForwardFFTImageFilter
+ * \class ForwardFFTImageFilter
  *
  * \brief Base class for forward Fast Fourier Transform.
  *
@@ -83,7 +83,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ForwardFFTImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ForwardFFTImageFilter);
 
   /** Customized object creation methods that support configuration-based
    * selection of FFT implementation.

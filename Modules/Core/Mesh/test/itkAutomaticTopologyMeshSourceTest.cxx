@@ -220,7 +220,7 @@ itkAutomaticTopologyMeshSourceTest(int, char *[])
     }
   }
 
-  std::cout << "\n" << mesh->GetNumberOfCells() << " cells:" << std::endl;
+  std::cout << '\n' << mesh->GetNumberOfCells() << " cells:" << std::endl;
   for (i = 0; i < mesh->GetNumberOfCells(); ++i)
   {
     using CellAutoPointer = MeshType::CellAutoPointer;
@@ -233,12 +233,12 @@ itkAutomaticTopologyMeshSourceTest(int, char *[])
       PointIdIterator pointsEnd = cell->PointIdsEnd();
       for (; pointIter != pointsEnd; ++pointIter)
       {
-        std::cout << *pointIter << " ";
+        std::cout << *pointIter << ' ';
       }
       std::cout << std::endl;
     }
   }
-  std::cout << "\n";
+  std::cout << '\n';
 
   for (i = 0; i < mesh->GetNumberOfCells(); ++i)
   {
@@ -257,25 +257,25 @@ itkAutomaticTopologyMeshSourceTest(int, char *[])
         std::cout << "Neighbors across vertex 0: ";
         for (const auto & neighborIter : cellSet)
         {
-          std::cout << neighborIter << " ";
+          std::cout << neighborIter << ' ';
         }
-        std::cout << "\n";
+        std::cout << '\n';
 
         mesh->GetCellBoundaryFeatureNeighbors(0, i, 1, &cellSet);
         std::cout << "Neighbors across vertex 1: ";
         for (const auto & neighborIter : cellSet)
         {
-          std::cout << neighborIter << " ";
+          std::cout << neighborIter << ' ';
         }
-        std::cout << "\n";
+        std::cout << '\n';
 
         mesh->GetCellNeighbors(i, &cellSet);
         std::cout << "Neighbors having edge as boundary: ";
         for (const auto neighborIter : cellSet)
         {
-          std::cout << neighborIter << " ";
+          std::cout << neighborIter << ' ';
         }
-        std::cout << "\n" << std::endl;
+        std::cout << '\n' << std::endl;
       }
     }
   }

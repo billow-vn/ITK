@@ -101,11 +101,11 @@ StatisticsImageFilter<TInputImage>::ThreadedStreamedGenerateData(const RegionTyp
 
   CompensatedSummation<RealType> sum = NumericTraits<RealType>::ZeroValue();
   CompensatedSummation<RealType> sumOfSquares = NumericTraits<RealType>::ZeroValue();
-  SizeValueType                  count = NumericTraits<SizeValueType>::ZeroValue();
+  SizeValueType                  count{};
   PixelType                      min = NumericTraits<PixelType>::max();
   PixelType                      max = NumericTraits<PixelType>::NonpositiveMin();
 
-  ImageScanlineConstIterator<TInputImage> it(this->GetInput(), regionForThread);
+  ImageScanlineConstIterator it(this->GetInput(), regionForThread);
 
   // do the work
   while (!it.IsAtEnd())
@@ -125,7 +125,7 @@ StatisticsImageFilter<TInputImage>::ThreadedStreamedGenerateData(const RegionTyp
     it.NextLine();
   }
 
-  std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+  const std::lock_guard<std::mutex> lockGuard(m_Mutex);
   m_ThreadSum += sum;
   m_SumOfSquares += sumOfSquares;
   m_Count += count;

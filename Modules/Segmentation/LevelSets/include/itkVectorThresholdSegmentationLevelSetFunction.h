@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(VectorThresholdSegmentationLevelSetFunction, SegmentationLevelSetFunction);
+  itkOverrideGetNameOfClassMacro(VectorThresholdSegmentationLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using typename Superclass::ImageType;
@@ -115,7 +115,7 @@ public:
     return m_Mahalanobis->GetCovariance();
   }
 
-  /** Set/Get the threshold value for the MahanalobisDistance */
+  /** Set/Get the threshold value for the MahalanobisDistance */
   void
   SetThreshold(ScalarValueType thr)
   {
@@ -169,8 +169,8 @@ protected:
     os << indent << "ThresholdValue: " << m_Threshold << std::endl;
   }
 
-  MahalanobisFunctionPointer m_Mahalanobis;
-  ScalarValueType            m_Threshold;
+  MahalanobisFunctionPointer m_Mahalanobis{};
+  ScalarValueType            m_Threshold{};
 };
 } // end namespace itk
 

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ProjectedIterativeDeconvolutionImageFilter
+ * \class ProjectedIterativeDeconvolutionImageFilter
  * \brief Mix-in class that adds a projection step after each
  * iteration.
  *
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ProjectedIterativeDeconvolutionImageFilter, IterativeDeconvolutionImageFilter);
+  itkOverrideGetNameOfClassMacro(ProjectedIterativeDeconvolutionImageFilter);
 
 protected:
   ProjectedIterativeDeconvolutionImageFilter();
@@ -85,7 +85,7 @@ protected:
 private:
   using ProjectionFilterType = ThresholdImageFilter<InternalImageType>;
 
-  typename ProjectionFilterType::Pointer m_ProjectionFilter;
+  typename ProjectionFilterType::Pointer m_ProjectionFilter{};
 };
 } // namespace itk
 

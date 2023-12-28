@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BinaryThresholdImageFilter
+ * \class BinaryThresholdImageFilter
  *
  * \brief Binarize an input image by thresholding.
  *
@@ -150,7 +150,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryThresholdImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryThresholdImageFilter);
 
   /** Pixel types. */
   using InputPixelType = typename TInputImage::PixelType;
@@ -229,8 +229,8 @@ protected:
   BeforeThreadedGenerateData() override;
 
 private:
-  OutputPixelType m_InsideValue;
-  OutputPixelType m_OutsideValue;
+  OutputPixelType m_InsideValue{};
+  OutputPixelType m_OutsideValue{};
 };
 } // end namespace itk
 

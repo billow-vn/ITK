@@ -34,7 +34,16 @@ ImageGaussianModelEstimator<TInputImage, TMembershipFunction, TTrainingImage>::P
 
   os << indent << "NumberOfSamples: " << m_NumberOfSamples << std::endl;
   os << indent << "Means: " << m_Means << std::endl;
-  os << indent << "Covariance: " << m_Covariance.get() << std::endl;
+
+  os << indent << "Covariance: ";
+  if (m_Covariance != nullptr)
+  {
+    os << *m_Covariance.get() << std::endl;
+  }
+  else
+  {
+    os << "(null): " << std::endl;
+  }
 
   itkPrintSelfObjectMacro(TrainingImage);
 }
@@ -231,7 +240,7 @@ ImageGaussianModelEstimator<TInputImage, TMembershipFunction, TTrainingImage>::E
     }
     m_Covariance[classIndex] -= tempMeanSq;
 
-    // Fill the rest of the covairance matrix and make it symmetric
+    // Fill the rest of the covariance matrix and make it symmetric
     if (m_NumberOfSamples[classIndex][0] > 0)
     {
       auto lastInX = static_cast<unsigned int>(VectorDimension - 1);

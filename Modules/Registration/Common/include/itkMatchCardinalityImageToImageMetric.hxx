@@ -20,49 +20,42 @@
 
 #include "itkMath.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedImage, typename TMovingImage>
 MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::MatchCardinalityImageToImageMetric()
 {
   this->SetComputeGradient(false); // don't use the default gradients
 }
 
-/*
- * Get the match Measure
- */
 template <typename TFixedImage, typename TMovingImage>
-typename MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::GetValue(
-  const TransformParametersType & parameters) const
+  const TransformParametersType & parameters) const -> MeasureType
 {
   return const_cast<Self *>(this)->GetNonconstValue(parameters);
 }
 
-/**
- * Get the match Measure (non const version. spawns threads).
- */
 template <typename TFixedImage, typename TMovingImage>
-typename MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::GetNonconstValue(
-  const TransformParametersType & parameters)
+  const TransformParametersType & parameters) -> MeasureType
 {
   itkDebugMacro("GetValue( " << parameters << " ) ");
 
   FixedImageConstPointer fixedImage = this->m_FixedImage;
   if (!fixedImage)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   // Initialize some variables before spawning threads
   //
   //
-  MeasureType measure = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType measure{};
   this->m_NumberOfPixelsCounted = 0;
 
   m_ThreadMatches.clear();
@@ -106,7 +99,7 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::GetNonconstValue(
 
   if (!this->m_NumberOfPixelsCounted)
   {
-    itkExceptionMacro(<< "All the points mapped to outside of the moving image");
+    itkExceptionMacro("All the points mapped to outside of the moving image");
   }
   else
   {
@@ -126,14 +119,14 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::ThreadedGetValue(
 
   if (!fixedImage)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   using FixedIteratorType = ImageRegionConstIteratorWithIndex<FixedImageType>;
   typename FixedImageType::IndexType index;
   FixedIteratorType                  ti(fixedImage, regionForThread);
 
-  MeasureType   threadMeasure = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType   threadMeasure{};
   SizeValueType threadNumberOfPixelsCounted = 0;
 
   while (!ti.IsAtEnd())
@@ -183,7 +176,6 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::ThreadedGetValue(
   m_ThreadCounts[threadId] = threadNumberOfPixelsCounted;
 }
 
-//----------------------------------------------------------------------------
 template <typename TFixedImage, typename TMovingImage>
 ThreadIdType
 MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::SplitFixedRegion(ThreadIdType           i,
@@ -241,9 +233,6 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::SplitFixedRegion(
   return maxThreadIdUsed + 1;
 }
 
-// Callback routine used by the threading library. This routine just calls
-// the ThreadedGenerateData method after setting the correct region for this
-// thread.
 template <typename TFixedImage, typename TMovingImage>
 ITK_THREAD_RETURN_FUNCTION_CALL_CONVENTION
 MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::ThreaderCallback(void * arg)
@@ -267,7 +256,7 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::ThreaderCallback(
   }
   // else
   //   {
-  //   otherwise don't use this thread. Sometimes the threads dont
+  //   otherwise don't use this thread. Sometimes the threads don't
   //   break up very well and it is just as efficient to leave a
   //   few threads idle.
   //   }
@@ -275,15 +264,20 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::ThreaderCallback(
   return ITK_THREAD_RETURN_DEFAULT_VALUE;
 }
 
-/**
- * PrintSelf
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
+
   os << indent << "MeasureMatches: " << (m_MeasureMatches ? "On" : "Off") << std::endl;
+
+  os << indent << "ThreadMatches: " << m_ThreadMatches << std::endl;
+  os << indent << "ThreadCounts: " << m_ThreadCounts << std::endl;
+
+  itkPrintSelfObjectMacro(Threader);
 }
 } // end namespace itk
 

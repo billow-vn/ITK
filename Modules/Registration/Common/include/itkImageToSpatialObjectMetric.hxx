@@ -21,7 +21,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <typename TFixedImage, typename TMovingSpatialObject>
 ImageToSpatialObjectMetric<TFixedImage, TMovingSpatialObject>::ImageToSpatialObjectMetric()
 
@@ -32,21 +32,16 @@ ImageToSpatialObjectMetric<TFixedImage, TMovingSpatialObject>::ImageToSpatialObj
   m_Interpolator = nullptr;        // has to be provided by the user.
 }
 
-/** Return the number of parameters required by the Transform */
 template <typename TFixedImage, typename TMovingSpatialObject>
 unsigned int
 ImageToSpatialObjectMetric<TFixedImage, TMovingSpatialObject>::GetNumberOfParameters() const
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
   return m_Transform->GetNumberOfParameters();
 }
-
-/**
- * Initialize
- */
 
 template <typename TFixedImage, typename TMovingSpatialObject>
 void
@@ -54,22 +49,22 @@ ImageToSpatialObjectMetric<TFixedImage, TMovingSpatialObject>::Initialize()
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
 
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator is not present");
+    itkExceptionMacro("Interpolator is not present");
   }
 
   if (!m_MovingSpatialObject)
   {
-    itkExceptionMacro(<< "MovingSpatialObject is not present");
+    itkExceptionMacro("MovingSpatialObject is not present");
   }
 
   if (!m_FixedImage)
   {
-    itkExceptionMacro(<< "FixedImage is not present");
+    itkExceptionMacro("FixedImage is not present");
   }
 
   // If the image is provided by a source, update the source.
@@ -82,17 +77,24 @@ ImageToSpatialObjectMetric<TFixedImage, TMovingSpatialObject>::Initialize()
   this->InvokeEvent(InitializeEvent());
 }
 
-/** PrintSelf */
 template <typename TFixedImage, typename TMovingSpatialObject>
 void
 ImageToSpatialObjectMetric<TFixedImage, TMovingSpatialObject>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Moving Spatial Object: " << m_MovingSpatialObject.GetPointer() << std::endl;
-  os << indent << "Fixed  Image: " << m_FixedImage.GetPointer() << std::endl;
-  os << indent << "Transform:    " << m_Transform.GetPointer() << std::endl;
-  os << indent << "Interpolator: " << m_Interpolator.GetPointer() << std::endl;
-  os << indent << "Last Transform parameters = " << m_LastTransformParameters << std::endl;
+
+
+  os << indent << "MatchMeasure: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_MatchMeasure)
+     << std::endl;
+  os << indent << "MatchMeasureDerivatives: " << m_MatchMeasureDerivatives << std::endl;
+
+  itkPrintSelfObjectMacro(Transform);
+  itkPrintSelfObjectMacro(Interpolator);
+
+  itkPrintSelfObjectMacro(MovingSpatialObject);
+  itkPrintSelfObjectMacro(FixedImage);
+
+  os << indent << "LastTransformParameters: " << m_LastTransformParameters << std::endl;
 }
 } // end namespace itk
 

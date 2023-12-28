@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class FastMarchingExtensionImageFilter
+ * \class FastMarchingExtensionImageFilter
  * \brief Extend auxiliary variables smoothly using Fast Marching.
  *
  * Fast marching can be used to extend auxiliary variables smoothly
@@ -61,7 +61,7 @@ class ITK_TEMPLATE_EXPORT FastMarchingExtensionImageFilter : public FastMarching
 public:
   ITK_DISALLOW_COPY_AND_MOVE(FastMarchingExtensionImageFilter);
 
-  /** Standard class typdedefs. */
+  /** Standard class typedefs. */
   using Self = FastMarchingExtensionImageFilter;
   using Superclass = FastMarchingImageFilter<TLevelSet, TSpeedImage>;
   using Pointer = SmartPointer<Self>;
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingExtensionImageFilter, FastMarchingImageFilter);
+  itkOverrideGetNameOfClassMacro(FastMarchingExtensionImageFilter);
 
   /** Inherited type alias. */
   using typename Superclass::LevelSetType;
@@ -153,10 +153,10 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
 private:
-  typename AuxValueContainer::Pointer m_AuxAliveValues;
-  typename AuxValueContainer::Pointer m_AuxTrialValues;
+  typename AuxValueContainer::Pointer m_AuxAliveValues{};
+  typename AuxValueContainer::Pointer m_AuxTrialValues{};
 
-  AuxImageType * m_AuxImages[AuxDimension];
+  AuxImageType * m_AuxImages[AuxDimension]{};
 };
 } // namespace itk
 

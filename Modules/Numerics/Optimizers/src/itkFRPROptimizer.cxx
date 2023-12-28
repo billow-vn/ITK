@@ -22,7 +22,7 @@ namespace itk
 {
 const double FRPR_TINY = 1e-20;
 
-FRPROptimizer ::FRPROptimizer()
+FRPROptimizer::FRPROptimizer()
 {
   m_UseUnitLengthGradient = false;
   m_OptimizationType = OptimizationEnum::PolakRibiere;
@@ -200,37 +200,27 @@ FRPROptimizer::StartOptimization()
   this->InvokeEvent(EndEvent());
 }
 
-/**
- *
- */
 void
 FRPROptimizer::SetToPolakRibiere()
 {
   m_OptimizationType = OptimizationEnum::PolakRibiere;
 }
 
-/**
- *
- */
 void
 FRPROptimizer::SetToFletchReeves()
 {
   m_OptimizationType = OptimizationEnum::FletchReeves;
 }
 
-/**
- *
- */
 void
 FRPROptimizer::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Optimization Type = " << m_OptimizationType << std::endl;
-  os << indent << "0=FletchReeves, 1=PolakRibiere" << std::endl;
-  os << indent << "Use unit length gradient = " << m_UseUnitLengthGradient << std::endl;
+
+  os << indent << "OptimizationType: " << m_OptimizationType << std::endl;
+  os << indent << "UseUnitLengthGradient: " << (m_UseUnitLengthGradient ? "On" : "Off") << std::endl;
 }
 
-/** Print enum values */
 std::ostream &
 operator<<(std::ostream & out, const FRPROptimizerEnums::Optimization value)
 {

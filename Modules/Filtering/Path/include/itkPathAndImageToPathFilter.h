@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class PathAndImageToPathFilter
+ * \class PathAndImageToPathFilter
  * \brief Base class for filters that take both a path and an image as input and produce a path as output.
  *
  * This class is the base class for filters that take both a path and an image
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathAndImageToPathFilter, PathToPathFilter);
+  itkOverrideGetNameOfClassMacro(PathAndImageToPathFilter);
 
   /** Some convenient type alias. */
   using InputPathType = TInputPath;

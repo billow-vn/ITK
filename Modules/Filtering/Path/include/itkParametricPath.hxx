@@ -22,9 +22,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <unsigned int VDimension>
 ParametricPath<VDimension>::ParametricPath()
 {
@@ -81,7 +79,7 @@ ParametricPath<VDimension>::IncrementInput(InputType & input) const -> OffsetTyp
   {
     if (iterationCount++ > 10000)
     {
-      itkExceptionMacro(<< "Too many iterations");
+      itkExceptionMacro("Too many iterations");
     }
 
     nextImageIndex = this->EvaluateToIndex(input + inputStepSize);
@@ -137,7 +135,10 @@ void
 ParametricPath<VDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "DefaultInputSize: " << m_DefaultInputStepSize << std::endl;
+
+  os << indent
+     << "DefaultInputStepSize: " << static_cast<typename NumericTraits<InputType>::PrintType>(m_DefaultInputStepSize)
+     << std::endl;
 }
 } // namespace itk
 

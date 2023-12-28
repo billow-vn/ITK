@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class VectorInterpolateImageFunction
+ * \class VectorInterpolateImageFunction
  * \brief Base class for all vector image interpolators.
  *
  * VectorInterpolateImageFunction is the base for all ImageFunctions that
@@ -65,7 +65,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorInterpolateImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(VectorInterpolateImageFunction);
 
   /** InputImageType type alias support */
   using typename Superclass::InputImageType;
@@ -137,11 +137,6 @@ public:
 protected:
   VectorInterpolateImageFunction() = default;
   ~VectorInterpolateImageFunction() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
 };
 } // end namespace itk
 

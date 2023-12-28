@@ -52,7 +52,7 @@ extern "C"
                                                           1,
                                                           const_cast<char *>("LSM Private Tag") } };
 
-    TIFFMergeFieldInfo(tiff, xtiffFieldInfo, sizeof(xtiffFieldInfo) / sizeof(xtiffFieldInfo[0]));
+    TIFFMergeFieldInfo(tiff, xtiffFieldInfo, std::size(xtiffFieldInfo));
   }
 }
 
@@ -123,14 +123,14 @@ LSMImageIO::CanReadFile(const char * filename)
 
   if (fname.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 
 
   if (!this->HasSupportedReadExtension(filename))
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -261,7 +261,7 @@ LSMImageIO::Write(const void * buffer)
       break;
 
     default:
-      itkExceptionMacro(<< "TIFF supports unsigned char and unsigned short");
+      itkExceptionMacro("TIFF supports unsigned char and unsigned short");
   }
 
   uint16_t predictor;
@@ -269,7 +269,7 @@ LSMImageIO::Write(const void * buffer)
   TIFF * tif = TIFFOpen(m_FileName.c_str(), "w");
   if (!tif)
   {
-    itkDebugMacro(<< "Returning");
+    itkDebugMacro("Returning");
     return;
   }
 
@@ -291,7 +291,7 @@ LSMImageIO::Write(const void * buffer)
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     char zeiss[TIF_CZ_LSMINFO_SIZE];
     FillZeissStruct(zeiss);
-    unsigned int iCount = sizeof(zeiss) / sizeof(zeiss[0]);
+    constexpr unsigned int iCount = std::size(zeiss);
     // Zeiss field is only on the first TIFF image
     if (page == 0)
     {
@@ -354,7 +354,7 @@ LSMImageIO::Write(const void * buffer)
     {
       predictor = 2;
       TIFFSetField(tif, TIFFTAG_PREDICTOR, predictor);
-      itkDebugMacro(<< "LZW compression is patented outside US so it is disabled");
+      itkDebugMacro("LZW compression is patented outside US so it is disabled");
     }
     else if (compression == COMPRESSION_DEFLATE)
     {
@@ -387,7 +387,7 @@ LSMImageIO::Write(const void * buffer)
         rowLength = sizeof(unsigned short);
         break;
       default:
-        itkExceptionMacro(<< "TIFF supports unsigned char and unsigned short");
+        itkExceptionMacro("TIFF supports unsigned char and unsigned short");
     }
 
     rowLength *= this->GetNumberOfComponents();
@@ -398,7 +398,7 @@ LSMImageIO::Write(const void * buffer)
     {
       if (TIFFWriteScanline(tif, const_cast<unsigned char *>(outPtr), row, 0) < 0)
       {
-        itkExceptionMacro(<< "TIFFImageIO: error out of disk space");
+        itkExceptionMacro("TIFFImageIO: error out of disk space");
       }
       outPtr += rowLength;
       ++row;

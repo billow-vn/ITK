@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class AttributeRelabelLabelMapFilter
+ * \class AttributeRelabelLabelMapFilter
  * \brief relabel objects according to their shape attributes
  *
  * AttributeRelabelLabelMapFilter relabel a label map according to the
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributeRelabelLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(AttributeRelabelLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -137,7 +137,7 @@ protected:
   };
 
 private:
-  bool m_ReverseOrdering;
+  bool m_ReverseOrdering{};
 
 }; // end of class
 

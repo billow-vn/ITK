@@ -32,14 +32,14 @@
 
 namespace itk
 {
-/**\class TransformBaseTemplateEnums
+/** \class TransformBaseTemplateEnums
  * \brief Contains all enum classes used by TransformBaseTemplate class.
  * \ingroup ITKTransform
  */
 class TransformBaseTemplateEnums
 {
 public:
-  /**\class TransformCategory
+  /** \class TransformCategory
    * \ingroup ITKTransform
    * */
   enum class TransformCategory : uint8_t
@@ -55,7 +55,7 @@ public:
 // Define how to print enumeration
 extern ITKTransform_EXPORT std::ostream &
                            operator<<(std::ostream & out, const TransformBaseTemplateEnums::TransformCategory value);
-/** \class itkTransformBaseTemplate
+/** \class TransformBaseTemplate
  *
  * This class is an abstract class to represent a spatial transform.
  *
@@ -84,7 +84,7 @@ public:
   using FixedParametersType = OptimizerParameters<FixedParametersValueType>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformBaseTemplate, Object);
+  itkOverrideGetNameOfClassMacro(TransformBaseTemplate);
 
   /** The number of parameters can potentially be very large,
    *  therefore we use here a large capacity integer. */

@@ -28,7 +28,7 @@ namespace itk
  * \class ConstSparseFieldLayerIterator
  * \brief Used to iterate through an itkSparseFieldLayer.
  *
- *  This class is modelled on the STL Forward Iterator concept, and is used to
+ *  This class is modeled on the STL Forward Iterator concept, and is used to
  *  iterate through an itkSparseFieldLayer.
  * \ingroup ITKCommon
  */
@@ -173,7 +173,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SparseFieldLayer, Object);
+  itkOverrideGetNameOfClassMacro(SparseFieldLayer);
 
   /** Type of node stored in the linked list. */
   using NodeType = TNodeType;
@@ -304,8 +304,8 @@ protected:
 private:
   /** The anchor node of the list.  m_HeadNode->Next is the first node in the
    *  list. If m_HeadNode->Next == m_HeadNode, then the list is empty. */
-  NodeType *   m_HeadNode;
-  unsigned int m_Size;
+  NodeType *   m_HeadNode{};
+  unsigned int m_Size{};
 };
 } // end namespace itk
 

@@ -90,7 +90,7 @@ public:
       std::cout << "\nDomain partition per thread:" << std::endl;
       for (itk::ThreadIdType i = 0; i < m_DomainInThreadedExecution.size(); ++i)
       {
-        std::cout << "ThreadId: " << i << "\t" << m_DomainInThreadedExecution[i][0] << " "
+        std::cout << "ThreadId: " << i << '\t' << m_DomainInThreadedExecution[i][0] << ' '
                   << m_DomainInThreadedExecution[i][1] << std::endl;
       }
       std::cout << std::endl;
@@ -181,7 +181,7 @@ ThreadedIteratorRangePartitionerRunTest(
     if (i == 0 && subRange[0] != (fullDomain.Begin()).Index())
     {
       std::cerr << "Error: subRange[0][0] should be " << (fullDomain.Begin()).Index() << ", but it's " << subRange[0]
-                << ".";
+                << '.';
       return EXIT_FAILURE;
     }
 
@@ -191,7 +191,7 @@ ThreadedIteratorRangePartitionerRunTest(
     --fullIt;
     if (i == numberOfThreads - 1 && subRange[1] != fullIt.Index())
     {
-      std::cerr << "Error: subRange[N-1][1] should be " << fullIt.Index() << ", but it's " << subRange[1] << ".";
+      std::cerr << "Error: subRange[N-1][1] should be " << fullIt.Index() << ", but it's " << subRange[1] << '.';
       return EXIT_FAILURE;
     }
     /* Check that the sub-range endings and beginnings are continuous */
@@ -313,7 +313,7 @@ itkThreadedIteratorRangePartitionerTest3(int, char *[])
     if (domainThreader->GetNumberOfWorkUnitsUsed() != maxNumberOfThreads)
     {
       std::cerr << "Error: Expected to use only " << maxNumberOfThreads << "threads, but used "
-                << domainThreader->GetNumberOfWorkUnitsUsed() << "." << std::endl;
+                << domainThreader->GetNumberOfWorkUnitsUsed() << '.' << std::endl;
     }
   }
   else

@@ -31,7 +31,7 @@ namespace itk
 {
 
 /**
- *\class ObjectToObjectMetric
+ * \class ObjectToObjectMetric
  * \brief Computes similarity between regions of two objects.
  *
  * This class is templated over the dimensionality of the two input objects.
@@ -48,7 +48,7 @@ namespace itk
  *
  * Similarity is evaluated using fixed and moving transforms.
  * Both transforms are initialized to an IdentityTransform, and can be
- * set by the user using SetFixedTranform() and SetMovingTransform().
+ * set by the user using SetFixedTransform() and SetMovingTransform().
  *
  * Virtual Domain
  *
@@ -101,7 +101,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ObjectToObjectMetric, ObjectToObjectMetricBaseTemplate);
+  itkOverrideGetNameOfClassMacro(ObjectToObjectMetric);
 
   /** Type used for representing object components  */
   using CoordinateRepresentationType = TParametersValueType;
@@ -357,14 +357,14 @@ protected:
   VerifyNumberOfValidPoints(MeasureType & value, DerivativeType & derivative) const;
 
   /** Transforms */
-  FixedTransformPointer  m_FixedTransform;
-  MovingTransformPointer m_MovingTransform;
+  FixedTransformPointer  m_FixedTransform{};
+  MovingTransformPointer m_MovingTransform{};
 
-  VirtualImagePointer m_VirtualImage;
+  VirtualImagePointer m_VirtualImage{};
 
   /** Flag that is set when user provides a virtual domain, either via
    * SetVirtualDomain() or SetVirtualDomainFromImage(). */
-  bool m_UserHasSetVirtualDomain;
+  bool m_UserHasSetVirtualDomain{};
 
   /** Store the number of points used during most recent value and derivative
    * calculation.

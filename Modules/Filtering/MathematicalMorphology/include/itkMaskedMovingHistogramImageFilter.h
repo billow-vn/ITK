@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MaskedMovingHistogramImageFilter, MovingHistogramImageFilter);
+  itkOverrideGetNameOfClassMacro(MaskedMovingHistogramImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -145,7 +145,7 @@ public:
   itkGetConstMacro(GenerateOutputMask, bool);
   itkBooleanMacro(GenerateOutputMask);
 
-  /** ConfigurewHistogram can be used to configure the histogram. The default version just do nothing. */
+  /** ConfigureHistogram can be used to configure the histogram. The default version just does nothing. */
   virtual void
   ConfigureHistogram(THistogram &)
   {}
@@ -173,13 +173,13 @@ protected:
                 const IndexType        currentIdx);
 
 private:
-  bool m_GenerateOutputMask;
+  bool m_GenerateOutputMask{};
 
-  OutputPixelType m_FillValue;
+  OutputPixelType m_FillValue{};
 
-  MaskPixelType m_MaskValue;
+  MaskPixelType m_MaskValue{};
 
-  MaskPixelType m_BackgroundMaskValue;
+  MaskPixelType m_BackgroundMaskValue{};
 }; // end of class
 } // end namespace itk
 

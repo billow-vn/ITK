@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class FourierSeriesPath
+ * \class FourierSeriesPath
  * \brief  Represent a closed path through ND Space by its frequency components
  *
  * This class is intended to represent closed parametric paths through an image
@@ -68,7 +68,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FourierSeriesPath, ParametricPath);
+  itkOverrideGetNameOfClassMacro(FourierSeriesPath);
 
   /** Input type */
   using typename Superclass::InputType;
@@ -123,8 +123,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  CoefficientsPointer m_CosCoefficients;
-  CoefficientsPointer m_SinCoefficients;
+  CoefficientsPointer m_CosCoefficients{};
+  CoefficientsPointer m_SinCoefficients{};
 };
 } // end namespace itk
 

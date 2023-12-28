@@ -111,7 +111,7 @@ FastMarchingImageFilter<TLevelSet, TSpeedImage>::EnlargeOutputRequestedRegion(Da
   else
   {
     // Pointer could not be cast to TLevelSet *
-    itkWarningMacro(<< "itk::FastMarchingImageFilter"
+    itkWarningMacro("itk::FastMarchingImageFilter"
                     << "::EnlargeOutputRequestedRegion cannot cast " << typeid(output).name() << " to "
                     << typeid(TLevelSet *).name());
   }
@@ -141,17 +141,12 @@ FastMarchingImageFilter<TLevelSet, TSpeedImage>::Initialize(LevelSetImageType * 
   // set all output value to infinity
   using OutputIterator = ImageRegionIterator<LevelSetImageType>;
 
-  OutputIterator outIt(output, output->GetBufferedRegion());
-
   PixelType outputPixel;
   outputPixel = m_LargeValue;
 
-  outIt.GoToBegin();
-
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(output, output->GetBufferedRegion()); !outIt.IsAtEnd(); ++outIt)
   {
     outIt.Set(outputPixel);
-    ++outIt;
   }
 
   // set all points type to FarPoint
@@ -159,8 +154,6 @@ FastMarchingImageFilter<TLevelSet, TSpeedImage>::Initialize(LevelSetImageType * 
 
   LabelIterator typeIt(m_LabelImage, m_LabelImage->GetBufferedRegion());
 
-
-  typeIt.GoToBegin();
   while (!typeIt.IsAtEnd())
   {
     typeIt.Set(LabelEnum::FarPoint);

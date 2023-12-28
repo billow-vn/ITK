@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MembershipFunctionBase
+ * \class MembershipFunctionBase
  * \brief MembershipFunctionBase defines common interfaces
  * for membership functions.
  *
@@ -67,7 +67,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(MembershipFunctionBase, FunctionBase);
+  itkOverrideGetNameOfClassMacro(MembershipFunctionBase);
 
   /** MeasurementVector type alias support */
   using MeasurementVectorType = TVector;
@@ -92,9 +92,7 @@ public:
   SetMeasurementVectorSize(MeasurementVectorSizeType s)
   {
     // Test whether the vector type is resizable or not
-    MeasurementVectorType m;
-
-    if (MeasurementVectorTraits::IsResizable(m))
+    if (MeasurementVectorTraits::IsResizable<MeasurementVectorType>({}))
     {
       // then this is a resizable vector type
       //
@@ -112,8 +110,7 @@ public:
     else
     {
       // If this is a non-resizable vector type
-      MeasurementVectorType     m3;
-      MeasurementVectorSizeType defaultLength = NumericTraits<MeasurementVectorType>::GetLength(m3);
+      MeasurementVectorSizeType defaultLength = NumericTraits<MeasurementVectorType>::GetLength({});
       // and the new length is different from the default one, then throw an
       // exception
       if (defaultLength != s)
@@ -142,7 +139,7 @@ protected:
   }
 
 private:
-  MeasurementVectorSizeType m_MeasurementVectorSize;
+  MeasurementVectorSizeType m_MeasurementVectorSize{};
 
 }; // end of class
 } // end of namespace Statistics

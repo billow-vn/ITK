@@ -41,6 +41,7 @@
 #include "itkFFTWComplexToComplexFFTImageFilter.h"
 #include "itkFFTWForwardFFTImageFilter.h"
 #include "itkFFTWInverseFFTImageFilter.h"
+#include "itkTestingMacros.h"
 
 template <typename TPixel, unsigned int VDimension>
 int
@@ -81,15 +82,8 @@ transformImage(const char * inputImageFileName, const char * outputImageFileName
   writer->SetFileName(outputImageFileName);
   writer->SetInput(inverseFilter->GetOutput());
 
-  try
-  {
-    writer->Update();
-  }
-  catch (const itk::ExceptionObject & error)
-  {
-    std::cerr << error << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
+
 
   return EXIT_SUCCESS;
 }
@@ -99,7 +93,9 @@ itkFFTWComplexToComplexFFTImageFilterTest(int argc, char * argv[])
 {
   if (argc < 4)
   {
-    std::cerr << "Usage: " << argv[0] << " <InputImage> <OutputImage> <float|double>" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv);
+    std::cerr << " InputImage OutputImage <float|double>" << std::endl;
     return EXIT_FAILURE;
   }
   const char *      inputImageFileName = argv[1];
@@ -119,10 +115,8 @@ itkFFTWComplexToComplexFFTImageFilterTest(int argc, char * argv[])
 #ifdef ITK_USE_FFTWF
       case 2:
         return transformImage<float, 2>(inputImageFileName, outputImageFileName);
-        break;
       case 3:
         return transformImage<float, 3>(inputImageFileName, outputImageFileName);
-        break;
 #endif
       default:
         std::cerr << "Unknown image dimension." << std::endl;
@@ -137,10 +131,8 @@ itkFFTWComplexToComplexFFTImageFilterTest(int argc, char * argv[])
 #ifdef ITK_USE_FFTWD
       case 2:
         return transformImage<double, 2>(inputImageFileName, outputImageFileName);
-        break;
       case 3:
         return transformImage<double, 3>(inputImageFileName, outputImageFileName);
-        break;
 #endif
       default:
         std::cerr << "Unknown image dimension." << std::endl;
@@ -155,5 +147,6 @@ itkFFTWComplexToComplexFFTImageFilterTest(int argc, char * argv[])
   }
 
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_FAILURE;
 }

@@ -23,7 +23,8 @@
 
 namespace itk
 {
-/* Constant definitions for functions */
+
+// Constant definitions for functions
 namespace Function
 {
 template <unsigned int VRadius, typename TInput, typename TOutput>
@@ -44,7 +45,6 @@ const double BlackmanWindowFunction<VRadius, TInput, TOutput>::m_Factor1 = itk::
 template <unsigned int VRadius, typename TInput, typename TOutput>
 const double BlackmanWindowFunction<VRadius, TInput, TOutput>::m_Factor2 = 2.0 * itk::Math::pi / VRadius;
 } // end namespace Function
-
 
 template <typename TInputImage,
           unsigned int VRadius,
@@ -68,7 +68,7 @@ WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunction, TBou
   radius.Fill(VRadius);
 
   // Initialize the neighborhood
-  IteratorType it = IteratorType(radius, image, image->GetBufferedRegion());
+  IteratorType it(radius, image, image->GetBufferedRegion());
 
   // Compute the offset tables (we ignore all the zero indices
   // in the neighborhood)
@@ -108,7 +108,6 @@ WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunction, TBou
   }
 }
 
-/** PrintSelf */
 template <typename TInputImage,
           unsigned int VRadius,
           typename TWindowFunction,
@@ -119,19 +118,20 @@ WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunction, TBou
   std::ostream & os,
   Indent         indent) const
 {
-  this->Superclass::PrintSelf(os, indent);
+  Superclass::PrintSelf(os, indent);
+
+  os << indent << "OffsetTable: " << m_OffsetTable << std::endl;
+  os << indent << "WeightOffsetTable: " << m_WeightOffsetTable << std::endl;
 }
 
-/** Evaluate at image index position */
 template <typename TInputImage,
           unsigned int VRadius,
           typename TWindowFunction,
           typename TBoundaryCondition,
           typename TCoordRep>
-typename WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunction, TBoundaryCondition, TCoordRep>::
-  OutputType
-  WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunction, TBoundaryCondition, TCoordRep>::
-    EvaluateAtContinuousIndex(const ContinuousIndexType & index) const
+auto
+WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunction, TBoundaryCondition, TCoordRep>::
+  EvaluateAtContinuousIndex(const ContinuousIndexType & index) const -> OutputType
 {
   IndexType baseIndex;
   double    distance[ImageDimension];
@@ -144,12 +144,10 @@ typename WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunct
     distance[dim] = index[dim] - static_cast<double>(baseIndex[dim]);
   }
 
-  // cout << "Sampling at index " << index << " discrete " << baseIndex << endl;
-
   // Position the neighborhood at the index of interest
   Size<ImageDimension> radius;
   radius.Fill(VRadius);
-  IteratorType nit = IteratorType(radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  IteratorType nit(radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   nit.SetLocation(baseIndex);
 
   // Compute the sinc function for each dimension
@@ -187,7 +185,7 @@ typename WindowedSincInterpolateImageFunction<TInputImage, VRadius, TWindowFunct
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension
   using PixelType = typename NumericTraits<typename TInputImage::PixelType>::RealType;
-  PixelType xPixelValue = NumericTraits<PixelType>::ZeroValue();
+  PixelType xPixelValue{};
   for (unsigned int j = 0; j < m_OffsetTableSize; ++j)
   {
     // Get the offset for this neighbor

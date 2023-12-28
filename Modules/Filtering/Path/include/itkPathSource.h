@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class PathSource
+ * \class PathSource
  *  \brief Base class for all process objects that output path data.
  *
  * PathSource is the base class for all process objects that output
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathSource, ProcessObject);
+  itkOverrideGetNameOfClassMacro(PathSource);
 
   /** Some convenient type alias. */
   using OutputPathType = TOutputPath;
@@ -141,7 +141,7 @@ public:
      \endcode
    *
    * For proper pipeline execution, a filter using a mini-pipeline
-   * must implement the GeneratseInputRequestedRegion(),
+   * must implement the GenerateInputRequestedRegion(),
    * GenerateOutputRequestedRegion(), GenerateOutputInformation() and
    * EnlargeOutputRequestedRegion() methods as necessary to reflect
    * how the mini-pipeline will execute (in other words, the outer

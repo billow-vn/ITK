@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BasicDilateImageFilter, MorphologyImageFilter);
+  itkOverrideGetNameOfClassMacro(BasicDilateImageFilter);
 
   /** Declaration of pixel type. */
   using typename Superclass::PixelType;
@@ -113,7 +113,7 @@ protected:
 private:
   // Default boundary condition for dilation filter, defaults to
   // NumericTraits<PixelType>::NonpositiveMin()
-  DefaultBoundaryConditionType m_DilateBoundaryCondition;
+  DefaultBoundaryConditionType m_DilateBoundaryCondition{};
 }; // end of class
 } // end namespace itk
 

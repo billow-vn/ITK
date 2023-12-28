@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class Bruker2dseqImageIO
+ * \class Bruker2dseqImageIO
  * \brief Class that defines how to read Bruker file format.
  *
  * The following is a brief description of the Bruker file format.
@@ -91,7 +91,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Bruker2dseqImageIO, ImageIOBase);
+  itkOverrideGetNameOfClassMacro(Bruker2dseqImageIO);
 
   /** Determine if the necessary files exist to read the specified 2dseq file.
    * Returns true if all required files exist. */
@@ -140,7 +140,7 @@ private:
   SwapBytesIfNecessary(void * buff, SizeValueType components);
 
   IOComponentEnum m_OnDiskComponentType{ IOComponentEnum::UCHAR };
-  IOByteOrderEnum m_MachineByteOrder;
+  IOByteOrderEnum m_MachineByteOrder{};
 };
 
 } // end namespace itk

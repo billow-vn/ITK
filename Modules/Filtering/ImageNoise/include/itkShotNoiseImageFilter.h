@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class ShotNoiseImageFilter
+ * \class ShotNoiseImageFilter
  *
  * \brief Alter an image with shot noise.
  *
@@ -106,7 +106,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShotNoiseImageFilter, NoiseBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(ShotNoiseImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageType;

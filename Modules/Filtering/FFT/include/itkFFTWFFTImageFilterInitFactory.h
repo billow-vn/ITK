@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class FFTWFFTImageFilterInitFactory
+ * \class FFTWFFTImageFilterInitFactory
  * \brief Initialize FFTW FFT image filter factory backends.
  *
  * The purpose of FFTWFFTImageFilterInitFactory is to perform
@@ -49,7 +49,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWFFTImageFilterInitFactory, LightObject);
+  itkOverrideGetNameOfClassMacro(FFTWFFTImageFilterInitFactory);
 
   /** Register one factory of this type.
    * The purpose of an InitFactory is to simply load other factories

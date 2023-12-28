@@ -24,9 +24,7 @@
 
 namespace itk
 {
-/**
- *
- */
+
 template <typename TInputImage, typename TOutputImage>
 ExtractImageFilter<TInputImage, TOutputImage>::ExtractImageFilter()
 {
@@ -34,9 +32,6 @@ ExtractImageFilter<TInputImage, TOutputImage>::ExtractImageFilter()
   this->DynamicMultiThreadingOn();
 }
 
-/**
- *
- */
 template <typename TInputImage, typename TOutputImage>
 void
 ExtractImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
@@ -101,15 +96,6 @@ ExtractImageFilter<TInputImage, TOutputImage>::SetExtractionRegion(InputImageReg
   this->Modified();
 }
 
-/**
- * ExtractImageFilter can produce an image which is a different resolution
- * than its input image.  As such, ExtractImageFilter needs to provide an
- * implementation for GenerateOutputInformation() in order to inform
- * the pipeline execution model.  The original documentation of this
- * method is below.
- *
- * \sa ProcessObject::GenerateOutputInformaton()
- */
 template <typename TInputImage, typename TOutputImage>
 void
 ExtractImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
@@ -175,7 +161,7 @@ ExtractImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
     }
     else
     {
-      // copy the non-collapsed part of the input spacing and origing to the
+      // copy the non-collapsed part of the input spacing and origin to the
       // output
       outputDirection.SetIdentity();
       int nonZeroCount = 0;
@@ -215,7 +201,7 @@ ExtractImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
         {
           if (vnl_determinant(outputDirection.GetVnlMatrix()) == 0.0)
           {
-            itkExceptionMacro(<< "Invalid submatrix extracted for collapsed direction.");
+            itkExceptionMacro("Invalid submatrix extracted for collapsed direction.");
           }
         }
         break;
@@ -247,7 +233,7 @@ ExtractImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
   else
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::ExtractImageFilter::GenerateOutputInformation "
+    itkExceptionMacro("itk::ExtractImageFilter::GenerateOutputInformation "
                       << "cannot cast input to " << typeid(ImageBase<InputImageDimension> *).name());
   }
 }
@@ -278,24 +264,12 @@ ExtractImageFilter<TInputImage, TOutputImage>::GenerateData()
   this->Superclass::GenerateData();
 }
 
-/**
- * ExtractImageFilter can be implemented as a multithreaded filter.
- * Therefore, this implementation provides a DynamicThreadedGenerateData()
- * routine which is called for each processing thread. The output
- * image data is allocated automatically by the superclass prior to
- * calling DynamicThreadedGenerateData().  DynamicThreadedGenerateData can only
- * write to the portion of the output image specified by the
- * parameter "outputRegionForThread"
- *
- * \sa ImageToImageFilter::ThreadedGenerateData(),
- *     ImageToImageFilter::GenerateData()
- */
 template <typename TInputImage, typename TOutputImage>
 void
 ExtractImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   const OutputImageRegionType & outputRegionForThread)
 {
-  itkDebugMacro(<< "Actually executing");
+  itkDebugMacro("Actually executing");
 
   const InputImageType * inputPtr = this->GetInput();
   OutputImageType *      outputPtr = this->GetOutput();

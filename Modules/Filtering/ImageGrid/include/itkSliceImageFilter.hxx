@@ -130,18 +130,16 @@ SliceImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   InputIndexType start;
   for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
   {
-    start[i] = std::max(m_Start[i], inputIndex[i]);
-    start[i] = std::min(start[i], static_cast<IndexValueType>(inputIndex[i] + inputSize[i] - 1));
+    start[i] = std::clamp(m_Start[i], inputIndex[i], static_cast<IndexValueType>(inputIndex[i] + inputSize[i] - 1));
   }
 
   // Define/declare an iterator that will walk the output region for this thread
   using OutputIterator = ImageRegionIteratorWithIndex<TOutputImage>;
-  OutputIterator outIt(outputPtr, outputRegionForThread);
 
   OutputIndexType destIndex;
   InputIndexType  srcIndex;
 
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(outputPtr, outputRegionForThread); !outIt.IsAtEnd(); ++outIt)
   {
     // Determine the index and physical location of the output pixel
     destIndex = outIt.GetIndex();
@@ -153,7 +151,6 @@ SliceImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 
     // Copy the input pixel to the output
     outIt.Set(inputPtr->GetPixel(srcIndex));
-    ++outIt;
     progress.CompletedPixel();
   }
 }
@@ -181,8 +178,7 @@ SliceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
   {
     // clamp to valid index range and don't include one past end, so
     // that a zero size RR would be valid
-    start[i] = std::max(m_Start[i], inputIndex[i]);
-    start[i] = std::min(start[i], static_cast<IndexValueType>(inputIndex[i] + inputSize[i] - 1));
+    start[i] = std::clamp(m_Start[i], inputIndex[i], static_cast<IndexValueType>(inputIndex[i] + inputSize[i] - 1));
   }
 
 
@@ -249,14 +245,17 @@ SliceImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
     outputSpacing[i] = inputSpacing[i] * itk::Math::abs(m_Step[i]);
 
     // clamp start, inclusive start interval
-    IndexValueType start = std::max(m_Start[i], inputIndex[i] - static_cast<int>(m_Step[i] < 0));
-    start =
-      std::min(start, static_cast<IndexValueType>(inputIndex[i] + inputSize[i]) - static_cast<int>(m_Step[i] < 0));
+    IndexValueType start =
+      std::clamp(m_Start[i],
+                 inputIndex[i] - static_cast<int>(m_Step[i] < 0),
+                 static_cast<IndexValueType>(inputIndex[i] + inputSize[i]) - static_cast<int>(m_Step[i] < 0));
 
     // clamp stop as open interval
     // Based on the sign of the step include 1 after the end.
-    IndexValueType stop = std::max(m_Stop[i], inputIndex[i] - static_cast<int>(m_Step[i] < 0));
-    stop = std::min(stop, static_cast<IndexValueType>(inputIndex[i] + inputSize[i]) - static_cast<int>(m_Step[i] < 0));
+    IndexValueType stop =
+      std::clamp(m_Stop[i],
+                 inputIndex[i] - static_cast<int>(m_Step[i] < 0),
+                 static_cast<IndexValueType>(inputIndex[i] + inputSize[i]) - static_cast<int>(m_Step[i] < 0));
 
     // If both the numerator and the denominator have the same sign,
     // then the range is a valid and non-zero sized. Truncation is the
@@ -312,7 +311,7 @@ SliceImageFilter<TInputImage, TOutputImage>::VerifyInputInformation() ITKv5_CONS
   {
     if (m_Step[i] == 0)
     {
-      itkExceptionMacro("Step size is zero " << m_Step << "!");
+      itkExceptionMacro("Step size is zero " << m_Step << '!');
     }
   }
 }

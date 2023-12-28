@@ -23,9 +23,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GPUDemonsRegistrationFunction()
 {
@@ -73,7 +71,7 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GP
     itkExceptionMacro("GPUDenseFiniteDifferenceImageFilter supports 1/2/3D image.");
   }
 
-  defines << "#define DIM_" << TDisplacementField::ImageDimension << "\n";
+  defines << "#define DIM_" << TDisplacementField::ImageDimension << '\n';
 
   defines << "#define IMGPIXELTYPE ";
   GetTypenameInString(typeid(typename TFixedImage::PixelType), defines);
@@ -93,9 +91,6 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GP
   m_ComputeUpdateGPUKernelHandle = this->m_GPUKernelManager->CreateKernel("ComputeUpdate");
 }
 
-/**
- * Standard "PrintSelf" method.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PrintSelf(std::ostream & os,
@@ -103,33 +98,34 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Pr
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "MovingImageIterpolator: ";
-  os << m_MovingImageInterpolator.GetPointer() << std::endl;
-  os << indent << "FixedImageGradientCalculator: ";
-  os << m_FixedImageGradientCalculator.GetPointer() << std::endl;
-  os << indent << "DenominatorThreshold: ";
-  os << m_DenominatorThreshold << std::endl;
-  os << indent << "IntensityDifferenceThreshold: ";
-  os << m_IntensityDifferenceThreshold << std::endl;
+  os << indent << "ZeroUpdateReturn: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_ZeroUpdateReturn)
+     << std::endl;
+  os << indent << "Normalizer: " << m_Normalizer << std::endl;
 
-  os << indent << "UseMovingImageGradient: ";
-  os << m_UseMovingImageGradient << std::endl;
+  itkPrintSelfObjectMacro(FixedImageGradientCalculator);
+  itkPrintSelfObjectMacro(MovingImageGradientCalculator);
 
-  os << indent << "Metric: ";
-  os << m_Metric << std::endl;
-  os << indent << "SumOfSquaredDifference: ";
-  os << m_SumOfSquaredDifference << std::endl;
-  os << indent << "NumberOfPixelsProcessed: ";
-  os << m_NumberOfPixelsProcessed << std::endl;
-  os << indent << "RMSChange: ";
-  os << m_RMSChange << std::endl;
-  os << indent << "SumOfSquaredChange: ";
-  os << m_SumOfSquaredChange << std::endl;
+  os << indent << "UseMovingImageGradient: " << (m_UseMovingImageGradient ? "On" : "Off") << std::endl;
+
+  itkPrintSelfObjectMacro(MovingImageInterpolator);
+
+  os << indent << "TimeStep: " << static_cast<typename NumericTraits<TimeStepType>::PrintType>(m_TimeStep) << std::endl;
+
+  os << indent << "DenominatorThreshold: " << m_DenominatorThreshold << std::endl;
+  os << indent << "IntensityDifferenceThreshold: " << m_IntensityDifferenceThreshold << std::endl;
+
+  os << indent << "Metric: " << m_Metric << std::endl;
+  os << indent << "SumOfSquaredDifference: " << m_SumOfSquaredDifference << std::endl;
+  os << indent << "NumberOfPixelsProcessed: "
+     << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfPixelsProcessed) << std::endl;
+  os << indent << "RMSChange: " << m_RMSChange << std::endl;
+  os << indent << "SumOfSquaredChange: " << m_SumOfSquaredChange << std::endl;
+
+  itkPrintSelfObjectMacro(GPUPixelCounter);
+  itkPrintSelfObjectMacro(GPUSquaredChange);
+  itkPrintSelfObjectMacro(GPUSquaredDifference);
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::SetIntensityDifferenceThreshold(
@@ -138,9 +134,6 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Se
   m_IntensityDifferenceThreshold = threshold;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GetIntensityDifferenceThreshold() const
@@ -148,16 +141,13 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Ge
   return m_IntensityDifferenceThreshold;
 }
 
-/**
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::InitializeIteration()
 {
   if (!this->GetMovingImage() || !this->GetFixedImage() || !m_MovingImageInterpolator)
   {
-    itkExceptionMacro(<< "MovingImage, FixedImage and/or Interpolator not set");
+    itkExceptionMacro("MovingImage, FixedImage and/or Interpolator not set");
   }
 
   // cache fixed image information
@@ -185,9 +175,6 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::In
   m_SumOfSquaredChange = 0.0;
 }
 
-/**
- * Allocate GPU buffers for computing metric statistics
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GPUAllocateMetricData(
@@ -217,10 +204,6 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GP
   m_GPUSquaredChange->ReleaseGPUInputBuffer();
   m_GPUSquaredDifference->ReleaseGPUInputBuffer();
 }
-
-/**
- * Compute update at a specify neighbourhood
- */
 
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
@@ -290,7 +273,7 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GP
   m_SumOfSquaredDifference = m_GPUSquaredDifference->GetGPUResult();
   m_NumberOfPixelsProcessed = m_GPUPixelCounter->GetGPUResult();
   m_SumOfSquaredChange = m_GPUSquaredChange->GetGPUResult();
-  // std::cout << "m_NumberOfPixelsProcessed = " << m_NumberOfPixelsProcessed << std::endl;
+
   if (m_NumberOfPixelsProcessed)
   {
     m_Metric = m_SumOfSquaredDifference / static_cast<double>(m_NumberOfPixelsProcessed);
@@ -298,15 +281,12 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GP
   }
 }
 
-/**
- * Compute update at a specify neighbourhood
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
-typename GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PixelType
+auto
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ComputeUpdate(
   const NeighborhoodType & it,
   void *                   gd,
-  const FloatOffsetType &  itkNotUsed(offset))
+  const FloatOffsetType &  itkNotUsed(offset)) -> PixelType
 {
   // Get fixed image related information
   // Note: no need to check the index is within
@@ -350,17 +330,16 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Co
     gradientSquaredMagnitude += itk::Math::sqr(gradient[j]);
   }
 
-  /**
-   * Compute Update.
-   * In the original equation the denominator is defined as (g-f)^2 + grad_mag^2.
-   * However there is a mismatch in units between the two terms.
-   * The units for the second term is intensity^2/mm^2 while the
-   * units for the first term is intensity^2. This mismatch is particularly
-   * problematic when the fixed image does not have unit spacing.
-   * In this implementation, we normalize the first term by a factor K,
-   * such that denominator = (g-f)^2/K + grad_mag^2
-   * where K = mean square spacing to compensate for the mismatch in units.
-   */
+  // Compute Update.
+  // In the original equation the denominator is defined as (g-f)^2 + grad_mag^2.
+  // However there is a mismatch in units between the two terms.
+  // The units for the second term is intensity^2/mm^2 while the
+  // units for the first term is intensity^2. This mismatch is particularly
+  // problematic when the fixed image does not have unit spacing.
+  // In this implementation, we normalize the first term by a factor K,
+  // such that denominator = (g-f)^2/K + grad_mag^2
+  // where K = mean square spacing to compensate for the mismatch in units.
+
   const double speedValue = fixedValue - movingValue;
   const double sqr_speedValue = itk::Math::sqr(speedValue);
 
@@ -391,16 +370,13 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Co
   return update;
 }
 
-/**
- * Update the metric and release the per-thread-global data.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ReleaseGlobalDataPointer(void * gd) const
 {
-  auto * globalData = (GlobalDataStruct *)gd;
+  const std::unique_ptr<const GlobalDataStruct> globalData(static_cast<GlobalDataStruct *>(gd));
 
-  m_MetricCalculationLock.lock();
+  const std::lock_guard<std::mutex> lockGuard(m_MetricCalculationMutex);
   m_SumOfSquaredDifference += globalData->m_SumOfSquaredDifference;
   m_NumberOfPixelsProcessed += globalData->m_NumberOfPixelsProcessed;
   m_SumOfSquaredChange += globalData->m_SumOfSquaredChange;
@@ -409,9 +385,6 @@ GPUDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::Re
     m_Metric = m_SumOfSquaredDifference / static_cast<double>(m_NumberOfPixelsProcessed);
     m_RMSChange = std::sqrt(m_SumOfSquaredChange / static_cast<double>(m_NumberOfPixelsProcessed));
   }
-  m_MetricCalculationLock.unlock();
-
-  delete globalData;
 }
 
 } // end namespace itk

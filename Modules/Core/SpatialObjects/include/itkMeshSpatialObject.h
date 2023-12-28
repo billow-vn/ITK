@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MeshSpatialObject
+ * \class MeshSpatialObject
  * \brief Implementation of an Mesh as spatial object.
  *
  * This class combines functionalities from a spatial object,
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(MeshSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -77,7 +77,13 @@ public:
   const MeshType *
   GetMesh() const;
 
-  /** Returns true if the point is inside, false otherwise. */
+  /** Test whether a point is inside or outside the object.
+   *
+   * Returns true if the point is inside, false otherwise.
+   *
+   * For computational speed purposes, it is faster if the method does not check the name of the class and the current
+   * depth.
+   */
   bool
   IsInsideInObjectSpace(const PointType & point) const override;
 
@@ -103,7 +109,7 @@ public:
   itkGetConstMacro(IsInsidePrecisionInObjectSpace, double);
 
 protected:
-  /** Compute the boundaries of the image spatial object. */
+  /** Compute the boundaries of the spatial object. */
   void
   ComputeMyBoundingBox() override;
 
@@ -117,11 +123,11 @@ protected:
   InternalClone() const override;
 
 private:
-  MeshPointer m_Mesh;
+  MeshPointer m_Mesh{};
 #if !defined(ITK_LEGACY_REMOVE)
-  std::string m_PixelType;
+  std::string m_PixelType{};
 #endif
-  double m_IsInsidePrecisionInObjectSpace;
+  double m_IsInsidePrecisionInObjectSpace{};
 };
 
 } // end namespace itk

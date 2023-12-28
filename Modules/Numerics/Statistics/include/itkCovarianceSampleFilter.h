@@ -28,7 +28,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class CovarianceSampleFilter
+ * \class CovarianceSampleFilter
  * \brief Calculates the covariance matrix of the target sample data.
  *
  * The filter calculates first the sample mean and use it in the covariance
@@ -63,7 +63,7 @@ public:
   using SampleType = TSample;
 
   /** Standard Macros */
-  itkTypeMacro(CovarianceSampleFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(CovarianceSampleFilter);
   itkNewMacro(Self);
 
   /** Type of each measurement vector in sample */

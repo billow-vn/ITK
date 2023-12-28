@@ -36,7 +36,7 @@ PrintVector(const std::vector<T> & v1)
     typename std::vector<T>::const_iterator it;
     for (it = v1.begin(); it != v1.end(); ++it)
     {
-      std::cout << *it << " ";
+      std::cout << *it << ' ';
     }
     std::cout << std::endl;
   }
@@ -146,8 +146,7 @@ itkCSVArray2DFileReaderTest(int argc, char * argv[])
   }
   if (!caught)
   {
-    std::cerr << "An exception should have been caught here as the filename does"
-              << "not exist! Test fails." << std::endl;
+    std::cerr << "An exception should have been caught here as the filename does not exist! Test fails." << std::endl;
     return EXIT_FAILURE;
   }
 

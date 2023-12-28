@@ -23,24 +23,21 @@
 namespace itk
 {
 template <typename TImage, typename TOperator, typename TComputation>
-typename NeighborhoodInnerProduct<TImage, TOperator, TComputation>::OutputPixelType
+auto
 NeighborhoodInnerProduct<TImage, TOperator, TComputation>::Compute(const ConstNeighborhoodIterator<TImage> & it,
                                                                    const OperatorType &                      op,
                                                                    const unsigned int                        start,
-                                                                   const unsigned int                        stride)
+                                                                   const unsigned int stride) -> OutputPixelType
 {
-  typename OperatorType::ConstIterator o_it;
-
   using InputPixelType = typename TImage::PixelType;
   using InputPixelRealType = typename NumericTraits<InputPixelType>::RealType;
   using AccumulateRealType = typename NumericTraits<InputPixelRealType>::AccumulateType;
 
-  AccumulateRealType sum = NumericTraits<AccumulateRealType>::ZeroValue();
-
   using OutputPixelValueType = typename NumericTraits<OutputPixelType>::ValueType;
 
-  o_it = op.Begin();
   const typename OperatorType::ConstIterator op_end = op.End();
+  typename OperatorType::ConstIterator       o_it = op.Begin();
+  AccumulateRealType                         sum{};
 
   for (unsigned int i = start; o_it < op_end; i += stride, ++o_it)
   {
@@ -52,13 +49,13 @@ NeighborhoodInnerProduct<TImage, TOperator, TComputation>::Compute(const ConstNe
 }
 
 template <typename TImage, typename TOperator, typename TComputation>
-typename NeighborhoodInnerProduct<TImage, TOperator, TComputation>::OutputPixelType
+auto
 NeighborhoodInnerProduct<TImage, TOperator, TComputation>::Compute(
   /*           const ImageBoundaryCondition<TImage> *,*/
   const NeighborhoodType & N,
   const OperatorType &     op,
   const unsigned int       start,
-  const unsigned int       stride)
+  const unsigned int       stride) -> OutputPixelType
 {
   typename OperatorType::ConstIterator o_it;
 
@@ -66,7 +63,7 @@ NeighborhoodInnerProduct<TImage, TOperator, TComputation>::Compute(
   using InputPixelRealType = typename NumericTraits<InputPixelType>::RealType;
   using AccumulateRealType = typename NumericTraits<InputPixelRealType>::AccumulateType;
 
-  AccumulateRealType sum = NumericTraits<AccumulateRealType>::ZeroValue();
+  AccumulateRealType sum{};
 
   using OutputPixelValueType = typename NumericTraits<OutputPixelType>::ValueType;
 

@@ -145,9 +145,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter<TTimeVaryingVelocityField, TDispl
 
   typename DisplacementFieldType::Pointer outputField = this->GetOutput();
 
-  ImageRegionIteratorWithIndex<DisplacementFieldType> It(outputField, region);
-
-  for (It.GoToBegin(); !It.IsAtEnd(); ++It)
+  for (ImageRegionIteratorWithIndex<DisplacementFieldType> It(outputField, region); !It.IsAtEnd(); ++It)
   {
     PointType point;
     outputField->TransformIndexToPhysicalPoint(It.GetIndex(), point);
@@ -157,10 +155,10 @@ TimeVaryingVelocityFieldIntegrationImageFilter<TTimeVaryingVelocityField, TDispl
 }
 
 template <typename TTimeVaryingVelocityField, typename TDisplacementField>
-typename TimeVaryingVelocityFieldIntegrationImageFilter<TTimeVaryingVelocityField, TDisplacementField>::VectorType
+auto
 TimeVaryingVelocityFieldIntegrationImageFilter<TTimeVaryingVelocityField, TDisplacementField>::IntegrateVelocityAtPoint(
   const PointType &                    initialSpatialPoint,
-  const TimeVaryingVelocityFieldType * inputField)
+  const TimeVaryingVelocityFieldType * inputField) -> VectorType
 {
   // Solve the initial value problem using fourth-order Runge-Kutta
   //    y' = f(t, y), y(t_0) = y_0

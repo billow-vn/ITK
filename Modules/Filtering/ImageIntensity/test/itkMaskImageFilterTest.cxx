@@ -94,7 +94,9 @@ itkMaskImageFilterTest(int, char *[])
   // Set to mask first 2 pixels and last 2 pixels and leave the rest as is
   std::cout << "Second operand " << std::endl;
   for (unsigned int i = 0; i < 2; ++i, ++it2)
+  {
     it2.Set(0);
+  }
 
   while (!it2.IsAtEnd())
   {
@@ -103,7 +105,9 @@ itkMaskImageFilterTest(int, char *[])
   }
 
   for (unsigned int i = 0; i < 3; ++i, --it2)
+  {
     it2.Set(0);
+  }
 
   it2.GoToBegin();
   while (!it2.IsAtEnd())
@@ -135,7 +139,7 @@ itkMaskImageFilterTest(int, char *[])
   // Create an iterator for going through the image output
   myIteratorType3 it3(outputImage, outputImage->GetBufferedRegion());
 
-  //  Print the content of the result image
+  // Print the content of the result image
   std::cout << " Result " << std::endl;
   while (!it3.IsAtEnd())
   {

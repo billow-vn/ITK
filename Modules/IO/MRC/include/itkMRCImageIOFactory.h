@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class MRCImageIOFactory
+ * \class MRCImageIOFactory
  * \brief Create instances of MRCImageIO objects using an object factory.
  *
  *  This code was contributed in the Insight Journal paper:
@@ -67,7 +67,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MRCImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(MRCImageIOFactory);
 
   /** Register one factory of this type  */
   static void

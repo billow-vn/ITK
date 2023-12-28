@@ -58,7 +58,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
-  itkTypeMacro(GPUKernelManager, LightObject);
+  itkOverrideGetNameOfClassMacro(GPUKernelManager);
 
   bool
   LoadProgramFromFile(const char * filename, const char * cPreamble = "");
@@ -120,7 +120,9 @@ public:
   SetKernelArgWithImageAndBufferedRegion(int kernelIdx, cl_uint & argIdx, TGPUImageDataManager * manager)
   {
     if (kernelIdx < 0 || kernelIdx >= static_cast<int>(m_KernelContainer.size()))
+    {
       return false;
+    }
 
     cl_int errid;
 
@@ -197,13 +199,13 @@ protected:
   ResetArguments(int kernelIdx);
 
 private:
-  cl_program m_Program;
+  cl_program m_Program{};
 
-  GPUContextManager * m_Manager;
-  int                 m_CommandQueueId;
+  GPUContextManager * m_Manager{};
+  int                 m_CommandQueueId{};
 
-  std::vector<cl_kernel>                       m_KernelContainer;
-  std::vector<std::vector<KernelArgumentList>> m_KernelArgumentReady;
+  std::vector<cl_kernel>                       m_KernelContainer{};
+  std::vector<std::vector<KernelArgumentList>> m_KernelArgumentReady{};
 
   template <typename TArg>
   bool

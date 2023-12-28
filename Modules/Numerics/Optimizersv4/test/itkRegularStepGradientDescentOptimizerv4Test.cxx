@@ -86,7 +86,7 @@ public:
     double y = m_Parameters[1];
 
     std::cout << "GetValueAndDerivative( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     value = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -235,8 +235,8 @@ RegularStepGradientDescentOptimizerv4TestHelper(
 
   ParametersType finalPosition = optimizer->GetMetric()->GetParameters();
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ')' << std::endl;
 
   //
   // Check results to see if it is within range

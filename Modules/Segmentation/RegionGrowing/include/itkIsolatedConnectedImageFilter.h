@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class IsolatedConnectedImageFilter
+ * \class IsolatedConnectedImageFilter
  * \brief Label pixels that are connected to one set of seeds but not
  * another.
  *
@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(IsolatedConnectedImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(IsolatedConnectedImageFilter);
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;
   using InputImageConstPointer = typename InputImageType::ConstPointer;
@@ -114,6 +114,8 @@ public:
    *
    * This seed will be isolated from Seed2 (if possible). All pixels
    * connected to this seed will be replaced with ReplaceValue.
+   *
+   * \deprecated Please use AddSeed1.
    */
   void
   SetSeed1(const IndexType & seed);
@@ -129,6 +131,8 @@ public:
   /**  Set a single seed point 2.
    *
    * This seed will be isolated from Seed1 (if possible).
+   *
+   * \deprecated Please use AddSeed2.
    */
   void
   SetSeed2(const IndexType & seed);
@@ -204,19 +208,19 @@ public:
 protected:
   IsolatedConnectedImageFilter();
   ~IsolatedConnectedImageFilter() override = default;
-  SeedsContainerType m_Seeds1;
-  SeedsContainerType m_Seeds2;
+  SeedsContainerType m_Seeds1{};
+  SeedsContainerType m_Seeds2{};
 
-  InputImagePixelType m_Lower;
-  InputImagePixelType m_Upper;
+  InputImagePixelType m_Lower{};
+  InputImagePixelType m_Upper{};
 
-  OutputImagePixelType m_ReplaceValue;
+  OutputImagePixelType m_ReplaceValue{};
 
-  InputImagePixelType m_IsolatedValue;
-  InputImagePixelType m_IsolatedValueTolerance;
+  InputImagePixelType m_IsolatedValue{};
+  InputImagePixelType m_IsolatedValueTolerance{};
 
-  bool m_FindUpperThreshold;
-  bool m_ThresholdingFailed;
+  bool m_FindUpperThreshold{};
+  bool m_ThresholdingFailed{};
 
   // Override since the filter needs all the data for the algorithm
   void

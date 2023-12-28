@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetEquationChanAndVeseExternalTerm, LevelSetEquationChanAndVeseInternalTerm);
+  itkOverrideGetNameOfClassMacro(LevelSetEquationChanAndVeseExternalTerm);
 
   using typename Superclass::InputImageType;
   using typename Superclass::InputImagePointer;
@@ -112,8 +112,8 @@ protected:
   ~LevelSetEquationChanAndVeseExternalTerm() override = default;
 
 private:
-  DomainMapImageFilterType * m_DomainMapImageFilter;
-  CacheImageType *           m_CacheImage;
+  DomainMapImageFilterType * m_DomainMapImageFilter{};
+  CacheImageType *           m_CacheImage{};
 };
 
 } // namespace itk

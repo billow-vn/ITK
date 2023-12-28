@@ -38,7 +38,7 @@ namespace itk
  *
  *    \par OVERVIEW
  *    This class is a level set method segmentation filter.  It constructs a
- *    speed function which is close to zero where the Mahalabonian Distance
+ *    speed function which is close to zero where the Mahalanobian Distance
  *    exceeds a certain threshold, effectively locking the propagating front onto those
  *    edges.  Elsewhere, the front will propagate quickly.
  *
@@ -112,7 +112,7 @@ public:
   using ScalarValueType = typename ThresholdFunctionType::ScalarValueType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorThresholdSegmentationLevelSetImageFilter, SegmentationLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorThresholdSegmentationLevelSetImageFilter);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -145,7 +145,7 @@ public:
     return m_ThresholdFunction->GetCovariance();
   }
 
-  /** Set/Get the threshold for the Mahanalobis Distance */
+  /** Set/Get the threshold for the Mahalanobis Distance */
   void
   SetThreshold(ScalarValueType thr)
   {
@@ -167,7 +167,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ThresholdFunctionPointer m_ThresholdFunction;
+  ThresholdFunctionPointer m_ThresholdFunction{};
 };
 } // end namespace itk
 

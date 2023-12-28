@@ -45,7 +45,7 @@ ShapePositionLabelMapFilter<TImage>::ThreadedProcessLabelObject(LabelObjectType 
       break;
     }
     default:
-      itkExceptionMacro(<< "Unknown attribute type");
+      itkExceptionMacro("Unknown attribute type");
       break;
   }
 }
@@ -56,7 +56,7 @@ ShapePositionLabelMapFilter<TImage>::PrintSelf(std::ostream & os, Indent indent)
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ")"
+  os << indent << "Attribute: " << LabelObjectType::GetNameFromAttribute(m_Attribute) << " (" << m_Attribute << ')'
      << std::endl;
 }
 

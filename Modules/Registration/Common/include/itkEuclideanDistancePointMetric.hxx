@@ -36,29 +36,29 @@ EuclideanDistancePointMetric<TFixedPointSet, TMovingPointSet, TDistanceMap>::Get
 
   if (!movingPointSet)
   {
-    itkExceptionMacro(<< "Moving point set has not been assigned");
+    itkExceptionMacro("Moving point set has not been assigned");
   }
 
   return movingPointSet->GetPoints()->Size();
 }
 
 template <typename TFixedPointSet, typename TMovingPointSet, typename TDistanceMap>
-typename EuclideanDistancePointMetric<TFixedPointSet, TMovingPointSet, TDistanceMap>::MeasureType
+auto
 EuclideanDistancePointMetric<TFixedPointSet, TMovingPointSet, TDistanceMap>::GetValue(
-  const TransformParametersType & parameters) const
+  const TransformParametersType & parameters) const -> MeasureType
 {
   FixedPointSetConstPointer fixedPointSet = this->GetFixedPointSet();
 
   if (!fixedPointSet)
   {
-    itkExceptionMacro(<< "Fixed point set has not been assigned");
+    itkExceptionMacro("Fixed point set has not been assigned");
   }
 
   MovingPointSetConstPointer movingPointSet = this->GetMovingPointSet();
 
   if (!movingPointSet)
   {
-    itkExceptionMacro(<< "Moving point set has not been assigned");
+    itkExceptionMacro("Moving point set has not been assigned");
   }
 
   MovingPointIterator pointItr = movingPointSet->GetPoints()->Begin();
@@ -154,15 +154,10 @@ EuclideanDistancePointMetric<TFixedPointSet, TMovingPointSet, TDistanceMap>::Pri
                                                                                        Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "DistanceMap: " << m_DistanceMap << std::endl;
-  if (m_ComputeSquaredDistance)
-  {
-    os << indent << "m_ComputeSquaredDistance: True" << std::endl;
-  }
-  else
-  {
-    os << indent << "m_ComputeSquaredDistance: False" << std::endl;
-  }
+
+  itkPrintSelfObjectMacro(DistanceMap);
+
+  os << indent << "ComputeSquaredDistance: " << (m_ComputeSquaredDistance ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 

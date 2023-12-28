@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class SpatialObjectToImageStatisticsCalculator
+ * \class SpatialObjectToImageStatisticsCalculator
  * This calculator computes the mean and the covariance matrices of a certain
  *  region of an image specified by a spatial object.
  * \ingroup Operators
@@ -49,7 +49,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpatialObjectToImageStatisticsCalculator, Object);
+  itkOverrideGetNameOfClassMacro(SpatialObjectToImageStatisticsCalculator);
 
   /** Type definitions for the input image. */
   using ImageType = TInputImage;
@@ -125,22 +125,23 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
+  /** Compute statistics from the sample vector. */
   bool
   ComputeStatistics();
 
 private:
-  ImageConstPointer    m_Image;
-  SpatialObjectPointer m_SpatialObject;
-  VectorType           m_Mean;
-  AccumulateType       m_Sum;
-  SizeValueType        m_NumberOfPixels;
-  MatrixType           m_CovarianceMatrix;
-  unsigned int         m_SampleDirection;
-  ModifiedTimeType     m_InternalImageTime;
-  ModifiedTimeType     m_InternalSpatialObjectTime;
-  TimeStamp            m_ModifiedTime;
+  ImageConstPointer    m_Image{};
+  SpatialObjectPointer m_SpatialObject{};
+  VectorType           m_Mean{};
+  AccumulateType       m_Sum{};
+  SizeValueType        m_NumberOfPixels{};
+  MatrixType           m_CovarianceMatrix{};
+  unsigned int         m_SampleDirection{};
+  ModifiedTimeType     m_InternalImageTime{};
+  ModifiedTimeType     m_InternalSpatialObjectTime{};
+  TimeStamp            m_ModifiedTime{};
 
-  typename SampleType::Pointer m_Sample;
+  typename SampleType::Pointer m_Sample{};
 };
 } // end namespace itk
 

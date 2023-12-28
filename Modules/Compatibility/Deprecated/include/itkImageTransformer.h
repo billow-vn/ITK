@@ -34,7 +34,7 @@
 namespace itk
 {
 /**
- *\class ImageTransformer
+ * \class ImageTransformer
  *  \brief Base class for all process objects that transform an image into something else.
  *
  * ImageTransformer is the base class for all process objects that transform an
@@ -72,7 +72,7 @@ public:
   using DataObjectPointer = DataObject::Pointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageTransformer, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageTransformer);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;

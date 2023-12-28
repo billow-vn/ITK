@@ -61,11 +61,8 @@ SpeckleNoiseImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators
-  ImageScanlineConstIterator<TInputImage> inputIt(inputPtr, inputRegionForThread);
-  ImageScanlineIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
-
-  inputIt.GoToBegin();
-  outputIt.GoToBegin();
+  ImageScanlineConstIterator inputIt(inputPtr, inputRegionForThread);
+  ImageScanlineIterator      outputIt(outputPtr, outputRegionForThread);
 
   TotalProgressReporter progress(this, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 

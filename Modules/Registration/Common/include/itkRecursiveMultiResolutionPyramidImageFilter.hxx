@@ -30,18 +30,13 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::RecursiveMultiResolutionPyramidImageFilter()
 {
   this->Superclass::m_UseShrinkImageFilter = true;
 }
 
-/**
- * GenerateData
- */
 template <typename TInputImage, typename TOutputImage>
 void
 RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateData()
@@ -174,7 +169,7 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateD
     {
       if (ilevel == static_cast<int>(this->GetNumberOfLevels()) - 1)
       {
-        // use caster -> smoother -> shrinker piepline
+        // use caster -> smoother -> shrinker pipeline
         caster->SetInput(inputPtr);
         smoother->SetInput(caster->GetOutput());
       }
@@ -216,19 +211,6 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateD
   }
 }
 
-/**
- * PrintSelf method
- */
-template <typename TInputImage, typename TOutputImage>
-void
-RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
-
-/*
- * GenerateOutputRequestedRegion
- */
 template <typename TInputImage, typename TOutputImage>
 void
 RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateOutputRequestedRegion(DataObject * ptr)
@@ -239,7 +221,7 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateO
   auto * refOutputPtr = itkDynamicCastInDebugMode<TOutputImage *>(ptr);
   if (!refOutputPtr)
   {
-    itkExceptionMacro(<< "Could not cast ptr to TOutputImage*.");
+    itkExceptionMacro("Could not cast ptr to TOutputImage*.");
   }
 
   // find the index for this output
@@ -351,9 +333,6 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateO
   delete oper;
 }
 
-/**
- * GenerateInputRequestedRegion
- */
 template <typename TInputImage, typename TOutputImage>
 void
 RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
@@ -365,7 +344,7 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateI
   InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput());
   if (!inputPtr)
   {
-    itkExceptionMacro(<< "Input has not been set.");
+    itkExceptionMacro("Input has not been set.");
   }
 
   // compute baseIndex and baseSize

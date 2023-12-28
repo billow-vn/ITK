@@ -35,7 +35,7 @@ HuangThresholdCalculator<THistogram, TOutput>::GenerateData()
   TotalAbsoluteFrequencyType total = histogram->GetTotalFrequency();
   if (total == NumericTraits<TotalAbsoluteFrequencyType>::ZeroValue())
   {
-    itkExceptionMacro(<< "Histogram is empty");
+    itkExceptionMacro("Histogram is empty");
   }
   m_Size = histogram->GetSize(0);
   ProgressReporter progress(this, 0, m_Size);
@@ -53,7 +53,7 @@ HuangThresholdCalculator<THistogram, TOutput>::GenerateData()
   }
   if (m_FirstBin == m_Size)
   {
-    itkWarningMacro(<< "No data in histogram");
+    itkWarningMacro("No data in histogram");
     return;
   }
   m_LastBin = m_Size - 1;

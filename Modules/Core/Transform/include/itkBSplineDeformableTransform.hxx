@@ -348,14 +348,16 @@ BSplineDeformableTransform<TParametersValueType, VDimension, VSplineOrder>::SetF
     // with BSplines saved to disk from before image orientation was used.
     // Those transforms would no longer be valid with respect to images
     // with explicit directions.
-    itkExceptionMacro(<< "Mismatched between parameters size " << passedParameters.size()
-                      << " and required number of fixed parameters " << this->m_FixedParameters.Size()
+    itkExceptionMacro("Mismatched between parameters size "
+                      << passedParameters.size() << " and required number of fixed parameters "
+                      << this->m_FixedParameters.Size()
                       << ".  Implicit setting of identity direction is no longer supported.");
   }
   else
   {
-    itkExceptionMacro(<< "Mismatched between parameters size " << passedParameters.size()
-                      << " and the required number of fixed parameters " << this->m_FixedParameters.Size());
+    itkExceptionMacro("Mismatched between parameters size " << passedParameters.size()
+                                                            << " and the required number of fixed parameters "
+                                                            << this->m_FixedParameters.Size());
   }
   this->SetCoefficientImageInformationFromFixedParameters();
 }
@@ -388,7 +390,7 @@ BSplineDeformableTransform<TParametersValueType, VDimension, VSplineOrder>::SetC
       const SizeValueType numberOfPixels = images[j]->GetLargestPossibleRegion().GetNumberOfPixels();
       if (numberOfPixels * SpaceDimension != totalParameters)
       {
-        itkExceptionMacro(<< "SetCoefficientImage() has array of images that are "
+        itkExceptionMacro("SetCoefficientImage() has array of images that are "
                           << "not the correct size. " << numberOfPixels * SpaceDimension << " != " << totalParameters
                           << " for image at index " << j << "  \n"
                           << images[j]);
@@ -402,7 +404,7 @@ BSplineDeformableTransform<TParametersValueType, VDimension, VSplineOrder>::SetC
   }
   else
   {
-    itkExceptionMacro(<< "SetCoefficientImage() requires that an array of "
+    itkExceptionMacro("SetCoefficientImage() requires that an array of "
                       << "correctly sized images be supplied.");
   }
 }
@@ -590,9 +592,9 @@ BSplineDeformableTransform<TParametersValueType, VDimension, VSplineOrder>::Comp
 
   SizeValueType numberOfParametersPerDimension = this->GetNumberOfParametersPerDimension();
 
-  ImageRegionConstIteratorWithIndex<ImageType> It(this->m_CoefficientImages[0], supportRegion);
-  unsigned long                                counter = 0;
-  for (It.GoToBegin(); !It.IsAtEnd(); ++It)
+  unsigned long counter = 0;
+  for (ImageRegionConstIteratorWithIndex<ImageType> It(this->m_CoefficientImages[0], supportRegion); !It.IsAtEnd();
+       ++It)
   {
     typename ImageType::OffsetType currentIndex = It.GetIndex() - startIndex;
 

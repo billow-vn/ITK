@@ -126,7 +126,7 @@ public:
         if (itk::Math::NotAlmostEquals(it.GetFrequency()[dim], itk::Math::abs(reverseIt.GetFrequency()[dim])))
         {
           std::cout << "Failed testing Hermitian property at index:" << it.GetIndex() << " freq: " << it.GetFrequency()
-                    << "\n"
+                    << '\n'
                     << " reverseIt: " << reverseIt.GetIndex() << " freq: " << reverseIt.GetFrequency() << std::endl;
           return false;
         }
@@ -195,7 +195,7 @@ public:
       if (it.GetLargestPositiveFrequencyIndex()[dim] != truthHalfIndex[dim])
       {
         std::cerr << "Test failed! " << std::endl;
-        std::cerr << "Error in GetLargestPositiveFrequencyIndex()[" << dim << "]" << std::endl;
+        std::cerr << "Error in GetLargestPositiveFrequencyIndex()[" << dim << ']' << std::endl;
         std::cerr << "Expected: " << truthHalfIndex << ", but got " << it.GetLargestPositiveFrequencyIndex()
                   << std::endl;
         return false;
@@ -263,7 +263,7 @@ itkFrequencyFFTLayoutImageRegionIteratorWithIndexTest(int, char *[])
   constexpr unsigned int Dimension = 3;
 
   using CharPixelType = char;
-  using FloatPixelType = char;
+  using FloatPixelType = float;
 
   // Even input image size test
   {

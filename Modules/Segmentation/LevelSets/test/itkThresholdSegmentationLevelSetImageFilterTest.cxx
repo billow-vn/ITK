@@ -83,7 +83,7 @@ public:
   using Superclass = Command;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
-  itkTypeMacro(RMSCommand, Command);
+  itkOverrideGetNameOfClassMacro(RMSCommand);
   itkNewMacro(Self);
 
   /** Standard Command virtual methods */
@@ -118,7 +118,7 @@ public:
   using Superclass = Command;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
-  itkTypeMacro(TSIFTNProgressCommand, Command);
+  itkOverrideGetNameOfClassMacro(TSIFTNProgressCommand);
   itkNewMacro(Self);
 
   /** Standard Command virtual methods */
@@ -177,9 +177,13 @@ itkThresholdSegmentationLevelSetImageFilterTest(int, char *[])
         for (i = 0; i < 3; ++i)
         {
           if (idx[i] < 32)
+          {
             val += idx[i];
+          }
           else
+          {
             val += 64 - idx[i];
+          }
         }
         inputImage->SetPixel(idx, val);
       }
@@ -192,7 +196,18 @@ itkThresholdSegmentationLevelSetImageFilterTest(int, char *[])
 
 
   filter->SetInput(seedImage);
+  ITK_TEST_SET_GET_VALUE(seedImage, filter->GetInitialImage());
+
+  filter->SetInitialImage(seedImage);
+  ITK_TEST_SET_GET_VALUE(seedImage, filter->GetInput());
+  ITK_TEST_SET_GET_VALUE(seedImage, filter->GetInitialImage());
+
   filter->SetFeatureImage(inputImage);
+  ITK_TEST_SET_GET_VALUE(inputImage, filter->GetFeatureImage());
+
+  auto advectionImage = FilterType::SegmentationFunctionType::VectorImageType::New();
+  filter->SetAdvectionImage(advectionImage);
+  ITK_TEST_SET_GET_VALUE(advectionImage, filter->GetAdvectionImage());
 
   typename FilterType::ValueType upperThreshold = 63;
   filter->SetUpperThreshold(upperThreshold);
@@ -220,9 +235,20 @@ itkThresholdSegmentationLevelSetImageFilterTest(int, char *[])
 
   filter->SetMaximumRMSError(0.04);
   filter->SetNumberOfIterations(10);
+
+  auto reverseExpansionDirection = true;
+
+  filter->SetUseNegativeFeaturesOff();
   filter->SetUseNegativeFeaturesOn(); // Change the default behavior of the speed
                                       // function so that negative values result in
                                       // surface growth.
+  filter->SetUseNegativeFeatures(reverseExpansionDirection);
+  ITK_TEST_SET_GET_VALUE(reverseExpansionDirection, filter->GetUseNegativeFeatures());
+
+  ITK_TEST_SET_GET_BOOLEAN(filter, ReverseExpansionDirection, reverseExpansionDirection);
+
+  auto autoGenerateSpeedAdvection = true;
+  ITK_TEST_SET_GET_BOOLEAN(filter, AutoGenerateSpeedAdvection, autoGenerateSpeedAdvection);
 
   itk::RMSCommand::Pointer c = itk::RMSCommand::New();
   filter->AddObserver(itk::IterationEvent(), c);

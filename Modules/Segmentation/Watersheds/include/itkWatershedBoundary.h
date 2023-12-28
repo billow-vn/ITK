@@ -129,7 +129,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(Boundary, DataObject);
+  itkOverrideGetNameOfClassMacro(Boundary);
 
   /** The following averts an internal compiler error on microsoft compilers */
   using FacePointer = typename face_t::Pointer;
@@ -264,15 +264,15 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** The Nx2 matrix of faces of this boundary.   */
-  std::vector<std::pair<FacePointer, FacePointer>> m_Faces;
+  std::vector<std::pair<FacePointer, FacePointer>> m_Faces{};
 
   /** The Nx2 matrix flat region connections associated with
    * this boundary.   */
-  std::vector<std::pair<flat_hash_t, flat_hash_t>> m_FlatHashes;
+  std::vector<std::pair<flat_hash_t, flat_hash_t>> m_FlatHashes{};
 
   /** The Nx2 matrix of boolean flags indicating which faces contain
    * information.    */
-  std::vector<std::pair<bool, bool>> m_Valid;
+  std::vector<std::pair<bool, bool>> m_Valid{};
 };
 } // end namespace watershed
 } // end namespace itk

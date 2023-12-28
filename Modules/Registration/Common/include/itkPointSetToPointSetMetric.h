@@ -57,7 +57,7 @@ public:
   using CoordinateRepresentationType = Superclass::ParametersValueType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetToPointSetMetric, MultipleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(PointSetToPointSetMetric);
 
   /**  Type of the moving Pointset. */
   using MovingPointSetType = TMovingPointSet;
@@ -108,7 +108,7 @@ public:
   /** Connect the Transform. */
   itkSetObjectMacro(Transform, TransformType);
 
-  /** Get a pointer to the Transform.  */
+  /** Get a pointer to the Transform. */
   itkGetModifiableObjectMacro(Transform, TransformType);
 
   /** Set the parameters defining the Transform. */
@@ -122,8 +122,7 @@ public:
     return m_Transform->GetNumberOfParameters();
   }
 
-  /** Initialize the Metric by making sure that all the components
-   *  are present and plugged together correctly     */
+  /** Initialize the Metric by making sure that all the components are present and plugged together correctly. */
   virtual void
   Initialize();
 
@@ -133,11 +132,11 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  FixedPointSetConstPointer m_FixedPointSet;
+  FixedPointSetConstPointer m_FixedPointSet{};
 
-  MovingPointSetConstPointer m_MovingPointSet;
+  MovingPointSetConstPointer m_MovingPointSet{};
 
-  mutable TransformPointer m_Transform;
+  mutable TransformPointer m_Transform{};
 };
 } // end namespace itk
 

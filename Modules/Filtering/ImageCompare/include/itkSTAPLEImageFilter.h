@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class STAPLEImageFilter
+ * \class STAPLEImageFilter
  *
  * \brief The STAPLE filter implements the Simultaneous Truth and Performance
  * Level Estimation algorithm for generating ground truth volumes from a set of
@@ -134,7 +134,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(STAPLEImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(STAPLEImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -184,7 +184,7 @@ public:
   {
     if (i > this->GetNumberOfIndexedInputs())
     {
-      itkExceptionMacro(<< "Array reference out of bounds.");
+      itkExceptionMacro("Array reference out of bounds.");
     }
     return m_Sensitivity[i];
   }
@@ -196,7 +196,7 @@ public:
   {
     if (i > this->GetNumberOfIndexedInputs())
     {
-      itkExceptionMacro(<< "Array reference out of bounds.");
+      itkExceptionMacro("Array reference out of bounds.");
     }
     return m_Specificity[i];
   }
@@ -204,7 +204,7 @@ public:
   /** Set/Get the maximum number of iterations after which the STAPLE algorithm
    *  will be considered to have converged.  In general this SHOULD NOT be set and
    *  the algorithm should be allowed to converge on its own. */
-  itkSetMacro(MaximumIterations, unsigned int);
+  itkSetClampMacro(MaximumIterations, unsigned int, 1, NumericTraits<unsigned int>::max());
   itkGetConstMacro(MaximumIterations, unsigned int);
 
   /** Scales the estimated prior probability that a pixel will be inside the
@@ -243,14 +243,14 @@ protected:
   PrintSelf(std::ostream &, Indent) const override;
 
 private:
-  InputPixelType m_ForegroundValue;
-  unsigned int   m_ElapsedIterations;
-  unsigned int   m_MaximumIterations;
+  InputPixelType m_ForegroundValue{};
+  unsigned int   m_ElapsedIterations{};
+  unsigned int   m_MaximumIterations{};
 
-  double m_ConfidenceWeight;
+  double m_ConfidenceWeight{};
 
-  std::vector<double> m_Sensitivity;
-  std::vector<double> m_Specificity;
+  std::vector<double> m_Sensitivity{};
+  std::vector<double> m_Specificity{};
 };
 } // end namespace itk
 

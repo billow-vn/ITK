@@ -19,11 +19,11 @@
 #define itkTriangleCell_hxx
 #include "vnl/algo/vnl_determinant.h"
 
+#include <algorithm> // For copy_n.
+
 namespace itk
 {
-/**
- * Standard CellInterface:
- */
+
 template <typename TCellInterface>
 void
 TriangleCell<TCellInterface>::MakeCopy(CellAutoPointer & cellPointer) const
@@ -32,10 +32,6 @@ TriangleCell<TCellInterface>::MakeCopy(CellAutoPointer & cellPointer) const
   cellPointer->SetPointIds(this->GetPointIds());
 }
 
-/**
- * Standard CellInterface:
- * Get the topological dimension of this cell.
- */
 template <typename TCellInterface>
 unsigned int
 TriangleCell<TCellInterface>::GetDimension() const
@@ -43,10 +39,6 @@ TriangleCell<TCellInterface>::GetDimension() const
   return Self::CellDimension;
 }
 
-/**
- * Standard CellInterface:
- * Get the number of points required to define the cell.
- */
 template <typename TCellInterface>
 unsigned int
 TriangleCell<TCellInterface>::GetNumberOfPoints() const
@@ -54,10 +46,6 @@ TriangleCell<TCellInterface>::GetNumberOfPoints() const
   return Self::NumberOfPoints;
 }
 
-/**
- * Standard CellInterface:
- * Get the number of boundary features of the given dimension.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::GetNumberOfBoundaryFeatures(int dimension) const -> CellFeatureCount
@@ -73,12 +61,6 @@ TriangleCell<TCellInterface>::GetNumberOfBoundaryFeatures(int dimension) const -
   }
 }
 
-/**
- * Standard CellInterface:
- * Get the boundary feature of the given dimension specified by the given
- * cell feature Id.
- * The Id can range from 0 to GetNumberOfBoundaryFeatures(dimension)-1.
- */
 template <typename TCellInterface>
 bool
 TriangleCell<TCellInterface>::GetBoundaryFeature(int                   dimension,
@@ -114,31 +96,13 @@ TriangleCell<TCellInterface>::GetBoundaryFeature(int                   dimension
   return false;
 }
 
-/**
- * Standard CellInterface:
- * Set the point id list used by the cell.  It is assumed that the given
- * iterator can be incremented and safely de-referenced enough times to
- * get all the point ids needed by the cell.
- */
 template <typename TCellInterface>
 void
 TriangleCell<TCellInterface>::SetPointIds(PointIdConstIterator first)
 {
-  PointIdConstIterator ii(first);
-
-  for (unsigned int i = 0; i < NumberOfPoints; ++i, ++ii)
-  {
-    m_PointIds[i] = *ii;
-  }
+  std::copy_n(first, Self::NumberOfPoints, m_PointIds.begin());
 }
 
-/**
- * Standard CellInterface:
- * Set the point id list used by the cell.  It is assumed that the range
- * of iterators [first, last) contains the correct number of points needed to
- * define the cell.  The position *last is NOT referenced, so it can safely
- * be one beyond the end of an array or other container.
- */
 template <typename TCellInterface>
 void
 TriangleCell<TCellInterface>::SetPointIds(PointIdConstIterator first, PointIdConstIterator last)
@@ -152,10 +116,6 @@ TriangleCell<TCellInterface>::SetPointIds(PointIdConstIterator first, PointIdCon
   }
 }
 
-/**
- * Standard CellInterface:
- * Set an individual point identifier in the cell.
- */
 template <typename TCellInterface>
 void
 TriangleCell<TCellInterface>::SetPointId(int localId, PointIdentifier ptId)
@@ -163,10 +123,6 @@ TriangleCell<TCellInterface>::SetPointId(int localId, PointIdentifier ptId)
   m_PointIds[localId] = ptId;
 }
 
-/**
- * Standard CellInterface:
- * Get a begin iterator to the list of point identifiers used by the cell.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::PointIdsBegin() -> PointIdIterator
@@ -174,11 +130,6 @@ TriangleCell<TCellInterface>::PointIdsBegin() -> PointIdIterator
   return &m_PointIds[0];
 }
 
-/**
- * Standard CellInterface:
- * Get a const begin iterator to the list of point identifiers used
- * by the cell.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::PointIdsBegin() const -> PointIdConstIterator
@@ -186,10 +137,6 @@ TriangleCell<TCellInterface>::PointIdsBegin() const -> PointIdConstIterator
   return &m_PointIds[0];
 }
 
-/**
- * Standard CellInterface:
- * Get an end iterator to the list of point identifiers used by the cell.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::PointIdsEnd() -> PointIdIterator
@@ -197,11 +144,6 @@ TriangleCell<TCellInterface>::PointIdsEnd() -> PointIdIterator
   return &m_PointIds[Self::NumberOfPoints - 1] + 1;
 }
 
-/**
- * Standard CellInterface:
- * Get a const end iterator to the list of point identifiers used
- * by the cell.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::PointIdsEnd() const -> PointIdConstIterator
@@ -209,10 +151,6 @@ TriangleCell<TCellInterface>::PointIdsEnd() const -> PointIdConstIterator
   return &m_PointIds[Self::NumberOfPoints - 1] + 1;
 }
 
-/**
- * Triangle-specific:
- * Get the number of vertices defining the triangle.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::GetNumberOfVertices() const -> CellFeatureCount
@@ -220,10 +158,6 @@ TriangleCell<TCellInterface>::GetNumberOfVertices() const -> CellFeatureCount
   return Self::NumberOfVertices;
 }
 
-/**
- * Triangle-specific:
- * Get the number of edges defined for the triangle.
- */
 template <typename TCellInterface>
 auto
 TriangleCell<TCellInterface>::GetNumberOfEdges() const -> CellFeatureCount
@@ -231,11 +165,6 @@ TriangleCell<TCellInterface>::GetNumberOfEdges() const -> CellFeatureCount
   return Self::NumberOfEdges;
 }
 
-/**
- * Triangle-specific:
- * Get the vertex specified by the given cell feature Id.
- * The Id can range from 0 to GetNumberOfVertices()-1.
- */
 template <typename TCellInterface>
 bool
 TriangleCell<TCellInterface>::GetVertex(CellFeatureIdentifier vertexId, VertexAutoPointer & vertexPointer)
@@ -247,11 +176,6 @@ TriangleCell<TCellInterface>::GetVertex(CellFeatureIdentifier vertexId, VertexAu
   return true;
 }
 
-/**
- * Triangle-specific:
- * Get the edge specified by the given cell feature Id.
- * The Id can range from 0 to GetNumberOfEdges()-1.
- */
 template <typename TCellInterface>
 bool
 TriangleCell<TCellInterface>::GetEdge(CellFeatureIdentifier edgeId, EdgeAutoPointer & edgePointer)
@@ -266,8 +190,6 @@ TriangleCell<TCellInterface>::GetEdge(CellFeatureIdentifier edgeId, EdgeAutoPoin
   return true;
 }
 
-/** Compute distance to finite line. Returns parametric coordinate t
- *  and point location on line. */
 template <typename TCellInterface>
 double
 TriangleCell<TCellInterface>::DistanceToLine(PointType      x,
@@ -304,9 +226,8 @@ TriangleCell<TCellInterface>::DistanceToLine(PointType   x,
                                              PointType & closestPoint)
 {
   VectorType v21 = p2 - p1;
-  //
-  //   Get parametric location
-  //
+
+  // Get parametric location
   double num(0);
   double denom(0);
 
@@ -326,10 +247,9 @@ TriangleCell<TCellInterface>::DistanceToLine(PointType   x,
   {
     closestPoint = p1; // arbitrary, point is (numerically) far away
   }
-  //
+
   // If parametric coordinate is within 0<=p<=1, then the point is closest to
   // the line.  Otherwise, it's closest to a point at the end of the line.
-  //
   else if ((t = num / denom) < 0.0)
   {
     closestPoint = p1;
@@ -446,13 +366,12 @@ TriangleCell<TCellInterface>::ComputeCircumCenter(PointsContainer * iPoints) -> 
   }
 }
 
-/** Evaluate the position of a given point inside the cell */
 template <typename TCellInterface>
 bool
 TriangleCell<TCellInterface>::EvaluatePosition(CoordRepType *            x,
                                                PointsContainer *         points,
                                                CoordRepType *            closestPoint,
-                                               CoordRepType              pcoord[3],
+                                               CoordRepType              pcoord[],
                                                double *                  minDist2,
                                                InterpolationWeightType * weights)
 {
@@ -470,43 +389,33 @@ TriangleCell<TCellInterface>::EvaluatePosition(CoordRepType *            x,
     return false;
   }
 
-  //
   // Get the vertexes of this triangle
-  //
   PointType pt1 = points->GetElement(m_PointIds[0]);
   PointType pt2 = points->GetElement(m_PointIds[1]);
   PointType pt3 = points->GetElement(m_PointIds[2]);
 
-  //
   // Compute Vectors along the edges.
   // These two vectors form a vector base for the 2D space of the triangle cell.
-  //
   VectorType v12 = pt1 - pt2;
   VectorType v32 = pt3 - pt2;
 
-  //
   // Compute Vectors in the dual vector base inside the 2D space of the triangle
   // cell.
   // u12 is orthogonal to v32
   // u32 is orthogonal to v12
-  //
   const double dotproduct = v12 * v32;
   VectorType   u12 = v12 - v32 * (dotproduct / v32.GetSquaredNorm());
   VectorType   u32 = v32 - v12 * (dotproduct / v12.GetSquaredNorm());
 
-  //
   // Add normalizations for making {u12,u32} a vector basis orthonormal to {v12,
   // v32}.
-  //
   u12 /= (u12 * v12);
   u32 /= (u32 * v32);
 
-  //
   // Project point to plane, by using the dual vector base
-  //
+
   // Compute components of the input point in the 2D
   // space defined by v12 and v32
-  //
   VectorType xo = X - pt2;
 
   const double u12p = xo * u12;
@@ -515,32 +424,24 @@ TriangleCell<TCellInterface>::EvaluatePosition(CoordRepType *            x,
   VectorType x12 = v12 * u12p;
   VectorType x32 = v32 * u32p;
 
-  //
   // The projection of point X in the plane is cp
-  //
   PointType cp = pt2 + x12 + x32;
 
-  //
   // Compute barycentric coordinates in the Triangle
-  //
   const double b1 = u12p;
   const double b2 = 1.0 - u12p - u32p;
   const double b3 = u32p;
 
-  //
   // Test if the projected point is inside the cell.
-  //
+
   // Zero with epsilon
   const double zwe = -NumericTraits<double>::min();
 
-  //
   // Since the three barycentric coordinates are interdependent
   // only three tests should be necessary. That is, we only need
   // to test against the equations of three lines (half-spaces).
-  //
   if ((b1 >= zwe) && (b2 >= zwe) && (b3 >= zwe))
   {
-    //
     // This is the case when the point is inside the triangle
     // projection distance
     if (closestPoint)

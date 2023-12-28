@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class HalfHermitianToRealInverseFFTImageFilter
+ * \class HalfHermitianToRealInverseFFTImageFilter
  *
  * \brief Base class for specialized complex-to-real inverse Fast Fourier Transform.
  *
@@ -75,7 +75,7 @@ public:
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HalfHermitianToRealInverseFFTImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HalfHermitianToRealInverseFFTImageFilter);
 
   /** Customized object creation methods that support configuration-based
    * selection of FFT implementation.

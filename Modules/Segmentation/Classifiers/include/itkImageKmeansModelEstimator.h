@@ -40,7 +40,7 @@
 namespace itk
 {
 /**
- *\class ImageKmeansModelEstimator
+ * \class ImageKmeansModelEstimator
  * \brief Base class for ImageKmeansModelEstimator object.
  *
  * itkImageKmeansModelEstimator generates the kmeans model (cluster centers).
@@ -54,7 +54,7 @@ namespace itk
  * is referred as a codebook.
  *
  * As required by the GLA algorithm, the initial seed cluster should contain
- * approximate centers of clusters.  The GLA algorithm genrates updated
+ * approximate centers of clusters.  The GLA algorithm generates updated
  * cluster centers that result in a lower distortion than the input seed
  * cluster when the input vectors are mapped/classified/labelled using the
  * given codebooks.
@@ -144,7 +144,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageKmeansModelEstimator, ImageModelEstimatorBase);
+  itkOverrideGetNameOfClassMacro(ImageKmeansModelEstimator);
 
   /** Type definition for the input image. */
   using InputImageType = TInputImage;
@@ -215,7 +215,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /** Starts the image modelling process */
+  /** Starts the image modeling process */
   void
   GenerateData() override;
 
@@ -267,27 +267,27 @@ private:
   void
   Perturb(double * oldCodeword, int scale, double * newCodeword);
 
-  CodebookMatrixOfDoubleType m_Codebook;
+  CodebookMatrixOfDoubleType m_Codebook{};
 
   // Buffer for K-means calculations
-  CodebookMatrixOfDoubleType m_Centroid;
+  CodebookMatrixOfDoubleType m_Centroid{};
 
-  double m_Threshold;
-  double m_OffsetAdd;
-  double m_OffsetMultiply;
-  int    m_MaxSplitAttempts;
+  double m_Threshold{};
+  double m_OffsetAdd{};
+  double m_OffsetMultiply{};
+  int    m_MaxSplitAttempts{};
 
-  bool   m_ValidInCodebook;
-  double m_DoubleMaximum;
-  double m_OutputDistortion;
-  int    m_OutputNumberOfEmptyCells;
+  bool   m_ValidInCodebook{};
+  double m_DoubleMaximum{};
+  double m_OutputDistortion{};
+  int    m_OutputNumberOfEmptyCells{};
 
-  SizeValueType m_VectorDimension;
-  SizeValueType m_NumberOfCodewords;
-  SizeValueType m_CurrentNumberOfCodewords;
+  SizeValueType m_VectorDimension{};
+  SizeValueType m_NumberOfCodewords{};
+  SizeValueType m_CurrentNumberOfCodewords{};
 
-  CodebookMatrixOfIntegerType m_CodewordHistogram;
-  CodebookMatrixOfDoubleType  m_CodewordDistortion;
+  CodebookMatrixOfIntegerType m_CodewordHistogram{};
+  CodebookMatrixOfDoubleType  m_CodewordDistortion{};
 }; // class ImageKmeansModelEstimator
 
 } // end namespace itk

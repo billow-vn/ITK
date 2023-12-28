@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class LabelMapToAttributeImageFilter
+ * \class LabelMapToAttributeImageFilter
  * \brief Convert a LabelMap to a labeled image
  *
  * LabelMapToAttributeImageFilter converts a LabelMap to an
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToAttributeImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapToAttributeImageFilter);
 
   /**
    * Set/Get the value used as "background" in the output image, if the input
@@ -111,7 +111,7 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
+  OutputImagePixelType m_BackgroundValue{};
 
 }; // end of class
 

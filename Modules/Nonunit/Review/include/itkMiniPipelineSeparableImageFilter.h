@@ -37,7 +37,6 @@ namespace itk
  * This code was contributed in the Insight Journal paper:
  * "Efficient implementation of kernel filtering"
  * by Beare R., Lehmann G
- * https://hdl.handle.net/1926/555
  * https://www.insight-journal.org/browse/publication/160
  *
  *
@@ -62,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MiniPipelineSeparableImageFilter, BoxImageFilter);
+  itkOverrideGetNameOfClassMacro(MiniPipelineSeparableImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -107,8 +106,8 @@ protected:
   void
   GenerateData() override;
 
-  typename FilterType::Pointer m_Filters[ImageDimension];
-  typename CastType::Pointer   m_Cast;
+  typename FilterType::Pointer m_Filters[ImageDimension]{};
+  typename CastType::Pointer   m_Cast{};
 };
 } // namespace itk
 

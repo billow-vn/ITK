@@ -162,10 +162,10 @@ static const char * g_history[] =
 static char g_version[] = "version 1.24 (September 26, 2012)";
 static int  g_debug = 1;
 
+#include <limits.h>
 #include <string.h>
 #include <stdint.h>
 
-#define _NIFTI_TOOL_C_
 #include "nifti1_io.h"
 #include "nifti1_tool.h"
 
@@ -689,13 +689,14 @@ int verify_opts( nt_opts * opts, char * prog )
 int fill_cmd_string( nt_opts * opts, int argc, char * argv[])
 {
    char * cp;
-   int    len, remain = sizeof(opts->command);  /* max command len */
+   int    len, remain = (int)sizeof(opts->command);  /* max command len */
    int    c, ac;
    int    has_space;  /* arguments containing space must be quoted */
    int    skip = 0;   /* counter to skip some of the arguments     */
 
    /* get the first argument separately */
-   len = snprintf( opts->command, sizeof(opts->command), "\n  command: %s", argv[0] );
+   len = snprintf( opts->command, sizeof(opts->command),
+                   "\n  command: %s", argv[0] );
    if( len < 0 || len >= (int)sizeof(opts->command) ) {
       fprintf(stderr,"FCS: no space remaining for command, continuing...\n");
       return 1;
@@ -708,7 +709,7 @@ int fill_cmd_string( nt_opts * opts, int argc, char * argv[])
    {
       if( skip ){ skip--;  continue; }  /* then skip these arguments */
 
-      len = strlen(argv[ac]);
+      len = (int)strlen(argv[ac]);
       if( len + 3 >= remain ) {  /* extra 3 for space and possible '' */
          fprintf(stderr,"FCS: no space remaining for command, continuing...\n");
          return 1;
@@ -1734,9 +1735,8 @@ int use_full(const char * prog )
    "  ------------------------------\n"
    "\n"
    "  R. Reynolds\n"
-   "  compiled: %s\n"
    "  %s\n\n",
-   __DATE__, g_version );
+   g_version );
 
    return 1;
 }
@@ -1849,7 +1849,7 @@ int act_add_exts( nt_opts * opts )
 
       for( ec = 0; ec < opts->elist.len; ec++ ){
          ext = opts->elist.list[ec];
-         elen = strlen(ext);
+         elen = (int)strlen(ext);
          if( !strncmp(ext,"file:",5) ){
             edata = read_file_text(ext+5, &elen);
             if( !edata || elen <= 0 ) {
@@ -1866,11 +1866,12 @@ int act_add_exts( nt_opts * opts )
          }
 
          /* if extension came from file, free the data */
-         if( edata ){ free(edata); edata = NULL; }
+         free(edata);
+         edata = NULL;
       }
 
       if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                             strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                             (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
          fprintf(stderr,"** failed to add command to image as extension\n");
 
       if( opts->prefix &&
@@ -1936,7 +1937,7 @@ static char * read_file_text(const char * filename, int * length)
       return NULL;
    }
 
-   bytes = fread(text, sizeof(char), len, fp);
+   bytes = (int)fread(text, sizeof(char), len, fp);
    fclose(fp); /* in any case */
 
    if( bytes != len ) {
@@ -2068,7 +2069,7 @@ int act_rm_ext( nt_opts * opts )
          return 1;
 
       if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                             strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                             (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
          fprintf(stderr,"** failed to add command to image as extension\n");
 
       if( opts->prefix &&
@@ -2167,7 +2168,7 @@ int remove_ext_list( nifti_image * nim, const char ** elist, int len )
          disp_nifti1_extension("+d removing ext: ",nim->ext_list+ec,-1);
 
       /* delete this data, and shift the list down (yeah, inefficient) */
-      if( nim->ext_list[ec].edata ) free( nim->ext_list[ec].edata );
+      free( nim->ext_list[ec].edata );
 
       /* move anything above down one */
       for( c = ec+1; c < nim->num_ext; c++ )
@@ -2603,7 +2604,7 @@ int act_mod_hdrs( nt_opts * opts )
             return 1;
          }
          if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                                strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                                (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
                fprintf(stderr,"** failed to add command to image as extension\n");
          if( nifti_set_filenames(nim, opts->prefix, 1, 1) )
          {
@@ -2631,7 +2632,7 @@ int act_mod_hdrs( nt_opts * opts )
       /* if all is well, overwrite header in fname dataset */
       (void)write_hdr_to_file(nhdr, fname); /* errors printed in function */
 
-      if( dupname ) free(dupname);
+      free(dupname);
       free(nhdr);
    }
 
@@ -2724,7 +2725,7 @@ int act_swap_hdrs( nt_opts * opts )
             return 1;
          }
          if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                                strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                                (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
                fprintf(stderr,"** failed to add command to image as extension\n");
          if( nifti_set_filenames(nim, opts->prefix, 1, 1) )
          {
@@ -2750,7 +2751,7 @@ int act_swap_hdrs( nt_opts * opts )
       /* if all is well, overwrite header in fname dataset */
       (void)write_hdr_to_file(nhdr, fname); /* errors printed in function */
 
-      if( dupname ) free(dupname);
+      free(dupname);
       free(nhdr);
    }
 
@@ -2789,7 +2790,7 @@ int act_mod_nims( nt_opts * opts )
 
       /* add command as COMMENT extension */
       if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                             strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                             (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
          fprintf(stderr,"** failed to add command to image as extension\n");
 
       /* possibly duplicate the current dataset before writing new header */
@@ -3392,8 +3393,6 @@ const char * field_type_str( int type )
    return "DT_UNKNOWN";  /* for DT_UNKNOWN, or as an else */
 }
 
-#define NT_MAX_DT_STR_LEN 14
-
 /*----------------------------------------------------------------------
  * display the contents of all of the field structures
  *----------------------------------------------------------------------*/
@@ -3552,8 +3551,7 @@ int diff_field(field_s *fieldp, void * str0, void * str1, int nfields)
 
             if( ! ext0 && ! ext1 ) break;     /* continue on */
 
-            if( ext0 && ! ext1 )   return 1;  /* pointer diff is diff */
-            if( ! ext0 && ext1 )   return 1;
+            if( !(ext0 && ext1) )   return 1;  /* pointer diff is diff */
 
             /* just check size and type for a single extension */
             if( ext0->esize != ext1->esize ) return 1;
@@ -3664,8 +3662,11 @@ int diff_hdrs( nifti_1_header * s0, nifti_1_header * s1, int display )
    for( c = 0; c < NT_HDR_NUM_FIELDS; c++, fp++ )
       if( diff_field(fp, s0, s1, 1) )
       {
-         if( display ) disp_field(NULL, fp, s0, 1, ndiff == 0);
-         if( display ) disp_field(NULL, fp, s1, 1, 0);
+         if( display )
+         {
+            disp_field(NULL, fp, s0, 1, ndiff == 0);
+            disp_field(NULL, fp, s1, 1, 0);
+         }
          ndiff++;
       }
 
@@ -3684,8 +3685,11 @@ int diff_nims( nifti_image * s0, nifti_image * s1, int display )
    for( c = 0; c < NT_NIM_NUM_FIELDS; c++, fp++ )
       if( diff_field(fp, s0, s1, 1) )
       {
-         if( display ) disp_field(NULL, fp, s0, 1, ndiff == 0);
-         if( display ) disp_field(NULL, fp, s1, 1, 0);
+         if( display )
+         {
+            disp_field(NULL, fp, s0, 1, ndiff == 0);
+            disp_field(NULL, fp, s1, 1, 0);
+         }
          ndiff++;
       }
 
@@ -3709,8 +3713,11 @@ int diff_hdrs_list( nifti_1_header * s0, nifti_1_header * s1, str_list * slist,
       fp = get_hdr_field(*sptr, 1);    /* "not found" displayed in func */
       if( fp && diff_field(fp, s0, s1, 1) )
       {
-         if( display ) disp_field(NULL, fp, s0, 1, ndiff == 0);
-         if( display ) disp_field(NULL, fp, s1, 1, 0);
+         if( display )
+         {
+            disp_field(NULL, fp, s0, 1, ndiff == 0);
+            disp_field(NULL, fp, s1, 1, 0);
+         }
          ndiff++;
       }
       sptr++;
@@ -3736,8 +3743,11 @@ int diff_nims_list( nifti_image * s0, nifti_image * s1, str_list * slist,
       fp = get_nim_field(*sptr, 1);    /* "not found" displayed in func */
       if( fp && diff_field(fp, s0, s1, 1) )
       {
-         if( display ) disp_field(NULL, fp, s0, 1, ndiff == 0);
-         if( display ) disp_field(NULL, fp, s1, 1, 0);
+         if( display )
+         {
+            disp_field(NULL, fp, s0, 1, ndiff == 0);
+            disp_field(NULL, fp, s1, 1, 0);
+         }
          ndiff++;
       }
       sptr++;
@@ -3806,7 +3816,8 @@ int act_disp_ci( nt_opts * opts )
       if( len < 0 || !data )
       {
          fprintf(stderr,"** FAILURE for dataset '%s'\n", nim->fname);
-         if( data ) { free(data); data = NULL; }
+         free(data);
+         data = NULL;
          err++;
       }
 
@@ -3828,15 +3839,15 @@ int act_disp_ci( nt_opts * opts )
       nifti_image_free(nim);
    }
 
-   if( data ) free(data);
+   free(data);
 
    return 0;
 }
 
-
+#define NT_LOC_MAX_FLOAT_BUF 32
 int disp_raw_data( void * data, int type, int nvals, char space, int newline )
 {
-   char * dp, fbuf[32];
+   char * dp, fbuf[NT_LOC_MAX_FLOAT_BUF];
    int    c, size;
 
    nifti_datatype_sizes( type, &size, NULL );   /* get nbyper */
@@ -3887,7 +3898,7 @@ int disp_raw_data( void * data, int type, int nvals, char space, int newline )
          {
                float temp;
                memcpy(&temp, dp, sizeof(temp));
-               snprintf(fbuf,sizeof(fbuf),"%f", temp);
+               snprintf(fbuf, NT_LOC_MAX_FLOAT_BUF,"%f", temp);
                clear_float_zeros(fbuf);
                printf("%s", fbuf);
                break;
@@ -3896,7 +3907,7 @@ int disp_raw_data( void * data, int type, int nvals, char space, int newline )
          {
                double temp;
                memcpy(&temp, dp, sizeof(temp));
-               snprintf(fbuf,sizeof(fbuf),"%f", temp);
+               snprintf(fbuf, NT_LOC_MAX_FLOAT_BUF,"%f", temp);
                clear_float_zeros(fbuf);
                printf("%s", fbuf);
                break;
@@ -3915,13 +3926,14 @@ int disp_raw_data( void * data, int type, int nvals, char space, int newline )
 
 /*----------------------------------------------------------------------
  * remove trailing zeros from string of printed float
+ * (of a max NT_LOC_MAX_FLOAT_BUF (32) string)
  * return  1 if something was cleared
  *         0 if not
  *----------------------------------------------------------------------*/
 int clear_float_zeros( char * str )
 {
-   char * dp  = strchr(str, '.'), * valp;
-   int    len;
+   char   * dp  = strchr(str, '.'), * valp;
+   size_t   len;
 
    if( !dp ) return 0;      /* nothing to clear */
 
@@ -4008,7 +4020,7 @@ int act_cbl( nt_opts * opts )
 
    /* add command as COMMENT extension */
    if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                          strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                          (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
       fprintf(stderr,"** failed to add command to image as extension\n");
 
    /* replace filenames using prefix */
@@ -4066,7 +4078,7 @@ int act_cci( nt_opts * opts )
 
    /* add command as COMMENT extension */
    if( opts->keep_hist && nifti_add_extension(nim, opts->command,
-                          strlen(opts->command), NIFTI_ECODE_COMMENT) )
+                          (int)strlen(opts->command), NIFTI_ECODE_COMMENT) )
       fprintf(stderr,"** failed to add command to image as extension\n");
 
    /* replace filenames using prefix */
@@ -4107,11 +4119,11 @@ static int free_opts_mem( nt_opts * nopt )
 {
     if( !nopt ) return 1;
 
-    if( nopt->elist.list   ) free(nopt->elist.list);
-    if( nopt->etypes.list  ) free(nopt->etypes.list);
-    if( nopt->flist.list   ) free(nopt->flist.list);
-    if( nopt->vlist.list   ) free(nopt->vlist.list);
-    if( nopt->infiles.list ) free(nopt->infiles.list);
+    free(nopt->elist.list);
+    free(nopt->etypes.list);
+    free(nopt->flist.list);
+    free(nopt->vlist.list);
+    free(nopt->infiles.list);
 
     return 0;
 }

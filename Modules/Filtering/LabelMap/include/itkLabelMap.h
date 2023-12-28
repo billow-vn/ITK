@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LabelMap
+ * \class LabelMap
  *  \brief Templated n-dimensional image to store labeled objects.
  *
  * LabelMap is an image class specialized in storing the labeled
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LabelMap, ImageBase);
+  itkOverrideGetNameOfClassMacro(LabelMap);
 
   using LabelObjectType = TLabelObject;
 
@@ -165,7 +165,7 @@ public:
 
   /**
    * Return the LabelObject with at the position given in parameter.
-   * This method can be useful when the labels are not consecutives, but is quite
+   * This method can be useful when the labels are not consecutive, but is quite
    * inefficient.
    * This method throws an exception if the index doesn't exist in this image.
    */
@@ -191,7 +191,7 @@ public:
    * has a unique value.
    *
    * The complexity of this method is at best O(L) where L is the number of lines
-   * in the image - usit with care.
+   * in the image - use it with care.
    */
   void
   SetPixel(const IndexType & idx, const LabelType & iLabel);
@@ -307,7 +307,7 @@ public:
   Optimize();
 
   /**
-   *\class ConstIterator
+   * \class ConstIterator
    * \brief A forward iterator over the LabelObjects of a LabelMap
    * \ingroup ITKLabelMap
    */
@@ -394,7 +394,7 @@ public:
   };
 
   /**
-   *\class Iterator
+   * \class Iterator
    * \brief A forward iterator over the LabelObjects of a LabelMap
    * \ingroup ITKLabelMap
    */
@@ -497,8 +497,8 @@ private:
   using LabelObjectContainerIterator = typename LabelObjectContainerType::iterator;
   using LabelObjectContainerConstIterator = typename LabelObjectContainerType::const_iterator;
 
-  LabelObjectContainerType m_LabelObjectContainer;
-  LabelType                m_BackgroundValue;
+  LabelObjectContainerType m_LabelObjectContainer{};
+  LabelType                m_BackgroundValue{};
 
   void
   AddPixel(const LabelObjectContainerIterator & it, const IndexType & idx, const LabelType & label);

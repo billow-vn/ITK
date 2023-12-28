@@ -68,7 +68,7 @@ namespace itk
  * Unlike them, this iterator is not local, nor cyclic. Starting from a
  * given seed, it will create a front that propagates on the surface.
  * Depending on the weight associated which each edge, and on the type of the
- * seed (primal or dual) it can be used for frint propagation algorithm,
+ * seed (primal or dual) it can be used for front propagation algorithm,
  * distance tree computation or other Djikstra like algorithms.
  * \ingroup ITKQuadEdgeMesh
  */
@@ -210,17 +210,17 @@ protected:
 
 protected:
   /** Mesh on which we propagate the front */
-  MeshType * m_Mesh;
+  MeshType * m_Mesh{};
   /** Initial seed of the front */
-  QEType * m_Seed;
+  QEType * m_Seed{};
   /** Whether the iterator is active */
-  bool m_Start;
+  bool m_Start{};
   /** The active front */
-  FrontTypePointer m_Front;
+  FrontTypePointer m_Front{};
   /** The already visited points */
-  IsVisitedPointerType m_IsPointVisited;
+  IsVisitedPointerType m_IsPointVisited{};
   /** The current edge at this stage of iteration */
-  QEType * m_CurrentEdge;
+  QEType * m_CurrentEdge{};
 };
 
 /**

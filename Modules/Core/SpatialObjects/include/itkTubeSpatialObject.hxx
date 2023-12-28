@@ -23,7 +23,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension, typename TTubePointType>
 TubeSpatialObject<TDimension, TTubePointType>::TubeSpatialObject()
 {
@@ -52,7 +52,6 @@ TubeSpatialObject<TDimension, TTubePointType>::Clear()
   this->Modified();
 }
 
-/** Copy the information from another spatial object */
 template <unsigned int TDimension, typename TTubePointType>
 void
 TubeSpatialObject<TDimension, TTubePointType>::CopyInformation(const DataObject * data)
@@ -67,8 +66,8 @@ TubeSpatialObject<TDimension, TTubePointType>::CopyInformation(const DataObject 
   if (soData == nullptr)
   {
     // pointer could not be cast back down
-    itkExceptionMacro(<< "itk::TubeSpatialObject::CopyInformation() cannot cast " << typeid(data).name() << " to "
-                      << typeid(TubeSpatialObject<TDimension> *).name());
+    itkExceptionMacro("itk::TubeSpatialObject::CopyInformation() cannot cast "
+                      << typeid(data).name() << " to " << typeid(TubeSpatialObject<TDimension> *).name());
   }
 
   // check if we are the same type
@@ -87,7 +86,6 @@ TubeSpatialObject<TDimension, TTubePointType>::CopyInformation(const DataObject 
   // this->SetParentPoint(source->GetParentPoint());
 }
 
-/** InternalClone */
 template <unsigned int TDimension, typename TTubePointType>
 typename LightObject::Pointer
 TubeSpatialObject<TDimension, TTubePointType>::InternalClone() const
@@ -97,7 +95,7 @@ TubeSpatialObject<TDimension, TTubePointType>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   rval->SetEndRounded(this->GetEndRounded());
@@ -107,20 +105,17 @@ TubeSpatialObject<TDimension, TTubePointType>::InternalClone() const
   return loPtr;
 }
 
-/** Print the object */
 template <unsigned int TDimension, typename TTubePointType>
 void
 TubeSpatialObject<TDimension, TTubePointType>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  os << indent << "TubeSpatialObject(" << this << ")" << std::endl;
-  os << indent << "End Type : " << m_EndRounded << std::endl;
-  os << indent << "Parent Point : " << m_ParentPoint << std::endl;
-  os << indent << "Root : " << m_Root << std::endl;
-
   Superclass::PrintSelf(os, indent);
+
+  os << indent << "ParentPoint : " << m_ParentPoint << std::endl;
+  os << indent << "EndRounded: " << (m_EndRounded ? "On" : "Off") << std::endl;
+  os << indent << "Root: " << (m_Root ? "On" : "Off") << std::endl;
 }
 
-/** Compute the bounds of the tube */
 template <unsigned int TDimension, typename TTubePointType>
 void
 TubeSpatialObject<TDimension, TTubePointType>::ComputeMyBoundingBox()
@@ -179,9 +174,6 @@ TubeSpatialObject<TDimension, TTubePointType>::ComputeMyBoundingBox()
   this->GetModifiableMyBoundingBoxInObjectSpace()->ComputeBoundingBox();
 }
 
-/** Test whether a point is inside or outside the object
- *  For computational speed purposes, it is faster if the method does not
- *  check the name of the class and the current depth */
 template <unsigned int TDimension, typename TTubePointType>
 bool
 TubeSpatialObject<TDimension, TTubePointType>::IsInsideInObjectSpace(const PointType & point) const
@@ -295,7 +287,6 @@ TubeSpatialObject<TDimension, TTubePointType>::IsInsideInObjectSpace(const Point
   return false;
 }
 
-/** Remove duplicate points */
 template <unsigned int TDimension, typename TTubePointType>
 unsigned int
 TubeSpatialObject<TDimension, TTubePointType>::RemoveDuplicatePointsInObjectSpace(double minSpacingInObjectSpace)
@@ -322,7 +313,6 @@ TubeSpatialObject<TDimension, TTubePointType>::RemoveDuplicatePointsInObjectSpac
   return nPoints;
 }
 
-/** Compute the tangent of the centerline of the tube */
 template <unsigned int TDimension, typename TTubePointType>
 bool
 TubeSpatialObject<TDimension, TTubePointType>::ComputeTangentsAndNormals()
@@ -367,8 +357,7 @@ TubeSpatialObject<TDimension, TTubePointType>::ComputeTangentsAndNormals()
       l = l + t[i] * t[i];
     }
     l = std::sqrt(l);
-    // if the adjacent points correspond, use the current point and one
-    //   forward point
+    // If the adjacent points correspond, use the current point and one forward point
     if (Math::AlmostEquals(l, 0.0) || std::isnan(l))
     {
       const PointType & x2 = this->GetPoint(it2)->GetPositionInObjectSpace();
@@ -379,16 +368,15 @@ TubeSpatialObject<TDimension, TTubePointType>::ComputeTangentsAndNormals()
         l = l + t[i] * t[i];
       }
       l = std::sqrt(l);
-      // if the forward point and the current point correspond, then
-      //   RemoveDuplicatePointsInObjectSpace was not called.
+      // If the forward point and the current point correspond, then RemoveDuplicatePointsInObjectSpace was not called
       if (Math::AlmostEquals(l, 0.0) || std::isnan(l))
       {
-        std::cerr << "TubeSpatialObject::ComputeTangentAndNormals() : ";
-        std::cerr << "length between two consecutive points is 0";
-        std::cerr << " (use RemoveDuplicatePointsInObjectSpace())" << std::endl;
-        std::cerr << "   p1 = " << x1 << std::endl;
-        std::cerr << "   p2 = " << x2 << std::endl;
-        std::cerr << "   p3 = " << x3 << std::endl;
+        std::cerr << "TubeSpatialObject::ComputeTangentAndNormals() : "
+                  << "length between two consecutive points is 0"
+                  << " (use RemoveDuplicatePointsInObjectSpace())" << std::endl
+                  << "   p1 = " << x1 << std::endl
+                  << "   p2 = " << x2 << std::endl
+                  << "   p3 = " << x3 << std::endl;
         return false;
       }
     }
@@ -441,8 +429,7 @@ TubeSpatialObject<TDimension, TTubePointType>::ComputeTangentsAndNormals()
     CovariantVectorType n1;
     if (TDimension == 2)
     {
-      // The normal to the tangent in 2D is the orthogonal direction to the
-      //   tangent.
+      // The normal to the tangent in 2D is the orthogonal direction to the tangent.
       n1[0] = t[1];
       n1[1] = -t[0];
       if (it1 != 0)
@@ -462,8 +449,7 @@ TubeSpatialObject<TDimension, TTubePointType>::ComputeTangentsAndNormals()
     }
     else if (TDimension == 3)
     {
-      // The normal to the tangent in 3D is the cross product of adjacent
-      //   tangent directions.
+      // The normal to the tangent in 3D is the cross product of adjacent tangent directions.
       n1[0] = t[1] * t2[2] - t[2] * t2[1];
       n1[1] = t[2] * t2[0] - t[0] * t2[2];
       n1[2] = t[0] * t2[1] - t[1] * t2[0];
@@ -506,8 +492,7 @@ TubeSpatialObject<TDimension, TTubePointType>::ComputeTangentsAndNormals()
         n1 /= l_n1;
       }
 
-      // The second normal is the cross product of the tangent and the
-      //   first normal
+      // The second normal is the cross product of the tangent and the first normal
       CovariantVectorType n2;
       n2[0] = t[1] * n1[2] - t[2] * n1[1];
       n2[1] = t[2] * n1[0] - t[0] * n1[2];

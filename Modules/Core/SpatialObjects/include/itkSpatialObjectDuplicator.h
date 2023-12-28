@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class SpatialObjectDuplicator
+ * \class SpatialObjectDuplicator
  *  This helper class create an SpatialObject which is perfect
  *  copy of the input SpatialObject
  * \ingroup ITKSpatialObjects
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpatialObjectDuplicator, Object);
+  itkOverrideGetNameOfClassMacro(SpatialObjectDuplicator);
 
   /** Type definitions for the input SpatialObject. */
   using SpatialObjectType = TInputSpatialObject;
@@ -105,9 +105,9 @@ protected:
   CopyObject(const InternalSpatialObjectType * source, InternalSpatialObjectType * destination);
 
 private:
-  SpatialObjectConstPointer m_Input;
-  SpatialObjectPointer      m_DuplicateSpatialObject;
-  ModifiedTimeType          m_InternalSpatialObjectTime;
+  SpatialObjectConstPointer m_Input{};
+  SpatialObjectPointer      m_DuplicateSpatialObject{};
+  ModifiedTimeType          m_InternalSpatialObjectTime{};
 };
 } // end namespace itk
 

@@ -99,7 +99,7 @@ DerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
   {
     if (this->GetInput()->GetSpacing()[m_Direction] == 0.0)
     {
-      itkExceptionMacro(<< "Image spacing cannot be zero.");
+      itkExceptionMacro("Image spacing cannot be zero.");
     }
     else
     {
@@ -121,7 +121,7 @@ DerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
   filter->OverrideBoundaryCondition(&nbc);
 
   //
-  // Set up the mini-pipline
+  // Set up the mini-pipeline
   //
   filter->SetOperator(oper);
   filter->SetInput(this->GetInput());
@@ -147,7 +147,7 @@ DerivativeImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, I
 
   os << indent << "Order: " << m_Order << std::endl;
   os << indent << "Direction: " << m_Direction << std::endl;
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 

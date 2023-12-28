@@ -41,7 +41,7 @@ namespace itk
  * This class is parameterized over the type of the input image and
  * the type of the output image.
  *
- * This class was contributed to the Insight Journal by Emilian Beronich and
+ * This class was contributed to the Insight Journal by Emiliano Beronich and
  * Gaetan Lehmann. The original paper can be found at
  * https://www.insight-journal.org/browse/publication/71
  *
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ProjectionImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ProjectionImageFilter);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;
@@ -122,7 +122,7 @@ protected:
   virtual AccumulatorType NewAccumulator(SizeValueType) const;
 
 private:
-  unsigned int m_ProjectionDimension;
+  unsigned int m_ProjectionDimension{};
 };
 } // end namespace itk
 

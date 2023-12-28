@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScaleTransform, Transform);
+  itkOverrideGetNameOfClassMacro(ScaleTransform);
 
   /** Dimension of the domain space. */
   static constexpr unsigned int SpaceDimension = VDimension;
@@ -214,7 +214,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ScaleType m_Scale; // Scales of the transformation
+  ScaleType m_Scale{}; // Scales of the transformation
 
 }; // class ScaleTransform
 

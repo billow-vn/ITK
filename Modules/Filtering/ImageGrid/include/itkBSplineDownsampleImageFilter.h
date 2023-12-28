@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class BSplineDownsampleImageFilter
+ * \class BSplineDownsampleImageFilter
  * \brief Down-samples an image by a factor of 2 using B-Spline filter interpolation.
  *
  * This class is the public interface for spline down-sampling as defined by the
@@ -70,7 +70,7 @@ namespace itk
  *                        itkBSplineSplineCenteredResampleImageFilterBase,
  *                        itkBSplineCenteredL2ResampleImageFilterBase
  *               The limitations of these resampler types will apply to this filter.
- *               Downsamples only by a factor of 2.
+ *               Down-samples only by a factor of 2.
  *
  * \sa itkBSplineDownsampleImageFilter
  * \sa itkBSplineL2ResampleImageFilter
@@ -100,7 +100,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineDownsampleImageFilter, ResamplerType);
+  itkOverrideGetNameOfClassMacro(BSplineDownsampleImageFilter);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);

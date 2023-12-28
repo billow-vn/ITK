@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class ScalarConnectedComponentImageFilter
+ * \class ScalarConnectedComponentImageFilter
  *
  *  \brief A connected components filter that labels the
  *         objects in an arbitrary image.  Two pixels are
@@ -124,7 +124,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarConnectedComponentImageFilter, ConnectedComponentFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(ScalarConnectedComponentImageFilter);
 
   using InputPixelType = typename TInputImage::PixelType;
 

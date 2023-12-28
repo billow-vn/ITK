@@ -37,7 +37,7 @@ namespace itk
  *
  * This code was contributed in the Insight Journal paper: "FFT based
  * convolution" by Lehmann G.
- * https://insight-journal.org/browse/publication/717
+ * https://www.insight-journal.org/browse/publication/717
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
@@ -90,7 +90,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(NormalizeToConstantImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(NormalizeToConstantImageFilter);
 
   /** Set/get the normalization constant. */
   itkSetMacro(Constant, RealType);
@@ -116,7 +116,7 @@ protected:
   GenerateData() override;
 
 private:
-  RealType m_Constant;
+  RealType m_Constant{};
 
 }; // end of class
 } // end namespace itk

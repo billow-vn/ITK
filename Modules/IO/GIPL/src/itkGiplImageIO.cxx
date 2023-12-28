@@ -105,7 +105,7 @@ GiplImageIO::CanReadFile(const char * filename)
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -183,14 +183,14 @@ GiplImageIO::CanWriteFile(const char * name)
 
   if (filename.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
   }
 
   bool extensionFound = CheckExtension(name);
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -612,7 +612,7 @@ GiplImageIO::ReadImageInformation()
 }
 
 void
-GiplImageIO ::SwapBytesIfNecessary(void * buffer, SizeValueType numberOfPixels)
+GiplImageIO::SwapBytesIfNecessary(void * buffer, SizeValueType numberOfPixels)
 {
   switch (m_ComponentType)
   {
@@ -696,14 +696,14 @@ GiplImageIO ::SwapBytesIfNecessary(void * buffer, SizeValueType numberOfPixels)
 }
 
 void
-GiplImageIO ::WriteImageInformation()
+GiplImageIO::WriteImageInformation()
 {
   // not possible to write a Gipl file
 }
 
 /** The write function is not implemented */
 void
-GiplImageIO ::Write(const void * buffer)
+GiplImageIO::Write(const void * buffer)
 {
   CheckExtension(m_FileName.c_str());
 
@@ -1098,7 +1098,7 @@ void
 GiplImageIO::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "PixelType " << m_PixelType << "\n";
+  os << indent << "PixelType " << m_PixelType << '\n';
 }
 
 bool
@@ -1108,7 +1108,7 @@ GiplImageIO::CheckExtension(const char * filename)
 
   if (fname.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 

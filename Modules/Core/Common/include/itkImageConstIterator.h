@@ -94,7 +94,7 @@ public:
   static constexpr unsigned int ImageIteratorDimension = TImage::ImageDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacroNoParent(ImageConstIterator);
+  itkVirtualGetNameOfClassMacro(ImageConstIterator);
 
   /** Index type alias support */
   using IndexType = typename TImage::IndexType;
@@ -112,7 +112,7 @@ public:
   using ImageType = TImage;
 
   /** PixelContainer type alias support. Used to refer to the container for
-   * the pixel data. While this was already typdef'ed in the superclass
+   * the pixel data. While this was already typedef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc. */
   using PixelContainer = typename TImage::PixelContainer;
   using PixelContainerPointer = typename PixelContainer::Pointer;
@@ -377,18 +377,18 @@ public:
   }
 
 protected: // made protected so other iterators can access
-  typename TImage::ConstWeakPointer m_Image;
+  typename TImage::ConstWeakPointer m_Image{};
 
-  RegionType m_Region; // region to iterate over
+  RegionType m_Region{}; // region to iterate over
 
-  OffsetValueType m_Offset;
-  OffsetValueType m_BeginOffset; // offset to first pixel in region
-  OffsetValueType m_EndOffset;   // offset to one pixel past last pixel in region
+  OffsetValueType m_Offset{};
+  OffsetValueType m_BeginOffset{}; // offset to first pixel in region
+  OffsetValueType m_EndOffset{};   // offset to one pixel past last pixel in region
 
-  const InternalPixelType * m_Buffer;
+  const InternalPixelType * m_Buffer{};
 
-  AccessorType        m_PixelAccessor;
-  AccessorFunctorType m_PixelAccessorFunctor;
+  AccessorType        m_PixelAccessor{};
+  AccessorFunctorType m_PixelAccessorFunctor{};
 };
 } // end namespace itk
 

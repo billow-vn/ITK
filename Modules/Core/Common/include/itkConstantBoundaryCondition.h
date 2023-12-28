@@ -72,6 +72,9 @@ public:
   using Self = ConstantBoundaryCondition;
   using Superclass = ImageBoundaryCondition<TInputImage, TOutputImage>;
 
+  /** Runtime information support. */
+  itkOverrideGetNameOfClassMacro(ConstantBoundaryCondition);
+
   /** Extract information from the image type */
   using typename Superclass::PixelType;
   using typename Superclass::PixelPointerType;
@@ -88,14 +91,7 @@ public:
   static constexpr unsigned int ImageDimension = Superclass::ImageDimension;
 
   /** Default constructor. */
-  ConstantBoundaryCondition();
-
-  /** Runtime information support. */
-  const char *
-  GetNameOfClass() const override
-  {
-    return "itkConstantBoundaryCondition";
-  }
+  ConstantBoundaryCondition() = default;
 
   /** Utility for printing the boundary condition. */
   void
@@ -161,7 +157,7 @@ public:
   GetPixel(const IndexType & index, const TInputImage * image) const override;
 
 private:
-  OutputPixelType m_Constant;
+  OutputPixelType m_Constant{};
 };
 } // end namespace itk
 

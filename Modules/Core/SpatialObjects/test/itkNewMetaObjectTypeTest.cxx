@@ -19,7 +19,7 @@
 #include "itkTestingMacros.h"
 
 /**
- *\class MetaDummy
+ * \class MetaDummy
  *  dummy MetaObject to add to MetaScene
  */
 class MetaDummy : public MetaObject
@@ -83,7 +83,7 @@ private:
 namespace itk
 {
 /**
- *\class DummySpatialObject
+ * \class DummySpatialObject
  */
 template <unsigned int TDimension = 3>
 class DummySpatialObject : public SpatialObject<TDimension>
@@ -99,7 +99,7 @@ public:
   /** method for creation through the object factory */
   itkNewMacro(Self);
 
-  itkTypeMacro(DummySpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(DummySpatialObject);
   void
   SetValue(float val)
   {
@@ -127,7 +127,7 @@ private:
 };
 
 /**
- *\class MetaConverterBase
+ * \class MetaConverterBase
  *  Dummy converter class
  */
 template <unsigned int VDimension = 3>
@@ -146,7 +146,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaDummyConverter, MetaConverterBase);
+  itkOverrideGetNameOfClassMacro(MetaDummyConverter);
 
   using typename Superclass::SpatialObjectType;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
@@ -165,7 +165,7 @@ public:
     const auto * dummyMO = dynamic_cast<const MetaDummy *>(mo);
     if (dummyMO == nullptr)
     {
-      itkExceptionMacro(<< "Can't convert MetaObject to MetaDummy");
+      itkExceptionMacro("Can't convert MetaObject to MetaDummy");
     }
     DummySpatialObjectPointer dummySO = DummySpatialObjectType::New();
     dummySO->SetValue(dummyMO->GetValue());
@@ -188,7 +188,7 @@ public:
     DummySpatialObjectConstPointer dummySO = dynamic_cast<const DummySpatialObjectType *>(spatialObject);
     if (dummySO.IsNull())
     {
-      itkExceptionMacro(<< "Can't downcast SpatialObject to DummySpatialObject");
+      itkExceptionMacro("Can't downcast SpatialObject to DummySpatialObject");
     }
     auto * dummyMO = new MetaDummy;
     dummyMO->SetValue(dummySO->GetValue());

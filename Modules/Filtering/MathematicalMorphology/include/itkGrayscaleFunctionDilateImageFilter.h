@@ -32,7 +32,7 @@ namespace itk
  * The structuring element can be composed of arbitrary nonnegative
  * values (not restricted to zero or one). Element values greater than
  * zero indicate pixels that will be considered during the dilation.
- * The function dilation operation is defined as the maxixum over the
+ * The function dilation operation is defined as the maximum over the
  * element of the image value PLUS the structuring element value.
  *
  * For the each input image pixel,
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GrayscaleFunctionDilateImageFilter, MorphologyImageFilter);
+  itkOverrideGetNameOfClassMacro(GrayscaleFunctionDilateImageFilter);
 
   /** Declaration of pixel type. */
   using typename Superclass::PixelType;
@@ -119,7 +119,7 @@ protected:
 private:
   // Default boundary condition for dilation filter, defaults to
   // NumericTraits<PixelType>::NonpositiveMin()
-  DefaultBoundaryConditionType m_DilateBoundaryCondition;
+  DefaultBoundaryConditionType m_DilateBoundaryCondition{};
 }; // end of class
 } // end namespace itk
 

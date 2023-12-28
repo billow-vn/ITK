@@ -59,7 +59,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExpectationBasedPointSetToPointSetMetricv4, PointSetToPointSetMetricv4);
+  itkOverrideGetNameOfClassMacro(ExpectationBasedPointSetToPointSetMetricv4);
 
   /** Types transferred from the base class */
   using typename Superclass::MeasureType;
@@ -134,9 +134,9 @@ private:
   using VectorType = typename PointType::VectorType;
   using NeighborsIterator = typename NeighborsIdentifierType::const_iterator;
 
-  CoordRepType m_PointSetSigma;
-  MeasureType  m_PreFactor;
-  MeasureType  m_Denominator;
+  CoordRepType m_PointSetSigma{};
+  MeasureType  m_PreFactor{};
+  MeasureType  m_Denominator{};
   unsigned int m_EvaluationKNeighborhood{ 50 };
 };
 } // end namespace itk

@@ -71,7 +71,6 @@ public:
     void
     ThreadedExecution(const DomainType & subdomain, const itk::ThreadIdType threadId) override
     {
-      itk::CompensatedSummation<double> compensatedSum;
       for (DomainType::IndexValueType i = subdomain[0]; i <= subdomain[1]; ++i)
       {
         double value = 1.0 / 7;
@@ -200,7 +199,7 @@ itkCompensatedSummationTest2(int, char *[])
     if (domainThreader->GetNumberOfWorkUnitsUsed() != maxNumberOfThreads)
     {
       std::cerr << "Error: Expected to use " << maxNumberOfThreads << "threads, but used "
-                << domainThreader->GetNumberOfWorkUnitsUsed() << "." << std::endl;
+                << domainThreader->GetNumberOfWorkUnitsUsed() << '.' << std::endl;
       return EXIT_FAILURE;
     }
     std::cout << "# of digits precision in double: " << std::numeric_limits<double>::digits10 << std::endl;

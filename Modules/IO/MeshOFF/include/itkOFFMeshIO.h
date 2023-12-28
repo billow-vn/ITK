@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class OFFMeshIO
+ * \class OFFMeshIO
  * \brief this class defines how to read and write Object file format.
  * \ingroup IOFilters
  * \ingroup ITKIOMeshOFF
@@ -52,12 +52,12 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OFFMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(OFFMeshIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
   /** Determine if the file can be read with this MeshIO implementation.
-   * \param FileNameToRead The name of the file to test for reading.
+   * \param fileName The name of the file to test for reading.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can read the file specified.
    */
@@ -84,7 +84,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this MeshIO implementation.
-   * \param FileNameToWrite The name of the file to test for writing.
+   * \param fileName The name of the file to test for writing.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can write the file specified.
    */
@@ -134,7 +134,7 @@ protected:
     }
   }
 
-  /** Read cells from a data buffer, used when writting cells. This function
+  /** Read cells from a data buffer, used when writing cells. This function
     write all kind of cells as it is stored in cells container. It is used when
     cells container have only one kind of cells */
   template <typename TInput, typename TOutput>
@@ -203,9 +203,9 @@ protected:
   CloseFile();
 
 private:
-  std::ifstream    m_InputFile;
-  StreamOffsetType m_PointsStartPosition; // file position for points rlative to std::ios::beg
-  bool             m_TriangleCellType;    // if all cells are trinalge it is true. otherwise, it is false.
+  std::ifstream    m_InputFile{};
+  StreamOffsetType m_PointsStartPosition{}; // file position for points relative to std::ios::beg
+  bool             m_TriangleCellType{};    // if all cells are triangle it is true. otherwise, it is false.
 };
 } // end namespace itk
 

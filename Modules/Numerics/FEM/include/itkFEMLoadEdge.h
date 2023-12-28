@@ -50,7 +50,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoadEdge, LoadElement);
+  itkOverrideGetNameOfClassMacro(LoadEdge);
 
   /** CreateAnother method will clone the existing instance of this type,
    * including its internal member variables. */
@@ -95,7 +95,7 @@ protected:
    * Local number of the edge (face) of the element on which the load acts.
    * Check the corresponding element class for more info on edge numbering.
    */
-  int m_Edge;
+  int m_Edge{};
 
   /**
    * An edge force matrix. This matrix specifies nodal forces on all
@@ -113,7 +113,7 @@ protected:
    * element. Again check the documentation of the element class to which
    * the force is applied.
    */
-  vnl_matrix<Float> m_Force;
+  vnl_matrix<Float> m_Force{};
 };
 } // end namespace fem
 } // end namespace itk

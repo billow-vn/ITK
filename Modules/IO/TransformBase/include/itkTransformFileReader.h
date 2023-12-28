@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformFileReaderTemplate, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(TransformFileReaderTemplate);
 
   /** Set the filename  */
   itkSetStringMacro(FileName);
@@ -103,9 +103,9 @@ protected:
   TransformFileReaderTemplate();
   ~TransformFileReaderTemplate() override;
 
-  TransformListType                 m_TransformList;
-  typename TransformIOType::Pointer m_TransformIO;
-  std::string                       m_FileName;
+  TransformListType                 m_TransformList{};
+  typename TransformIOType::Pointer m_TransformIO{};
+  std::string                       m_FileName{};
 };
 
 /** This helps to meet backward compatibility */

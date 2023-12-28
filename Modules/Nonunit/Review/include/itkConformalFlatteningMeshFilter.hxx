@@ -23,20 +23,10 @@
 
 #include <cfloat> // for DBL_MIN
 
-/*
- * This code was contributed in the Insight Journal paper:
- * "Conformal Flattening ITK Filter"
- * by Gao Y., Melonakos J., Tannenbaum A.
- * https://hdl.handle.net/1926/225
- * https://www.insight-journal.org/browse/publication/112
- *
- */
 
 namespace itk
 {
-/**
- *
- */
+
 template <typename TInputMesh, typename TOutputMesh>
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::ConformalFlatteningMeshFilter()
 {
@@ -47,13 +37,10 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::ConformalFlatteningMeshF
   // If during the stage when this parameter is used and it is still
   // -1.0, then it indicates that the user doesn't assign a scale
   // factor. Then automatically calculate it s.t. after doing the
-  // stereo-graphic projection, upper and lower hemi-sphere will have
-  // same number of vertics.
+  // stereo-graphic projection, upper and lower hemisphere will have
+  // same number of vertices.
 }
 
-/**
- * Set the triangle used to define the boundary of the flattened region.
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::SetPolarCellIdentifier(CellIdentifier cellId)
@@ -61,10 +48,6 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::SetPolarCellIdentifier(C
   this->m_PolarCellIdentifier = cellId;
 }
 
-/**
- * Define the scale of the mapping. The largest coordinates of the
- * furthest point in the plane is m_MapScale.
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::SetScale(double scale)
@@ -72,9 +55,6 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::SetScale(double scale)
   this->m_MapScale = scale;
 }
 
-/**
- * Define that the input surface will be mapped to a sphere
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::MapToSphere()
@@ -82,9 +62,6 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::MapToSphere()
   this->m_MapToSphere = true;
 }
 
-/** Define that the input surface will be mapped to a plane.
- *  This skips the steps of the stereographic projection.
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::MapToPlane()
@@ -92,9 +69,6 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::MapToPlane()
   this->m_MapToSphere = false;
 }
 
-/**
- *
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
@@ -102,9 +76,6 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream &
   Superclass::PrintSelf(os, indent);
 }
 
-/**
- * This method causes the filter to generate its output.
- */
 template <typename TInputMesh, typename TOutputMesh>
 void
 ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
@@ -117,12 +88,12 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
 
   if (!inputMesh)
   {
-    itkExceptionMacro(<< "Missing Input Mesh");
+    itkExceptionMacro("Missing Input Mesh");
   }
 
   if (!outputMesh)
   {
-    itkExceptionMacro(<< "Missing Output Mesh");
+    itkExceptionMacro("Missing Output Mesh");
   }
 
   outputMesh->SetBufferedRegion(outputMesh->GetRequestedRegion());
@@ -514,8 +485,8 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
     {
       // < 0 means user doesn't explicitly assign it. Then
       // automatically calculate it s.t. after doing the
-      // stereo-graphic projection, upper and lower hemi-sphere will have
-      // same number of vertics.
+      // stereo-graphic projection, upper and lower hemisphere will have
+      // same number of vertices.
 
       std::vector<double> v_r2(numberOfPoints);
       auto                itv_r2 = v_r2.begin();
@@ -623,9 +594,8 @@ ConformalFlatteningMeshFilter<TInputMesh, TOutputMesh>::GenerateData()
     }
   }
 
-  itkDebugMacro("bounds"
-                << " " << bounds[0] << " " << bounds[1] << " " << bounds[2] << " " << bounds[3] << " " << bounds[4]
-                << " " << bounds[5]);
+  itkDebugMacro("bounds" << ' ' << bounds[0] << ' ' << bounds[1] << ' ' << bounds[2] << ' ' << bounds[3] << ' '
+                         << bounds[4] << ' ' << bounds[5]);
 
   // Create duplicate references to the rest of data on the mesh
   this->CopyInputMeshToOutputMeshPointData();

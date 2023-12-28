@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class TubeSpatialObjectPoint
+ * \class TubeSpatialObjectPoint
  * \brief Point used for a tube definition
  *
  * This class contains all the functions necessary to define a point
@@ -55,36 +55,36 @@ public:
   /** Default destructor. */
   ~TubeSpatialObjectPoint() override = default;
 
-  /** Get R */
+  /** Get the radius in object space. */
   double
   GetRadiusInObjectSpace() const
   {
     return m_RadiusInObjectSpace;
   }
 
-  /** Get R */
+  /** Get the radius in world space. */
   double
   GetRadiusInWorldSpace() const;
 
-  /** Set R */
+  /** Set the radius in object space. */
   void
   SetRadiusInObjectSpace(double newR)
   {
     m_RadiusInObjectSpace = newR;
   }
 
-  /** Set R */
+  /** Set the radius in world space. */
   void
   SetRadiusInWorldSpace(double newR);
 
-  /** Get the tangent in Object Space */
+  /** Get the tangent in object space. */
   const VectorType &
   GetTangentInObjectSpace() const
   {
     return m_TangentInObjectSpace;
   }
 
-  /** Get the tangent in World Space */
+  /** Get the tangent in world space. */
   const VectorType
   GetTangentInWorldSpace() const;
 
@@ -268,23 +268,23 @@ public:
   operator=(const TubeSpatialObjectPoint & rhs);
 
 protected:
-  VectorType          m_TangentInObjectSpace;
-  CovariantVectorType m_Normal1InObjectSpace;
-  CovariantVectorType m_Normal2InObjectSpace;
+  VectorType          m_TangentInObjectSpace{};
+  CovariantVectorType m_Normal1InObjectSpace{};
+  CovariantVectorType m_Normal2InObjectSpace{};
 
-  double m_Branchness;
-  double m_Medialness;
-  double m_Ridgeness;
-  double m_Curvature;
-  double m_Levelness;
-  double m_Roundness;
-  double m_Intensity;
-  double m_Alpha1;
-  double m_Alpha2;
-  double m_Alpha3;
+  double m_Branchness{};
+  double m_Medialness{};
+  double m_Ridgeness{};
+  double m_Curvature{};
+  double m_Levelness{};
+  double m_Roundness{};
+  double m_Intensity{};
+  double m_Alpha1{};
+  double m_Alpha2{};
+  double m_Alpha3{};
 
   /** The radius of the tube point */
-  double m_RadiusInObjectSpace;
+  double m_RadiusInObjectSpace{};
 
   /** Print the object */
   void

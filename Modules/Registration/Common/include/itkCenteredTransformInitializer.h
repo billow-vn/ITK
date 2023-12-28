@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CenteredTransformInitializer, Object);
+  itkOverrideGetNameOfClassMacro(CenteredTransformInitializer);
 
   /** Type of the transform to initialize */
   using TransformType = TTransform;
@@ -146,11 +146,11 @@ protected:
   itkGetModifiableObjectMacro(Transform, TransformType);
 
 private:
-  TransformPointer m_Transform;
+  TransformPointer m_Transform{};
 
-  FixedImagePointer m_FixedImage;
+  FixedImagePointer m_FixedImage{};
 
-  MovingImagePointer m_MovingImage;
+  MovingImagePointer m_MovingImage{};
 
   bool m_UseMoments{ false };
 

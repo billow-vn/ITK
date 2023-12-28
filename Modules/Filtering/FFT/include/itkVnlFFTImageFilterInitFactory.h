@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VnlFFTImageFilterInitFactory
+ * \class VnlFFTImageFilterInitFactory
  * \brief Initialize Vnl FFT image filter factory backends.
  *
  * The purpose of VnlFFTImageFilterInitFactory is to perform
@@ -49,7 +49,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VnlFFTImageFilterInitFactory, LightObject);
+  itkOverrideGetNameOfClassMacro(VnlFFTImageFilterInitFactory);
 
   /** Mimic factory interface for Python initialization  */
   static void

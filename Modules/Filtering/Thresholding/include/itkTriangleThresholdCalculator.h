@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class TriangleThresholdCalculator
+ * \class TriangleThresholdCalculator
  * \brief Computes the Triangle's threshold for an image.
  *
  * This calculator computes the Triangle's threshold which separates an image
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TriangleThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(TriangleThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

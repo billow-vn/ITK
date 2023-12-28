@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetDenseImage, DiscreteLevelSetImage);
+  itkOverrideGetNameOfClassMacro(LevelSetDenseImage);
 
   static constexpr unsigned int Dimension = Superclass::Dimension;
 
@@ -85,7 +85,7 @@ protected:
 
   ~LevelSetDenseImage() override = default;
 
-  ImagePointer m_Image;
+  ImagePointer m_Image{};
 
   bool
   IsInsideDomain(const InputType & inputIndex) const override;

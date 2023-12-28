@@ -24,14 +24,14 @@
 
 namespace itk
 {
-/**\class MultiScaleHessianBasedMeasureImageFilterEnums
+/** \class MultiScaleHessianBasedMeasureImageFilterEnums
  * \brief This class contains all enum classes used by MultiScaleHessianBasedMeasureImageFilter class.
  * \ingroup ITKImageFeature
  */
 class MultiScaleHessianBasedMeasureImageFilterEnums
 {
 public:
-  /**\class SigmaStepMethod
+  /** \class SigmaStepMethod
    * \ingroup ITKImageFeature
    * \ingroup IntensityImageFilters
    * Sigma step method type
@@ -46,7 +46,7 @@ public:
 extern ITKImageFeature_EXPORT std::ostream &
                               operator<<(std::ostream & out, const MultiScaleHessianBasedMeasureImageFilterEnums::SigmaStepMethod value);
 
-/**\class MultiScaleHessianBasedMeasureImageFilter
+/** \class MultiScaleHessianBasedMeasureImageFilter
  * \brief A filter to enhance structures using Hessian eigensystem-based
  * measures in a multiscale framework
  *
@@ -129,7 +129,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MultiScaleHessianBasedMeasureImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(MultiScaleHessianBasedMeasureImageFilter);
 
   /** Set/Get macros for SigmaMin */
   itkSetMacro(SigmaMinimum, double);
@@ -231,22 +231,22 @@ private:
   void
   AllocateUpdateBuffer();
 
-  bool m_NonNegativeHessianBasedMeasure;
+  bool m_NonNegativeHessianBasedMeasure{};
 
-  double m_SigmaMinimum;
-  double m_SigmaMaximum;
+  double m_SigmaMinimum{};
+  double m_SigmaMaximum{};
 
-  unsigned int        m_NumberOfSigmaSteps;
-  SigmaStepMethodEnum m_SigmaStepMethod;
+  unsigned int        m_NumberOfSigmaSteps{};
+  SigmaStepMethodEnum m_SigmaStepMethod{};
 
-  typename HessianToMeasureFilterType::Pointer m_HessianToMeasureFilter;
+  typename HessianToMeasureFilterType::Pointer m_HessianToMeasureFilter{};
 
-  typename HessianFilterType::Pointer m_HessianFilter;
+  typename HessianFilterType::Pointer m_HessianFilter{};
 
-  typename UpdateBufferType::Pointer m_UpdateBuffer;
+  typename UpdateBufferType::Pointer m_UpdateBuffer{};
 
-  bool m_GenerateScalesOutput;
-  bool m_GenerateHessianOutput;
+  bool m_GenerateScalesOutput{};
+  bool m_GenerateHessianOutput{};
 };
 } // end namespace itk
 

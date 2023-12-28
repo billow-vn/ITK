@@ -72,7 +72,7 @@ public:
   using Superclass = NeighborhoodOperator<TPixel, VDimension, TAllocator>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LaplacianOperator, NeighborhoodOperator);
+  itkOverrideGetNameOfClassMacro(LaplacianOperator);
 
   using typename Superclass::SizeType;
 
@@ -118,7 +118,7 @@ protected:
 
 private:
   /** Weights applied to derivatives in each axial direction */
-  double m_DerivativeScalings[VDimension];
+  double m_DerivativeScalings[VDimension]{};
 };
 } // namespace itk
 

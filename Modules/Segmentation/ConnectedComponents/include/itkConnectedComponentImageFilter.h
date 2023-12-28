@@ -116,7 +116,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(ConnectedComponentImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ConnectedComponentImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -197,10 +197,10 @@ protected:
   using WorkUnitData = typename ScanlineFunctions::WorkUnitData;
 
 private:
-  OutputPixelType m_BackgroundValue = NumericTraits<OutputPixelType>::ZeroValue();
+  OutputPixelType m_BackgroundValue{};
   LabelType       m_ObjectCount = 0;
 
-  typename TInputImage::ConstPointer m_Input;
+  typename TInputImage::ConstPointer m_Input{};
 };
 } // end namespace itk
 

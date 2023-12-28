@@ -54,7 +54,7 @@ namespace itk
  * for each pyramid externally prior to calling Update().
  *
  * \warning If there is discrepancy between the number of level requested
- * and a pyramid schedule. The pyramid schedule will be overriden
+ * and a pyramid schedule. The pyramid schedule will be overridden
  * with a default one.
  *
  * Before each resolution level an IterationEvent is invoked providing an
@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiResolutionImageRegistrationMethod, ProcessObject);
+  itkOverrideGetNameOfClassMacro(MultiResolutionImageRegistrationMethod);
 
   /**  Type of the Fixed image. */
   using FixedImageType = TFixedImage;
@@ -134,7 +134,7 @@ public:
   /** Smart Pointer type to a DataObject. */
   using DataObjectPointer = typename DataObject::Pointer;
 
-  /** Method to stop the registration. */
+  /** Stop the registration. */
   void
   StopRegistration();
 
@@ -158,7 +158,7 @@ public:
   itkSetMacro(FixedImageRegion, FixedImageRegionType);
   itkGetConstReferenceMacro(FixedImageRegion, FixedImageRegionType);
 
-  /** Set/Get the Transfrom. */
+  /** Set/Get the Transform. */
   itkSetObjectMacro(Transform, TransformType);
   itkGetModifiableObjectMacro(Transform, TransformType);
 
@@ -174,7 +174,7 @@ public:
   itkSetObjectMacro(MovingImagePyramid, MovingImagePyramidType);
   itkGetModifiableObjectMacro(MovingImagePyramid, MovingImagePyramidType);
 
-  /** Set/Get the schedules . */
+  /** Set/Get the schedules for the fixed and moving image pyramid. */
   void
   SetSchedules(const ScheduleType & fixedImagePyramidSchedule, const ScheduleType & movingImagePyramidSchedule);
 
@@ -246,35 +246,35 @@ protected:
   itkSetMacro(CurrentLevel, SizeValueType);
 
 private:
-  MetricPointer          m_Metric;
-  OptimizerType::Pointer m_Optimizer;
+  MetricPointer          m_Metric{};
+  OptimizerType::Pointer m_Optimizer{};
 
-  MovingImageConstPointer m_MovingImage;
-  FixedImageConstPointer  m_FixedImage;
+  MovingImageConstPointer m_MovingImage{};
+  FixedImageConstPointer  m_FixedImage{};
 
-  TransformPointer    m_Transform;
-  InterpolatorPointer m_Interpolator;
+  TransformPointer    m_Transform{};
+  InterpolatorPointer m_Interpolator{};
 
-  MovingImagePyramidPointer m_MovingImagePyramid;
-  FixedImagePyramidPointer  m_FixedImagePyramid;
+  MovingImagePyramidPointer m_MovingImagePyramid{};
+  FixedImagePyramidPointer  m_FixedImagePyramid{};
 
-  ParametersType m_InitialTransformParameters;
-  ParametersType m_InitialTransformParametersOfNextLevel;
-  ParametersType m_LastTransformParameters;
+  ParametersType m_InitialTransformParameters{};
+  ParametersType m_InitialTransformParametersOfNextLevel{};
+  ParametersType m_LastTransformParameters{};
 
-  FixedImageRegionType              m_FixedImageRegion;
-  std::vector<FixedImageRegionType> m_FixedImageRegionPyramid;
+  FixedImageRegionType              m_FixedImageRegion{};
+  std::vector<FixedImageRegionType> m_FixedImageRegionPyramid{};
 
-  SizeValueType m_NumberOfLevels;
-  SizeValueType m_CurrentLevel;
+  SizeValueType m_NumberOfLevels{};
+  SizeValueType m_CurrentLevel{};
 
-  bool m_Stop;
+  bool m_Stop{};
 
-  ScheduleType m_FixedImagePyramidSchedule;
-  ScheduleType m_MovingImagePyramidSchedule;
+  ScheduleType m_FixedImagePyramidSchedule{};
+  ScheduleType m_MovingImagePyramidSchedule{};
 
-  bool m_ScheduleSpecified;
-  bool m_NumberOfLevelsSpecified;
+  bool m_ScheduleSpecified{};
+  bool m_NumberOfLevelsSpecified{};
 };
 } // end namespace itk
 

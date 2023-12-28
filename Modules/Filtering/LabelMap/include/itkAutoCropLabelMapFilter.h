@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class AutoCropLabelMapFilter
+ * \class AutoCropLabelMapFilter
  * \brief Crop a LabelMap image to fit exactly the objects in the LabelMap.
  *
  * The CropBorder can be used to add a border which will never be larger than
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AutoCropLabelMapFilter, ChangeRegionImageFilter);
+  itkOverrideGetNameOfClassMacro(AutoCropLabelMapFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageType;
@@ -110,7 +110,7 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  SizeType m_CropBorder;
+  SizeType m_CropBorder{};
 };
 } // end namespace itk
 

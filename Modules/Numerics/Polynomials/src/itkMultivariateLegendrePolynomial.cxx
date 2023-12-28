@@ -26,7 +26,7 @@ MultivariateLegendrePolynomial::MultivariateLegendrePolynomial(unsigned int     
 {
   if (dimension > 3 || dimension < 2)
   {
-    itkGenericExceptionMacro(<< "MultivariateLegendrePolynomial only supports 2D and 3D");
+    itkGenericExceptionMacro("MultivariateLegendrePolynomial only supports 2D and 3D");
   }
 
   m_Dimension = dimension;
@@ -74,42 +74,42 @@ MultivariateLegendrePolynomial::PrintSelf(std::ostream & os, Indent indent) cons
   os << indent << "DomainSize: ";
   for (const auto i : m_DomainSize)
   {
-    os << i << " ";
+    os << i << ' ';
   }
   os << std::endl;
 
   os << indent << "Cached X coefficients: ";
   for (auto i : m_CachedXCoef)
   {
-    os << i << " ";
+    os << i << ' ';
   }
   os << std::endl;
 
   os << indent << "Cached Y coefficients: ";
   for (auto i : m_CachedYCoef)
   {
-    os << i << " ";
+    os << i << ' ';
   }
   os << std::endl;
 
   os << indent << "Cached Z coefficients: ";
   for (auto i : m_CachedZCoef)
   {
-    os << i << " ";
+    os << i << ' ';
   }
   os << std::endl;
 
   os << indent << "Coefficients: ";
   for (auto i : m_CoefficientArray)
   {
-    os << i << " ";
+    os << i << ' ';
   }
   os << std::endl;
 
   os << indent << "Normalization factors: ";
   for (auto i : m_NormFactor)
   {
-    os << i << " ";
+    os << i << ' ';
   }
   os << std::endl;
 

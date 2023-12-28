@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class RayCastInterpolateImageFunction
+ * \class RayCastInterpolateImageFunction
  * \brief Projective interpolation of an image at specified positions.
  *
  * RayCastInterpolateImageFunction casts rays through a 3-dimensional
@@ -76,7 +76,7 @@ public:
   using InterpolatorPointer = typename InterpolatorType::Pointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RayCastInterpolateImageFunction, InterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(RayCastInterpolateImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -187,15 +187,18 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  TransformPointer    m_Transform;
-  InputPointType      m_FocalPoint;
-  double              m_Threshold;
-  InterpolatorPointer m_Interpolator;
+  TransformPointer    m_Transform{};
+  InputPointType      m_FocalPoint{};
+  double              m_Threshold{};
+  InterpolatorPointer m_Interpolator{};
+
+private:
+  class RayCastHelper;
 };
 } // namespace itk
 
 
-/**\class RayCastHelperEnums
+/** \class RayCastHelperEnums
  * \brief Contains all enum classes used by RayCastHelper class.
  * \ingroup ITKImageFunction
  * @tparam TInputImage

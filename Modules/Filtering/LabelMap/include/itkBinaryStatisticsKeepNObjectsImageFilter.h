@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class BinaryStatisticsKeepNObjectsImageFilter
+ * \class BinaryStatisticsKeepNObjectsImageFilter
  * \brief keep N objects according to their statistics attributes
  *
  * BinaryStatisticsKeepNObjectsImageFilter keep the N objects in a binary image
@@ -90,7 +90,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryStatisticsKeepNObjectsImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryStatisticsKeepNObjectsImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -203,11 +203,11 @@ protected:
 
 private:
   bool                 m_FullyConnected{ false };
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
   SizeValueType        m_NumberOfObjects{ 0 };
   bool                 m_ReverseOrdering{ false };
-  AttributeType        m_Attribute;
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

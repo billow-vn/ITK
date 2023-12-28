@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class ShapeUniqueLabelMapFilter
+ * \class ShapeUniqueLabelMapFilter
  * \brief Remove some pixels in the label object according to the value of their shape attribute to ensure that a pixel
  * is not in to objects
  *
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShapeUniqueLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ShapeUniqueLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -317,10 +317,10 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  AttributeType m_Attribute;
+  AttributeType m_Attribute{};
 
 private:
-  bool m_ReverseOrdering;
+  bool m_ReverseOrdering{};
   struct LineOfLabelObject
   {
     using LineType = typename LabelObjectType::LineType;

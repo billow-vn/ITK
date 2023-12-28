@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ChangeLabelLabelMapFilter
+ * \class ChangeLabelLabelMapFilter
  * \brief  Replace the label Ids of selected LabelObjects with new label Ids.
  *
  * This filter takes as input a label map and a list of pairs of Label Ids, to
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ChangeLabelLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ChangeLabelLabelMapFilter);
 
   using ChangeMapType = typename std::map<PixelType, PixelType>;
   using ChangeMapIterator = typename ChangeMapType::const_iterator;
@@ -112,7 +112,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  ChangeMapType m_MapOfLabelToBeReplaced;
+  ChangeMapType m_MapOfLabelToBeReplaced{};
 }; // end of class
 } // end namespace itk
 

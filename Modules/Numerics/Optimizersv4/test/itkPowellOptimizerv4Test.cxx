@@ -22,7 +22,7 @@
 int POWELL_CALLS_TO_GET_VALUE = 0;
 
 /**
- *  The objectif function is the quadratic form:
+ *  The objective function is the quadratic form:
  *
  *  1/2 x^T A x - b^T x
  *
@@ -67,7 +67,7 @@ public:
     double y = m_Parameters[1];
 
     std::cout << "      GetValue( ";
-    std::cout << x << " ";
+    std::cout << x << ' ';
     std::cout << y << ") = ";
 
     MeasureType measure = 0.5 * (3 * x * x + 4 * x * y + 6 * y * y) - 2 * x + 8 * y;
@@ -211,23 +211,11 @@ itkPowellOptimizerv4Test(int argc, char * argv[])
   itkOptimizer->SetMetricWorstPossibleValue(metricWorstPossibleValue);
   ITK_TEST_SET_GET_VALUE(metricWorstPossibleValue, itkOptimizer->GetMetricWorstPossibleValue());
 
-  try
-  {
-    itkOptimizer->StartOptimization();
-  }
-  catch (const itk::ExceptionObject & e)
-  {
-    std::cout << "Exception thrown ! " << std::endl;
-    std::cout << "An error occurred during Optimization" << std::endl;
-    std::cout << "Location    = " << e.GetLocation() << std::endl;
-    std::cout << "Description = " << e.GetDescription() << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(itkOptimizer->StartOptimization());
+
 
   ParametersType finalPosition = itkOptimizer->GetCurrentPosition();
-  std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ")" << std::endl;
+  std::cout << "Solution        = (" << finalPosition[0] << ',' << finalPosition[1] << ')' << std::endl;
   std::cout << "StopConditionDescription: " << itkOptimizer->GetStopConditionDescription() << std::endl;
 
   //
@@ -238,13 +226,15 @@ itkPowellOptimizerv4Test(int argc, char * argv[])
   for (unsigned int j = 0; j < 2; ++j)
   {
     if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > 0.01)
+    {
       pass = false;
+    }
   }
 
   // Exercise various member functions.
-  std::cout << "CurrentIteration: " << itkOptimizer->GetCurrentIteration();
-  std::cout << std::endl;
+  std::cout << "CurrentIteration: " << itkOptimizer->GetCurrentIteration() << std::endl;
   std::cout << "CurrentCost: " << itkOptimizer->GetCurrentCost() << std::endl;
+  std::cout << "CurrentCost (through GetValue): " << itkOptimizer->GetValue() << std::endl;
   std::cout << "CurrentLineIteration: " << itkOptimizer->GetCurrentLineIteration() << std::endl;
 
   std::cout << "Calls to GetValue = " << POWELL_CALLS_TO_GET_VALUE << std::endl;

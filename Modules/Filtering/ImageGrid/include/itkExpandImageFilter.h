@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ExpandImageFilter
+ * \class ExpandImageFilter
  * \brief Expand the size of an image by an integer factor in each
  * dimension.
  *
@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExpandImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ExpandImageFilter);
 
   /** Typedef to describe the output image region type. */
   using OutputImageRegionType = typename TOutputImage::RegionType;
@@ -157,8 +157,8 @@ protected:
   BeforeThreadedGenerateData() override;
 
 private:
-  ExpandFactorsType   m_ExpandFactors;
-  InterpolatorPointer m_Interpolator;
+  ExpandFactorsType   m_ExpandFactors{};
+  InterpolatorPointer m_Interpolator{};
 };
 } // end namespace itk
 

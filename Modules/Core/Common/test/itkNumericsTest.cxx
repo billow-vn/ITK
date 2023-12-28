@@ -27,7 +27,9 @@ print_vnl_matrix(T & mat)
   for (unsigned int r = 0; r < mat.rows(); ++r)
   {
     for (unsigned int c = 0; c < mat.columns(); ++c)
-      std::cout << mat(r, c) << " ";
+    {
+      std::cout << mat(r, c) << ' ';
+    }
     std::cout << std::endl;
   }
 }
@@ -41,7 +43,9 @@ solve_with_warning(vnl_matrix<V> const & M, vnl_matrix<V> const & B)
   vnl_svd<V> svd(M, 1e-8);
   // Check for rank-deficiency
   if (svd.singularities() > 1)
+  {
     std::cout << "Warning: Singular matrix, condition = " << svd.well_condition() << std::endl;
+  }
   return svd.solve(B);
 }
 
@@ -73,7 +77,7 @@ itkNumericsTest(int, char *[])
   {
     for (unsigned int c = 0; c < mat.rows(); ++c)
     {
-      std::cout << mat(r, c) << " ";
+      std::cout << mat(r, c) << ' ';
     }
     std::cout << std::endl;
   }

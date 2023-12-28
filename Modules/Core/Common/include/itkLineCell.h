@@ -19,6 +19,9 @@
 #define itkLineCell_h
 
 #include "itkVertexCell.h"
+#include "itkMakeFilled.h"
+
+#include <array>
 
 namespace itk
 {
@@ -49,7 +52,7 @@ public:
   itkCellInheritedTypedefs(TCellInterface);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(LineCell, CellInterface);
+  itkOverrideGetNameOfClassMacro(LineCell);
 
   /** The type of boundary for this lines's vertices. */
   using VertexType = VertexCell<TCellInterface>;
@@ -110,19 +113,14 @@ public:
   /** Visitor interface */
   itkCellVisitMacro(CellGeometryEnum::LINE_CELL);
 
-  LineCell()
-  {
-    for (unsigned int i = 0; i < Self::NumberOfPoints; ++i)
-    {
-      m_PointIds[i] = NumericTraits<PointIdentifier>::max();
-    }
-  }
+  LineCell() = default;
 
   ~LineCell() override = default;
 
 protected:
   /** Store number of points needed for a line segment. */
-  PointIdentifier m_PointIds[NumberOfPoints];
+  std::array<PointIdentifier, NumberOfPoints> m_PointIds{ MakeFilled<std::array<PointIdentifier, NumberOfPoints>>(
+    NumericTraits<PointIdentifier>::max()) };
 };
 } // end namespace itk
 

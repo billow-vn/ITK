@@ -42,7 +42,6 @@ ActualTest(std::string filename, typename TImageType::SizeType size)
   typename ImageType::RegionType region;
   typename ImageType::IndexType  index;
 
-  PixelType pixelValue;
 
   itk::TimeProbesCollectorBase chronometer;
 
@@ -73,7 +72,7 @@ ActualTest(std::string filename, typename TImageType::SizeType size)
     IteratorType itr(image, region);
     itr.GoToBegin();
 
-    pixelValue = itk::NumericTraits<PixelType>::ZeroValue();
+    PixelType pixelValue{};
 
     chronometer.Start("Initializing");
     while (!itr.IsAtEnd())
@@ -125,9 +124,9 @@ ActualTest(std::string filename, typename TImageType::SizeType size)
   ritr.GoToBegin();
   // oitr.GoToBegin();
 
-  std::cout << "Comparing the pixel values.. :" << std::endl;
+  std::cout << "Comparing the pixel values..." << std::endl;
 
-  pixelValue = itk::NumericTraits<PixelType>::ZeroValue();
+  PixelType pixelValue{};
 
   chronometer.Start("Compare");
   while (!ritr.IsAtEnd())

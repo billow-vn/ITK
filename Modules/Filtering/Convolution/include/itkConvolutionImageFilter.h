@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class ConvolutionImageFilter
+ * \class ConvolutionImageFilter
  * \brief Convolve a given image with an arbitrary image kernel.
  *
  * This filter operates by centering the flipped kernel at each pixel
@@ -51,7 +51,7 @@ namespace itk
  *
  * "Image Kernel Convolution"
  * by Tustison N., Gee J.
- * https://insight-journal.org/browse/publication/208
+ * https://www.insight-journal.org/browse/publication/208
  *
  * \author Nicholas J. Tustison
  * \author James C. Gee
@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information ( and related methods ) */
-  itkTypeMacro(ConvolutionImageFilter, ConvolutionImageFilterBase);
+  itkOverrideGetNameOfClassMacro(ConvolutionImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;

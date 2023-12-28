@@ -32,7 +32,7 @@ namespace itk
 
 /** \class MINCTransformIOTemplate
  *
- * \brief Read and write transforms in Minc XFM Format
+ * \brief Read and write transforms in MINC format (.xfm).
  *
  * \author Vladimir S. FONOV
  *         Brain Imaging Center, Montreal Neurological Institute, McGill University, Montreal Canada 2012
@@ -40,7 +40,7 @@ namespace itk
  * \ingroup ITKIOTransformMINC
  */
 template <typename TParametersValueType>
-class ITKIOTransformMINC_EXPORT MINCTransformIOTemplate : public TransformIOBaseTemplate<TParametersValueType>
+class ITK_TEMPLATE_EXPORT MINCTransformIOTemplate : public TransformIOBaseTemplate<TParametersValueType>
 {
 public:
   using Self = MINCTransformIOTemplate;
@@ -60,7 +60,7 @@ public:
   using OffsetType = typename MatrixOffsetTransformBaseType::OffsetType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MINCTransformIOTemplate, TransformIOBaseTemplate);
+  itkOverrideGetNameOfClassMacro(MINCTransformIOTemplate);
   itkNewMacro(Self);
 
   /** Determine the file type. Returns true if this ImageIO can read the
@@ -84,8 +84,8 @@ protected:
   MINCTransformIOTemplate();
   ~MINCTransformIOTemplate() override;
 
-  VIO_General_transform m_XFM;
-  bool                  m_XFM_initialized;
+  VIO_General_transform m_XFM{};
+  bool                  m_XFM_initialized{};
 
 private:
   void

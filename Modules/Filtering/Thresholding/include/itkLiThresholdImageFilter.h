@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class LiThresholdImageFilter
+ * \class LiThresholdImageFilter
  * \brief Threshold an image using the Li Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LiThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(LiThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

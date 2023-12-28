@@ -24,14 +24,14 @@
 #include "ITKQuadEdgeMeshFilteringExport.h"
 namespace itk
 {
-/**\class NormalQuadEdgeMeshFilterEnums
+/** \class NormalQuadEdgeMeshFilterEnums
  * \brief Contains enum classes used by NormalQuadEdgeMeshFilter class
  * \ingroup ITKQuadEdgeMeshFiltering
  */
 class NormalQuadEdgeMeshFilterEnums
 {
 public:
-  /**\class WeightEnum
+  /** \class WeightEnum
    * \ingroup ITKQuadEdgeMeshFiltering
    */
   enum class Weight : uint8_t
@@ -102,7 +102,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(NormalQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(NormalQuadEdgeMeshFilter);
 
   using InputMeshType = TInputMesh;
   using InputMeshPointer = typename InputMeshType::Pointer;
@@ -159,7 +159,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  WeightEnum m_Weight;
+  WeightEnum m_Weight{};
 
   /** \brief Compute the normal to a face iPoly. It assumes that iPoly != 0
    * and

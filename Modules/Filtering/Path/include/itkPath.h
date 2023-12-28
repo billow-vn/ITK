@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class Path
+ * \class Path
  * \brief  Represent a path through ND Space
  *
  * This base class is intended to represent a path through an image.   As a
@@ -66,7 +66,7 @@ public:
   static constexpr unsigned int PathDimension = VDimension;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Path, FunctionBase);
+  itkOverrideGetNameOfClassMacro(Path);
 
   /** Input type */
   using InputType = TInput;
@@ -127,8 +127,8 @@ protected:
 
 private:
   // These "constants" are initialized in the constructor
-  OffsetType m_ZeroOffset; // = 0 for all dimensions
-  IndexType  m_ZeroIndex;  // = 0 for all dimensions
+  OffsetType m_ZeroOffset{}; // = 0 for all dimensions
+  IndexType  m_ZeroIndex{};  // = 0 for all dimensions
 };
 } // namespace itk
 

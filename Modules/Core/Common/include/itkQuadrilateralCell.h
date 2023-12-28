@@ -20,6 +20,9 @@
 
 #include "itkLineCell.h"
 #include "itkQuadrilateralCellTopology.h"
+#include "itkMakeFilled.h"
+
+#include <array>
 
 namespace itk
 {
@@ -48,7 +51,7 @@ public:
   itkCellInheritedTypedefs(TCellInterface);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(QuadrilateralCell, CellInterface);
+  itkOverrideGetNameOfClassMacro(QuadrilateralCell);
 
   /** The type of boundary for this triangle's vertices. */
   using VertexType = VertexCell<TCellInterface>;
@@ -130,13 +133,7 @@ public:
   itkCellVisitMacro(CellGeometryEnum::QUADRILATERAL_CELL);
 
   /** Constructor and destructor */
-  QuadrilateralCell()
-  {
-    for (PointIdentifier i = 0; i < Self::NumberOfPoints; ++i)
-    {
-      m_PointIds[i] = NumericTraits<PointIdentifier>::max();
-    }
-  }
+  QuadrilateralCell() = default;
 
 #if defined(__GNUC__)
   // A bug in some versions of the GCC and Clang compilers
@@ -151,7 +148,8 @@ public:
 
 protected:
   /** Store the number of points needed for a quadrilateral. */
-  PointIdentifier m_PointIds[NumberOfPoints];
+  std::array<PointIdentifier, NumberOfPoints> m_PointIds{ MakeFilled<std::array<PointIdentifier, NumberOfPoints>>(
+    NumericTraits<PointIdentifier>::max()) };
 
   void
   InterpolationDerivs(const CoordRepType pointCoords[CellDimension], CoordRepType derivs[NumberOfDerivatives]);

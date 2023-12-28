@@ -23,13 +23,13 @@
 namespace itk
 {
 template <typename TFixedImage, typename TMovingImage>
-typename NormalizedMutualInformationHistogramImageToImageMetric<TFixedImage, TMovingImage>::MeasureType
+auto
 NormalizedMutualInformationHistogramImageToImageMetric<TFixedImage, TMovingImage>::EvaluateMeasure(
-  HistogramType & histogram) const
+  HistogramType & histogram) const -> MeasureType
 {
-  MeasureType entropyX = NumericTraits<MeasureType>::ZeroValue();
-  MeasureType entropyY = NumericTraits<MeasureType>::ZeroValue();
-  MeasureType jointEntropy = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType entropyX{};
+  MeasureType entropyY{};
+  MeasureType jointEntropy{};
 
   using HistogramFrequencyRealType = typename NumericTraits<HistogramFrequencyType>::RealType;
 

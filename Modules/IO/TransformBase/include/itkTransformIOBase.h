@@ -64,7 +64,7 @@ public:
   using Pointer = SmartPointer<Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformIOBaseTemplate, Superclass);
+  itkOverrideGetNameOfClassMacro(TransformIOBaseTemplate);
 
   /** Transform types */
   using ScalarType = TParametersValueType; // For backwards compatibility
@@ -145,7 +145,7 @@ public:
   static inline void
   CorrectTransformPrecisionType(std::string & itkNotUsed(inputTransformName))
   {
-    itkGenericExceptionMacro(<< "Unknown ScalarType" << typeid(ScalarType).name());
+    itkGenericExceptionMacro("Unknown ScalarType" << typeid(ScalarType).name());
   }
 
 protected:
@@ -165,13 +165,13 @@ protected:
   static inline const std::string
   GetTypeNameString()
   {
-    itkGenericExceptionMacro(<< "Unknown ScalarType" << typeid(ScalarType).name());
+    itkGenericExceptionMacro("Unknown ScalarType" << typeid(ScalarType).name());
   }
 
 private:
-  std::string            m_FileName;
-  TransformListType      m_ReadTransformList;
-  ConstTransformListType m_WriteTransformList;
+  std::string            m_FileName{};
+  TransformListType      m_ReadTransformList{};
+  ConstTransformListType m_WriteTransformList{};
   bool                   m_AppendMode{ false };
   /** Should we compress the data? */
   bool m_UseCompression{ false };

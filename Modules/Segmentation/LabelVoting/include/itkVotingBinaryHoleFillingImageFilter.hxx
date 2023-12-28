@@ -86,11 +86,9 @@ VotingBinaryHoleFillingImageFilter<TInputImage, TOutputImage>::ThreadedGenerateD
   typename InputImageType::ConstPointer input = this->GetInput();
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                        bC;
-  faceList = bC(input, outputRegionForThread, this->GetRadius());
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList =
+    bC(input, outputRegionForThread, this->GetRadius());
 
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -102,10 +100,10 @@ VotingBinaryHoleFillingImageFilter<TInputImage, TOutputImage>::ThreadedGenerateD
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    bit = ConstNeighborhoodIterator<InputImageType>(this->GetRadius(), input, *fit);
-    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    bit = ConstNeighborhoodIterator<InputImageType>(this->GetRadius(), input, face);
+    it = ImageRegionIterator<OutputImageType>(output, face);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 

@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class IsoContourDistanceImageFilter
+ * \class IsoContourDistanceImageFilter
  *  \brief Compute an approximate distance from an interpolated isocontour
  *  to the close grid points.
  *
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(IsoContourDistanceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(IsoContourDistanceImageFilter);
 
   /**Typedefs from the superclass */
   using typename Superclass::InputImageType;
@@ -172,6 +172,7 @@ protected:
   void
   ThreadedGenerateDataBand(const OutputImageRegionType & outputRegionForThread, ThreadIdType threadId);
 
+  /** Split the band if the narrowband mode is used. */
   void
   BeforeThreadedGenerateData() override;
 
@@ -191,16 +192,16 @@ protected:
                const std::vector<OffsetValueType> & stride);
 
 private:
-  PixelRealType m_LevelSetValue;
-  PixelType     m_FarValue;
+  PixelRealType m_LevelSetValue{};
+  PixelType     m_FarValue{};
 
-  InputSpacingType m_Spacing;
+  InputSpacingType m_Spacing{};
 
-  bool                    m_NarrowBanding;
-  NarrowBandPointer       m_NarrowBand;
-  std::vector<RegionType> m_NarrowBandRegion;
+  bool                    m_NarrowBanding{};
+  NarrowBandPointer       m_NarrowBand{};
+  std::vector<RegionType> m_NarrowBandRegion{};
 
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 };
 } // namespace itk
 

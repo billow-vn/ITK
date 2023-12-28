@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VTKImageExportBase
+ * \class VTKImageExportBase
  * \brief Superclass for VTKImageExport instantiations.
  *
  * VTKImageExportBase provides the functions that serve as callbacks
@@ -47,7 +47,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKImageExportBase, ProcessObject);
+  itkOverrideGetNameOfClassMacro(VTKImageExportBase);
 
   /** Returns the user data to set for the vtkImageImport callbacks. */
   void *
@@ -72,7 +72,7 @@ public:
   using FloatOriginCallbackType = float * (*)(void *);
 
   /**
-   *\class CallbackTypeProxy
+   * \class CallbackTypeProxy
    * \brief Provide compatibility between VTK 4.4 and earlier versions.
    * \ingroup ITKVTK
    */
@@ -231,7 +231,7 @@ private:
 
 private:
   /** PipelineMTime from the last call to PipelineModifiedCallback. */
-  ModifiedTimeType m_LastPipelineMTime;
+  ModifiedTimeType m_LastPipelineMTime{};
 };
 } // end namespace itk
 

@@ -23,13 +23,6 @@
 namespace itk
 {
 template <unsigned int VDimension, typename TInput>
-EllipsoidInteriorExteriorSpatialFunction<VDimension, TInput>::EllipsoidInteriorExteriorSpatialFunction()
-{
-  m_Axes.Fill(1.0f);   // Lengths of ellipsoid axes.
-  m_Center.Fill(0.0f); // Origin of ellipsoid
-}
-
-template <unsigned int VDimension, typename TInput>
 auto
 EllipsoidInteriorExteriorSpatialFunction<VDimension, TInput>::Evaluate(const InputType & position) const -> OutputType
 {
@@ -87,7 +80,7 @@ EllipsoidInteriorExteriorSpatialFunction<VDimension, TInput>::PrintSelf(std::ost
   {
     for (j = 0; j < VDimension; ++j)
     {
-      os << indent << indent << m_Orientations[i][j] << " ";
+      os << indent << indent << m_Orientations[i][j] << ' ';
     }
     os << std::endl;
   }

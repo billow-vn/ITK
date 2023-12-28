@@ -41,7 +41,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaArrayWriter, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(MetaArrayWriter);
 
   /** Set/Get the filename. */
   itkSetStringMacro(FileName);
@@ -54,7 +54,7 @@ public:
 
   /** Boolean to set binary mode.
    *  If set to On, data will be stored in the file in binary format; if set
-   *  to Off, data will be stored in ascci format.
+   *  to Off, data will be stored in ascii format.
    *  Default is Off. */
   itkBooleanMacro(Binary);
   itkSetMacro(Binary, bool);
@@ -110,7 +110,7 @@ public:
    *  length of the major array is the "length" of the array, while
    *  the length of the sub-arrays is the "number of channels" at each
    *  array position. Expected form itk::Array< itk::Array< * > >.
-   *  May work for othesub-array-types that define the [] operator and the
+   *  May work for other sub-array-types that define the [] operator and the
    *  GetSize() function. */
   template <typename TValue>
   void
@@ -153,10 +153,10 @@ private:
 
   unsigned int m_Precision{ 6 };
 
-  std::string m_FileName;
-  std::string m_DataFileName;
+  std::string m_FileName{};
+  std::string m_DataFileName{};
 
-  MetaArray m_MetaArray;
+  MetaArray m_MetaArray{};
 
   const void * m_Buffer{ nullptr };
 };

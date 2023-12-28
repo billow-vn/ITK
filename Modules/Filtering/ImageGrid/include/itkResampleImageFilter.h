@@ -32,7 +32,7 @@
 namespace itk
 {
 /**
- *\class ResampleImageFilter
+ * \class ResampleImageFilter
  * \brief Resample an image via a coordinate transform
  *
  * ResampleImageFilter resamples an existing image through some coordinate
@@ -109,7 +109,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ResampleImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ResampleImageFilter);
 
   /** Number of dimensions of output image. */
   static constexpr unsigned int OutputImageDimension = TOutputImage::ImageDimension;
@@ -168,7 +168,7 @@ public:
 
   using PixelComponentType = typename PixelConvertType::ComponentType;
 
-  /** Input pixel continuous index typdef */
+  /** Input pixel continuous index typedef */
   using ContinuousInputIndexType = ContinuousIndex<TInterpolatorPrecisionType, InputImageDimension>;
 
   /** Typedef to describe the output image region type. */
@@ -367,18 +367,18 @@ private:
   void
   InitializeTransform();
 
-  SizeType                m_Size;         // Size of the output image
-  InterpolatorPointerType m_Interpolator; // Image function for
-                                          // interpolation
-  ExtrapolatorPointerType m_Extrapolator; // Image function for
-                                          // extrapolation
-  PixelType m_DefaultPixelValue;          // default pixel value
-                                          // if the point is
-                                          // outside the image
-  SpacingType     m_OutputSpacing;        // output image spacing
-  OriginPointType m_OutputOrigin;         // output image origin
-  DirectionType   m_OutputDirection;      // output image direction cosines
-  IndexType       m_OutputStartIndex;     // output image start index
+  SizeType                m_Size{};         // Size of the output image
+  InterpolatorPointerType m_Interpolator{}; // Image function for
+                                            // interpolation
+  ExtrapolatorPointerType m_Extrapolator{}; // Image function for
+                                            // extrapolation
+  PixelType m_DefaultPixelValue{};          // default pixel value
+                                            // if the point is
+                                            // outside the image
+  SpacingType     m_OutputSpacing{};        // output image spacing
+  OriginPointType m_OutputOrigin{};         // output image origin
+  DirectionType   m_OutputDirection{};      // output image direction cosines
+  IndexType       m_OutputStartIndex{};     // output image start index
   bool            m_UseReferenceImage{ false };
 };
 } // end namespace itk

@@ -141,7 +141,7 @@ DirectedHausdorffDistanceImageFilter<TInputImage1, TInputImage2>::AfterThreadedG
   }
   else
   {
-    itkGenericExceptionMacro(<< "pixelcount is equal to 0");
+    itkGenericExceptionMacro("pixelcount is equal to 0");
   }
 
   m_DirectedHausdorffDistance = m_MaxDistance;
@@ -158,7 +158,7 @@ DirectedHausdorffDistanceImageFilter<TInputImage1, TInputImage2>::DynamicThreade
   ImageRegionConstIterator<TInputImage1>    it1(inputPtr1, regionForThread);
   ImageRegionConstIterator<DistanceMapType> it2(m_DistanceMap, regionForThread);
 
-  RealType                 maxDistance = NumericTraits<RealType>::ZeroValue();
+  RealType                 maxDistance{};
   CompensatedSummationType sum = 0.0;
   IdentifierType           pixelCount = 0;
 
@@ -183,7 +183,7 @@ DirectedHausdorffDistanceImageFilter<TInputImage1, TInputImage2>::DynamicThreade
 
     progress.CompletedPixel();
   }
-  std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+  const std::lock_guard<std::mutex> lockGuard(m_Mutex);
   m_MaxDistance = std::max(m_MaxDistance, maxDistance);
   m_Sum += sum;
   m_PixelCount += pixelCount;
@@ -197,9 +197,12 @@ DirectedHausdorffDistanceImageFilter<TInputImage1, TInputImage2>::PrintSelf(std:
 
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "DistanceMap: " << m_DistanceMap << std::endl;
-  os << indent << "MaxDistance: " << m_MaxDistance << std::endl;
-  os << indent << "PixelCount:" << m_PixelCount << std::endl;
+  itkPrintSelfObjectMacro(DistanceMap);
+
+  os << indent << "MaxDistance: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_MaxDistance)
+     << std::endl;
+  os << indent << "PixelCount: " << static_cast<typename NumericTraits<IdentifierType>::PrintType>(m_PixelCount)
+     << std::endl;
   os << indent << "Sum: " << m_Sum.GetSum();
 
   os << std::endl;
@@ -207,7 +210,7 @@ DirectedHausdorffDistanceImageFilter<TInputImage1, TInputImage2>::PrintSelf(std:
      << static_cast<typename NumericTraits<RealType>::PrintType>(m_DirectedHausdorffDistance) << std::endl;
   os << indent << "AverageHausdorffDistance: "
      << static_cast<typename NumericTraits<RealType>::PrintType>(m_AverageHausdorffDistance) << std::endl;
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 #endif

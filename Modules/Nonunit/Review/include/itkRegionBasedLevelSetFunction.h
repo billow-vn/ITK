@@ -43,19 +43,16 @@ namespace itk
  *
  *      "Cell Tracking using Coupled Active Surfaces for Nuclei and Membranes"
  *      https://www.insight-journal.org/browse/publication/642
- *      https://hdl.handle.net/10380/3055
  *
  *  That is based on the papers:
  *
  *      "Level Set Segmentation: Active Contours without edge"
  *      https://www.insight-journal.org/browse/publication/322
- *      https://hdl.handle.net/1926/1532
  *
  *      and
  *
  *      "Level set segmentation using coupled active surfaces"
  *      https://www.insight-journal.org/browse/publication/323
- *      https://hdl.handle.net/1926/1533
  *
  * NOTE: The convention followed is
  * inside of the level-set function is negative and outside is positive.
@@ -80,7 +77,7 @@ public:
   // itkNewMacro() is not provided since this is an abstract class.
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(RegionBasedLevelSetFunction, FiniteDifferenceFunction);
+  itkOverrideGetNameOfClassMacro(RegionBasedLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using TimeStepType = double;
@@ -99,7 +96,7 @@ public:
   {
     GlobalDataStruct()
     {
-      ScalarValueType null_value = NumericTraits<ScalarValueType>::ZeroValue();
+      ScalarValueType null_value{};
 
       m_MaxCurvatureChange = null_value;
       m_MaxAdvectionChange = null_value;
@@ -380,47 +377,47 @@ protected:
   ~RegionBasedLevelSetFunction() override = default;
 
   /** The initial level set image */
-  InputImageConstPointer m_InitialImage;
+  InputImageConstPointer m_InitialImage{};
 
   /** The feature image */
-  FeatureImageConstPointer m_FeatureImage;
+  FeatureImageConstPointer m_FeatureImage{};
 
-  SharedDataPointer m_SharedData;
+  SharedDataPointer m_SharedData{};
 
-  HeavisideFunctionConstPointer m_DomainFunction;
+  HeavisideFunctionConstPointer m_DomainFunction{};
 
   /** Area regularization weight */
-  ScalarValueType m_AreaWeight;
+  ScalarValueType m_AreaWeight{};
 
   /** Internal functional of the level set weight */
-  ScalarValueType m_Lambda1;
+  ScalarValueType m_Lambda1{};
 
   /** External functional of the level set weight */
-  ScalarValueType m_Lambda2;
+  ScalarValueType m_Lambda2{};
 
   /** Overlap Penalty Weight */
-  ScalarValueType m_OverlapPenaltyWeight;
+  ScalarValueType m_OverlapPenaltyWeight{};
 
   /** Volume Regularization Weight */
-  ScalarValueType m_VolumeMatchingWeight;
+  ScalarValueType m_VolumeMatchingWeight{};
 
   /** Volume Constraint in pixels */
-  ScalarValueType m_Volume;
+  ScalarValueType m_Volume{};
 
   /** Curvature Regularization Weight */
-  ScalarValueType m_CurvatureWeight;
+  ScalarValueType m_CurvatureWeight{};
 
-  ScalarValueType m_AdvectionWeight;
+  ScalarValueType m_AdvectionWeight{};
 
   /** Laplacian Regularization Weight */
-  ScalarValueType m_ReinitializationSmoothingWeight;
+  ScalarValueType m_ReinitializationSmoothingWeight{};
 
-  unsigned int m_FunctionId;
+  unsigned int m_FunctionId{};
 
   std::slice      x_slice[Self::ImageDimension];
-  OffsetValueType m_Center;
-  OffsetValueType m_xStride[Self::ImageDimension];
-  double          m_InvSpacing[Self::ImageDimension];
+  OffsetValueType m_Center{};
+  OffsetValueType m_xStride[Self::ImageDimension]{};
+  double          m_InvSpacing[Self::ImageDimension]{};
 
   static double m_WaveDT;
   static double m_DT;
@@ -488,7 +485,7 @@ protected:
   virtual void
   UpdateSharedDataParameters() = 0;
 
-  bool m_UpdateC;
+  bool m_UpdateC{};
 
   /** This method's only purpose is to initialize the zero vector
    * constant. */

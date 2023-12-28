@@ -50,7 +50,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(GPUImage, Image);
+  itkOverrideGetNameOfClassMacro(GPUImage);
 
   static constexpr unsigned int ImageDimension = VImageDimension;
 
@@ -209,7 +209,7 @@ protected:
   using Superclass::Graft;
 
 private:
-  typename GPUImageDataManager<GPUImage>::Pointer m_DataManager;
+  typename GPUImageDataManager<GPUImage>::Pointer m_DataManager{};
 };
 
 class ITK_TEMPLATE_EXPORT GPUImageFactory : public itk::ObjectFactoryBase
@@ -238,7 +238,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GPUImageFactory, itk::ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(GPUImageFactory);
 
   /** Register one factory of this type  */
   static void

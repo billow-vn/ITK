@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class PeakSignalToNoiseRatioCalculator
+ * \class PeakSignalToNoiseRatioCalculator
  * \brief Compute the PSNR of a noisy image
  *
  * \todo This class needs to be refactored and made into a proper
@@ -49,7 +49,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PeakSignalToNoiseRatioCalculator, Object);
+  itkOverrideGetNameOfClassMacro(PeakSignalToNoiseRatioCalculator);
 
   /** Extract the dimension of the image. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -99,12 +99,12 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  bool m_Valid; // Have moments been computed
-                // yet?
-  double m_Output;
+  bool m_Valid{}; // Have moments been computed
+                  // yet?
+  double m_Output{};
 
-  InputImageConstPointer m_Image;
-  InputImageConstPointer m_NoisyImage;
+  InputImageConstPointer m_Image{};
+  InputImageConstPointer m_NoisyImage{};
 
 }; // class PeakSignalToNoiseRatioCalculator
 

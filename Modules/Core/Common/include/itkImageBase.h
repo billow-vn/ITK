@@ -117,7 +117,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageBase, DataObject);
+  itkOverrideGetNameOfClassMacro(ImageBase);
 
   /** Type of image dimension */
   using ImageDimensionType = unsigned int;
@@ -439,14 +439,14 @@ public:
      \endcode
    * \sa Transform */
   template <typename TCoordRep>
-  IndexType
+  [[nodiscard]] IndexType
   TransformPhysicalPointToIndex(const Point<TCoordRep, VImageDimension> & point) const
   {
     IndexType index;
 
     for (unsigned int i = 0; i < VImageDimension; ++i)
     {
-      TCoordRep sum = NumericTraits<TCoordRep>::ZeroValue();
+      TCoordRep sum{};
       for (unsigned int j = 0; j < VImageDimension; ++j)
       {
         sum += this->m_PhysicalPointToIndex[i][j] * (point[j] - this->m_Origin[j]);
@@ -459,10 +459,14 @@ public:
   /** Get the index (discrete) of a voxel from a physical point.
    * Floating point index results are rounded to integers
    * Returns true if the resulting index is within the image, false otherwise
+   *
+   * \note For performance reasons, if you do not need to use the `bool` return value, please call the corresponding
+   * overload instead, which has only one parameter (the point), and returns the index.
+   *
    * \sa Transform */
   template <typename TCoordRep>
-  bool
-  TransformPhysicalPointToIndex(const Point<TCoordRep, VImageDimension> & point, IndexType & index) const
+  ITK_NODISCARD("Call the overload which has the point as the only parameter and returns the index")
+  bool TransformPhysicalPointToIndex(const Point<TCoordRep, VImageDimension> & point, IndexType & index) const
   {
     index = TransformPhysicalPointToIndex(point);
 
@@ -487,7 +491,7 @@ public:
      \endcode
    * \sa Transform */
   template <typename TIndexRep, typename TCoordRep>
-  ContinuousIndex<TIndexRep, VImageDimension>
+  [[nodiscard]] ContinuousIndex<TIndexRep, VImageDimension>
   TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, VImageDimension> & point) const
   {
     ContinuousIndex<TIndexRep, VImageDimension> index;
@@ -508,11 +512,15 @@ public:
   /** \brief Get the continuous index from a physical point
    *
    * Returns true if the resulting index is within the image, false otherwise.
+   *
+   * \note For performance reasons, if you do not need to use the `bool` return value, please call the corresponding
+   * overload instead, which has only one parameter (the point), and returns the continuous index.
+   *
    * \sa Transform */
   template <typename TCoordRep, typename TIndexRep>
-  bool
-  TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, VImageDimension> &     point,
-                                          ContinuousIndex<TIndexRep, VImageDimension> & index) const
+  ITK_NODISCARD("Call the overload which has the point as the only parameter and returns the index")
+  bool TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, VImageDimension> &     point,
+                                               ContinuousIndex<TIndexRep, VImageDimension> & index) const
   {
     index = TransformPhysicalPointToContinuousIndex<TIndexRep>(point);
 
@@ -532,7 +540,7 @@ public:
   {
     for (unsigned int r = 0; r < VImageDimension; ++r)
     {
-      TCoordRep sum = NumericTraits<TCoordRep>::ZeroValue();
+      TCoordRep sum{};
       for (unsigned int c = 0; c < VImageDimension; ++c)
       {
         sum += this->m_IndexToPhysicalPoint(r, c) * index[c];
@@ -546,7 +554,7 @@ public:
    * from a continuous index (in the index space)
    * \sa Transform */
   template <typename TCoordRep, typename TIndexRep>
-  Point<TCoordRep, VImageDimension>
+  [[nodiscard]] Point<TCoordRep, VImageDimension>
   TransformContinuousIndexToPhysicalPoint(const ContinuousIndex<TIndexRep, VImageDimension> & index) const
   {
     Point<TCoordRep, VImageDimension> point;
@@ -579,7 +587,7 @@ public:
    *
    * \sa Transform */
   template <typename TCoordRep>
-  Point<TCoordRep, VImageDimension>
+  [[nodiscard]] Point<TCoordRep, VImageDimension>
   TransformIndexToPhysicalPoint(const IndexType & index) const
   {
     Point<TCoordRep, VImageDimension> point;
@@ -613,7 +621,7 @@ public:
     for (unsigned int i = 0; i < VImageDimension; ++i)
     {
       using CoordSumType = typename NumericTraits<TCoordRep>::AccumulateType;
-      CoordSumType sum = NumericTraits<CoordSumType>::ZeroValue();
+      CoordSumType sum{};
       for (unsigned int j = 0; j < VImageDimension; ++j)
       {
         sum += direction[i][j] * inputGradient[j];
@@ -629,7 +637,7 @@ public:
    * \sa Image
    */
   template <typename TVector>
-  TVector
+  [[nodiscard]] TVector
   TransformLocalVectorToPhysicalVector(const TVector & inputGradient) const
   {
     TVector outputGradient;
@@ -662,7 +670,7 @@ public:
     for (unsigned int i = 0; i < VImageDimension; ++i)
     {
       using CoordSumType = typename NumericTraits<TCoordRep>::AccumulateType;
-      CoordSumType sum = NumericTraits<CoordSumType>::ZeroValue();
+      CoordSumType sum{};
       for (unsigned int j = 0; j < VImageDimension; ++j)
       {
         sum += inverseDirection[i][j] * inputGradient[j];
@@ -678,7 +686,7 @@ public:
    *
    */
   template <typename TVector>
-  TVector
+  [[nodiscard]] TVector
   TransformPhysicalVectorToLocalVector(const TVector & inputGradient) const
   {
     TVector outputGradient;
@@ -870,9 +878,9 @@ protected:
 private:
   OffsetValueType m_OffsetTable[VImageDimension + 1]{};
 
-  RegionType m_LargestPossibleRegion;
-  RegionType m_RequestedRegion;
-  RegionType m_BufferedRegion;
+  RegionType m_LargestPossibleRegion{};
+  RegionType m_RequestedRegion{};
+  RegionType m_BufferedRegion{};
 };
 } // end namespace itk
 

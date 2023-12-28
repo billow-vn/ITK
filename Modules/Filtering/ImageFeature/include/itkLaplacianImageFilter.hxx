@@ -29,7 +29,8 @@ void
 LaplacianImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageSpacing = " << m_UseImageSpacing << std::endl;
+
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -103,7 +104,7 @@ LaplacianImageFilter<TInputImage, TOutputImage>::GenerateData()
     {
       if (this->GetInput()->GetSpacing()[i] == 0.0)
       {
-        itkExceptionMacro(<< "Image spacing cannot be zero");
+        itkExceptionMacro("Image spacing cannot be zero");
       }
       else
       {
@@ -132,7 +133,7 @@ LaplacianImageFilter<TInputImage, TOutputImage>::GenerateData()
   progress->RegisterInternalFilter(filter, 1.0f);
 
   //
-  // set up the mini-pipline
+  // set up the mini-pipeline
   //
   filter->SetOperator(oper);
   filter->SetInput(this->GetInput());

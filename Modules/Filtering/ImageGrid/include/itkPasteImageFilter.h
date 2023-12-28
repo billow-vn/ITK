@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PasteImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(PasteImageFilter);
 
   /** Typedefs from Superclass */
   using typename Superclass::InputImagePointer;
@@ -199,10 +199,10 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 
-  SourceImageRegionType m_SourceRegion;
+  SourceImageRegionType m_SourceRegion{};
 
-  InputImageIndexType    m_DestinationIndex;
-  InputSkipAxesArrayType m_DestinationSkipAxes;
+  InputImageIndexType    m_DestinationIndex{};
+  InputSkipAxesArrayType m_DestinationSkipAxes{};
 
   static_assert(InputImageDimension >= SourceImageDimension,
                 "The source image dimension is greater than the input image.");

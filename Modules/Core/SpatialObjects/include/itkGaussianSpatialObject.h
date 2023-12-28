@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class GaussianSpatialObject
+ * \class GaussianSpatialObject
  *
  * \brief Represents a multivariate Gaussian function.
  *
@@ -59,7 +59,7 @@ public:
   static constexpr unsigned int ObjectDimensions = TDimension;
 
   itkNewMacro(Self);
-  itkTypeMacro(GaussianSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(GaussianSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves
    *   Id, Parent, and Child information */
@@ -85,28 +85,40 @@ public:
   itkSetMacro(Maximum, ScalarType);
   itkGetConstReferenceMacro(Maximum, ScalarType);
 
+  /** Compute the z-score in object space.
+   *
+   * The z-score is the root mean square of the z-scores along each principal axis.
+   */
   ScalarType
   SquaredZScoreInObjectSpace(const PointType & point) const;
 
+  /** Compute the z-score in world space.
+   *
+   * The z-score is the root mean square of the z-scores along each principal axis.
+   */
   ScalarType
   SquaredZScoreInWorldSpace(const PointType & point) const;
 
-  /** Test whether a point is inside or outside the object */
+  /** Test whether a point is inside the object.
+   *
+   * For computational speed purposes, it is faster if the method does not  check the name of the class and the
+   * current depth.
+   */
   bool
   IsInsideInObjectSpace(const PointType & point) const override;
 
   /* Avoid hiding the overload that supports depth and name arguments */
   using Superclass::IsInsideInObjectSpace;
 
-  /** Returns the value of the Gaussian at the given point.  */
+  /** Returns the value of the Gaussian at the given point. */
   bool
   ValueAtInObjectSpace(const PointType &   point,
                        double &            value,
                        unsigned int        depth = 0,
                        const std::string & name = "") const override;
 
-  /** Returns the sigma=m_Radius level set of the Gaussian function, as an
-   * EllipseSpatialObject.  */
+  /** Returns the $sigma = $ \c m_Radius level set of the Gaussian function, as an
+   * EllipseSpatialObject. */
   typename EllipseSpatialObject<TDimension>::Pointer
   GetEllipsoid() const;
 
@@ -124,7 +136,6 @@ protected:
   GaussianSpatialObject();
   ~GaussianSpatialObject() override = default;
 
-  /** Print the object information in a stream. */
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
@@ -132,10 +143,10 @@ protected:
   InternalClone() const override;
 
 private:
-  ScalarType m_Maximum;
-  ScalarType m_RadiusInObjectSpace;
-  ScalarType m_SigmaInObjectSpace;
-  PointType  m_CenterInObjectSpace;
+  ScalarType m_Maximum{};
+  ScalarType m_RadiusInObjectSpace{};
+  ScalarType m_SigmaInObjectSpace{};
+  PointType  m_CenterInObjectSpace{};
 };
 } // end namespace itk
 

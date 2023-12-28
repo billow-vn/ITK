@@ -19,7 +19,9 @@
 #define itkQuadEdgeMeshLineCell_h
 
 #include "itkAutoPointer.h"
+#include "itkMesh.h"
 #include "itkGeometricalQuadEdge.h"
+#include "itkCommonEnums.h"
 
 namespace itk
 {
@@ -93,7 +95,7 @@ public:
 
 public:
   /** Standard part of every itk Object. */
-  itkTypeMacro(QuadEdgeMeshLineCell, TCellInterface);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshLineCell);
 
   // accessor to the new QEGeom link that replaces now inheritance.
   QEType *
@@ -232,9 +234,9 @@ private:
    * In order to have constant time access at the itk level instead of
    * of doing a search in the Mesh::Cell container.
    */
-  CellIdentifier          m_Identifier;
-  QEType *                m_QuadEdgeGeom;
-  mutable PointIdentifier m_PointIds[2];
+  CellIdentifier          m_Identifier{};
+  QEType *                m_QuadEdgeGeom{};
+  mutable PointIdentifier m_PointIds[2]{};
 };
 } // end namespace itk
 

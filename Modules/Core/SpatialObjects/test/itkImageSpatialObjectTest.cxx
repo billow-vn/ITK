@@ -94,34 +94,23 @@ itkImageSpatialObjectTest(int, char *[])
   q.Fill(15);
 
   std::cout << "Bounding Box = " << imageSO->GetMyBoundingBoxInWorldSpace()->GetBounds() << std::endl;
-  std::cout << "IsInside()...";
-  if (imageSO->IsInsideInWorldSpace(r) || !imageSO->IsInsideInWorldSpace(q))
-  {
-    std::cout << "[FAILED]" << std::endl;
-    return EXIT_FAILURE;
-  }
-  else
-  {
-    std::cout << "[PASSED]" << std::endl;
-  }
+
+  ITK_TEST_EXPECT_TRUE(!imageSO->IsInsideInWorldSpace(r));
+  ITK_TEST_EXPECT_TRUE(imageSO->IsInsideInWorldSpace(q));
 
   q.Fill(15.1);
   expectedValue = 555;
 
-  try
-  {
-    imageSO->ValueAtInWorldSpace(q, returnedValue);
-  }
-  catch (const itk::ExceptionObject &)
-  {
-    throw;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(imageSO->ValueAtInWorldSpace(q, returnedValue));
+
 
   std::cout << "ValueAt()...";
   if (itk::Math::NotAlmostEquals(returnedValue, expectedValue))
   {
-    std::cout << "Expected: " << expectedValue << " returned: " << returnedValue << std::endl;
-    std::cout << "[FAILED]: " << std::endl;
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in ValueAt at point " << q << std::endl;
+    std::cerr << "Expected value " << expectedValue << std::endl;
+    std::cerr << " differs from " << returnedValue << std::endl;
     return EXIT_FAILURE;
   }
   else
@@ -140,16 +129,9 @@ itkImageSpatialObjectTest(int, char *[])
   expectedDerivative[1] = expectedPixel;
   expectedPixel = 100;
   expectedDerivative[2] = expectedPixel;
-  std::cout << "DerivativeAt()...";
-  if (derivative != expectedDerivative)
-  {
-    std::cout << "[FAILED]" << std::endl;
-    return EXIT_FAILURE;
-  }
-  else
-  {
-    std::cout << "[PASSED]" << std::endl;
-  }
+
+  ITK_TEST_EXPECT_EQUAL(derivative, expectedDerivative);
+
 
   // Now testing the ValueAt() with an interpolator
   using InterpolatorType = itk::LinearInterpolateImageFunction<ImageType>;
@@ -163,9 +145,15 @@ itkImageSpatialObjectTest(int, char *[])
 
 
   std::cout << "ValueAt() with interpolator...";
-  if (itk::Math::abs(returnedValue - expectedValue) > 0.001)
+  double epsilon = 0.001;
+  if (itk::Math::abs(returnedValue - expectedValue) > epsilon)
   {
-    std::cout << "Expected: " << expectedValue << " returned: " << returnedValue << std::endl;
+    std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in ValueAt at point " << q << std::endl;
+    std::cerr << "Expected value " << expectedValue << std::endl;
+    std::cerr << " differs from " << returnedValue;
+    std::cerr << " by more than " << epsilon << std::endl;
     return EXIT_FAILURE;
   }
   else
@@ -179,12 +167,17 @@ itkImageSpatialObjectTest(int, char *[])
   expectedDerivative[1] = 10;
   expectedDerivative[2] = 100;
   std::cout << "DerivativeAt() with interpolator ...";
-  if (itk::Math::abs(derivative[0] - expectedDerivative[0]) > 0.00001 ||
-      itk::Math::abs(derivative[1] - expectedDerivative[1]) > 0.00001 ||
-      itk::Math::abs(derivative[2] - expectedDerivative[2]) > 0.00001)
+  epsilon = 0.00001;
+  if (itk::Math::abs(derivative[0] - expectedDerivative[0]) > epsilon ||
+      itk::Math::abs(derivative[1] - expectedDerivative[1]) > epsilon ||
+      itk::Math::abs(derivative[2] - expectedDerivative[2]) > epsilon)
   {
-    std::cout << "Expected: " << derivative << " returned: " << expectedDerivative << std::endl;
-    std::cout << "[FAILED]" << std::endl;
+    std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(epsilon))));
+    std::cerr << "Test failed!" << std::endl;
+    std::cerr << "Error in ValueAt at point " << q << std::endl;
+    std::cerr << "Expected value " << expectedDerivative << std::endl;
+    std::cerr << " differs from " << derivative;
+    std::cerr << " by more than " << epsilon << std::endl;
     return EXIT_FAILURE;
   }
   else
@@ -193,6 +186,6 @@ itkImageSpatialObjectTest(int, char *[])
   }
 
 
-  std::cout << "Test finished" << std::endl;
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class SpeckleNoiseImageFilter
+ * \class SpeckleNoiseImageFilter
  *
  * \brief Alter an image with speckle (multiplicative) noise.
  *
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpeckleNoiseImageFilter, NoiseBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(SpeckleNoiseImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageType;

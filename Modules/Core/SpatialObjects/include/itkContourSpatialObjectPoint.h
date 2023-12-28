@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ContourSpatialObjectPoint
+ * \class ContourSpatialObjectPoint
  * \brief Point used for a Contour definition
  *
  * This class contains all the functions necessary to define a point
@@ -78,8 +78,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  CovariantVectorType m_NormalInObjectSpace;
-  PointType           m_PickedPointInObjectSpace;
+  CovariantVectorType m_NormalInObjectSpace{};
+  PointType           m_PickedPointInObjectSpace{};
 };
 } // end of namespace itk
 

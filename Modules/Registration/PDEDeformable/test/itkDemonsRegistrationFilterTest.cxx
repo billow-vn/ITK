@@ -77,9 +77,13 @@ FillWithCircle(TImage *                   image,
       distance += itk::Math::sqr(static_cast<double>(index[j]) - center[j]);
     }
     if (distance <= r2)
+    {
       it.Set(foregnd);
+    }
     else
+    {
       it.Set(backgnd);
+    }
     ++it;
   }
 }
@@ -114,9 +118,7 @@ itkDemonsRegistrationFilterTest(int, char *[])
   using SizeType = ImageType::SizeType;
   using RegionType = ImageType::RegionType;
 
-  //--------------------------------------------------------
-  std::cout << "Generate input images and initial deformation field";
-  std::cout << std::endl;
+  std::cout << "Generate input images and initial deformation field" << std::endl;
 
   ImageType::SizeValueType sizeArray[ImageDimension] = { 128, 128 };
   SizeType                 size;
@@ -172,23 +174,64 @@ itkDemonsRegistrationFilterTest(int, char *[])
   caster->SetInput(initField);
   caster->InPlaceOff();
 
-  //-------------------------------------------------------------
   std::cout << "Run registration and warp moving" << std::endl;
 
   using RegistrationType = itk::DemonsRegistrationFilter<ImageType, ImageType, FieldType>;
   auto registrator = RegistrationType::New();
 
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(registrator, DemonsRegistrationFilter, PDEDeformableRegistrationFilter);
+
+
   registrator->SetInitialDisplacementField(caster->GetOutput());
+  ITK_TEST_SET_GET_VALUE(caster->GetOutput(), registrator->GetInitialDisplacementField());
+
   registrator->SetMovingImage(moving);
+  ITK_TEST_SET_GET_VALUE(moving, registrator->GetMovingImage());
+
   registrator->SetFixedImage(fixed);
-  registrator->SetNumberOfIterations(200);
-  registrator->SetStandardDeviations(1.0);
-  registrator->SetMaximumError(0.08);
-  registrator->SetMaximumKernelWidth(10);
-  registrator->SetIntensityDifferenceThreshold(0.001);
+  ITK_TEST_SET_GET_VALUE(fixed, registrator->GetFixedImage());
+
+  auto numberOfIterations = static_cast<itk::IdentifierType>(200);
+  registrator->SetNumberOfIterations(numberOfIterations);
+  ITK_TEST_SET_GET_VALUE(numberOfIterations, registrator->GetNumberOfIterations());
+
+  double                                   standardDeviationsVal = 1.0;
+  RegistrationType::StandardDeviationsType standardDeviations{ standardDeviationsVal };
+  registrator->SetStandardDeviations(standardDeviationsVal);
+  ITK_TEST_SET_GET_VALUE(standardDeviations, registrator->GetStandardDeviations());
+
+  registrator->SetStandardDeviations(standardDeviations);
+  ITK_TEST_SET_GET_VALUE(standardDeviations, registrator->GetStandardDeviations());
+
+  auto maximumError = 0.08;
+  registrator->SetMaximumError(maximumError);
+  ITK_TEST_SET_GET_VALUE(maximumError, registrator->GetMaximumError());
+
+  unsigned int maximumKernelWidth = 10;
+  registrator->SetMaximumKernelWidth(maximumKernelWidth);
+  ITK_TEST_SET_GET_VALUE(maximumKernelWidth, registrator->GetMaximumKernelWidth());
+
+  auto intensityDifferenceThreshold = 0.001;
+  registrator->SetIntensityDifferenceThreshold(intensityDifferenceThreshold);
+  ITK_TEST_SET_GET_VALUE(intensityDifferenceThreshold, registrator->GetIntensityDifferenceThreshold());
+
+  auto smoothDisplacementField = true;
+  ITK_TEST_SET_GET_BOOLEAN(registrator, SmoothDisplacementField, smoothDisplacementField);
+
+  auto smoothUpdateField = false;
+  ITK_TEST_SET_GET_BOOLEAN(registrator, SmoothUpdateField, smoothUpdateField);
+
+  double                                   updateFieldStandardDeviationsVal = 1.0;
+  RegistrationType::StandardDeviationsType updateFieldStandardDeviations{ updateFieldStandardDeviationsVal };
+  registrator->SetUpdateFieldStandardDeviations(updateFieldStandardDeviationsVal);
+  ITK_TEST_SET_GET_VALUE(updateFieldStandardDeviations, registrator->GetUpdateFieldStandardDeviations());
+
+  registrator->SetUpdateFieldStandardDeviations(updateFieldStandardDeviations);
+  ITK_TEST_SET_GET_VALUE(updateFieldStandardDeviations, registrator->GetUpdateFieldStandardDeviations());
 
   // turn on inplace execution
-  registrator->InPlaceOn();
+  auto inPlace = true;
+  ITK_TEST_SET_GET_BOOLEAN(registrator, InPlace, inPlace);
 
   // turn on/off use moving image gradient
   auto useMovingImageGradient = false;
@@ -200,18 +243,6 @@ itkDemonsRegistrationFilterTest(int, char *[])
   {
     fptr->Print(std::cout);
   }
-
-  // exercise other member variables
-  std::cout << "No. Iterations: " << registrator->GetNumberOfIterations() << std::endl;
-  std::cout << "Max. kernel error: " << registrator->GetMaximumError() << std::endl;
-  std::cout << "Max. kernel width: " << registrator->GetMaximumKernelWidth() << std::endl;
-
-  double v[ImageDimension];
-  for (unsigned int j = 0; j < ImageDimension; ++j)
-  {
-    v[j] = registrator->GetStandardDeviations()[j];
-  }
-  registrator->SetStandardDeviations(v);
 
   using ProgressType = ShowProgressObject<RegistrationType>;
   ProgressType                                    progressWatch(registrator);
@@ -241,7 +272,7 @@ itkDemonsRegistrationFilterTest(int, char *[])
 
   warper->Update();
 
-  // ---------------------------------------------------------
+
   std::cout << "Compare warped moving and fixed." << std::endl;
 
   // compare the warp and fixed images
@@ -259,8 +290,7 @@ itkDemonsRegistrationFilterTest(int, char *[])
     ++warpedIter;
   }
 
-  std::cout << "Number of pixels different: " << numPixelsDifferent;
-  std::cout << std::endl;
+  std::cout << "Number of pixels different: " << numPixelsDifferent << std::endl;
 
   if (numPixelsDifferent > 10)
   {
@@ -268,85 +298,45 @@ itkDemonsRegistrationFilterTest(int, char *[])
     return EXIT_FAILURE;
   }
 
+  std::cout << "IntensityDifferenceThreshold: " << registrator->GetIntensityDifferenceThreshold() << std::endl;
+
   registrator->Print(std::cout);
 
-  // -----------------------------------------------------------
-  std::cout << "Test running registrator without initial deformation field.";
-  std::cout << std::endl;
+  std::cout << "Test running registrator without initial deformation field." << std::endl;
 
-  bool passed = true;
-  try
-  {
-    registrator->SetInput(nullptr);
-    registrator->SetNumberOfIterations(2);
-    registrator->Update();
-  }
-  catch (const itk::ExceptionObject & err)
-  {
-    std::cout << "Unexpected error." << std::endl;
-    std::cout << err << std::endl;
-    passed = false;
-  }
+  registrator->SetInput(nullptr);
+  registrator->SetNumberOfIterations(2);
 
-  if (!passed)
-  {
-    std::cout << "Test failed" << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(registrator->Update());
 
-  //--------------------------------------------------------------
+
+  // Test exceptions
   std::cout << "Test exception handling." << std::endl;
 
   std::cout << "Test nullptr moving image. " << std::endl;
-  passed = false;
-  try
-  {
-    registrator->SetInput(caster->GetOutput());
-    registrator->SetMovingImage(nullptr);
-    registrator->Update();
-  }
-  catch (const itk::ExceptionObject & err)
-  {
-    std::cout << "Caught expected error." << std::endl;
-    std::cout << err << std::endl;
-    passed = true;
-  }
 
-  if (!passed)
-  {
-    std::cout << "Test failed" << std::endl;
-    return EXIT_FAILURE;
-  }
+  registrator->SetInput(caster->GetOutput());
+  registrator->SetMovingImage(nullptr);
+
+  ITK_TRY_EXPECT_EXCEPTION(registrator->Update());
+
+
   registrator->SetMovingImage(moving);
   registrator->ResetPipeline();
 
   std::cout << "Test nullptr moving image interpolator. " << std::endl;
-  passed = false;
-  try
+  fptr = dynamic_cast<FunctionType *>(registrator->GetDifferenceFunction().GetPointer());
+  if (fptr == nullptr)
   {
-    fptr = dynamic_cast<FunctionType *>(registrator->GetDifferenceFunction().GetPointer());
-    if (fptr == nullptr)
-    {
-      std::cerr << "dynamic_cast failed" << std::endl;
-      return EXIT_FAILURE;
-    }
-    fptr->SetMovingImageInterpolator(nullptr);
-    registrator->SetInput(initField);
-    registrator->Update();
-  }
-  catch (const itk::ExceptionObject & err)
-  {
-    std::cout << "Caught expected error." << std::endl;
-    std::cout << err << std::endl;
-    passed = true;
-  }
-
-  if (!passed)
-  {
-    std::cout << "Test failed" << std::endl;
+    std::cerr << "dynamic_cast failed" << std::endl;
     return EXIT_FAILURE;
   }
+  fptr->SetMovingImageInterpolator(nullptr);
+  registrator->SetInput(initField);
 
-  std::cout << "Test passed" << std::endl;
+  ITK_TRY_EXPECT_EXCEPTION(registrator->Update());
+
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class SquaredDifferenceImageFilter
+ * \class SquaredDifferenceImageFilter
  * \brief Implements pixel-wise the computation of squared difference.
  *
  * This filter is parameterized over the types of the two
@@ -101,7 +101,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SquaredDifferenceImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(SquaredDifferenceImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

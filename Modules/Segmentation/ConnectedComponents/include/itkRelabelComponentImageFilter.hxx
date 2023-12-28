@@ -60,7 +60,7 @@ RelabelComponentImageFilter<TInputImage, TOutputImage>::ParallelComputeLabels(co
   initialSize.m_SizeInPixels = 0;
 
   // walk the input
-  ImageScanlineConstIterator<InputImageType> it(this->GetInput(), inputRegionForThread);
+  ImageScanlineConstIterator it(this->GetInput(), inputRegionForThread);
 
   auto                  inputRequestedRegion = this->GetInput()->GetRequestedRegion();
   TotalProgressReporter report(this, inputRequestedRegion.GetNumberOfPixels(), 100, 0.5f);
@@ -96,29 +96,27 @@ RelabelComponentImageFilter<TInputImage, TOutputImage>::ParallelComputeLabels(co
   // local copy, this thread may do multiple merges.
   while (true)
   {
-    std::unique_lock<std::mutex> lock(m_Mutex);
+    MapType toMerge{};
+    {
+      const std::lock_guard<std::mutex> lockGuard(m_Mutex);
 
-    if (m_SizeMap.empty())
-    {
-      swap(m_SizeMap, localSizeMap);
-      break;
-    }
-    else
-    {
-      // copy the output map to thread local storage
-      MapType toMerge;
+      if (m_SizeMap.empty())
+      {
+        swap(m_SizeMap, localSizeMap);
+        break;
+      }
+
+      // Move the data of the output map to the local `toMerge` and clear the output map.
       swap(m_SizeMap, toMerge);
 
-      // allow other threads to merge data
-      lock.unlock();
+    } // release lock, allow other threads to merge data
 
-      // Merge toMerge into localSizeMap, locally
-      for (auto & sizePair : toMerge)
-      {
-        localSizeMap[sizePair.first] += sizePair.second;
-      }
+    // Merge toMerge into localSizeMap, locally
+    for (auto & sizePair : toMerge)
+    {
+      localSizeMap[sizePair.first] += sizePair.second;
     }
-  } // release lock
+  }
 }
 
 
@@ -228,15 +226,15 @@ RelabelComponentImageFilter<TInputImage, TOutputImage>::GenerateData()
   // Allocate the output
   this->AllocateOutputs();
 
-  // In parallel apply the relabling map
+  // In parallel apply the relabeling map
   this->GetMultiThreader()->template ParallelizeImageRegion<ImageDimension>(
     output->GetRequestedRegion(),
     [this, &relabelMap](const RegionType & outputRegionForThread) {
       auto                  outputRequestedRegion = this->GetOutput()->GetRequestedRegion();
       TotalProgressReporter report(this, outputRequestedRegion.GetNumberOfPixels(), 100, 0.5f);
 
-      ImageScanlineIterator<OutputImageType>     oit(this->GetOutput(), outputRegionForThread);
-      ImageScanlineConstIterator<InputImageType> it(this->GetInput(), outputRegionForThread);
+      ImageScanlineIterator      oit(this->GetOutput(), outputRegionForThread);
+      ImageScanlineConstIterator it(this->GetInput(), outputRegionForThread);
 
       auto mapIt = relabelMap.cbegin();
 

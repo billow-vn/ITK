@@ -87,7 +87,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaDataObject, MetaDataObjectBase);
+  itkOverrideGetNameOfClassMacro(MetaDataObject);
 
   /**
    * The definition of this function is necessary to fulfill
@@ -207,17 +207,15 @@ private:
    * A variable to store this derived type.
    * \author Hans J. Johnson
    */
-  MetaDataObjectType m_MetaDataObjectValue;
+  MetaDataObjectType m_MetaDataObjectValue{};
 };
 
 /**
  * EncapsulateMetaData is a convenience function that encapsulates raw MetaData into a
  * MetaDataObject that can be put into the MetaDataDictionary.
- * \param Dictionary TODO
- * \param key TODO
+ * \param Dictionary reference to a dictionary
+ * \param key string identifier for this object
  * \param invalue the value of type T that is to be encapsulated.
- * \return A smartpointer to a MetaDataObject that is suitable for
- * insertion into a MetaDataDictionary.
  */
 template <typename T>
 inline void

@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetQuadEdgeMesh, LevelSetBase);
+  itkOverrideGetNameOfClassMacro(LevelSetQuadEdgeMesh);
 
   using typename Superclass::InputType;
   using typename Superclass::OutputType;
@@ -112,7 +112,7 @@ protected:
   virtual ~LevelSetQuadEdgeMesh() = default;
 
 private:
-  MeshPointer m_Mesh;
+  MeshPointer m_Mesh{};
 };
 } // namespace itk
 

@@ -49,7 +49,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ElasticBodyReciprocalSplineKernelTransform, KernelTransform);
+  itkOverrideGetNameOfClassMacro(ElasticBodyReciprocalSplineKernelTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -105,7 +105,7 @@ protected:
   ComputeG(const InputVectorType & x, GMatrixType & gmatrix) const override;
 
   /** alpha, Poisson's ratio */
-  TParametersValueType m_Alpha;
+  TParametersValueType m_Alpha{};
 };
 } // namespace itk
 

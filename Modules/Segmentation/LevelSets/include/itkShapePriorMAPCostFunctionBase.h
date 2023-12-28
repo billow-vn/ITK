@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShapePriorMAPCostFunctionBase, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(ShapePriorMAPCostFunctionBase);
 
   /**  MeasureType type alias.
    *  It defines a type used to return the cost function value. */
@@ -114,7 +114,7 @@ public:
   void
   GetDerivative(const ParametersType &, DerivativeType &) const override
   {
-    itkExceptionMacro(<< "This function is currently not supported.");
+    itkExceptionMacro("This function is currently not supported.");
   }
 
   /** Return the number of parameters. */
@@ -156,10 +156,10 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  ShapeFunctionPointer m_ShapeFunction;
-  NodeContainerPointer m_ActiveRegion;
+  ShapeFunctionPointer m_ShapeFunction{};
+  NodeContainerPointer m_ActiveRegion{};
 
-  FeatureImagePointer m_FeatureImage;
+  FeatureImagePointer m_FeatureImage{};
 };
 } // end namespace itk
 

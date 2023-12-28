@@ -52,7 +52,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Element3DMembrane1DOF, TBaseClass);
+  itkOverrideGetNameOfClassMacro(Element3DMembrane1DOF);
 
   // Repeat the required type alias and enums from parent class
   using typename Superclass::Float;
@@ -122,7 +122,7 @@ protected:
   /**
    * Pointer to material properties of the element
    */
-  MaterialLinearElasticity::ConstPointer m_Mat;
+  MaterialLinearElasticity::ConstPointer m_Mat{};
 };
 
 } // end namespace fem

@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class GradientDescentOptimizerBasev4
+ * \class GradientDescentOptimizerBasev4
  *  \brief Abstract base class for gradient descent-style optimizers.
  *
  * Gradient modification is threaded in \c ModifyGradient.
@@ -50,7 +50,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientDescentOptimizerBasev4Template, ObjectToObjectOptimizerBaseTemplate);
+  itkOverrideGetNameOfClassMacro(GradientDescentOptimizerBasev4Template);
 
 #if !defined(ITK_LEGACY_REMOVE)
   /**Exposes enums values for backwards compatibility*/
@@ -167,12 +167,12 @@ protected:
   /** Flag to control use of the ScalesEstimator (if set) for
    * automatic learning step estimation at *each* iteration.
    */
-  bool m_DoEstimateLearningRateAtEachIteration;
+  bool m_DoEstimateLearningRateAtEachIteration{};
 
   /** Flag to control use of the ScalesEstimator (if set) for
    * automatic learning step estimation only *once*, during first iteration.
    */
-  bool m_DoEstimateLearningRateOnce;
+  bool m_DoEstimateLearningRateOnce{};
 
   /** The maximum step size in physical units, to restrict learning rates.
    * Only used with automatic learning rate estimation.
@@ -180,33 +180,33 @@ protected:
    * manually or by using m_ScalesEstimator automatically, and the former has
    * higher priority than the latter. See main documentation.
    */
-  TInternalComputationValueType m_MaximumStepSizeInPhysicalUnits;
+  TInternalComputationValueType m_MaximumStepSizeInPhysicalUnits{};
 
   /** Flag to control using the convergence monitoring for stop condition.
    *  This flag should be always set to true except for regular step gradient
    *  descent optimizer that uses minimum step length to check the convergence.
    */
-  bool m_UseConvergenceMonitoring;
+  bool m_UseConvergenceMonitoring{};
 
   /** Window size for the convergence checker.
    *  The convergence checker calculates convergence value by fitting to
    *  a window of the energy (metric value) profile.
    */
-  SizeValueType m_ConvergenceWindowSize;
+  SizeValueType m_ConvergenceWindowSize{};
 
   /** The convergence checker. */
-  typename ConvergenceMonitoringType::Pointer m_ConvergenceMonitoring;
+  typename ConvergenceMonitoringType::Pointer m_ConvergenceMonitoring{};
 
-  typename DomainThreader<ThreadedIndexedContainerPartitioner, Self>::Pointer m_ModifyGradientByScalesThreader;
-  typename DomainThreader<ThreadedIndexedContainerPartitioner, Self>::Pointer m_ModifyGradientByLearningRateThreader;
+  typename DomainThreader<ThreadedIndexedContainerPartitioner, Self>::Pointer m_ModifyGradientByScalesThreader{};
+  typename DomainThreader<ThreadedIndexedContainerPartitioner, Self>::Pointer m_ModifyGradientByLearningRateThreader{};
 
   /* Common variables for optimization control and reporting */
   bool                                     m_Stop{ false };
-  StopConditionObjectToObjectOptimizerEnum m_StopCondition;
-  StopConditionDescriptionType             m_StopConditionDescription;
+  StopConditionObjectToObjectOptimizerEnum m_StopCondition{};
+  StopConditionDescriptionType             m_StopConditionDescription{};
 
   /** Current gradient */
-  DerivativeType m_Gradient;
+  DerivativeType m_Gradient{};
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 

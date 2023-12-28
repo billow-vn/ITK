@@ -19,12 +19,11 @@
 #define itkMultiResolutionImageRegistrationMethod_hxx
 
 #include "itkRecursiveMultiResolutionPyramidImageFilter.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedImage, typename TMovingImage>
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::MultiResolutionImageRegistrationMethod()
 {
@@ -64,9 +63,6 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::MultiResoluti
   this->ProcessObject::SetNthOutput(0, transformDecorator.GetPointer());
 }
 
-/*
- * Initialize by setting the interconnects between components.
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
@@ -74,22 +70,22 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
   // Sanity checks
   if (!m_Metric)
   {
-    itkExceptionMacro(<< "Metric is not present");
+    itkExceptionMacro("Metric is not present");
   }
 
   if (!m_Optimizer)
   {
-    itkExceptionMacro(<< "Optimizer is not present");
+    itkExceptionMacro("Optimizer is not present");
   }
 
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
 
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator is not present");
+    itkExceptionMacro("Interpolator is not present");
   }
 
   // Setup the metric
@@ -112,9 +108,6 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::Initialize()
   transformOutput->Set(m_Transform);
 }
 
-/*
- * Stop the Registration Process
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::StopRegistration()
@@ -122,9 +115,6 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::StopRegistrat
   m_Stop = true;
 }
 
-/**
- * Set the schedules for the fixed and moving image pyramid
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::SetSchedules(
@@ -153,9 +143,6 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::SetSchedules(
   this->Modified();
 }
 
-/**
- * Set the number of levels
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::SetNumberOfLevels(SizeValueType numberOfLevels)
@@ -171,44 +158,41 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::SetNumberOfLe
   this->Modified();
 }
 
-/**
- * Stop the Registration Process
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::PreparePyramids()
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
 
   m_InitialTransformParametersOfNextLevel = m_InitialTransformParameters;
 
   if (m_InitialTransformParametersOfNextLevel.Size() != m_Transform->GetNumberOfParameters())
   {
-    itkExceptionMacro(<< "Size mismatch between initial parameter and transform");
+    itkExceptionMacro("Size mismatch between initial parameter and transform");
   }
 
   // Sanity checks
   if (!m_FixedImage)
   {
-    itkExceptionMacro(<< "FixedImage is not present");
+    itkExceptionMacro("FixedImage is not present");
   }
 
   if (!m_MovingImage)
   {
-    itkExceptionMacro(<< "MovingImage is not present");
+    itkExceptionMacro("MovingImage is not present");
   }
 
   if (!m_FixedImagePyramid)
   {
-    itkExceptionMacro(<< "Fixed image pyramid is not present");
+    itkExceptionMacro("Fixed image pyramid is not present");
   }
 
   if (!m_MovingImagePyramid)
   {
-    itkExceptionMacro(<< "Moving image pyramid is not present");
+    itkExceptionMacro("Moving image pyramid is not present");
   }
 
   // Setup the fixed and moving image pyramid
@@ -238,10 +222,10 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::PreparePyrami
   using IndexType = typename FixedImageRegionType::IndexType;
 
   ScheduleType schedule = m_FixedImagePyramid->GetSchedule();
-  itkDebugMacro(<< "FixedImage schedule: " << schedule);
+  itkDebugMacro("FixedImage schedule: " << schedule);
 
   ScheduleType movingschedule = m_MovingImagePyramid->GetSchedule();
-  itkDebugMacro(<< "MovingImage schedule: " << movingschedule);
+  itkDebugMacro("MovingImage schedule: " << movingschedule);
 
   SizeType  inputSize = m_FixedImageRegion.GetSize();
   IndexType inputStart = m_FixedImageRegion.GetIndex();
@@ -277,53 +261,53 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::PreparePyrami
   }
 }
 
-/*
- * PrintSelf
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
-  os << indent << "Metric: " << m_Metric.GetPointer() << std::endl;
-  os << indent << "Optimizer: " << m_Optimizer.GetPointer() << std::endl;
-  os << indent << "Transform: " << m_Transform.GetPointer() << std::endl;
-  os << indent << "Interpolator: " << m_Interpolator.GetPointer() << std::endl;
-  os << indent << "FixedImage: " << m_FixedImage.GetPointer() << std::endl;
-  os << indent << "MovingImage: " << m_MovingImage.GetPointer() << std::endl;
-  os << indent << "FixedImagePyramid: ";
-  os << m_FixedImagePyramid.GetPointer() << std::endl;
-  os << indent << "MovingImagePyramid: ";
-  os << m_MovingImagePyramid.GetPointer() << std::endl;
 
-  os << indent << "NumberOfLevels: ";
-  os << m_NumberOfLevels << std::endl;
+  itkPrintSelfObjectMacro(Metric);
+  itkPrintSelfObjectMacro(Optimizer);
 
-  os << indent << "CurrentLevel: ";
-  os << m_CurrentLevel << std::endl;
+  itkPrintSelfObjectMacro(MovingImage);
+  itkPrintSelfObjectMacro(FixedImage);
 
-  os << indent << "InitialTransformParameters: ";
-  os << m_InitialTransformParameters << std::endl;
-  os << indent << "InitialTransformParametersOfNextLevel: ";
-  os << m_InitialTransformParametersOfNextLevel << std::endl;
-  os << indent << "LastTransformParameters: ";
-  os << m_LastTransformParameters << std::endl;
-  os << indent << "FixedImageRegion: ";
-  os << m_FixedImageRegion << std::endl;
-  for (unsigned int level = 0; level < m_FixedImageRegionPyramid.size(); ++level)
-  {
-    os << indent << "FixedImageRegion at level " << level << ": ";
-    os << m_FixedImageRegionPyramid[level] << std::endl;
-  }
-  os << indent << "FixedImagePyramidSchedule : " << std::endl;
-  os << m_FixedImagePyramidSchedule << std::endl;
-  os << indent << "MovingImagePyramidSchedule : " << std::endl;
-  os << m_MovingImagePyramidSchedule << std::endl;
+  itkPrintSelfObjectMacro(Transform);
+  itkPrintSelfObjectMacro(Interpolator);
+
+  itkPrintSelfObjectMacro(MovingImagePyramid);
+  itkPrintSelfObjectMacro(FixedImagePyramid);
+
+  os << indent << "InitialTransformParameters: "
+     << static_cast<typename NumericTraits<ParametersType>::PrintType>(m_InitialTransformParameters) << std::endl;
+  os << indent << "InitialTransformParametersOfNextLevel: "
+     << static_cast<typename NumericTraits<ParametersType>::PrintType>(m_InitialTransformParametersOfNextLevel)
+     << std::endl;
+  os << indent << "LastTransformParameters: "
+     << static_cast<typename NumericTraits<ParametersType>::PrintType>(m_LastTransformParameters) << std::endl;
+
+  os << indent << "FixedImageRegion: " << m_FixedImageRegion << std::endl;
+  os << indent << "FixedImageRegionPyramid: " << m_FixedImageRegionPyramid << std::endl;
+
+  os << indent << "NumberOfLevels: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfLevels)
+     << std::endl;
+  os << indent << "CurrentLevel: " << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_CurrentLevel)
+     << std::endl;
+
+  os << indent << "Stop: " << (m_Stop ? "On" : "Off") << std::endl;
+
+  os << indent << "FixedImagePyramidSchedule: "
+     << static_cast<typename NumericTraits<ScheduleType>::PrintType>(m_FixedImagePyramidSchedule) << std::endl;
+  os << indent << "MovingImagePyramidSchedule: "
+     << static_cast<typename NumericTraits<ScheduleType>::PrintType>(m_MovingImagePyramidSchedule) << std::endl;
+
+  os << indent << "ScheduleSpecified: " << (m_ScheduleSpecified ? "On" : "Off") << std::endl;
+  os << indent << "NumberOfLevelsSpecified: " << (m_Stop ? "On" : "Off") << std::endl;
 }
 
-/*
- * Generate Data
- */
 template <typename TFixedImage, typename TMovingImage>
 void
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::GenerateData()
@@ -435,9 +419,6 @@ MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::GetMTime() co
   return mtime;
 }
 
-/*
- *  Get Output
- */
 template <typename TFixedImage, typename TMovingImage>
 auto
 MultiResolutionImageRegistrationMethod<TFixedImage, TMovingImage>::GetOutput() const -> const TransformOutputType *

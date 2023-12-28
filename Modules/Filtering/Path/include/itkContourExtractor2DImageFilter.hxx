@@ -117,7 +117,7 @@ ContourExtractor2DImageFilter<TInputImage>::CreateSingleContour(InputPixelType  
   for (const InputIndexType index : RegionIndexRange{ usableRegion })
   {
     neighborhoodRange.SetLocation(index);
-    // There are sixteen different possible square types, diagramed below.
+    // There are sixteen different possible square types, diagrammed below.
     // A + indicates that the vertex is above the contour value, and a -
     // indicates that the vertex is below or equal to the contour value.
     // The vertices of each square are here numbered:
@@ -308,11 +308,11 @@ ContourExtractor2DImageFilter<TInputImage>::GenerateDataForLabels()
        checkedLabel != allLabels.cend() && m_UnusedLabel == *checkedLabel;
        ++checkedLabel)
   {
-    if /* constexpr */ (std::is_integral<InputPixelType>::value)
+    if /* constexpr */ (std::is_integral_v<InputPixelType>)
     {
       ++m_UnusedLabel;
     }
-    else if /* constexpr */ (std::is_floating_point<InputPixelType>::value)
+    else if /* constexpr */ (std::is_floating_point_v<InputPixelType>)
     {
       m_UnusedLabel = std::nextafter(m_UnusedLabel, NumericTraits<InputPixelType>::max());
     }
@@ -394,11 +394,11 @@ ContourExtractor2DImageFilter<TInputImage>::GenerateDataForLabels()
 
 
 template <typename TInputImage>
-inline typename ContourExtractor2DImageFilter<TInputImage>::VertexType
+inline auto
 ContourExtractor2DImageFilter<TInputImage>::InterpolateContourPosition(InputPixelType  fromValue,
                                                                        InputPixelType  toValue,
                                                                        InputIndexType  fromIndex,
-                                                                       InputOffsetType toOffset)
+                                                                       InputOffsetType toOffset) -> VertexType
 {
   // Now calculate the fraction of the way from 'from' to 'to' that the contour
   // crosses. Interpolate linearly: y = v0 + (v1 - v0) * x, and solve for the
@@ -477,8 +477,7 @@ ContourExtractor2DImageFilter<TInputImage>::AddSegment(VertexType from, VertexTy
         // There should be exactly one entry in the hash for that endpoint
         if (erased != 1)
         {
-          itkWarningMacro(<< "There should be exactly one entry in the hash for that endpoint, but there are "
-                          << erased);
+          itkWarningMacro("There should be exactly one entry in the hash for that endpoint, but there are " << erased);
         }
         contourData.m_Contours.erase(tail); // remove from the master list
 
@@ -500,8 +499,7 @@ ContourExtractor2DImageFilter<TInputImage>::AddSegment(VertexType from, VertexTy
           head->front()) };
         if (erased != 1)
         {
-          itkWarningMacro(<< "There should be exactly one entry in the hash for that endpoint, but there are "
-                          << erased);
+          itkWarningMacro("There should be exactly one entry in the hash for that endpoint, but there are " << erased);
         }
         contourData.m_Contours.erase(head); // remove from the master list
 

@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FlipImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(FlipImageFilter);
 
   /** ImageDimension enumeration */
   static constexpr unsigned int ImageDimension = TImage::ImageDimension;
@@ -136,7 +136,7 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 private:
-  FlipAxesArrayType m_FlipAxes;
+  FlipAxesArrayType m_FlipAxes{};
   bool              m_FlipAboutOrigin{ true };
 };
 } // end namespace itk

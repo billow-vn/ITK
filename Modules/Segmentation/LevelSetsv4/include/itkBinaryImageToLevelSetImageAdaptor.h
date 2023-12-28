@@ -34,7 +34,7 @@
 namespace itk
 {
 /**
- *\class BinaryImageToLevelSetImageAdator
+ * \class BinaryImageToLevelSetImageAdaptor
  *  \brief Converts one binary image to the appropriate level-set type
  *  provided by the template argument TLevelSet.
  *
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(BinaryImageToLevelSetImageAdaptorBase, Object);
+  itkOverrideGetNameOfClassMacro(BinaryImageToLevelSetImageAdaptorBase);
 
   using InputImageType = TInputImage;
   using InputImagePixelType = typename InputImageType::PixelType;
@@ -108,13 +108,13 @@ protected:
   ~BinaryImageToLevelSetImageAdaptor() override;
 
 private:
-  SignedDistanceTransformFilterPointer m_SignedDistanceTransformFilter;
+  SignedDistanceTransformFilterPointer m_SignedDistanceTransformFilter{};
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- *\class BinaryImageToSparseLevelSetImageAdaptorBase
+ * \class BinaryImageToSparseLevelSetImageAdaptorBase
  *  \brief Abstract class for converting binary image to sparse level-set
  *
  *  \ingroup ITKLevelSetsv4
@@ -132,7 +132,7 @@ public:
   using Superclass = BinaryImageToLevelSetImageAdaptorBase<TInput, TOutput>;
 
   /** Run-time type information */
-  itkTypeMacro(BinaryImageToSparseLevelSetImageAdaptorBase, BinaryImageToLevelSetImageAdaptorBase);
+  itkOverrideGetNameOfClassMacro(BinaryImageToSparseLevelSetImageAdaptorBase);
 
   using typename Superclass::InputImageType;
   using typename Superclass::InputImagePixelType;
@@ -178,9 +178,9 @@ protected:
   {}
   ~BinaryImageToSparseLevelSetImageAdaptorBase() override = default;
 
-  LevelSetLabelMapPointer m_LabelMap;
+  LevelSetLabelMapPointer m_LabelMap{};
 
-  InternalImagePointer m_InternalImage;
+  InternalImagePointer m_InternalImage{};
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +207,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(BinaryImageToLevelSetImageAdaptor, BinaryImageToSparseLevelSetImageAdaptorBase);
+  itkOverrideGetNameOfClassMacro(BinaryImageToLevelSetImageAdaptor);
 
   using typename Superclass::InputImageType;
   using typename Superclass::InputImagePixelType;
@@ -291,7 +291,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(BinaryImageToLevelSetImageAdaptor, BinaryImageToSparseLevelSetImageAdaptorBase);
+  itkOverrideGetNameOfClassMacro(BinaryImageToLevelSetImageAdaptor);
 
   using typename Superclass::InputImageType;
 
@@ -372,7 +372,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(BinaryImageToLevelSetImageAdaptor, BinaryImageToSparseLevelSetImageAdaptorBase);
+  itkOverrideGetNameOfClassMacro(BinaryImageToLevelSetImageAdaptor);
 
   using typename Superclass::InputImageType;
 

@@ -38,7 +38,7 @@
 namespace itk
 {
 /**
- *\class BSplineDecompositionImageFilter
+ * \class BSplineDecompositionImageFilter
  * \brief Calculates the B-Spline coefficients of an image. Spline order may be from 0 to 5.
  *
  * This class defines N-Dimension B-Spline transformation.
@@ -83,7 +83,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineDecompositionImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BSplineDecompositionImageFilter);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -116,7 +116,7 @@ public:
   itkGetConstMacro(SplinePoles, SplinePolesVectorType);
 
   /** Get the number of poles. */
-  itkGetConstMacro(NumberOfPoles, int);
+  itkGetConstMacro(NumberOfPoles, unsigned int);
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
@@ -188,17 +188,17 @@ private:
   // Variables needed by the smoothing spline routine.
 
   /** Temporary storage for processing of Coefficients. */
-  CoefficientsVectorType m_Scratch;
+  CoefficientsVectorType m_Scratch{};
 
   /** Image size. */
-  typename TInputImage::SizeType m_DataLength;
+  typename TInputImage::SizeType m_DataLength{};
 
   /** User specified spline order (3rd or cubic is the default). */
   unsigned int m_SplineOrder{ 0 };
 
-  SplinePolesVectorType m_SplinePoles;
+  SplinePolesVectorType m_SplinePoles{};
 
-  int m_NumberOfPoles;
+  unsigned int m_NumberOfPoles{};
 
   /** Tolerance used for determining initial causal coefficient. Default is 1e-10.*/
   double m_Tolerance{ 1e-10 };

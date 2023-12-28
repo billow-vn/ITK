@@ -156,7 +156,7 @@ itkSampleClassifierFilterTest7(int argc, char * argv[])
   bool passed = true;
   for (unsigned int i = 0; i < numberOfClasses; ++i)
   {
-    std::cout << "Cluster[" << i << "]" << std::endl;
+    std::cout << "Cluster[" << i << ']' << std::endl;
     std::cout << "    Parameters:" << std::endl;
     std::cout << "         " << (components[i])->GetFullParameters() << std::endl;
     std::cout << "    Proportion: ";
@@ -239,7 +239,7 @@ itkSampleClassifierFilterTest7(int argc, char * argv[])
   std::cout << "Estimator membership function Weight/proporation output: " << std::endl;
   for (unsigned int i = 0; i < weightsArray.Size(); ++i)
   {
-    std::cout << "Membership function: \t" << i << "\t" << weightsArray[i] << std::endl;
+    std::cout << "Membership function: \t" << i << '\t' << weightsArray[i] << std::endl;
   }
 
   char *        targetFileName = argv[2];
@@ -297,7 +297,7 @@ itkSampleClassifierFilterTest7(int argc, char * argv[])
   {
     if (iter.GetClassLabel() != class1)
     {
-      std::cerr << "Classification error: " << sampleCounter << "\t" << iter.GetMeasurementVector() << "\t"
+      std::cerr << "Classification error: " << sampleCounter << '\t' << iter.GetMeasurementVector() << '\t'
                 << "Class label= " << iter.GetClassLabel() << "\tTrue label=" << class1 << std::endl;
       return EXIT_FAILURE;
     }
@@ -309,7 +309,7 @@ itkSampleClassifierFilterTest7(int argc, char * argv[])
   {
     if (iter.GetClassLabel() != class1)
     {
-      std::cerr << "Classification error: " << sampleCounter << "\t" << iter.GetMeasurementVector() << "\t"
+      std::cerr << "Classification error: " << sampleCounter << '\t' << iter.GetMeasurementVector() << '\t'
                 << "Class label= " << iter.GetClassLabel() << "\tTrue label=" << class1 << std::endl;
       return EXIT_FAILURE;
     }

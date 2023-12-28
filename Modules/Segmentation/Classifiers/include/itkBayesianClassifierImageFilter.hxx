@@ -136,7 +136,7 @@ void
 BayesianClassifierImageFilter<TInputVectorImage, TLabelsType, TPosteriorsPrecisionType, TPriorsPrecisionType>::
   ComputeBayesRule()
 {
-  itkDebugMacro(<< "Computing Bayes Rule");
+  itkDebugMacro("Computing Bayes Rule");
   const InputImageType * membershipImage = this->GetInput();
 
   ImageRegionType imageRegion = membershipImage->GetBufferedRegion();
@@ -166,7 +166,7 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType, TPosteriorsPrecisi
 
     const unsigned int numberOfClasses = membershipImage->GetVectorLength();
 
-    itkDebugMacro(<< "Computing Bayes Rule nclasses in membershipImage: " << numberOfClasses);
+    itkDebugMacro("Computing Bayes Rule nclasses in membershipImage: " << numberOfClasses);
 
     while (!itrMembershipImage.IsAtEnd())
     {
@@ -367,10 +367,12 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType, TPosteriorsPrecisi
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "User provided priors =  " << m_UserProvidedPriors << std::endl;
-  os << indent << "User provided smooting filter =  " << m_UserProvidedSmoothingFilter << std::endl;
-  os << indent << "Smoothing filter pointer =  " << m_SmoothingFilter.GetPointer() << std::endl;
-  os << indent << "Number of smoothing iterations =  " << m_NumberOfSmoothingIterations << std::endl;
+  os << indent << "UserProvidedPriors: " << (m_UserProvidedPriors ? "On" : "Off") << std::endl;
+  os << indent << "UserProvidedSmoothingFilter " << (m_UserProvidedSmoothingFilter ? "On" : "Off") << std::endl;
+
+  itkPrintSelfObjectMacro(SmoothingFilter);
+
+  os << indent << "NumberOfSmoothingIterations: " << m_NumberOfSmoothingIterations << std::endl;
 }
 } // end namespace itk
 

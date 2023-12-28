@@ -26,7 +26,7 @@ namespace itk
 namespace Accessor
 {
 /**
- *\class LogPixelAccessor
+ * \class LogPixelAccessor
  * \brief Give access to the std::log() function of a value
  *
  * LogPixelAccessor is templated over an internal type and an
@@ -65,7 +65,7 @@ public:
 } // end namespace Accessor
 
 /**
- *\class LogImageAdaptor
+ * \class LogImageAdaptor
  * \brief Presents an image as being composed of the std::log() of its pixels
  *
  * Additional casting is performed according to the input and output image
@@ -89,7 +89,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LogImageAdaptor, ImageAdaptor);
+  itkOverrideGetNameOfClassMacro(LogImageAdaptor);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

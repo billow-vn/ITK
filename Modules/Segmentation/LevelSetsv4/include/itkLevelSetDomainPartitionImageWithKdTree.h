@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class LevelSetDomainPartitionImageWithKdTree
+ * \class LevelSetDomainPartitionImageWithKdTree
  *
  * \brief Helper class used to share data in the ScalarChanAndVeseLevelSetFunction.
  * \ingroup ITKLevelSetsv4
@@ -47,7 +47,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkTypeMacro(LevelSetDomainPartitionImageWithKdTree, LevelSetDomainPartitionImage);
+  itkOverrideGetNameOfClassMacro(LevelSetDomainPartitionImageWithKdTree);
 
   using ImageType = TImage;
   using typename Superclass::ListIndexType;
@@ -88,7 +88,7 @@ protected:
   PopulateDomainWithKdTree();
 
 private:
-  KdTreePointer   m_KdTree;
+  KdTreePointer   m_KdTree{};
   NeighborsIdType m_NumberOfNeighbors{ 10 };
 };
 

@@ -27,7 +27,7 @@ namespace itk
 namespace Testing
 {
 /**
- *\class ComparisonImageFilter
+ * \class ComparisonImageFilter
  * \brief Implements comparison between two images.
  *
  * This filter is used by the testing system to compute the difference between
@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComparisonImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ComparisonImageFilter);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;
@@ -137,27 +137,27 @@ protected:
   void
   VerifyInputInformation() ITKv5_CONST override;
 
-  OutputPixelType m_DifferenceThreshold;
+  OutputPixelType m_DifferenceThreshold{};
 
-  RealType        m_MeanDifference;
-  OutputPixelType m_MinimumDifference;
-  OutputPixelType m_MaximumDifference;
-  bool            m_VerifyInputInformation;
+  RealType        m_MeanDifference{};
+  OutputPixelType m_MinimumDifference{};
+  OutputPixelType m_MaximumDifference{};
+  bool            m_VerifyInputInformation{};
 
-  AccumulateType m_TotalDifference;
+  AccumulateType m_TotalDifference{};
 
-  SizeValueType m_NumberOfPixelsWithDifferences;
+  SizeValueType m_NumberOfPixelsWithDifferences{};
 
-  int m_ToleranceRadius;
+  int m_ToleranceRadius{};
 
-  Array<AccumulateType> m_ThreadDifferenceSum;
-  Array<SizeValueType>  m_ThreadNumberOfPixels;
+  Array<AccumulateType> m_ThreadDifferenceSum{};
+  Array<SizeValueType>  m_ThreadNumberOfPixels{};
 
-  Array<OutputPixelType> m_ThreadMinimumDifference;
-  Array<OutputPixelType> m_ThreadMaximumDifference;
+  Array<OutputPixelType> m_ThreadMinimumDifference{};
+  Array<OutputPixelType> m_ThreadMaximumDifference{};
 
 private:
-  bool m_IgnoreBoundaryPixels;
+  bool m_IgnoreBoundaryPixels{};
 };
 } // end namespace Testing
 } // end namespace itk

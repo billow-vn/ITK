@@ -127,8 +127,8 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     }
   }
 
-  itkDebugMacro(<< ": initial position: " << parentPosition);
-  itkDebugMacro(<< ": initial fitness: " << pvalue);
+  itkDebugMacro(": initial position: " << parentPosition);
+  itkDebugMacro(": initial fitness: " << pvalue);
 
   this->m_Metric->SetParameters(parentPosition);
   const ScalesType & scales = this->GetScales();
@@ -136,8 +136,9 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
   // Make sure the scales have been set properly
   if (scales.size() != spaceDimension)
   {
-    itkExceptionMacro(<< "The size of Scales is " << scales.size()
-                      << ", but the NumberOfParameters for the CostFunction is " << spaceDimension << ".");
+    itkExceptionMacro("The size of Scales is "
+                      << scales.size() << ", but the NumberOfParameters for the CostFunction is " << spaceDimension
+                      << '.');
   }
 
   A.set_identity();
@@ -151,8 +152,8 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     if (m_Stop)
     {
       m_StopConditionDescription.str("");
-      m_StopConditionDescription << this->GetNameOfClass() << ": ";
-      m_StopConditionDescription << "StopOptimization() called";
+      m_StopConditionDescription << this->GetNameOfClass() << ": "
+                                 << "StopOptimization() called";
       break;
     }
 
@@ -160,7 +161,7 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     {
       if (!m_RandomGenerator)
       {
-        itkExceptionMacro(<< "Random Generator is not set!");
+        itkExceptionMacro("Random Generator is not set!");
       }
       f_norm[i] = m_RandomGenerator->GetVariate();
     }
@@ -180,7 +181,7 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     {
       cvalue = this->m_Metric->GetValue();
       // While we got the metric value in childPosition,
-      // the metric parameteres are set back to parentPosition
+      // the metric parameters are set back to parentPosition
       this->m_Metric->SetParameters(parentPosition);
     }
     catch (...)
@@ -195,19 +196,19 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
       }
     }
 
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": parent position: " << parentPosition);
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": parent fitness: " << pvalue);
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": random vector: " << f_norm);
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": A: " << std::endl << A);
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": delta: " << delta);
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": child position: " << childPosition);
-    itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": child fitness: " << cvalue);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": parent position: " << parentPosition);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": parent fitness: " << pvalue);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": random vector: " << f_norm);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": A: " << std::endl << A);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": delta: " << delta);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": child position: " << childPosition);
+    itkDebugMacro("iter: " << this->m_CurrentIteration << ": child fitness: " << cvalue);
 
     double adjust = m_ShrinkFactor;
 
     if (cvalue < pvalue)
     {
-      itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": increasing search radius");
+      itkDebugMacro("iter: " << this->m_CurrentIteration << ": increasing search radius");
       pvalue = cvalue;
       parent.swap(child);
       adjust = m_GrowthFactor;
@@ -219,7 +220,7 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     }
     else
     {
-      itkDebugMacro(<< "iter: " << this->m_CurrentIteration << ": decreasing search radius");
+      itkDebugMacro("iter: " << this->m_CurrentIteration << ": decreasing search radius");
     }
 
     m_CurrentCost = pvalue;
@@ -227,13 +228,13 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     // Compute double precision sum of absolute values of
     // a single precision vector
     m_FrobeniusNorm = A.fro_norm();
-    itkDebugMacro(<< "A f-norm:" << m_FrobeniusNorm);
+    itkDebugMacro("A f-norm:" << m_FrobeniusNorm);
     if (m_FrobeniusNorm <= m_Epsilon)
     {
-      itkDebugMacro(<< "converges at iteration = " << this->m_CurrentIteration);
+      itkDebugMacro("converges at iteration = " << this->m_CurrentIteration);
       m_StopConditionDescription.str("");
-      m_StopConditionDescription << this->GetNameOfClass() << ": ";
-      m_StopConditionDescription << "Fnorm (" << m_FrobeniusNorm << ") is less than Epsilon (" << m_Epsilon
+      m_StopConditionDescription << this->GetNameOfClass() << ": "
+                                 << "Fnorm (" << m_FrobeniusNorm << ") is less than Epsilon (" << m_Epsilon
                                  << " at iteration #" << this->m_CurrentIteration;
       this->InvokeEvent(EndEvent());
       return;
@@ -262,13 +263,13 @@ OnePlusOneEvolutionaryOptimizerv4<TInternalComputationValueType>::StartOptimizat
     }
 
     this->InvokeEvent(IterationEvent());
-    itkDebugMacro(<< "Current position: " << this->GetCurrentPosition());
+    itkDebugMacro("Current position: " << this->GetCurrentPosition());
   }
   if (this->m_CurrentIteration >= m_MaximumIteration)
   {
     m_StopConditionDescription.str("");
-    m_StopConditionDescription << this->GetNameOfClass() << ": ";
-    m_StopConditionDescription << "Maximum number of iterations (" << m_MaximumIteration << ") exceeded. ";
+    m_StopConditionDescription << this->GetNameOfClass() << ": "
+                               << "Maximum number of iterations (" << m_MaximumIteration << ") exceeded. ";
   }
   this->InvokeEvent(EndEvent());
 }

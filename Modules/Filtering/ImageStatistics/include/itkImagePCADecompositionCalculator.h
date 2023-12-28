@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImagePCADecompositionCalculator, Object);
+  itkOverrideGetNameOfClassMacro(ImagePCADecompositionCalculator);
 
   /** Type definitions for the input images. */
   using InputImageType = TInputImage;
@@ -137,24 +137,26 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
+  /** Convert a vector of basis images into a matrix flattening each image into 1-D. */
   void
   CalculateBasisMatrix();
 
+  /** Convert an image into a 1-D vector changing the pixel type if necessary. */
   void
   CalculateRecenteredImageAsVector();
 
 private:
   using BasisSizeType = typename BasisImageType::SizeType;
 
-  BasisVectorType         m_Projection;
-  BasisVectorType         m_ImageAsVector;
-  BasisImagePointerVector m_BasisImages;
-  BasisImageConstPointer  m_MeanImage;
-  BasisSizeType           m_Size;
-  InputImageConstPointer  m_Image;
-  BasisMatrixType         m_BasisMatrix;
-  bool                    m_BasisMatrixCalculated;
-  SizeValueType           m_NumPixels;
+  BasisVectorType         m_Projection{};
+  BasisVectorType         m_ImageAsVector{};
+  BasisImagePointerVector m_BasisImages{};
+  BasisImageConstPointer  m_MeanImage{};
+  BasisSizeType           m_Size{};
+  InputImageConstPointer  m_Image{};
+  BasisMatrixType         m_BasisMatrix{};
+  bool                    m_BasisMatrixCalculated{};
+  SizeValueType           m_NumPixels{};
 };
 } // end namespace itk
 

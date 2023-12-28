@@ -66,7 +66,7 @@ public:
   using CoordinateRepresentationType = typename Superclass::ParametersValueType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToImageMetric, SingleValuedCostFunction);
+  itkOverrideGetNameOfClassMacro(ImageToImageMetric);
 
   /**  Type of the moving Image. */
   using MovingImageType = TMovingImage;
@@ -219,8 +219,7 @@ public:
     return m_Transform->GetNumberOfParameters();
   }
 
-  /** Initialize the Metric by making sure that all the components
-   *  are present and plugged together correctly     */
+  /** Initialize the Metric by making sure that all the components are present and plugged together correctly. */
   virtual void
   Initialize();
 
@@ -228,8 +227,10 @@ public:
   virtual void
   MultiThreadingInitialize();
 
-  /** Number of spatial samples to used to compute metric
-   *   This sets the number of samples.  */
+  /** Number of spatial samples to compute the metric.
+   *
+   * Sets the number of samples.
+   */
   virtual void
   SetNumberOfFixedImageSamples(SizeValueType numSamples);
   itkGetConstReferenceMacro(NumberOfFixedImageSamples, SizeValueType);
@@ -356,6 +357,16 @@ protected:
 
     ~FixedImageSamplePoint() = default;
 
+    inline friend std::ostream &
+    operator<<(std::ostream & os, const FixedImageSamplePoint & val)
+    {
+      os << "point: " << static_cast<typename NumericTraits<FixedImagePointType>::PrintType>(val.point) << std::endl;
+      os << "value: " << val.value << std::endl;
+      os << "valueIndex: " << val.valueIndex << std::endl;
+
+      return os;
+    }
+
   public:
     FixedImagePointType point;
     double              value;
@@ -363,27 +374,34 @@ protected:
   };
 
   bool                     m_UseFixedImageIndexes{ false };
-  FixedImageIndexContainer m_FixedImageIndexes;
+  FixedImageIndexContainer m_FixedImageIndexes{};
 
   bool                m_UseFixedImageSamplesIntensityThreshold{ false };
-  FixedImagePixelType m_FixedImageSamplesIntensityThreshold;
+  FixedImagePixelType m_FixedImageSamplesIntensityThreshold{};
 
   /** FixedImageSamplePoint type alias support */
   using FixedImageSampleContainer = std::vector<FixedImageSamplePoint>;
 
-  /** Uniformly select a sample set from the fixed image domain. */
+  /** Uniformly select a sample set from the fixed image domain.
+   *
+   * Samples the fixed image using a random walk.
+   */
   virtual void
   SampleFixedImageRegion(FixedImageSampleContainer & samples) const;
 
+  /** Use the indexes that have been passed to the metric. */
   virtual void
   SampleFixedImageIndexes(FixedImageSampleContainer & samples) const;
 
-  /** Gather all the pixels from the fixed image domain. */
+  /** Sample the fixed image domain using all pixels in the Fixed image region.
+   *
+   * Gathers all the pixels from the fixed image domain.
+   */
   virtual void
   SampleFullFixedImageRegion(FixedImageSampleContainer & samples) const;
 
   /** Container to store a set of points and fixed image values. */
-  FixedImageSampleContainer m_FixedImageSamples;
+  FixedImageSampleContainer m_FixedImageSamples{};
 
   SizeValueType m_NumberOfParameters{ 0 };
 
@@ -393,22 +411,22 @@ protected:
   // onto this accumulator variable.
   mutable SizeValueType m_NumberOfPixelsCounted{ 0 };
 
-  FixedImageConstPointer  m_FixedImage;
-  MovingImageConstPointer m_MovingImage;
+  FixedImageConstPointer  m_FixedImage{};
+  MovingImageConstPointer m_MovingImage{};
 
   /** Main transform to be used in thread = 0 */
-  TransformPointer m_Transform;
+  TransformPointer m_Transform{};
   /** Copies of Transform helpers per thread (N-1 of them, since m_Transform
    * will do the work for thread=0. */
   std::unique_ptr<TransformPointer[]> m_ThreaderTransform;
 
-  InterpolatorPointer m_Interpolator;
+  InterpolatorPointer m_Interpolator{};
 
   bool                 m_ComputeGradient{ true };
-  GradientImagePointer m_GradientImage;
+  GradientImagePointer m_GradientImage{};
 
-  FixedImageMaskConstPointer  m_FixedImageMask;
-  MovingImageMaskConstPointer m_MovingImageMask;
+  FixedImageMaskConstPointer  m_FixedImageMask{};
+  MovingImageMaskConstPointer m_MovingImageMask{};
 
   ThreadIdType m_NumberOfWorkUnits{ 1 };
 
@@ -417,7 +435,7 @@ protected:
 
   bool m_ReseedIterator{ false };
 
-  mutable int m_RandomSeed;
+  mutable int m_RandomSeed{};
 
   /** Types and variables related to BSpline deformable transforms.
    * If the transform is of type third order BSplineBaseTransform,
@@ -458,29 +476,32 @@ protected:
   using DerivativeFunctionType = CentralDifferenceImageFunction<MovingImageType, CoordinateRepresentationType>;
   using ImageDerivativesType = CovariantVector<double, Self::MovingImageDimension>;
 
-  typename BSplineTransformType::Pointer m_BSplineTransform;
+  typename BSplineTransformType::Pointer m_BSplineTransform{};
 
-  BSplineTransformWeightsArrayType m_BSplineTransformWeightsArray;
-  BSplineTransformIndicesArrayType m_BSplineTransformIndicesArray;
-  MovingImagePointArrayType        m_BSplinePreTransformPointsArray;
-  BooleanArrayType                 m_WithinBSplineSupportRegionArray;
+  BSplineTransformWeightsArrayType m_BSplineTransformWeightsArray{};
+  BSplineTransformIndicesArrayType m_BSplineTransformIndicesArray{};
+  MovingImagePointArrayType        m_BSplinePreTransformPointsArray{};
+  BooleanArrayType                 m_WithinBSplineSupportRegionArray{};
 
-  BSplineParametersOffsetType m_BSplineParametersOffset;
+  BSplineParametersOffsetType m_BSplineParametersOffset{};
 
   // Variables needed for optionally caching values when using a BSpline
   // transform.
   bool                                   m_UseCachingOfBSplineWeights{ true };
-  mutable BSplineTransformWeightsType    m_BSplineTransformWeights;
-  mutable BSplineTransformIndexArrayType m_BSplineTransformIndices;
+  mutable BSplineTransformWeightsType    m_BSplineTransformWeights{};
+  mutable BSplineTransformIndexArrayType m_BSplineTransformIndices{};
 
   mutable std::unique_ptr<BSplineTransformWeightsType[]>    m_ThreaderBSplineTransformWeights;
   mutable std::unique_ptr<BSplineTransformIndexArrayType[]> m_ThreaderBSplineTransformIndices;
 
+  /** Cache pre-transformed points, weights and indices. */
   virtual void
   PreComputeTransformValues();
 
   /** Transform a point from FixedImage domain to MovingImage domain.
-   * This function also checks if mapped point is within support region. */
+   *
+   * This function also checks if mapped point is within support region.
+   */
   virtual void
   TransformPoint(unsigned int           sampleNumber,
                  MovingImagePointType & mappedPoint,
@@ -488,6 +509,10 @@ protected:
                  double &               movingImageValue,
                  ThreadIdType           threadId) const;
 
+  /** Transform a point from FixedImage domain to MovingImage domain.
+   *
+   * This function also checks if mapped point is within support region.
+   */
   virtual void
   TransformPointWithDerivatives(unsigned int           sampleNumber,
                                 MovingImagePointType & mappedPoint,
@@ -499,12 +524,14 @@ protected:
   /** Boolean to indicate if the interpolator BSpline. */
   bool m_InterpolatorIsBSpline{ false };
   /** Pointer to BSplineInterpolator. */
-  typename BSplineInterpolatorType::Pointer m_BSplineInterpolator;
+  typename BSplineInterpolatorType::Pointer m_BSplineInterpolator{};
 
   /** Pointer to central difference calculator. */
-  typename DerivativeFunctionType::Pointer m_DerivativeCalculator;
+  typename DerivativeFunctionType::Pointer m_DerivativeCalculator{};
 
-  /** Compute image derivatives at a point. */
+  /** Compute image derivatives at a point using a central difference function if we are not using a
+   * BSplineInterpolator, which includes derivatives.
+   */
   virtual void
   ComputeImageDerivatives(const MovingImagePointType & mappedPoint,
                           ImageDerivativesType &       gradient,
@@ -566,7 +593,7 @@ protected:
     const typename MultiThreaderType::WorkUnitInfo * m_WorkUnitInfo;
   };
 
-  MultiThreaderType::Pointer              m_Threader;
+  MultiThreaderType::Pointer              m_Threader{};
   std::unique_ptr<ConstantPointerWrapper> m_ConstSelfWrapper;
   mutable std::unique_ptr<unsigned int[]> m_ThreaderNumberOfMovingImageSamples;
   bool                                    m_WithinThreadPreProcess{ false };
@@ -578,15 +605,19 @@ protected:
   void
   GetValueMultiThreadedPostProcessInitiate() const;
 
+  /** Get the match Measure. */
   static ITK_THREAD_RETURN_FUNCTION_CALL_CONVENTION
   GetValueMultiThreaded(void * workunitInfoAsVoid);
 
+  /** Get the match Measure. */
   static ITK_THREAD_RETURN_FUNCTION_CALL_CONVENTION
   GetValueMultiThreadedPostProcess(void * workunitInfoAsVoid);
 
+  /** Get the match Measure. */
   virtual inline void
   GetValueThread(ThreadIdType threadId) const;
 
+  /** Get the match Measure. */
   virtual inline void
   GetValueThreadPreProcess(ThreadIdType itkNotUsed(threadId), bool itkNotUsed(withinSampleThread)) const
   {}
@@ -633,14 +664,16 @@ protected:
   GetValueAndDerivativeThreadPostProcess(ThreadIdType itkNotUsed(threadId), bool itkNotUsed(withinSampleThread)) const
   {}
 
-  /** Synchronizes the threader transforms with the transform
-   *   member variable.
+  /** Synchronizes the threader transforms with the transform member variable.
+   *
+   * This method can be const because we are not altering the m_ThreaderTransform pointer. We are altering the object
+   * that m_ThreaderTransform[idx] points at.* This is allowed under C++ const rules.
    */
   virtual void
   SynchronizeTransforms() const;
 
 private:
-  FixedImageRegionType m_FixedImageRegion;
+  FixedImageRegionType m_FixedImageRegion{};
 };
 } // end namespace itk
 

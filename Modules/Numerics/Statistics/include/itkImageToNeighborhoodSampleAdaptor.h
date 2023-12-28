@@ -36,7 +36,7 @@ namespace Statistics
 {
 
 /**
- *\class ImageToNeighborhoodSampleAdaptor
+ * \class ImageToNeighborhoodSampleAdaptor
  *  \brief This class provides ListSample interface to ITK Image
  *
  * After calling SetImage( const Image * ) method to plug in the image object,
@@ -67,7 +67,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToNeighborhoodSampleAdaptor, ListSample);
+  itkOverrideGetNameOfClassMacro(ImageToNeighborhoodSampleAdaptor);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -155,7 +155,7 @@ public:
   GetTotalFrequency() const override;
 
   /**
-   *\class ConstIterator
+   * \class ConstIterator
    *  \brief Const Iterator
    *  \ingroup ITKStatistics
    */
@@ -231,7 +231,7 @@ public:
   };
 
   /**
-   *\class Iterator
+   * \class Iterator
    *  \brief Iterator
    *  \ingroup ITKStatistics
    */
@@ -317,14 +317,14 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ImageConstPointer             m_Image;
-  mutable MeasurementVectorType m_MeasurementVectorInternal;
-  mutable InstanceIdentifier    m_InstanceIdentifierInternal;
-  mutable IndexType             m_NeighborIndexInternal;
-  NeighborhoodRadiusType        m_Radius;
-  RegionType                    m_Region;
+  ImageConstPointer             m_Image{};
+  mutable MeasurementVectorType m_MeasurementVectorInternal{};
+  mutable InstanceIdentifier    m_InstanceIdentifierInternal{};
+  mutable IndexType             m_NeighborIndexInternal{};
+  NeighborhoodRadiusType        m_Radius{};
+  RegionType                    m_Region{};
   bool                          m_UseImageRegion{ true };
-  OffsetTableType               m_OffsetTable;
+  OffsetTableType               m_OffsetTable{};
 
 }; // end of class ImageToNeighborhoodSampleAdaptor
 

@@ -30,12 +30,12 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MixtureModelComponentBase
+ * \class MixtureModelComponentBase
  * \brief base class for distribution modules that supports analytical way
  * to update the distribution parameters
  *
  * This class expects that its subclasses (distribution components) should
- * have analytical expressions for updating its paraters using only
+ * have analytical expressions for updating its parameters using only
  * the measurement vectors and their associated weights.
  *
  * This class can be considered as a macro class that encapsulates the
@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /**Standard Macros */
-  itkTypeMacro(MixtureModelComponentBase, Object);
+  itkOverrideGetNameOfClassMacro(MixtureModelComponentBase);
 
   using MeasurementVectorType = typename TSample::MeasurementVectorType;
   using MeasurementVectorSizeType = typename TSample::MeasurementVectorSizeType;
@@ -72,7 +72,7 @@ public:
   /** type alias for the MembershipFunctionBase */
   using MembershipFunctionType = MembershipFunctionBase<MeasurementVectorType>;
 
-  /** type alias of strorage for the weights */
+  /** type alias of storage for the weights */
   using WeightArrayType = Array<double>;
 
   using ParametersType = Array<double>;
@@ -157,20 +157,20 @@ protected:
 
 private:
   /** target sample data pointer */
-  const TSample * m_Sample;
+  const TSample * m_Sample{};
 
-  double m_MinimalParametersChange;
+  double m_MinimalParametersChange{};
 
-  ParametersType m_Parameters;
+  ParametersType m_Parameters{};
 
-  /** SmartPointer to the memberhip function - usually density function */
-  MembershipFunctionType * m_MembershipFunction;
+  /** SmartPointer to the membership function - usually density function */
+  MembershipFunctionType * m_MembershipFunction{};
 
   /** weights array */
-  WeightArrayType m_Weights;
+  WeightArrayType m_Weights{};
 
   /** indicative flag of membership function's parameter changes */
-  bool m_ParametersModified;
+  bool m_ParametersModified{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

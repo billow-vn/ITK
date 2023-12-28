@@ -28,7 +28,7 @@ namespace itk
 namespace watershed
 {
 /**
- *\class SegmentTable
+ * \class SegmentTable
  * A table for storing segmentation information in various component filters of
  * the watershed segmentation algorithm.  See itk::WatershedImageFilter for an
  * overview.
@@ -56,7 +56,7 @@ public:
   using ScalarType = TScalar;
 
   itkNewMacro(Self);
-  itkTypeMacro(SegmentTable, DataObject);
+  itkOverrideGetNameOfClassMacro(SegmentTable);
 
   /** The value type for lists of adjacencies contained in each table
       entry */
@@ -272,9 +272,9 @@ protected:
   {}
   ~SegmentTable() override = default;
 
-  HashMapType m_HashMap;
+  HashMapType m_HashMap{};
 
-  ScalarType m_MaximumDepth;
+  ScalarType m_MaximumDepth{};
 
 private:
   void

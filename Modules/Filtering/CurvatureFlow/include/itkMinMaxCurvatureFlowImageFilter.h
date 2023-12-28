@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MinMaxCurvatureFlowImageFilter
+ * \class MinMaxCurvatureFlowImageFilter
  * \brief Denoise an image using min/max curvature flow.
  *
  * MinMaxCurvatureFlowImageFilter implements a curvature driven image denoising
@@ -95,7 +95,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MinMaxCurvatureFlowImageFilter, CurvatureFlowImageFilter);
+  itkOverrideGetNameOfClassMacro(MinMaxCurvatureFlowImageFilter);
 
   /** Inherit type alias from Superclass. */
   using typename Superclass::FiniteDifferenceFunctionType;
@@ -144,7 +144,7 @@ protected:
   InitializeIteration() override;
 
 private:
-  RadiusValueType m_StencilRadius;
+  RadiusValueType m_StencilRadius{};
 };
 } // namespace itk
 

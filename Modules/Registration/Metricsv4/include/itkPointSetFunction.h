@@ -68,7 +68,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetFunction, FunctionBase);
+  itkOverrideGetNameOfClassMacro(PointSetFunction);
 
   /** InputPointSetType type alias support */
   using InputPointSetType = TInputPointSet;
@@ -112,7 +112,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Const pointer to the input image. */
-  InputPointSetConstPointer m_PointSet;
+  InputPointSetConstPointer m_PointSet{};
 };
 
 } // end namespace itk

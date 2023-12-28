@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryFunctorImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryFunctorImageFilter);
 
   /** Some convenient type alias. */
   using FunctorType = TFunction;
@@ -204,7 +204,7 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 };
 } // end namespace itk
 

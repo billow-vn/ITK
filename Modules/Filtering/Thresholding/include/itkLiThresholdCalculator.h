@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class LiThresholdCalculator
+ * \class LiThresholdCalculator
  * \brief Computes the Li threshold for an image. Aka intermeans
  *
  * Implements Li's Minimum Cross Entropy thresholding method
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LiThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(LiThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

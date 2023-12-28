@@ -73,7 +73,7 @@ public:
   using RotationPlaneEnum = FrustumSpatialFunctionEnums::RotationPlane;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FrustumSpatialFunction, InteriorExteriorSpatialFunction);
+  itkOverrideGetNameOfClassMacro(FrustumSpatialFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -126,13 +126,13 @@ public:
   itkSetMacro(RotationPlane, FrustumRotationPlaneType);
 
 protected:
-  FrustumSpatialFunction();
+  FrustumSpatialFunction() = default;
   ~FrustumSpatialFunction() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  InputType                m_Apex;
+  InputType                m_Apex{};
   double                   m_AngleZ{ 0.0f };
   double                   m_ApertureAngleX{ 0.0f };
   double                   m_ApertureAngleY{ 0.0f };

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class HausdorffDistanceImageFilter
+ * \class HausdorffDistanceImageFilter
  * \brief Computes the Hausdorff distance between the set of
  * non-zero pixels of two images.
  *
@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(HausdorffDistanceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HausdorffDistanceImageFilter);
 
   /** Image related type alias. */
   using InputImage1Type = TInputImage1;
@@ -147,9 +147,9 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * data) override;
 
 private:
-  RealType m_HausdorffDistance;
-  RealType m_AverageHausdorffDistance;
-  bool     m_UseImageSpacing;
+  RealType m_HausdorffDistance{};
+  RealType m_AverageHausdorffDistance{};
+  bool     m_UseImageSpacing{};
 }; // end of class
 } // end namespace itk
 

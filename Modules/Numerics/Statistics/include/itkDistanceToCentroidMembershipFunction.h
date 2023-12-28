@@ -34,7 +34,7 @@ namespace Statistics
  * distance to the centroid of the class. A choice of distance metric
  * can be specified using the SetDistanceMetric() method. Options
  * include EuclideanDistanceMetric, EuclideanSquaredDistanceMetric,
- * and ManhattenDistanceMetric. The centroid of the class is specified
+ * and ManhattanDistanceMetric. The centroid of the class is specified
  * using the SetCentroid() method. Any other parameters to control the
  * distance function evaluation have to be set directly on the
  * distance function itself.
@@ -53,8 +53,8 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Strandard macros */
-  itkTypeMacro(DistanceToCentroidMembershipFunction, MembershipFunctionBase);
+  /** Standard macros */
+  itkOverrideGetNameOfClassMacro(DistanceToCentroidMembershipFunction);
   itkNewMacro(Self);
 
   /** SmartPointer class for superclass */
@@ -109,7 +109,7 @@ protected:
   InternalClone() const override;
 
 private:
-  DistanceMetricPointer m_DistanceMetric;
+  DistanceMetricPointer m_DistanceMetric{};
 };
 } // end of namespace Statistics
 } // end namespace itk

@@ -62,7 +62,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineSmoothingOnUpdateDisplacementFieldTransform, DisplacementFieldTransform);
+  itkOverrideGetNameOfClassMacro(BSplineSmoothingOnUpdateDisplacementFieldTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -188,8 +188,9 @@ protected:
   typename LightObject::Pointer
   InternalClone() const override;
 
-  /**
-   * Smooth the displacement field using B-splines.
+  /** Smooth the displacement field using B-splines.
+   *
+   * Sets displacement field and projects it onto the space of B-spline transforms.
    */
   DisplacementFieldPointer
   BSplineSmoothDisplacementField(const DisplacementFieldType *, const ArrayType &);
@@ -197,8 +198,8 @@ protected:
 private:
   SplineOrderType m_SplineOrder{ 3 };
   bool            m_EnforceStationaryBoundary{ true };
-  ArrayType       m_NumberOfControlPointsForTheUpdateField;
-  ArrayType       m_NumberOfControlPointsForTheTotalField;
+  ArrayType       m_NumberOfControlPointsForTheUpdateField{};
+  ArrayType       m_NumberOfControlPointsForTheTotalField{};
 };
 
 } // end namespace itk

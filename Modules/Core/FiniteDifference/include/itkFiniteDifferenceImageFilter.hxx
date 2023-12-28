@@ -165,11 +165,12 @@ FiniteDifferenceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRe
 }
 
 template <typename TInputImage, typename TOutputImage>
-typename FiniteDifferenceImageFilter<TInputImage, TOutputImage>::TimeStepType
+auto
 FiniteDifferenceImageFilter<TInputImage, TOutputImage>::ResolveTimeStep(const std::vector<TimeStepType> & timeStepList,
                                                                         const BooleanStdVectorType &      valid) const
+  -> TimeStepType
 {
-  TimeStepType oMin = NumericTraits<TimeStepType>::ZeroValue();
+  TimeStepType oMin{};
   bool         flag = false;
 
   // grab first valid value
@@ -193,7 +194,7 @@ FiniteDifferenceImageFilter<TInputImage, TOutputImage>::ResolveTimeStep(const st
   if (!flag)
   {
     // no values!
-    itkGenericExceptionMacro(<< "there is no satisfying value");
+    itkGenericExceptionMacro("there is no satisfying value");
   }
 
   t_it = timeStepList.begin();

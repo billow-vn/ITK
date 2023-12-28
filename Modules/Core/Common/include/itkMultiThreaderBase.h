@@ -119,7 +119,7 @@ public:
   New();
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiThreaderBase, Object);
+  itkOverrideGetNameOfClassMacro(MultiThreaderBase);
 
   /** Get/Set the number of threads to use. It will be clamped to the range
    * [ 1, m_GlobalMaximumNumberOfThreads ], so the caller of this method should
@@ -180,17 +180,13 @@ public:
     {
       case ThreaderEnum::Platform:
         return "Platform";
-        break;
       case ThreaderEnum::Pool:
         return "Pool";
-        break;
       case ThreaderEnum::TBB:
         return "TBB";
-        break;
       case ThreaderEnum::Unknown:
       default:
         return "Unknown";
-        break;
     }
   }
 
@@ -312,8 +308,13 @@ ITK_GCC_PRAGMA_DIAG_POP()
   virtual void
   SetSingleMethod(ThreadFunctionType, void * data) = 0;
 
+#ifndef ITK_FUTURE_LEGACY_REMOVE
+  // `TemplatedThreadingFunctorType` was previously used to declare the `funcP` parameter of `ParallelizeImageRegion`
+  // and `ParallelizeImageRegionRestrictDirection` template member functions.
   template <unsigned int VDimension>
-  using TemplatedThreadingFunctorType = std::function<void(const ImageRegion<VDimension> &)>;
+  using TemplatedThreadingFunctorType [[deprecated]] = std::function<void(const ImageRegion<VDimension> &)>;
+#endif
+
   using ThreadingFunctorType = std::function<void(const IndexValueType index[], const SizeValueType size[])>;
   using ArrayThreadingFunctorType = std::function<void(SizeValueType)>;
 
@@ -328,20 +329,20 @@ ITK_GCC_PRAGMA_DIAG_POP()
                    ArrayThreadingFunctorType aFunc,
                    ProcessObject *           filter);
 
-  /** Break up region into smaller chunks, and call the function with chunks as parameters.
+  /** Break up region into smaller chunks, and call the user-specified function or function object `funcP` for each
+   * chunk, having the region of the chunk as argument. The type of such a chuck region is `ImageRegion<VDimension>`.
+   * Each such `funcP(region)` call must be thread-safe.
    * If filter argument is not nullptr, this function will update its progress
    * as each work unit is completed. Delegates work to non-templated version. */
-  template <unsigned int VDimension>
+  template <unsigned int VDimension, typename TFunction>
   ITK_TEMPLATE_EXPORT void
-  ParallelizeImageRegion(const ImageRegion<VDimension> &           requestedRegion,
-                         TemplatedThreadingFunctorType<VDimension> funcP,
-                         ProcessObject *                           filter)
+  ParallelizeImageRegion(const ImageRegion<VDimension> & requestedRegion, TFunction funcP, ProcessObject * filter)
   {
     this->ParallelizeImageRegion(
       VDimension,
       requestedRegion.GetIndex().m_InternalArray,
       requestedRegion.GetSize().m_InternalArray,
-      [funcP](const IndexValueType index[], const SizeValueType size[]) {
+      [&funcP](const IndexValueType index[], const SizeValueType size[]) {
         ImageRegion<VDimension> region;
         for (unsigned int d = 0; d < VDimension; ++d)
         {
@@ -356,14 +357,14 @@ ITK_GCC_PRAGMA_DIAG_POP()
   /** Similar to ParallelizeImageRegion, but do not split the region along one
    * of the directions. If VDimension is 1, restrictedDirection is ignored
    * and no parallelization occurs. */
-  template <unsigned int VDimension>
+  template <unsigned int VDimension, typename TFunction>
   ITK_TEMPLATE_EXPORT void
-  ParallelizeImageRegionRestrictDirection(unsigned int                              restrictedDirection,
-                                          const ImageRegion<VDimension> &           requestedRegion,
-                                          TemplatedThreadingFunctorType<VDimension> funcP,
-                                          ProcessObject *                           filter)
+  ParallelizeImageRegionRestrictDirection(unsigned int                    restrictedDirection,
+                                          const ImageRegion<VDimension> & requestedRegion,
+                                          TFunction                       funcP,
+                                          ProcessObject *                 filter)
   {
-    if (VDimension <= 1) // Cannot split, no parallelization
+    if constexpr (VDimension <= 1) // Cannot split, no parallelization
     {
 
       ProgressReporter progress(filter, 0, requestedRegion.GetNumberOfPixels());
@@ -371,38 +372,36 @@ ITK_GCC_PRAGMA_DIAG_POP()
     }
     else // Can split, parallelize!
     {
-      constexpr unsigned int SplitDimension = (VDimension - 1) ? VDimension - 1 : VDimension;
-      using SplitRegionType = ImageRegion<SplitDimension>;
+      constexpr unsigned int SplitDimension = VDimension - 1;
 
-      SplitRegionType splitRegion;
+      Index<SplitDimension> splitIndex{};
+      Size<SplitDimension>  splitSize{};
       for (unsigned int splitDimension = 0, dimension = 0; dimension < VDimension; ++dimension)
       {
-        if (dimension == restrictedDirection)
+        if (dimension != restrictedDirection)
         {
-          continue;
+          splitIndex[splitDimension] = requestedRegion.GetIndex(dimension);
+          splitSize[splitDimension] = requestedRegion.GetSize(dimension);
+          ++splitDimension;
         }
-        splitRegion.SetIndex(splitDimension, requestedRegion.GetIndex(dimension));
-        splitRegion.SetSize(splitDimension, requestedRegion.GetSize(dimension));
-        ++splitDimension;
       }
 
       this->ParallelizeImageRegion(
         SplitDimension,
-        splitRegion.GetIndex().m_InternalArray,
-        splitRegion.GetSize().m_InternalArray,
-        [&](const IndexValueType index[], const SizeValueType size[]) {
+        splitIndex.m_InternalArray,
+        splitSize.m_InternalArray,
+        [restrictedDirection, &requestedRegion, &funcP](const IndexValueType index[], const SizeValueType size[]) {
           ImageRegion<VDimension> restrictedRequestedRegion;
           restrictedRequestedRegion.SetIndex(restrictedDirection, requestedRegion.GetIndex(restrictedDirection));
           restrictedRequestedRegion.SetSize(restrictedDirection, requestedRegion.GetSize(restrictedDirection));
           for (unsigned int splitDimension = 0, dimension = 0; dimension < VDimension; ++dimension)
           {
-            if (dimension == restrictedDirection)
+            if (dimension != restrictedDirection)
             {
-              continue;
+              restrictedRequestedRegion.SetIndex(dimension, index[splitDimension]);
+              restrictedRequestedRegion.SetSize(dimension, size[splitDimension]);
+              ++splitDimension;
             }
-            restrictedRequestedRegion.SetIndex(dimension, index[splitDimension]);
-            restrictedRequestedRegion.SetSize(dimension, size[splitDimension]);
-            ++splitDimension;
           }
           funcP(restrictedRequestedRegion);
         },
@@ -449,7 +448,7 @@ protected:
   ParallelizeImageRegionHelper(void * arg);
 
   /** The number of work units to create. */
-  ThreadIdType m_NumberOfWorkUnits;
+  ThreadIdType m_NumberOfWorkUnits{};
 
   /** The number of threads to use.
    *  The m_MaximumNumberOfThreads must always be less than or equal to
@@ -459,7 +458,7 @@ protected:
    *  to the current m_GlobalMaximumNumberOfThreads in the
    *  SingleMethodExecute() method.
    */
-  ThreadIdType m_MaximumNumberOfThreads;
+  ThreadIdType m_MaximumNumberOfThreads{};
 
   /** Static function used as a "proxy callback" by multi-threaders.  The
    * threading library will call this routine for each thread, which

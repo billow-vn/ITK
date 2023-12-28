@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class VectorConfidenceConnectedImageFilter
+ * \class VectorConfidenceConnectedImageFilter
  * \brief Segment pixels with similar statistics using connectivity
  *
  * This filter extracts a connected set of pixels whose pixel
@@ -44,7 +44,7 @@ namespace itk
  * variance are re-calculated. All the pixels in the previous
  * segmentation are used to calculate the mean the standard deviation
  * (as opposed to using the pixels in the neighborhood of the seed
- * point).  The segmentation is then recalculted using these refined
+ * point).  The segmentation is then recalculated using these refined
  * estimates for the mean and variance of the pixel values.  This
  * process is repeated for the specified number of iterations.
  * Setting the "NumberOfIterations" to zero stops the algorithm
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(VectorConfidenceConnectedImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorConfidenceConnectedImageFilter);
 
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;
@@ -164,13 +164,13 @@ protected:
   GenerateData() override;
 
 private:
-  SeedsContainerType   m_Seeds;
-  double               m_Multiplier;
-  unsigned int         m_NumberOfIterations;
-  OutputImagePixelType m_ReplaceValue;
-  unsigned int         m_InitialNeighborhoodRadius;
+  SeedsContainerType   m_Seeds{};
+  double               m_Multiplier{};
+  unsigned int         m_NumberOfIterations{};
+  OutputImagePixelType m_ReplaceValue{};
+  unsigned int         m_InitialNeighborhoodRadius{};
 
-  DistanceThresholdFunctionPointer m_ThresholdFunction;
+  DistanceThresholdFunctionPointer m_ThresholdFunction{};
 };
 } // end namespace itk
 

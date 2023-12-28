@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TernaryGeneratorImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(TernaryGeneratorImageFilter);
 
   /** Some type alias. */
   using Input1ImageType = TInputImage1;
@@ -264,7 +264,7 @@ protected:
 
 
 private:
-  std::function<void(const OutputImageRegionType &)> m_DynamicThreadedGenerateDataFunction;
+  std::function<void(const OutputImageRegionType &)> m_DynamicThreadedGenerateDataFunction{};
 };
 } // end namespace itk
 

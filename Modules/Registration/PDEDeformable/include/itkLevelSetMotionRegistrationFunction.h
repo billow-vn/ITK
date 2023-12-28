@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LevelSetMotionRegistrationFunction, PDEDeformableRegistrationFunction);
+  itkOverrideGetNameOfClassMacro(LevelSetMotionRegistrationFunction);
 
   /** MovingImage image type. */
   using typename Superclass::MovingImageType;
@@ -126,8 +126,10 @@ public:
     return m_MovingImageInterpolator;
   }
 
-  /** Compute the time step that can taken for this iterations.  In
-   * this context, the timestep is a function of the maximum gradients. */
+  /** Compute the time global step that for this iteration.
+   *
+   * In this context, the timestep is a function of the maximum gradients.
+   */
   TimeStepType
   ComputeGlobalTimeStep(void * GlobalData) const override;
 
@@ -145,7 +147,10 @@ public:
     return global;
   }
 
-  /** Release memory for global data structure. */
+  /** Release memory for global data structure.
+   *
+   * Updates the metric and releases the per-thread-global data.
+   */
   void
   ReleaseGlobalDataPointer(void * gd) const override;
 
@@ -153,8 +158,10 @@ public:
   void
   InitializeIteration() override;
 
-  /** This method is called by a finite difference solver image filter at
-   * each pixel that does not lie on a data set boundary */
+  /** Compute update at the specified neighbourhood.
+   *
+   * Called by a finite difference solver image filter at each pixel that does not lie on a data set boundary.
+   */
   PixelType
   ComputeUpdate(const NeighborhoodType & it, void * gd, const FloatOffsetType & offset = FloatOffsetType(0.0)) override;
 
@@ -242,42 +249,42 @@ protected:
 
 private:
   /** Cache fixed image information. */
-  SpacingType m_FixedImageSpacing;
-  PointType   m_FixedImageOrigin;
+  SpacingType m_FixedImageSpacing{};
+  PointType   m_FixedImageOrigin{};
 
   /** Function to compute derivatives of the moving image. */
-  MovingImageSmoothingFilterPointer m_MovingImageSmoothingFilter;
+  MovingImageSmoothingFilterPointer m_MovingImageSmoothingFilter{};
 
   /** Function to interpolate the moving image. */
-  InterpolatorPointer m_MovingImageInterpolator;
-  InterpolatorPointer m_SmoothMovingImageInterpolator;
+  InterpolatorPointer m_MovingImageInterpolator{};
+  InterpolatorPointer m_SmoothMovingImageInterpolator{};
 
   /** Stabilization factor for normalizing gradients to protect
    * against small gradient magnitudes */
-  double m_Alpha;
+  double m_Alpha{};
 
   /** Threshold below which the gradient is considered zero. */
-  double m_GradientMagnitudeThreshold;
+  double m_GradientMagnitudeThreshold{};
 
   /** Threshold below which two intensity value are assumed to match. */
-  double m_IntensityDifferenceThreshold;
+  double m_IntensityDifferenceThreshold{};
 
   /** Smoothing parameter for gradient calculation */
-  double m_GradientSmoothingStandardDeviations;
+  double m_GradientSmoothingStandardDeviations{};
 
   /** The metric value is the mean square difference in intensity between
    * the fixed image and transforming moving image computed over the
    * the overlapping region between the two images. */
-  mutable double        m_Metric;
-  mutable double        m_SumOfSquaredDifference;
-  mutable SizeValueType m_NumberOfPixelsProcessed;
-  mutable double        m_RMSChange;
-  mutable double        m_SumOfSquaredChange;
+  mutable double        m_Metric{};
+  mutable double        m_SumOfSquaredDifference{};
+  mutable SizeValueType m_NumberOfPixelsProcessed{};
+  mutable double        m_RMSChange{};
+  mutable double        m_SumOfSquaredChange{};
 
   /** Mutex lock to protect modification to metric. */
-  mutable std::mutex m_MetricCalculationLock;
+  mutable std::mutex m_MetricCalculationMutex{};
 
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 };
 } // end namespace itk
 

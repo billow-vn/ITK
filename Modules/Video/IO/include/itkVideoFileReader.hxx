@@ -54,13 +54,13 @@ VideoFileReader<TOutputVideoStream>::UpdateOutputInformation()
   }
 
   //
-  // Check that the desired dimension mateches that read from the file
+  // Check that the desired dimension matches that read from the file
   //
   if (m_VideoIO->GetNumberOfDimensions() != FrameDimension)
   {
-    itkExceptionMacro(<< "Output dimension doesn't match dimension of read "
+    itkExceptionMacro("Output dimension doesn't match dimension of read "
                       << "data. Expected " << FrameDimension << " but the IO "
-                      << "method has " << m_VideoIO->GetNumberOfDimensions() << ".");
+                      << "method has " << m_VideoIO->GetNumberOfDimensions() << '.');
   }
 
   //
@@ -184,7 +184,7 @@ VideoFileReader<TOutputVideoStream>::InitializeVideoIO()
     itkExceptionMacro("Cannot convert " << m_VideoIO->GetNumberOfDimensions()
                                         << "D "
                                            "image set to "
-                                        << FrameType::ImageDimension << "D");
+                                        << FrameType::ImageDimension << 'D');
   }
 
   // See if a buffer conversion is needed
@@ -194,7 +194,7 @@ VideoFileReader<TOutputVideoStream>::InitializeVideoIO()
   {
     // the pixel types don't match so a type conversion needs to be
     // performed
-    itkDebugMacro(<< "Buffer conversion required from: "
+    itkDebugMacro("Buffer conversion required from: "
                   << m_VideoIO->GetComponentTypeAsString(m_VideoIO->GetComponentType())
                   << " to: " << m_VideoIO->GetComponentTypeAsString(ioType) << " ConvertPixelTraits::NumComponents "
                   << ConvertPixelTraits::GetNumberOfComponents() << " m_VideoIO->NumComponents "
@@ -253,24 +253,24 @@ VideoFileReader<TOutputVideoStream>::TemporalStreamingGenerateData()
 
 template <typename TOutputVideoStream>
 void
-VideoFileReader<TOutputVideoStream>::DoConvertBuffer(void * inputData, FrameOffsetType frameNumber)
+VideoFileReader<TOutputVideoStream>::DoConvertBuffer(const void * inputData, FrameOffsetType frameNumber)
 {
   PixelType *  outputData = this->GetOutput()->GetFrame(frameNumber)->GetPixelContainer()->GetBufferPointer();
   unsigned int numberOfPixels = this->GetOutput()->GetFrame(frameNumber)->GetPixelContainer()->Size();
   bool         isVectorImage(strcmp(this->GetOutput()->GetFrame(frameNumber)->GetNameOfClass(), "VectorImage") == 0);
-#define ITK_CONVERT_BUFFER_IF_BLOCK(_CType, type)                                                        \
-  else if (m_VideoIO->GetComponentType() == _CType)                                                      \
-  {                                                                                                      \
-    if (isVectorImage)                                                                                   \
-    {                                                                                                    \
-      ConvertPixelBuffer<type, PixelType, ConvertPixelTraits>::ConvertVectorImage(                       \
-        static_cast<type *>(inputData), m_VideoIO->GetNumberOfComponents(), outputData, numberOfPixels); \
-    }                                                                                                    \
-    else                                                                                                 \
-    {                                                                                                    \
-      ConvertPixelBuffer<type, PixelType, ConvertPixelTraits>::Convert(                                  \
-        static_cast<type *>(inputData), m_VideoIO->GetNumberOfComponents(), outputData, numberOfPixels); \
-    }                                                                                                    \
+#define ITK_CONVERT_BUFFER_IF_BLOCK(_CType, type)                                                              \
+  else if (m_VideoIO->GetComponentType() == _CType)                                                            \
+  {                                                                                                            \
+    if (isVectorImage)                                                                                         \
+    {                                                                                                          \
+      ConvertPixelBuffer<type, PixelType, ConvertPixelTraits>::ConvertVectorImage(                             \
+        static_cast<const type *>(inputData), m_VideoIO->GetNumberOfComponents(), outputData, numberOfPixels); \
+    }                                                                                                          \
+    else                                                                                                       \
+    {                                                                                                          \
+      ConvertPixelBuffer<type, PixelType, ConvertPixelTraits>::Convert(                                        \
+        static_cast<const type *>(inputData), m_VideoIO->GetNumberOfComponents(), outputData, numberOfPixels); \
+    }                                                                                                          \
   }
 
   if (false)

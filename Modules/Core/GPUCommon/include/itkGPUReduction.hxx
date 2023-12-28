@@ -24,13 +24,11 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TElement>
 GPUReduction<TElement>::GPUReduction()
 {
-  /*** Prepare GPU opencl program ***/
+  // Prepare GPU opencl program
   m_GPUKernelManager = GPUKernelManager::New();
   m_GPUDataManager = nullptr;
 
@@ -46,16 +44,23 @@ GPUReduction<TElement>::~GPUReduction()
   this->ReleaseGPUInputBuffer();
 }
 
-/**
- * Standard "PrintSelf" method.
- */
 template <typename TElement>
 void
 GPUReduction<TElement>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  // GetTypenameInString( typeid(TElement), os);
+  itkPrintSelfObjectMacro(GPUKernelManager);
+  itkPrintSelfObjectMacro(GPUDataManager);
+
+  os << indent << "ReduceGPUKernelHandle: " << m_ReduceGPUKernelHandle << std::endl;
+  os << indent << "TestGPUKernelHandle: " << m_TestGPUKernelHandle << std::endl;
+
+  os << indent << "Size: " << m_Size << std::endl;
+  os << indent << "SmallBlock: " << (m_SmallBlock ? "On" : "Off") << std::endl;
+
+  os << indent << "GPUResult: " << static_cast<typename NumericTraits<TElement>::PrintType>(m_GPUResult) << std::endl;
+  os << indent << "CPUResult: " << static_cast<typename NumericTraits<TElement>::PrintType>(m_CPUResult) << std::endl;
 }
 
 template <typename TElement>
@@ -114,13 +119,12 @@ GPUReduction<TElement>::GetReductionKernel(int whichKernel, int blockSize, int i
 {
   if (whichKernel != 5 && whichKernel != 6)
   {
-    itkExceptionMacro(<< "Reduction kernel undefined!");
+    itkExceptionMacro("Reduction kernel undefined!");
   }
 
   std::ostringstream defines;
 
-  defines << "#define blockSize " << blockSize << std::endl;
-  defines << "#define nIsPow2 " << isPowOf2 << std::endl;
+  defines << "#define blockSize " << blockSize << std::endl << "#define nIsPow2 " << isPowOf2 << std::endl;
 
   defines << "#define T ";
   GetTypenameInString(typeid(TElement), defines);
@@ -251,7 +255,9 @@ GPUReduction<TElement>::GPUGenerateData()
   this->GetNumBlocksAndThreads(whichKernel, size, maxBlocks, maxThreads, numBlocks, numThreads);
 
   if (numBlocks == 1)
+  {
     cpuFinalThreshold = 1;
+  }
 
   // allocate output data for the result
   auto * h_odata = (TElement *)malloc(numBlocks * sizeof(TElement));

@@ -36,10 +36,7 @@ AmoebaOptimizer::AmoebaOptimizer()
 }
 
 
-AmoebaOptimizer::~AmoebaOptimizer()
-{
-  delete m_VnlOptimizer;
-}
+AmoebaOptimizer::~AmoebaOptimizer() = default;
 
 
 const std::string
@@ -72,12 +69,12 @@ AmoebaOptimizer::GetValue() const
   {
     if (static_cast<unsigned int>(costFunction->get_number_of_unknowns()) != numberOfParameters)
     {
-      itkExceptionMacro(<< "cost function and current position dimensions mismatch");
+      itkExceptionMacro("cost function and current position dimensions mismatch");
     }
   }
   else
   {
-    itkExceptionMacro(<< "cost function not set");
+    itkExceptionMacro("cost function not set");
   }
 
   if (m_ScalesInitialized)
@@ -95,7 +92,7 @@ AmoebaOptimizer::GetValue() const
 vnl_amoeba *
 AmoebaOptimizer::GetOptimizer() const
 {
-  return this->m_VnlOptimizer;
+  return this->m_VnlOptimizer.get();
 }
 
 void
@@ -150,8 +147,7 @@ AmoebaOptimizer::StartOptimization()
   CostFunctionAdaptorType * adaptor = GetNonConstCostFunctionAdaptor();
   // get rid of previous instance of the internal optimizer and create a
   // new one
-  delete m_VnlOptimizer;
-  m_VnlOptimizer = new vnl_amoeba(*adaptor);
+  m_VnlOptimizer = std::make_unique<vnl_amoeba>(*adaptor);
   m_VnlOptimizer->set_max_iterations(static_cast<int>(m_MaximumNumberOfIterations));
   m_VnlOptimizer->set_x_tolerance(m_ParametersConvergenceTolerance);
   m_VnlOptimizer->set_f_tolerance(m_FunctionConvergenceTolerance);
@@ -283,7 +279,7 @@ AmoebaOptimizer::ValidateSettings()
   // we have to have a cost function
   if (GetCostFunctionAdaptor() == nullptr)
   {
-    itkExceptionMacro(<< "nullptr cost function");
+    itkExceptionMacro("nullptr cost function");
   }
   // if we got here it is safe to get the number of parameters the cost
   // function expects
@@ -292,7 +288,7 @@ AmoebaOptimizer::ValidateSettings()
   // check that the number of parameters match
   if (GetInitialPosition().Size() != n)
   {
-    itkExceptionMacro(<< "cost function and initial position dimensions mismatch");
+    itkExceptionMacro("cost function and initial position dimensions mismatch");
   }
 
   // the user gave us data to use for the initial simplex, check that it
@@ -303,7 +299,7 @@ AmoebaOptimizer::ValidateSettings()
   {
     if (m_InitialSimplexDelta.size() != n)
     {
-      itkExceptionMacro(<< "cost function and simplex delta dimensions mismatch");
+      itkExceptionMacro("cost function and simplex delta dimensions mismatch");
     }
   }
   // check that the number of scale factors matches
@@ -311,18 +307,18 @@ AmoebaOptimizer::ValidateSettings()
   {
     if (this->GetScales().Size() != n)
     {
-      itkExceptionMacro(<< "cost function and scaling information dimensions mismatch");
+      itkExceptionMacro("cost function and scaling information dimensions mismatch");
     }
   }
   // parameters' convergence tolerance has to be positive
   if (this->m_ParametersConvergenceTolerance < 0)
   {
-    itkExceptionMacro(<< "negative parameters convergence tolerance");
+    itkExceptionMacro("negative parameters convergence tolerance");
   }
   // function convergence tolerance has to be positive
   if (this->m_FunctionConvergenceTolerance < 0)
   {
-    itkExceptionMacro(<< "negative function convergence tolerance");
+    itkExceptionMacro("negative function convergence tolerance");
   }
 }
 

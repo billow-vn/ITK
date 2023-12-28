@@ -34,7 +34,7 @@ namespace itk
 class ObjectStoreEnums
 {
 public:
-  /**\class GrowthStrategy
+  /** \class GrowthStrategy
    * \ingroup ITKCommon
    * Type of memory allocation strategy */
   enum class GrowthStrategy : uint8_t
@@ -96,7 +96,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ObjectStore, Object);
+  itkOverrideGetNameOfClassMacro(ObjectStore);
 
   /** Type of the objects in storage. */
   using ObjectType = TObjectType;
@@ -163,7 +163,7 @@ public:
   }
 
 protected:
-  ObjectStore();
+  ObjectStore() = default;
   ~ObjectStore() override;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -174,9 +174,7 @@ protected:
 
   struct MemoryBlock
   {
-    MemoryBlock()
-      : Begin(0)
-    {}
+    MemoryBlock() = default;
 
     MemoryBlock(SizeValueType n)
       : Size(n)
@@ -192,21 +190,21 @@ protected:
       delete[] Begin;
     }
 
-    ObjectType *  Begin;
+    ObjectType *  Begin{};
     SizeValueType Size{ 0 };
   };
 
 private:
-  GrowthStrategyEnum m_GrowthStrategy;
+  GrowthStrategyEnum m_GrowthStrategy{ GrowthStrategyEnum::EXPONENTIAL_GROWTH };
 
-  SizeValueType m_Size;
-  SizeValueType m_LinearGrowthSize;
+  SizeValueType m_Size{};
+  SizeValueType m_LinearGrowthSize{ 1024 };
 
   /** Pointers to objects available for borrowing. */
-  FreeListType m_FreeList;
+  FreeListType m_FreeList{};
 
   /** A list of MemoryBlocks that have been allocated. */
-  std::vector<MemoryBlock> m_Store;
+  std::vector<MemoryBlock> m_Store{};
 };
 
 } // end namespace itk

@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class DistanceMetric
+ * \class DistanceMetric
  * \brief this class declares common interfaces
  * for distance functions.
  *
@@ -63,7 +63,7 @@ public:
   using MeasurementVectorSizeType = unsigned int;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DistanceMetric, FunctionBase);
+  itkOverrideGetNameOfClassMacro(DistanceMetric);
 
   using OriginType = Array<double>;
 
@@ -87,7 +87,7 @@ public:
    * KdTreeKMeans estimators. When the estimator is refactored,
    * this method should be removed. Distance between two measurement
    * vectors can be computed by setting one of them as an origin of
-   * the distane and using the Evaluate method with a single argument */
+   * the distance and using the Evaluate method with a single argument */
   virtual double
   Evaluate(const MeasurementVectorType & x1, const MeasurementVectorType & x2) const = 0;
 
@@ -96,9 +96,7 @@ public:
   SetMeasurementVectorSize(MeasurementVectorSizeType s)
   {
     // Test whether the vector type is resizable or not
-    MeasurementVectorType m;
-
-    if (MeasurementVectorTraits::IsResizable(m))
+    if (MeasurementVectorTraits::IsResizable<MeasurementVectorType>({}))
     {
       // then this is a resizable vector type
       //
@@ -116,14 +114,12 @@ public:
     else
     {
       // If this is a non-resizable vector type
-      MeasurementVectorType     m3;
-      MeasurementVectorSizeType defaultLength = NumericTraits<MeasurementVectorType>::GetLength(m3);
+      MeasurementVectorSizeType defaultLength = NumericTraits<MeasurementVectorType>::GetLength({});
       // and the new length is different from the default one, then throw an
       // exception
       if (defaultLength != s)
       {
-        itkExceptionMacro("Attempting to change the measurement \
-                           vector size of a non-resizable vector type");
+        itkExceptionMacro("Attempting to change the measurement vector size of a non-resizable vector type");
       }
     }
   }
@@ -138,10 +134,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  OriginType m_Origin;
+  OriginType m_Origin{};
 
   /** Number of components in the MeasurementVectorType */
-  MeasurementVectorSizeType m_MeasurementVectorSize;
+  MeasurementVectorSizeType m_MeasurementVectorSize{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

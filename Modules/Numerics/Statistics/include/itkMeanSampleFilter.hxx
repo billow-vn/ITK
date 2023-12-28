@@ -38,13 +38,6 @@ MeanSampleFilter<TSample>::MeanSampleFilter()
 
 template <typename TSample>
 void
-MeanSampleFilter<TSample>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
-
-template <typename TSample>
-void
 MeanSampleFilter<TSample>::SetInput(const SampleType * sample)
 {
   this->ProcessObject::SetNthInput(0, const_cast<SampleType *>(sample));
@@ -97,8 +90,7 @@ MeanSampleFilter<TSample>::GetMeasurementVectorSize() const -> MeasurementVector
   }
 
   // Test if the Vector type knows its length
-  MeasurementVectorType     vector;
-  MeasurementVectorSizeType measurementVectorSize = NumericTraits<MeasurementVectorType>::GetLength(vector);
+  MeasurementVectorSizeType measurementVectorSize = NumericTraits<MeasurementVectorType>::GetLength({});
 
   if (measurementVectorSize)
   {
@@ -132,7 +124,7 @@ MeanSampleFilter<TSample>::GenerateData()
   std::vector<MeasurementRealAccumulateType> sum(measurementVectorSize);
 
   using TotalFrequencyType = typename SampleType::TotalAbsoluteFrequencyType;
-  TotalFrequencyType totalFrequency = NumericTraits<TotalFrequencyType>::ZeroValue();
+  TotalFrequencyType totalFrequency{};
 
   typename SampleType::ConstIterator       iter = input->Begin();
   const typename SampleType::ConstIterator end = input->End();

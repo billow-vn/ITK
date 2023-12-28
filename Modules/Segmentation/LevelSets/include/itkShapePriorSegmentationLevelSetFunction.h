@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(ShapePriorSegmentationLevelSetFunction, SegmentationLevelSetFunction);
+  itkOverrideGetNameOfClassMacro(ShapePriorSegmentationLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using typename Superclass::ImageType;
@@ -128,8 +128,7 @@ public:
 
   /** A global data type used to store values needed to compute the time step.
    */
-  using typename Superclass::GlobalDataStruct;
-  struct ShapePriorGlobalDataStruct : public GlobalDataStruct
+  struct ShapePriorGlobalDataStruct : public Superclass::GlobalDataStruct
   {
     ScalarValueType m_MaxShapePriorChange;
   };
@@ -162,8 +161,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ShapeFunctionPointer m_ShapeFunction;
-  ScalarValueType      m_ShapePriorWeight;
+  ShapeFunctionPointer m_ShapeFunction{};
+  ScalarValueType      m_ShapePriorWeight{};
 };
 } // end namespace itk
 

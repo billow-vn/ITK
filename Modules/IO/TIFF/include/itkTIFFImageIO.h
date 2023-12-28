@@ -29,7 +29,7 @@ class TIFFReaderInternal;
 // ETX
 
 /**
- *\class TIFFImageIO
+ * \class TIFFImageIO
  *
  * \brief ImageIO object for reading and writing TIFF images
  *
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TIFFImageIO, ImageIOBase);
+  itkOverrideGetNameOfClassMacro(TIFFImageIO);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -239,14 +239,14 @@ protected:
   void
   PopulateColorPalette();
 
-  TIFFReaderInternal * m_InternalImage;
+  TIFFReaderInternal * m_InternalImage{};
 
   void
   ReadTIFFTags();
 
-  int m_Compression;
+  int m_Compression{};
 
-  PaletteType m_ColorPalette;
+  PaletteType m_ColorPalette{};
 
 private:
   void
@@ -304,9 +304,9 @@ private:
                    unsigned int toskew,
                    unsigned int fromskew);
 
-  uint16_t *   m_ColorRed;
-  uint16_t *   m_ColorGreen;
-  uint16_t *   m_ColorBlue;
+  uint16_t *   m_ColorRed{};
+  uint16_t *   m_ColorGreen{};
+  uint16_t *   m_ColorBlue{};
   uint64_t     m_TotalColors{ 0 };
   unsigned int m_ImageFormat{ TIFFImageIO::NOFORMAT };
 };

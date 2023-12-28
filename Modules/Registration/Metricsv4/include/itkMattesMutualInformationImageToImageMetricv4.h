@@ -117,7 +117,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MattesMutualInformationImageToImageMetricv4, ImageToImageMetricv4);
+  itkOverrideGetNameOfClassMacro(MattesMutualInformationImageToImageMetricv4);
 
   /** Superclass types */
   using typename Superclass::MeasureType;
@@ -246,31 +246,31 @@ protected:
 
   /** Variables to define the marginal and joint histograms. */
   SizeValueType m_NumberOfHistogramBins{ 50 };
-  PDFValueType  m_MovingImageNormalizedMin;
-  PDFValueType  m_FixedImageNormalizedMin;
-  PDFValueType  m_FixedImageTrueMin;
-  PDFValueType  m_FixedImageTrueMax;
-  PDFValueType  m_MovingImageTrueMin;
-  PDFValueType  m_MovingImageTrueMax;
-  PDFValueType  m_FixedImageBinSize;
-  PDFValueType  m_MovingImageBinSize;
+  PDFValueType  m_MovingImageNormalizedMin{};
+  PDFValueType  m_FixedImageNormalizedMin{};
+  PDFValueType  m_FixedImageTrueMin{};
+  PDFValueType  m_FixedImageTrueMax{};
+  PDFValueType  m_MovingImageTrueMin{};
+  PDFValueType  m_MovingImageTrueMax{};
+  PDFValueType  m_FixedImageBinSize{};
+  PDFValueType  m_MovingImageBinSize{};
 
   /** Helper array for storing the values of the JointPDF ratios. */
   using PRatioType = PDFValueType;
   using PRatioArrayType = std::vector<PRatioType>;
 
-  mutable PRatioArrayType m_PRatioArray;
+  mutable PRatioArrayType m_PRatioArray{};
 
   /** Helper array for storing per-parameter linearized index to
    * retrieve the pRatio during evaluation with local-support transform. */
-  mutable std::vector<OffsetValueType> m_JointPdfIndex1DArray;
+  mutable std::vector<OffsetValueType> m_JointPdfIndex1DArray{};
 
   /** The moving image marginal PDF. */
-  mutable std::vector<PDFValueType>              m_MovingImageMarginalPDF;
-  mutable std::vector<std::vector<PDFValueType>> m_ThreaderFixedImageMarginalPDF;
+  mutable std::vector<PDFValueType>              m_MovingImageMarginalPDF{};
+  mutable std::vector<std::vector<PDFValueType>> m_ThreaderFixedImageMarginalPDF{};
 
   /** The joint PDF and PDF derivatives. */
-  typename std::vector<typename JointPDFType::Pointer> m_ThreaderJointPDF;
+  typename std::vector<typename JointPDFType::Pointer> m_ThreaderJointPDF{};
 
   /* \class DerivativeBufferManager
    * A helper class to manage complexities of minimizing memory
@@ -279,9 +279,9 @@ protected:
    *
    * Thread safety note:
    * A separate object is used locally per each thread. Only the members
-   * m_ParentJointPDFDerivativesLockPtr and m_ParentJointPDFDerivatives
+   * m_ParentJointPDFDerivativesMutexPtr and m_ParentJointPDFDerivatives
    * are shared between threads and access to m_ParentJointPDFDerivatives
-   * is controlled with the m_ParentJointPDFDerivativesLockPtr mutex lock.
+   * is controlled with the m_ParentJointPDFDerivativesMutexPtr mutex lock.
    * \ingroup ITKMetricsv4
    */
   class DerivativeBufferManager
@@ -294,7 +294,7 @@ protected:
     void
     Initialize(size_t                                    maxBufferLength,
                const size_t                              cachedNumberOfLocalParameters,
-               std::mutex *                              parentDerivativeLockPtr,
+               std::mutex *                              parentDerivativeMutexPtr,
                typename JointPDFDerivativesType::Pointer parentJointPDFDerivatives);
 
     void
@@ -343,7 +343,7 @@ protected:
     ReduceBuffer();
 
   private:
-    // How many AccumlatorElements used
+    // How many AccumulatorElements used
     size_t m_CurrentFillSize{ 0 };
     // Continguous chunk of memory for efficiency
     std::vector<PDFValueType> m_MemoryBlock;
@@ -354,20 +354,20 @@ protected:
     size_t                       m_CachedNumberOfLocalParameters;
     size_t                       m_MaxBufferSize;
     // Pointer handle to parent version
-    std::mutex * m_ParentJointPDFDerivativesLockPtr;
+    std::mutex * m_ParentJointPDFDerivativesMutexPtr;
     // Smart pointer handle to parent version
     typename JointPDFDerivativesType::Pointer m_ParentJointPDFDerivatives;
   };
 
-  std::vector<DerivativeBufferManager>      m_ThreaderDerivativeManager;
-  std::mutex                                m_JointPDFDerivativesLock;
-  typename JointPDFDerivativesType::Pointer m_JointPDFDerivatives;
+  std::vector<DerivativeBufferManager>      m_ThreaderDerivativeManager{};
+  std::mutex                                m_JointPDFDerivativesLock{};
+  typename JointPDFDerivativesType::Pointer m_JointPDFDerivatives{};
 
-  PDFValueType m_JointPDFSum;
+  PDFValueType m_JointPDFSum{};
 
   /** Store the per-point local derivative result by parzen window bin.
    * For local-support transforms only. */
-  mutable std::vector<DerivativeType> m_LocalDerivativeByParzenBin;
+  mutable std::vector<DerivativeType> m_LocalDerivativeByParzenBin{};
 
 private:
   /** Perform the final step in computing results */

@@ -80,7 +80,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RegionalMinimaImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(RegionalMinimaImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -145,8 +145,8 @@ protected:
 private:
   bool                 m_FullyConnected{ false };
   bool                 m_FlatIsMinima{ true };
-  OutputImagePixelType m_ForegroundValue;
-  OutputImagePixelType m_BackgroundValue;
+  OutputImagePixelType m_ForegroundValue{};
+  OutputImagePixelType m_BackgroundValue{};
 }; // end of class
 } // end namespace itk
 

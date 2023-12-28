@@ -44,7 +44,7 @@ class DataSet;
 namespace itk
 {
 /**
- *\class HDF5ImageIO
+ * \class HDF5ImageIO
  *
  * \author Kent Williams
  * \brief Class that defines how to read HDF5 file format.
@@ -96,7 +96,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HDF5ImageIO, StreamingImageIOBase);
+  itkOverrideGetNameOfClassMacro(HDF5ImageIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
@@ -120,7 +120,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this ImageIO implementation.
-   * \param FileNameToWrite The name of the file to test for writing.
+   * \param name The name of the file to test for writing.
    * \author Hans J. Johnson
    * \post Sets classes ImageIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this ImageIO can write the file specified.

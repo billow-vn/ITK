@@ -138,7 +138,7 @@ public:
   using typename Superclass::SizeValueType;
 
   /** Default constructor. Needed since we provide a cast constructor. */
-  ImageRandomConstIteratorWithOnlyIndex();
+  ImageRandomConstIteratorWithOnlyIndex() = default;
   ~ImageRandomConstIteratorWithOnlyIndex() override = default;
 
   /** Constructor establishes an iterator to walk a particular image and a
@@ -206,14 +206,14 @@ public:
     return *this;
   }
 
-  /** Set/Get number of random samples to get from the image region */
+  /** Set/Get number of random samples to extract from the image region. */
   void
   SetNumberOfSamples(SizeValueType number);
 
   SizeValueType
   GetNumberOfSamples() const;
 
-  /** Reinitialize the seed of the random number generator  */
+  /** Reinitialize the seed of the random number generator. */
   void
   ReinitializeSeed();
 
@@ -221,14 +221,15 @@ public:
   ReinitializeSeed(int);
 
 private:
+  /** Execute a random jump. */
   void
   RandomJump();
 
   using GeneratorPointer = typename Statistics::MersenneTwisterRandomVariateGenerator::Pointer;
-  GeneratorPointer m_Generator;
-  SizeValueType    m_NumberOfSamplesRequested;
-  SizeValueType    m_NumberOfSamplesDone;
-  SizeValueType    m_NumberOfPixelsInRegion;
+  GeneratorPointer m_Generator{ Statistics::MersenneTwisterRandomVariateGenerator::New() };
+  SizeValueType    m_NumberOfSamplesRequested{};
+  SizeValueType    m_NumberOfSamplesDone{};
+  SizeValueType    m_NumberOfPixelsInRegion{};
 };
 } // end namespace itk
 

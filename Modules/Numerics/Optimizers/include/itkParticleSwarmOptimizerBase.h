@@ -65,7 +65,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ParticleSwarmOptimizerBase, SingleValuedNonLinearOptimizer);
+  itkOverrideGetNameOfClassMacro(ParticleSwarmOptimizerBase);
 
   using ParameterBoundsType = std::vector<std::pair<ParametersType::ValueType, ParametersType::ValueType>>;
 
@@ -174,7 +174,7 @@ public:
   itkSetMacro(PercentageParticlesConverged, double);
 
   /**Set the random number seed for the swarm. Use this method to
-   * produce reaptible results, typically, for testing.
+   * produce repeatable results, typically, for testing.
    */
   itkSetMacro(Seed, RandomVariateGeneratorType::IntegerType);
   itkGetMacro(Seed, RandomVariateGeneratorType::IntegerType);
@@ -230,23 +230,23 @@ protected:
   void
   FileInitialization();
 
-  bool                                    m_PrintSwarm;
-  std::ostringstream                      m_StopConditionDescription;
-  bool                                    m_InitializeNormalDistribution;
-  NumberOfParticlesType                   m_NumberOfParticles;
-  NumberOfIterationsType                  m_MaximalNumberOfIterations;
-  NumberOfGenerationsType                 m_NumberOfGenerationsWithMinimalImprovement;
-  ParameterBoundsType                     m_ParameterBounds;
-  ParametersType                          m_ParametersConvergenceTolerance;
-  double                                  m_PercentageParticlesConverged;
-  CostFunctionType::MeasureType           m_FunctionConvergenceTolerance;
-  std::vector<ParticleData>               m_Particles;
+  bool                                    m_PrintSwarm{};
+  std::ostringstream                      m_StopConditionDescription{};
+  bool                                    m_InitializeNormalDistribution{};
+  NumberOfParticlesType                   m_NumberOfParticles{};
+  NumberOfIterationsType                  m_MaximalNumberOfIterations{};
+  NumberOfGenerationsType                 m_NumberOfGenerationsWithMinimalImprovement{};
+  ParameterBoundsType                     m_ParameterBounds{};
+  ParametersType                          m_ParametersConvergenceTolerance{};
+  double                                  m_PercentageParticlesConverged{};
+  CostFunctionType::MeasureType           m_FunctionConvergenceTolerance{};
+  std::vector<ParticleData>               m_Particles{};
   CostFunctionType::MeasureType           m_FunctionBestValue{ 0 };
-  std::vector<MeasureType>                m_FunctionBestValueMemory;
-  ParametersType                          m_ParametersBestValue;
+  std::vector<MeasureType>                m_FunctionBestValueMemory{};
+  ParametersType                          m_ParametersBestValue{};
   NumberOfIterationsType                  m_IterationIndex{ 0 };
-  RandomVariateGeneratorType::IntegerType m_Seed;
-  bool                                    m_UseSeed;
+  RandomVariateGeneratorType::IntegerType m_Seed{};
+  bool                                    m_UseSeed{};
 };
 } // end namespace itk
 

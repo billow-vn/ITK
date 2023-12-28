@@ -54,7 +54,7 @@ ZeroCrossingImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion
   }
 
   // Build an operator so that we can determine the kernel size
-  SizeValueType radius = NumericTraits<SizeValueType>::ZeroValue();
+  SizeValueType radius{};
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -107,20 +107,18 @@ ZeroCrossingImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   radius.Fill(1);
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>                        bC;
-  faceList = bC(input, outputRegionForThread, radius);
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList =
+    bC(input, outputRegionForThread, radius);
 
   TotalProgressReporter progress(this, output->GetRequestedRegion().GetNumberOfPixels());
 
   InputImagePixelType this_one, that, abs_this_one, abs_that;
-  InputImagePixelType zero = NumericTraits<InputImagePixelType>::ZeroValue();
+  InputImagePixelType zero{};
 
   FixedArray<OffsetValueType, 2 * ImageDimension> offset;
 
-  bit = ConstNeighborhoodIterator<InputImageType>(radius, input, *faceList.begin());
+  bit = ConstNeighborhoodIterator<InputImageType>(radius, input, faceList.front());
   // Set the offset of the neighbors to the center pixel.
   for (i = 0; i < ImageDimension; ++i)
   {
@@ -130,10 +128,10 @@ ZeroCrossingImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    bit = ConstNeighborhoodIterator<InputImageType>(radius, input, *fit);
-    it = ImageRegionIterator<OutputImageType>(output, *fit);
+    bit = ConstNeighborhoodIterator<InputImageType>(radius, input, face);
+    it = ImageRegionIterator<OutputImageType>(output, face);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 

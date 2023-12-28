@@ -23,35 +23,21 @@
 
 namespace itk
 {
-/**
- * Define the number of neighbors
- */
+
 template <typename TInputImage, typename TCoordRep>
 const unsigned long VectorLinearInterpolateImageFunction<TInputImage, TCoordRep>::m_Neighbors =
   1 << TInputImage::ImageDimension;
 
-/**
- * PrintSelf
- */
-template <typename TInputImage, typename TCoordRep>
-void
-VectorLinearInterpolateImageFunction<TInputImage, TCoordRep>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  this->Superclass::PrintSelf(os, indent);
-}
 
-/**
- * Evaluate at image index position
- */
 template <typename TInputImage, typename TCoordRep>
-typename VectorLinearInterpolateImageFunction<TInputImage, TCoordRep>::OutputType
+auto
 VectorLinearInterpolateImageFunction<TInputImage, TCoordRep>::EvaluateAtContinuousIndex(
-  const ContinuousIndexType & index) const
+  const ContinuousIndexType & index) const -> OutputType
 {
-  /**
-   * Compute base index = closet index below point
-   * Compute distance from point to base index
-   */
+  //
+  // Compute base index = closet index below point
+  // Compute distance from point to base index
+  //
   IndexType                 baseIndex;
   InternalComputationType   distance[ImageDimension];
   const TInputImage * const inputImgPtr = this->GetInputImage();
@@ -70,7 +56,7 @@ VectorLinearInterpolateImageFunction<TInputImage, TCoordRep>::EvaluateAtContinuo
   output.Fill(0.0);
 
   using ScalarRealType = typename NumericTraits<PixelType>::ScalarRealType;
-  ScalarRealType totalOverlap = NumericTraits<ScalarRealType>::ZeroValue();
+  ScalarRealType totalOverlap{};
 
   for (unsigned int counter = 0; counter < m_Neighbors; ++counter)
   {

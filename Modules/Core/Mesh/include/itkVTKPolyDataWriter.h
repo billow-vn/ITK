@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKPolyDataWriter, Object);
+  itkOverrideGetNameOfClassMacro(VTKPolyDataWriter);
 
   /** Write the Input mesh to the Output file.
    * Use either Update() or Write(). */
@@ -107,9 +107,9 @@ protected:
   virtual void
   GenerateData();
 
-  std::string m_FileName;
+  std::string m_FileName{};
 
-  InputMeshPointer m_Input;
+  InputMeshPointer m_Input{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

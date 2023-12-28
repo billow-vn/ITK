@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class ShrinkImageFilter
+ * \class ShrinkImageFilter
  * \brief Reduce the size of an image by an integer factor in each
  * dimension.
  *
@@ -80,7 +80,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShrinkImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ShrinkImageFilter);
 
   /** Typedef to images */
   using OutputImageType = TOutputImage;
@@ -160,7 +160,7 @@ protected:
 
 
 private:
-  ShrinkFactorsType m_ShrinkFactors;
+  ShrinkFactorsType m_ShrinkFactors{};
 };
 } // end namespace itk
 

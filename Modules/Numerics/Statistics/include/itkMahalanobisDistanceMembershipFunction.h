@@ -69,8 +69,8 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Strandard macros */
-  itkTypeMacro(MahalanobisDistanceMembershipFunction, MembershipFunctionBase);
+  /** Standard macros */
+  itkOverrideGetNameOfClassMacro(MahalanobisDistanceMembershipFunction);
   itkNewMacro(Self);
 
   /** SmartPointer class for superclass */
@@ -130,15 +130,15 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  MeanVectorType       m_Mean;       // mean
-  CovarianceMatrixType m_Covariance; // covariance matrix
+  MeanVectorType       m_Mean{};       // mean
+  CovarianceMatrixType m_Covariance{}; // covariance matrix
 
   // inverse covariance matrix. automatically calculated
   // when covariance matrix is set.
-  CovarianceMatrixType m_InverseCovariance;
+  CovarianceMatrixType m_InverseCovariance{};
 
   /** Boolean to cache whether the covariance is singular or nearly singular */
-  bool m_CovarianceNonsingular;
+  bool m_CovarianceNonsingular{};
 };
 } // end of namespace Statistics
 } // end namespace itk

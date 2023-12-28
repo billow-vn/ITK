@@ -48,7 +48,7 @@ namespace itk
  * 2nd-order curvature flow can be used by itself to smooth surfaces as a
  * post-processing filter or it can be used with other PDE terms such as a
  * Canny edge term that attracts the surface to strong edges in a data
- * image. Curvature flow smoothes surfaces by making the surface move in the
+ * image. Curvature flow smooths surfaces by making the surface move in the
  * direction that will decrease surface area.
  *
  * \par
@@ -60,7 +60,7 @@ namespace itk
  * SparseFieldFourthOrderLevelSetImageFilter. This filter class, which is
  * derived from that, uses the 4th-order PDE by itself to implement an
  * anisotropic surface smoothing algorithm. This is a feature preserving
- * surface processing algorithm that smoothes surfaces but will preserve
+ * surface processing algorithm that smooths surfaces but will preserve
  * certain features (creases, edges, other sharp features) depending on the
  * NormalProcessConductanceParameter.
  *
@@ -94,7 +94,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(AnisotropicFourthOrderLevelSetImageFilter, SparseFieldFourthOrderLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(AnisotropicFourthOrderLevelSetImageFilter);
 
   /** Standard new macro */
   itkNewMacro(Self);
@@ -134,10 +134,10 @@ protected:
 
 private:
   /** The LevelSetFunctionWithRefitTerm object. */
-  typename FunctionType::Pointer m_Function;
+  typename FunctionType::Pointer m_Function{};
 
   /** The number of iterations for which this filter will run. */
-  unsigned int m_MaxFilterIteration;
+  unsigned int m_MaxFilterIteration{};
 };
 } // end namespace itk
 

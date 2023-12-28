@@ -45,7 +45,7 @@ ParticleSwarmOptimizerBase::SetNumberOfParticles(unsigned int n)
 {
   if (!this->m_Particles.empty() && n != this->m_Particles.size())
   {
-    itkExceptionMacro(<< "swarm already set with different size, clear swarm and then set");
+    itkExceptionMacro("swarm already set with different size, clear swarm and then set");
   }
   if (this->m_NumberOfParticles != n)
   {
@@ -70,7 +70,7 @@ ParticleSwarmOptimizerBase::SetInitialSwarm(const SwarmType & initialSwarm)
       if (it->m_CurrentParameters.GetSize() != n || it->m_CurrentVelocity.GetSize() != n ||
           it->m_BestParameters.GetSize() != n)
       {
-        itkExceptionMacro(<< "inconsistent dimensions in swarm data");
+        itkExceptionMacro("inconsistent dimensions in swarm data");
       }
     }
     this->m_Particles.insert(m_Particles.begin(), initialSwarm.begin(), initialSwarm_END);
@@ -146,25 +146,27 @@ ParticleSwarmOptimizerBase::PrintSelf(std::ostream & os, Indent indent) const
 
   Superclass::PrintSelf(os, indent);
   os << indent << "Create swarm using [normal, uniform] distribution: ";
-  os << "[" << this->m_InitializeNormalDistribution << ", ";
+  os << '[' << this->m_InitializeNormalDistribution << ", ";
   os << !this->m_InitializeNormalDistribution << "]\n";
-  os << indent << "Number of particles in swarm: " << this->m_NumberOfParticles << "\n";
-  os << indent << "Maximal number of iterations: " << this->m_MaximalNumberOfIterations << "\n";
+  os << indent << "Number of particles in swarm: " << this->m_NumberOfParticles << '\n';
+  os << indent << "Maximal number of iterations: " << this->m_MaximalNumberOfIterations << '\n';
   os << indent << "Number of generations with minimal improvement: ";
-  os << this->m_NumberOfGenerationsWithMinimalImprovement << "\n";
+  os << this->m_NumberOfGenerationsWithMinimalImprovement << '\n';
   ParameterBoundsType::const_iterator it, end;
   end = this->m_ParameterBounds.end();
   os << indent << "Parameter bounds: [";
   for (it = this->m_ParameterBounds.begin(); it != end; ++it)
-    os << " [" << it->first << ", " << it->second << "]";
+  {
+    os << " [" << it->first << ", " << it->second << ']';
+  }
   os << " ]\n";
   os << indent << "Parameters' convergence tolerance: " << this->m_ParametersConvergenceTolerance;
-  os << "\n";
+  os << '\n';
   os << indent << "Function convergence tolerance: " << this->m_FunctionConvergenceTolerance << std::endl;
   os << indent << "UseSeed: " << m_UseSeed << std::endl;
   os << indent << "Seed: " << m_Seed << std::endl;
 
-  os << "\n";
+  os << '\n';
   // printing the swarm, usually should be avoided (too much information)
   if (this->m_PrintSwarm && !m_Particles.empty())
   {
@@ -186,11 +188,11 @@ ParticleSwarmOptimizerBase::PrintSwarm(std::ostream & os, Indent indent) const
     const ParticleData & p = *it;
     os << indent;
     PrintParamtersType(p.m_CurrentParameters, os);
-    os << " ";
+    os << ' ';
     PrintParamtersType(p.m_CurrentVelocity, os);
-    os << " " << p.m_CurrentValue << " ";
+    os << ' ' << p.m_CurrentValue << ' ';
     PrintParamtersType(p.m_BestParameters, os);
-    os << " " << p.m_BestValue << "\n";
+    os << ' ' << p.m_BestValue << '\n';
   }
   os << indent << "]\n";
 }
@@ -202,7 +204,7 @@ ParticleSwarmOptimizerBase::PrintParamtersType(const ParametersType & x, std::os
   unsigned int sz = x.size();
   for (unsigned int i = 0; i < sz; ++i)
   {
-    os << x[i] << " ";
+    os << x[i] << ' ';
   }
 }
 
@@ -253,9 +255,13 @@ ParticleSwarmOptimizerBase::StartOptimization()
     if (this->m_IterationIndex >= m_NumberOfGenerationsWithMinimalImprovement)
     {
       if (index == this->m_NumberOfGenerationsWithMinimalImprovement)
+      {
         prevIndex = 0;
+      }
       else
+      {
         prevIndex = index + 1;
+      }
       // function value hasn't improved for a while, check the
       // parameter space to see if the "best" swarm has collapsed
       // around the swarm's best parameters, indicating convergence
@@ -281,9 +287,13 @@ ParticleSwarmOptimizerBase::StartOptimization()
 
   this->m_StopConditionDescription << GetNameOfClass() << ": ";
   if (converged)
+  {
     this->m_StopConditionDescription << "successfully converged after " << m_IterationIndex << " iterations";
+  }
   else
+  {
     this->m_StopConditionDescription << "terminated after " << m_IterationIndex << " iterations";
+  }
   InvokeEvent(EndEvent());
 }
 
@@ -296,7 +306,7 @@ ParticleSwarmOptimizerBase::ValidateSettings()
   // we have to have a cost function
   if (GetCostFunction() == nullptr)
   {
-    itkExceptionMacro(<< "nullptr cost function");
+    itkExceptionMacro("nullptr cost function");
   }
   // if we got here it is safe to get the number of parameters the cost
   // function expects
@@ -306,34 +316,34 @@ ParticleSwarmOptimizerBase::ValidateSettings()
   ParametersType initialPosition = GetInitialPosition();
   if (initialPosition.Size() != n)
   {
-    itkExceptionMacro(<< "cost function and initial position dimensions mismatch");
+    itkExceptionMacro("cost function and initial position dimensions mismatch");
   }
   // at least one particle
   if (this->m_NumberOfParticles == 0)
   {
-    itkExceptionMacro(<< "number of particles is zero");
+    itkExceptionMacro("number of particles is zero");
   }
   // at least one iteration (the initialization phase)
   if (this->m_MaximalNumberOfIterations == 0)
   {
-    itkExceptionMacro(<< "number of iterations is zero");
+    itkExceptionMacro("number of iterations is zero");
   }
   // we need at least one generation difference to
   // compare to the previous one
   if (this->m_NumberOfGenerationsWithMinimalImprovement == 0)
   {
-    itkExceptionMacro(<< "number of generations with minimal improvement is zero");
+    itkExceptionMacro("number of generations with minimal improvement is zero");
   }
 
   if (this->m_ParameterBounds.size() != n)
   {
-    itkExceptionMacro(<< "cost function and parameter bounds dimensions mismatch");
+    itkExceptionMacro("cost function and parameter bounds dimensions mismatch");
   }
   for (i = 0; i < n; ++i)
   {
     if (initialPosition[i] < this->m_ParameterBounds[i].first || initialPosition[i] > this->m_ParameterBounds[i].second)
     {
-      itkExceptionMacro(<< "initial position is outside specified parameter bounds");
+      itkExceptionMacro("initial position is outside specified parameter bounds");
     }
   }
   // if the user set an initial swarm, check that the number of parameters
@@ -342,7 +352,7 @@ ParticleSwarmOptimizerBase::ValidateSettings()
   {
     if (this->m_Particles[0].m_CurrentParameters.GetSize() != n)
     {
-      itkExceptionMacro(<< "cost function and particle data dimensions mismatch");
+      itkExceptionMacro("cost function and particle data dimensions mismatch");
     }
     std::vector<ParticleData>::iterator it, end = this->m_Particles.end();
     for (it = this->m_Particles.begin(); it != end; ++it)
@@ -354,7 +364,7 @@ ParticleSwarmOptimizerBase::ValidateSettings()
             p.m_CurrentParameters[i] > m_ParameterBounds[i].second ||
             p.m_BestParameters[i] < m_ParameterBounds[i].first || p.m_BestParameters[i] > m_ParameterBounds[i].second)
         {
-          itkExceptionMacro(<< "initial position is outside specified parameter bounds");
+          itkExceptionMacro("initial position is outside specified parameter bounds");
         }
       }
     }
@@ -364,13 +374,13 @@ ParticleSwarmOptimizerBase::ValidateSettings()
   {
     if (this->m_ParametersConvergenceTolerance[i] < 0)
     {
-      itkExceptionMacro(<< "negative parameters convergence tolerance");
+      itkExceptionMacro("negative parameters convergence tolerance");
     }
   }
   // function convergence tolerance has to be positive
   if (this->m_FunctionConvergenceTolerance < 0)
   {
-    itkExceptionMacro(<< "negative function convergence tolerance");
+    itkExceptionMacro("negative function convergence tolerance");
   }
 }
 

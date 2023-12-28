@@ -24,16 +24,6 @@
 namespace itk
 {
 template <typename TOutput, unsigned int VImageDimension, typename TInput>
-GaussianDerivativeSpatialFunction<TOutput, VImageDimension, TInput>::GaussianDerivativeSpatialFunction()
-{
-  m_Mean = ArrayType::Filled(0.0);
-  m_Sigma = ArrayType::Filled(1.0);
-  m_Scale = 1.0;
-  m_Normalized = false;
-  m_Direction = 0;
-}
-
-template <typename TOutput, unsigned int VImageDimension, typename TInput>
 auto
 GaussianDerivativeSpatialFunction<TOutput, VImageDimension, TInput>::Evaluate(const TInput & position) const
   -> OutputType
@@ -98,7 +88,7 @@ GaussianDerivativeSpatialFunction<TOutput, VImageDimension, TInput>::PrintSelf(s
   os << indent << "Sigma: " << m_Sigma << std::endl;
   os << indent << "Mean: " << m_Mean << std::endl;
   os << indent << "Scale: " << m_Scale << std::endl;
-  os << indent << "Normalized?: " << m_Normalized << std::endl;
+  os << indent << "Normalized: " << (m_Normalized ? "On" : "Off") << std::endl;
   os << indent << "Direction: " << m_Direction << std::endl;
 }
 } // end namespace itk

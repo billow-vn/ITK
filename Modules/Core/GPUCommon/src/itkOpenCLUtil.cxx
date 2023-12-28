@@ -336,7 +336,7 @@ OpenCLCheckError(cl_int error, const char * filename, int lineno, const char * l
       "CL_INVALID_GLOBAL_WORK_SIZE",
     };
     // print error message
-    const int          errorCount = sizeof(errorString) / sizeof(errorString[0]);
+    constexpr int      errorCount = std::size(errorString);
     const int          index = -error;
     std::ostringstream errorMsg;
 
@@ -360,7 +360,9 @@ IsGPUAvailable()
   cl_platform_id platformId = OpenCLSelectPlatform("NVIDIA");
 
   if (platformId == nullptr)
+  {
     return false;
+  }
 
   cl_device_type devType = CL_DEVICE_TYPE_GPU;
 
@@ -370,7 +372,9 @@ IsGPUAvailable()
   free(device_id);
 
   if (numDevices < 1)
+  {
     return false;
+  }
 
   return true;
 }
@@ -455,8 +459,8 @@ std::string
 Get64BitPragma()
 {
   std::ostringstream msg;
-  msg << "#pragma OPENCL EXTENSION cl_khr_fp64 : enable\n";
-  msg << "#pragma OPENCL EXTENSION cl_amd_fp64 : enable\n";
+  msg << "#pragma OPENCL EXTENSION cl_khr_fp64 : enable\n"
+      << "#pragma OPENCL EXTENSION cl_amd_fp64 : enable\n";
   return msg.str();
 }
 
@@ -464,7 +468,7 @@ void
 GetTypenameInString(const std::type_info & intype, std::ostringstream & ret)
 {
   std::string typestr = GetTypename(intype);
-  ret << typestr << "\n";
+  ret << typestr << '\n';
   if (typestr == "double")
   {
     std::string pragmastr = Get64BitPragma();

@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformParametersAdaptorBase, Object);
+  itkOverrideGetNameOfClassMacro(TransformParametersAdaptorBase);
 
   /** Typedefs associated with the transform */
   using TransformBaseType = TTransform;
@@ -100,7 +100,7 @@ protected:
     os << "Fixed parameters" << this->m_RequiredFixedParameters << std::endl;
   }
 
-  FixedParametersType m_RequiredFixedParameters;
+  FixedParametersType m_RequiredFixedParameters{};
 }; // class TransformParametersAdaptorBase
 } // namespace itk
 

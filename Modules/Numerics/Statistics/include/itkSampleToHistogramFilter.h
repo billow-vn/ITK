@@ -49,7 +49,7 @@ namespace Statistics
 {
 
 /**
- *\class SampleToHistogramFilter
+ * \class SampleToHistogramFilter
  *  \brief Computes the Histogram corresponding to a Sample.
  *
  * This filter produces as output the histogram corresponding to
@@ -77,7 +77,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(SampleToHistogramFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(SampleToHistogramFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

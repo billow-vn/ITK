@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MIRegistrationFunction, PDEDeformableRegistrationFunction);
+  itkOverrideGetNameOfClassMacro(MIRegistrationFunction);
 
   /** MovingImage image type. */
   using typename Superclass::MovingImageType;
@@ -187,15 +187,15 @@ protected:
 
 private:
   /** The global timestep. */
-  TimeStepType m_TimeStep;
+  TimeStepType m_TimeStep{};
 
-  SpacingType m_FixedImageSpacing;
-  PointType   m_FixedImageOrigin;
+  SpacingType m_FixedImageSpacing{};
+  PointType   m_FixedImageOrigin{};
 
-  GradientCalculatorPointer m_FixedImageGradientCalculator;
-  GradientCalculatorPointer m_MovingImageGradientCalculator;
+  GradientCalculatorPointer m_FixedImageGradientCalculator{};
+  GradientCalculatorPointer m_MovingImageGradientCalculator{};
 
-  InterpolatorPointer m_MovingImageInterpolator;
+  InterpolatorPointer m_MovingImageInterpolator{};
 
   /** Threshold below which the denominator term is considered zero. */
   double m_DenominatorThreshold{ 1e-9 };

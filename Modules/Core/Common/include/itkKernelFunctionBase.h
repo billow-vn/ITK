@@ -52,7 +52,7 @@ public:
   using RealType = TRealValueType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(KernelFunctionBase, FunctionBase);
+  itkOverrideGetNameOfClassMacro(KernelFunctionBase);
 
   /** Evaluate the function. Subclasses must implement this. */
   TRealValueType
@@ -67,11 +67,6 @@ public:
 protected:
   KernelFunctionBase() = default;
   ~KernelFunctionBase() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
 };
 } // end namespace itk
 

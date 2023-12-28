@@ -23,16 +23,16 @@ template <typename TImage, typename TBoundaryCondition>
 void
 ConstShapedNeighborhoodIterator<TImage, TBoundaryCondition>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  os << indent << "ConstShapedNeighborhoodIterator {this = " << this;
-  os << " m_ActiveIndexList = [";
+  Superclass::PrintSelf(os, indent);
+
+  os << indent << "ActiveIndexList: [";
   for (auto it = m_ActiveIndexList.begin(); it != m_ActiveIndexList.end(); ++it)
   {
-    os << *it << " ";
+    os << indent.GetNextIndent() << *it << ' ';
   }
   os << "] ";
-  os << " m_CenterIsActive = " << m_CenterIsActive;
-  os << "}" << std::endl;
-  Superclass::PrintSelf(os, indent.GetNextIndent());
+
+  os << indent << "CenterIsActive: " << (m_CenterIsActive ? "On" : "Off") << std::endl;
 }
 
 template <typename TImage, typename TBoundaryCondition>
@@ -119,8 +119,9 @@ ConstShapedNeighborhoodIterator<TImage, TBoundaryCondition>::CreateActiveListFro
 {
   if (this->GetRadius() != neighborhood.GetRadius())
   {
-    itkGenericExceptionMacro(<< "Radius of shaped iterator(" << this->GetRadius()
-                             << ") does not equal radius of neighborhood(" << neighborhood.GetRadius() << ")");
+    itkGenericExceptionMacro("Radius of shaped iterator(" << this->GetRadius()
+                                                          << ") does not equal radius of neighborhood("
+                                                          << neighborhood.GetRadius() << ')');
   }
   typename NeighborhoodType::ConstIterator nit;
   NeighborIndexType                        idx = 0;

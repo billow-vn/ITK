@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class IntermodesThresholdCalculator
+ * \class IntermodesThresholdCalculator
  * \brief Computes the Intermodes's threshold for an image.
  *
  * J. M. S. Prewitt and M. L. Mendelsohn, "The analysis of cell images," in
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(IntermodesThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(IntermodesThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;
@@ -106,8 +106,8 @@ private:
   bool
   BimodalTest(const std::vector<double> & h);
 
-  SizeValueType m_MaximumSmoothingIterations;
-  bool          m_UseInterMode;
+  SizeValueType m_MaximumSmoothingIterations{};
+  bool          m_UseInterMode{};
 };
 
 } // end namespace itk

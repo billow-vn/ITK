@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class FastMarchingUpwindGradientImageFilterBase
+ * \class FastMarchingUpwindGradientImageFilterBase
  *
  * \brief Generates the upwind gradient field of fast marching arrival times.
  *
@@ -57,7 +57,7 @@ class ITK_TEMPLATE_EXPORT FastMarchingUpwindGradientImageFilterBase
 public:
   ITK_DISALLOW_COPY_AND_MOVE(FastMarchingUpwindGradientImageFilterBase);
 
-  /** Standard class typdedefs. */
+  /** Standard class typedefs. */
   using Self = FastMarchingUpwindGradientImageFilterBase;
   using Superclass = FastMarchingImageFilterBase<TInput, TOutput>;
   using Pointer = SmartPointer<Self>;
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingUpwindGradientImageFilterBase, FastMarchingImageFilterBase);
+  itkOverrideGetNameOfClassMacro(FastMarchingUpwindGradientImageFilterBase);
 
   /** The dimension of the level set. */
   static constexpr unsigned int ImageDimension = Superclass::ImageDimension;
@@ -125,7 +125,7 @@ protected:
 //  using GrandParentClassType = FastMarchingImageFilterBase< VDimension, TInputPixel,
 //    TOutputPixel >;
 
-//  /** Standard class typdedefs. */
+//  /** Standard class typedefs. */
 //  using Self = IsotropicFastMarchingUpwindGradientImageFilterBase;
 //  using Superclass = FastMarchingUpwindGradientImageFilterBase< VDimension, TInputPixel,
 //    TOutputPixel, GrandParentClassType >;

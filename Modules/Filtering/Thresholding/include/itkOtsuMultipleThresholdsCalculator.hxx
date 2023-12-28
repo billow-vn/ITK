@@ -143,14 +143,14 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::Compute()
   // and the user could specify the dimension to apply the algorithm to.
   if (histogram->GetSize().Size() != 1)
   {
-    itkExceptionMacro(<< "Histogram must be 1-dimensional.");
+    itkExceptionMacro("Histogram must be 1-dimensional.");
   }
 
   // Compute global mean
   typename TInputHistogram::ConstIterator iter = histogram->Begin();
   typename TInputHistogram::ConstIterator end = histogram->End();
 
-  MeanType            globalMean = NumericTraits<MeanType>::ZeroValue();
+  MeanType            globalMean{};
   const FrequencyType globalFrequency = histogram->GetTotalFrequency();
   while (iter != end)
   {
@@ -173,7 +173,7 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::Compute()
   InstanceIdentifierVectorType maxVarThresholdIndexes = thresholdIndexes;
 
   // Compute frequency and mean of initial classes
-  FrequencyType       freqSum = NumericTraits<FrequencyType>::ZeroValue();
+  FrequencyType       freqSum{};
   FrequencyVectorType classFrequency(numberOfClasses);
   for (j = 0; j < numberOfClasses - 1; ++j)
   {
@@ -190,7 +190,7 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::Compute()
     imgPDF[j] = (WeightType)histogram->GetFrequency(j) / (WeightType)globalFrequency;
   }
 
-  MeanType       meanSum = NumericTraits<MeanType>::ZeroValue();
+  MeanType       meanSum{};
   MeanVectorType classMean(numberOfClasses);
   for (j = 0; j < numberOfClasses - 1; ++j)
   {
@@ -222,9 +222,9 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::Compute()
   // distribution.
   //
 #ifndef ITK_COMPILER_SUPPORTS_SSE2_32
-  volatile VarianceType maxVarBetween = NumericTraits<VarianceType>::ZeroValue();
+  volatile VarianceType maxVarBetween{};
 #else
-  VarianceType maxVarBetween = NumericTraits<VarianceType>::ZeroValue();
+  VarianceType maxVarBetween{};
 #endif
   //
   // The introduction of the "volatile" modifier forces the compiler to keep
@@ -240,7 +240,7 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::Compute()
   maxVarBetween /= static_cast<VarianceType>(globalFrequency);
 
   // Sum the relevant weights for valley emphasis
-  WeightType valleyEmphasisFactor = NumericTraits<WeightType>::ZeroValue();
+  WeightType valleyEmphasisFactor{};
   if (m_ValleyEmphasis)
   {
     for (j = 0; j < numberOfClasses - 1; ++j)
@@ -263,9 +263,9 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::Compute()
     // distribution.
     //
 #ifndef ITK_COMPILER_SUPPORTS_SSE2_32
-    volatile VarianceType varBetween = NumericTraits<VarianceType>::ZeroValue();
+    volatile VarianceType varBetween{};
 #else
-    VarianceType varBetween = NumericTraits<VarianceType>::ZeroValue();
+    VarianceType varBetween{};
 #endif
     //
     // The introduction of the "volatile" modifier forces the compiler to keep
@@ -341,7 +341,7 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>::PrintSelf(std::ostream & os, 
   os << indent << "Output: ";
   for (SizeValueType j = 0; j < m_NumberOfThresholds; ++j)
   {
-    os << m_Output[j] << " ";
+    os << m_Output[j] << ' ';
   }
   os << std::endl;
 }

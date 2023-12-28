@@ -114,7 +114,7 @@ itkGradientImageFilterTest2(int argc, char * argv[])
 
   if (iobase.IsNull())
   {
-    itkGenericExceptionMacro("Unable to determine ImageIO reader for \"" << infname << "\"");
+    itkGenericExceptionMacro("Unable to determine ImageIO reader for \"" << infname << '"');
   }
 
   using TestImageType = itk::Image<short, 3>;
@@ -126,7 +126,9 @@ itkGradientImageFilterTest2(int argc, char * argv[])
   const unsigned int dimension = iobase->GetNumberOfDimensions();
 
   if (dimension == 2)
+  {
     return DoIt<itk::Image<float, 2>>(infname, outfname);
+  }
   else if (dimension == 3)
     return DoIt<itk::Image<float, 3>>(infname, outfname);
 

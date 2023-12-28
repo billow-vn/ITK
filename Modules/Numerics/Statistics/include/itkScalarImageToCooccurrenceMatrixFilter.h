@@ -30,7 +30,7 @@ namespace Statistics
 {
 /** \class ScalarImageToCooccurrenceMatrixFilter
  *  \brief This class computes a co-occurrence matrix (histogram) from
- * a given image and a mask image if provided. Coocurrence matrices are
+ * a given image and a mask image if provided. Cooccurrence matrices are
  * used for image texture description.
  *
  * This filters creates a grey-level co-occurrence matrix from a N-D scalar
@@ -105,7 +105,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarImageToCooccurrenceMatrixFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ScalarImageToCooccurrenceMatrixFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -212,16 +212,16 @@ private:
   void
   NormalizeHistogram();
 
-  OffsetVectorConstPointer m_Offsets;
-  PixelType                m_Min;
-  PixelType                m_Max;
+  OffsetVectorConstPointer m_Offsets{};
+  PixelType                m_Min{};
+  PixelType                m_Max{};
 
-  unsigned int          m_NumberOfBinsPerAxis;
-  MeasurementVectorType m_LowerBound;
-  MeasurementVectorType m_UpperBound;
-  bool                  m_Normalize;
+  unsigned int          m_NumberOfBinsPerAxis{};
+  MeasurementVectorType m_LowerBound{};
+  MeasurementVectorType m_UpperBound{};
+  bool                  m_Normalize{};
 
-  MaskPixelType m_InsidePixelValue;
+  MaskPixelType m_InsidePixelValue{};
 };
 } // end of namespace Statistics
 } // end of namespace itk

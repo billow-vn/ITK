@@ -35,17 +35,6 @@ WeightedMeanSampleFilter<TSample>::WeightedMeanSampleFilter()
 
 template <typename TSample>
 void
-WeightedMeanSampleFilter<TSample>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-  // m_Weights
-  os << indent << "Weights: " << this->GetWeightsInput() << std::endl;
-  // m_WeightingFunction
-  os << indent << "Weighting Function: " << this->GetWeightingFunctionInput() << std::endl;
-}
-
-template <typename TSample>
-void
 WeightedMeanSampleFilter<TSample>::GenerateData()
 {
   // if weighting function is specified, use it to compute the mean
@@ -92,7 +81,7 @@ WeightedMeanSampleFilter<TSample>::ComputeMeanWithWeights()
 
   const WeightArrayType & weightsArray = this->GetWeights();
 
-  WeightValueType totalWeight = NumericTraits<WeightValueType>::ZeroValue();
+  WeightValueType totalWeight{};
 
   typename SampleType::ConstIterator iter = input->Begin();
   typename SampleType::ConstIterator end = input->End();
@@ -153,7 +142,7 @@ WeightedMeanSampleFilter<TSample>::ComputeMeanWithWeightingFunction()
 
   const WeightingFunctionType * const weightFunction = this->GetWeightingFunction();
 
-  WeightValueType totalWeight = NumericTraits<WeightValueType>::ZeroValue();
+  WeightValueType totalWeight{};
 
   typename SampleType::ConstIterator       iter = input->Begin();
   const typename SampleType::ConstIterator end = input->End();

@@ -28,7 +28,7 @@ namespace itk
  * pyramid.
  *
  * MultiResolutionPyramidImageFilter provides a generic framework to
- * to create a image pryamid according to a user defined
+ * to create a image pyramid according to a user defined
  * multi-resolution schedule.
  *
  * The multi-resolution schedule is specified in terms for
@@ -121,7 +121,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiResolutionPyramidImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(MultiResolutionPyramidImageFilter);
 
   /** ScheduleType type alias support */
   using ScheduleType = Array2D<unsigned int>;
@@ -226,16 +226,16 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /** Generate the output data. */
+  /** Generate the output data for non-downward divisible schedules. */
   void
   GenerateData() override;
 
-  double m_MaximumError;
+  double m_MaximumError{};
 
-  unsigned int m_NumberOfLevels;
-  ScheduleType m_Schedule;
+  unsigned int m_NumberOfLevels{};
+  ScheduleType m_Schedule{};
 
-  bool m_UseShrinkImageFilter;
+  bool m_UseShrinkImageFilter{};
 };
 } // namespace itk
 

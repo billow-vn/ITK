@@ -21,31 +21,14 @@
 
 namespace itk
 {
-/** Default constructor. Needed since we provide a cast constructor. */
-template <typename TImage>
-ImageRandomConstIteratorWithIndex<TImage>::ImageRandomConstIteratorWithIndex()
-  : ImageConstIteratorWithIndex<TImage>()
-{
-  m_NumberOfPixelsInRegion = 0L;
-  m_NumberOfSamplesRequested = 0L;
-  m_NumberOfSamplesDone = 0L;
-  m_Generator = Statistics::MersenneTwisterRandomVariateGenerator::New();
-}
 
-/** Constructor establishes an iterator to walk a particular image and a
- * particular region of that image. */
 template <typename TImage>
 ImageRandomConstIteratorWithIndex<TImage>::ImageRandomConstIteratorWithIndex(const ImageType *  ptr,
                                                                              const RegionType & region)
   : ImageConstIteratorWithIndex<TImage>(ptr, region)
-{
-  m_NumberOfPixelsInRegion = region.GetNumberOfPixels();
-  m_NumberOfSamplesRequested = 0L;
-  m_NumberOfSamplesDone = 0L;
-  m_Generator = Statistics::MersenneTwisterRandomVariateGenerator::New();
-}
+  , m_NumberOfPixelsInRegion{ region.GetNumberOfPixels() }
+{}
 
-/**  Set the number of samples to extract from the region */
 template <typename TImage>
 void
 ImageRandomConstIteratorWithIndex<TImage>::SetNumberOfSamples(SizeValueType number)
@@ -53,7 +36,6 @@ ImageRandomConstIteratorWithIndex<TImage>::SetNumberOfSamples(SizeValueType numb
   m_NumberOfSamplesRequested = number;
 }
 
-/**  Set the number of samples to extract from the region */
 template <typename TImage>
 auto
 ImageRandomConstIteratorWithIndex<TImage>::GetNumberOfSamples() const -> SizeValueType
@@ -61,7 +43,6 @@ ImageRandomConstIteratorWithIndex<TImage>::GetNumberOfSamples() const -> SizeVal
   return m_NumberOfSamplesRequested;
 }
 
-/** Reinitialize the seed of the random number generator */
 template <typename TImage>
 void
 ImageRandomConstIteratorWithIndex<TImage>::ReinitializeSeed()
@@ -77,27 +58,21 @@ ImageRandomConstIteratorWithIndex<TImage>::ReinitializeSeed(int seed)
   // vnl_sample_reseed(seed);
 }
 
-/** Execute an acrobatic random jump */
 template <typename TImage>
 void
 ImageRandomConstIteratorWithIndex<TImage>::RandomJump()
 {
   using PositionValueType = IndexValueType;
 
-  const PositionValueType randomPosition = static_cast<PositionValueType>(
+  auto position = static_cast<PositionValueType>(
     m_Generator->GetVariateWithOpenRange(static_cast<double>(m_NumberOfPixelsInRegion) - 0.5));
-  /*
-      vnl_sample_uniform(0.0f,
-      static_cast<double>(m_NumberOfPixelsInRegion)-0.5) );
-  */
 
-  PositionValueType position = randomPosition;
-  PositionValueType residual;
+  const SizeType regionSize = this->m_Region.GetSize();
 
   for (unsigned int dim = 0; dim < TImage::ImageDimension; ++dim)
   {
-    const SizeValueType sizeInThisDimension = this->m_Region.GetSize()[dim];
-    residual = position % sizeInThisDimension;
+    const SizeValueType     sizeInThisDimension = regionSize[dim];
+    const PositionValueType residual = position % sizeInThisDimension;
     this->m_PositionIndex[dim] = residual + this->m_BeginIndex[dim];
     position -= residual;
     position /= sizeInThisDimension;

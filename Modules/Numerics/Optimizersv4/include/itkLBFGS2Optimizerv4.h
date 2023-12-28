@@ -33,7 +33,7 @@ namespace itk
 class LBFGS2Optimizerv4Enums
 {
 public:
-  /***\class LineSearchMethod
+  /*** \class LineSearchMethod
    * \ingroup ITKOptimizersv4
    * Line search method enum
    */
@@ -84,10 +84,10 @@ extern ITKOptimizersv4_EXPORT std::ostream &
                               operator<<(std::ostream & out, LBFGS2Optimizerv4Enums::LineSearchMethod value);
 
 /**
- *\class LBFGS2Optimizerv4Template
+ * \class LBFGS2Optimizerv4Template
  * \brief Wrap of the libLBFGS[1] algorithm for use in ITKv4 registration framework.
  * LibLBFGS is a translation of LBFGS code by Nocedal [2] and adds the orthantwise
- * limited-memmory Quais-Newton method [3] for optimization with L1-norm on the
+ * limited-memory Quasi-Newton method [3] for optimization with L1-norm on the
  * parameters.
  *
  * LBFGS is a quasi-Newton method uses an approximate estimate of the inverse Hessian
@@ -201,7 +201,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LBFGS2Optimizerv4Template, GradientDescentOptimizerv4Template);
+  itkOverrideGetNameOfClassMacro(LBFGS2Optimizerv4Template);
 
   /** Start optimization with an initial value. */
   void
@@ -371,7 +371,7 @@ public:
    * evaluations are inexpensive with respect to the cost of the
    * iteration (which is sometimes the case when solving very large
    * problems) it may be advantageous to set this parameter to a small
-   * value. A typical small value is \c 0.1. This parameter shuold be
+   * value. A typical small value is \c 0.1. This parameter should be
    * greater than the \c ftol parameter (\c 1e-4) and smaller than
    * \c 1.0.
    */
@@ -393,7 +393,7 @@ public:
   GetMachinePrecisionTolerance() const;
 
   /**
-   * Coeefficient for the L1 norm of variables.
+   * Coefficient for the L1 norm of variables.
    *  This parameter should be set to zero for standard minimization
    *  problems. Setting this parameter to a positive value activates
    *  Orthant-Wise Limited-memory Quasi-Newton (OWL-QN) method, which
@@ -446,7 +446,7 @@ public:
   /** Get gradient norm of current iteration */
   itkGetConstMacro(CurrentGradientNorm, PrecisionType);
 
-  /** Get stepsize of current iteration */
+  /** Get step size of current iteration */
   itkGetConstMacro(CurrentStepSize, PrecisionType);
 
   /** Get number of evaluations for current iteration */
@@ -506,14 +506,14 @@ protected:
 private:
   // Private Implementation (Pimpl), to hide liblbfgs data structures
   class PrivateImplementationHolder;
-  lbfgs_parameter_t m_Parameters;
+  lbfgs_parameter_t m_Parameters{};
 
-  bool   m_EstimateScalesAtEachIteration;
-  double m_CurrentStepSize;
-  double m_CurrentParameterNorm;
-  double m_CurrentGradientNorm;
-  int    m_CurrentNumberOfEvaluations;
-  int    m_StatusCode;
+  bool   m_EstimateScalesAtEachIteration{};
+  double m_CurrentStepSize{};
+  double m_CurrentParameterNorm{};
+  double m_CurrentGradientNorm{};
+  int    m_CurrentNumberOfEvaluations{};
+  int    m_StatusCode{};
 
   /**
    * itkGradientDecentOptimizerv4Template specific non supported methods.

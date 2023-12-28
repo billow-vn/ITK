@@ -29,7 +29,7 @@ namespace itk
 {
 
 /**
- *\class HistogramThresholdCalculator
+ * \class HistogramThresholdCalculator
  * \brief Base class to compute a threshold value based on the histogram of an image
  *
  * \author Richard Beare. Department of Medicine, Monash University,
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HistogramThresholdCalculator, ProcessObject);
+  itkOverrideGetNameOfClassMacro(HistogramThresholdCalculator);
 
   /** Type definition for the input histogram. */
   using HistogramType = THistogram;
@@ -105,7 +105,7 @@ public:
   {
     if (this->GetNumberOfOutputs() < 1)
     {
-      itkExceptionMacro(<< "No output available.");
+      itkExceptionMacro("No output available.");
     }
     return static_cast<DecoratedOutputType *>(this->ProcessObject::GetOutput(0))->Get();
   }

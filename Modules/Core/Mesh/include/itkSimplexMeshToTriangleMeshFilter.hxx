@@ -73,7 +73,7 @@ SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>::CreateTriangles()
 
     if (!(b1 && b2 && b3))
     {
-      itkExceptionMacro(<< "Assertion failed for test of GetElementIfIndexExists()");
+      itkExceptionMacro("Assertion failed for test of GetElementIfIndexExists()");
     }
 
     ++pointsIt;
@@ -83,10 +83,10 @@ SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>::CreateTriangles()
 }
 
 template <typename TInputMesh, typename TOutputMesh>
-typename SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>::CellIdentifier
+auto
 SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>::FindCellId(CellIdentifier id1,
                                                                      CellIdentifier id2,
-                                                                     CellIdentifier id3)
+                                                                     CellIdentifier id3) -> CellIdentifier
 {
   std::set<CellIdentifier> cells1 = this->GetInput(0)->GetCellLinks()->GetElement(id1);
   std::set<CellIdentifier> cells2 = this->GetInput(0)->GetCellLinks()->GetElement(id2);
@@ -107,19 +107,19 @@ SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>::FindCellId(CellIdentif
 
   if (cellIt == cells1.end())
   {
-    itkExceptionMacro(<< "Cell was not found, although it should be there");
+    itkExceptionMacro("Cell was not found, although it should be there");
   }
 
   return *cellIt;
 }
 
-/* PrintSelf. */
 template <typename TInputMesh, typename TOutputMesh>
 void
 SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "ToDo: implement PrinSelf!!!";
+
+  itkPrintSelfObjectMacro(Centers);
 }
 } // namespace itk
 

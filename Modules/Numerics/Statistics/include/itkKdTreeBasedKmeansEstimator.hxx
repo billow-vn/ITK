@@ -443,9 +443,9 @@ KdTreeBasedKmeansEstimator<TKdTree>::PrintPoint(ParameterType & point)
   std::cout << "[ ";
   for (unsigned int i = 0; i < m_MeasurementVectorSize; ++i)
   {
-    std::cout << point[i] << " ";
+    std::cout << point[i] << ' ';
   }
-  std::cout << "]";
+  std::cout << ']';
 }
 } // end of namespace Statistics
 } // end namespace itk

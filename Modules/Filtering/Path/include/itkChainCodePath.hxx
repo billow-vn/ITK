@@ -19,6 +19,7 @@
 #define itkChainCodePath_hxx
 
 #include "itkNumericTraits.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -84,20 +85,22 @@ ChainCodePath<VDimension>::IncrementInput(InputType & input) const -> OffsetType
   }
 }
 
-/** Constructor */
 template <unsigned int VDimension>
 ChainCodePath<VDimension>::ChainCodePath()
 {
   m_Start = this->GetZeroIndex();
 }
 
-/** Standard "PrintSelf" method */
 template <unsigned int VDimension>
 void
 ChainCodePath<VDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
-  os << indent << "Start index:  " << m_Start << std::endl;
+
+  os << indent << "Start: " << static_cast<typename NumericTraits<IndexType>::PrintType>(m_Start) << std::endl;
+  os << indent << "Chain: " << m_Chain << std::endl;
 }
 } // end namespace itk
 

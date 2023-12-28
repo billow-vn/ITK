@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class VTKImageIOFactory
+ * \class VTKImageIOFactory
  * \brief Create instances of VTKImageIO objects using an object factory.
  * \ingroup ITKIOVTK
  */
@@ -61,7 +61,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(VTKImageIOFactory);
 
   /** Register one factory of this type  */
   static void

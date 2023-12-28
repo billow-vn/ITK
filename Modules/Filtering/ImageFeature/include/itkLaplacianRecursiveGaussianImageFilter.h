@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LaplacianRecursiveGaussianImageFilter
+ * \class LaplacianRecursiveGaussianImageFilter
  * \brief Computes the Laplacian of Gaussian (LoG) of an image.
  *
  * Computes the Laplacian of Gaussian (LoG) of an image by convolution
@@ -97,9 +97,9 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LaplacianRecursiveGaussianImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LaplacianRecursiveGaussianImageFilter);
 
-  /** Set Sigma value. Sigma is measured in the units of image spacing. */
+  /** Set/Get Sigma value. Sigma is measured in the units of image spacing. */
   void
   SetSigma(RealType sigma);
   RealType
@@ -127,11 +127,11 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
 private:
-  GaussianFilterPointer   m_SmoothingFilters[NumberOfSmoothingFilters];
-  DerivativeFilterPointer m_DerivativeFilter;
+  GaussianFilterPointer   m_SmoothingFilters[NumberOfSmoothingFilters]{};
+  DerivativeFilterPointer m_DerivativeFilter{};
 
   /** Normalize the image across scale space */
-  bool m_NormalizeAcrossScale;
+  bool m_NormalizeAcrossScale{};
 };
 } // end namespace itk
 

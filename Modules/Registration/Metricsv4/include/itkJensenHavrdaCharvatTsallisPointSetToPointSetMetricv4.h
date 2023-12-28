@@ -85,7 +85,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4, PointSetToPointSetMetricv4);
+  itkOverrideGetNameOfClassMacro(JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4);
 
   using PointSetType = TPointSet;
   using PointsContainer = typename PointSetType::PointsContainer;
@@ -118,8 +118,7 @@ public:
   using GaussianType = typename DensityFunctionType::GaussianType;
   using DensityFunctionPointer = typename DensityFunctionType::Pointer;
 
-  /** Initialize the Metric by making sure that all the components
-   *  are present and plugged together correctly     */
+  /** Initialize the Metric by making sure that all the components are present and plugged together correctly. */
   void
   Initialize() override;
 
@@ -208,6 +207,7 @@ public:
   MeasureType
   GetLocalNeighborhoodValue(const PointType & point, const PixelType & pixel = 0) const override;
 
+  /** Get the local measure and the derivative values. */
   void
   GetLocalNeighborhoodValueAndDerivative(const PointType &,
                                          MeasureType &,
@@ -246,21 +246,21 @@ protected:
   }
 
 private:
-  DensityFunctionPointer m_MovingDensityFunction;
+  DensityFunctionPointer m_MovingDensityFunction{};
 
   bool m_UseAnisotropicCovariances{ false };
 
-  RealType     m_PointSetSigma;
-  RealType     m_KernelSigma;
-  unsigned int m_CovarianceKNeighborhood;
-  unsigned int m_EvaluationKNeighborhood;
+  RealType     m_PointSetSigma{};
+  RealType     m_KernelSigma{};
+  unsigned int m_CovarianceKNeighborhood{};
+  unsigned int m_EvaluationKNeighborhood{};
 
-  RealType m_Alpha;
+  RealType m_Alpha{};
 
   /** Precomputed cached values */
-  mutable RealType m_TotalNumberOfPoints;
-  mutable RealType m_Prefactor0;
-  mutable RealType m_Prefactor1;
+  mutable RealType m_TotalNumberOfPoints{};
+  mutable RealType m_Prefactor0{};
+  mutable RealType m_Prefactor1{};
 };
 
 

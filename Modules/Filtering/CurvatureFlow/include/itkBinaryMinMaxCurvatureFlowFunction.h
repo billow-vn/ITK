@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class BinaryMinMaxCurvatureFlowFunction
+ * \class BinaryMinMaxCurvatureFlowFunction
  *
  * This class encapsulate the finite difference equation which drives a
  * min/max curvature flow algorithm for denoising binary images.
@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(BinaryMinMaxCurvatureFlowFunction, MinMaxCurvatureFlowFunction);
+  itkOverrideGetNameOfClassMacro(BinaryMinMaxCurvatureFlowFunction);
 
   /** Inherit some parameters from the superclass type. */
   using typename Superclass::PixelType;
@@ -79,8 +79,7 @@ public:
     return m_Threshold;
   }
 
-  /** This method computes the solution update for each pixel that does not
-   * lie on a the data set boundary. */
+  /** Compute the solution update for each pixel that does not lie on a the data set boundary. */
   PixelType
   ComputeUpdate(const NeighborhoodType & it,
                 void *                   globalData,
@@ -91,7 +90,7 @@ protected:
   ~BinaryMinMaxCurvatureFlowFunction() override = default;
 
 private:
-  double m_Threshold;
+  double m_Threshold{};
 };
 } // end namespace itk
 

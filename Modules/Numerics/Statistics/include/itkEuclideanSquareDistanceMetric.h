@@ -25,7 +25,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class EuclideanSquareDistanceMetric
+ * \class EuclideanSquareDistanceMetric
  * \brief Computes Euclidean distance between origin and given measurement vector.
  *
  * \sa DistanceMetric
@@ -47,7 +47,7 @@ public:
   using typename Superclass::MeasurementVectorType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EuclideanSquareDistanceMetric, DistanceMetric);
+  itkOverrideGetNameOfClassMacro(EuclideanSquareDistanceMetric);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

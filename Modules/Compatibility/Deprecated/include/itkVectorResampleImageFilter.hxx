@@ -72,7 +72,7 @@ VectorResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 {
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator not set");
+    itkExceptionMacro("Interpolator not set");
   }
 
   // Connect input image to interpolator
@@ -114,7 +114,6 @@ VectorResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
   PointType inputPoint;  // Coordinates of current input pixel
 
   using ContinuousIndexType = ContinuousIndex<TInterpolatorPrecisionType, ImageDimension>;
-  ContinuousIndexType inputIndex;
 
   // Doc says this only works for VectorImage, but Image implementation says otherwise...
   const unsigned int numberOfComponents = this->GetInput()->GetNumberOfComponentsPerPixel();
@@ -131,7 +130,8 @@ VectorResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
 
     // Compute corresponding input pixel position
     inputPoint = m_Transform->TransformPoint(outputPoint);
-    inputPtr->TransformPhysicalPointToContinuousIndex(inputPoint, inputIndex);
+    const ContinuousIndexType inputIndex =
+      inputPtr->template TransformPhysicalPointToContinuousIndex<TInterpolatorPrecisionType>(inputPoint);
 
     // Evaluate input at right position and copy to the output
     if (m_Interpolator->IsInsideBuffer(inputIndex))

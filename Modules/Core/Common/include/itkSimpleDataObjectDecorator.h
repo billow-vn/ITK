@@ -81,7 +81,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SimpleDataObjectDecorator, DataObject);
+  itkOverrideGetNameOfClassMacro(SimpleDataObjectDecorator);
 
   /** Set the contained object */
   virtual void
@@ -100,15 +100,15 @@ public:
   }
 
 protected:
-  SimpleDataObjectDecorator();
+  SimpleDataObjectDecorator() = default;
   ~SimpleDataObjectDecorator() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 protected:
 private:
-  ComponentType m_Component;
-  bool          m_Initialized;
+  ComponentType m_Component{};
+  bool          m_Initialized{};
 };
 } // end namespace itk
 

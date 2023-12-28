@@ -68,7 +68,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuadEdgeMeshEulerOperatorJoinVertexFunction, QuadEdgeMeshFunctionBase);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshEulerOperatorJoinVertexFunction);
 
   /** Type of QuadEdge with which to apply slicing. */
   using QEType = TQEType;
@@ -109,9 +109,9 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  PointIdentifier m_OldPointID;
+  PointIdentifier m_OldPointID{};
 
-  EdgeStatusType m_EdgeStatus;
+  EdgeStatusType m_EdgeStatus{};
 
   /**
    * \brief

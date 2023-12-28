@@ -133,7 +133,7 @@ public:
   using GeodesicActiveContourFunctionPointer = typename GeodesicActiveContourFunctionType::Pointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GeodesicActiveContourShapePriorLevelSetImageFilter, ShapePriorSegmentationLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(GeodesicActiveContourShapePriorLevelSetImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -172,7 +172,7 @@ protected:
   GenerateData() override;
 
 private:
-  GeodesicActiveContourFunctionPointer m_GeodesicActiveContourFunction;
+  GeodesicActiveContourFunctionPointer m_GeodesicActiveContourFunction{};
 };
 } // end namespace itk
 

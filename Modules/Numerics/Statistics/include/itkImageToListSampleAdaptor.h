@@ -67,7 +67,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToListSampleAdaptor, ListSample);
+  itkOverrideGetNameOfClassMacro(ImageToListSampleAdaptor);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -306,8 +306,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ImageConstPointer             m_Image;
-  mutable MeasurementVectorType m_MeasurementVectorInternal;
+  ImageConstPointer             m_Image{};
+  mutable MeasurementVectorType m_MeasurementVectorInternal{};
 
 }; // end of class ImageToListSampleAdaptor
 } // end of namespace Statistics

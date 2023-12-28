@@ -41,7 +41,7 @@ template <unsigned int VDimension>
 FlatStructuringElement<VDimension>
 FlatStructuringElement<VDimension>::Polygon(RadiusType radius, unsigned int lines)
 {
-  Self res = Self();
+  Self res{};
   GeneratePolygon(res, radius, lines);
   return res;
 }
@@ -854,7 +854,7 @@ FlatStructuringElement<VDimension>
 FlatStructuringElement<VDimension>::Box(RadiusType radius)
 {
   // this should work for any number of dimensions
-  Self res = Self();
+  Self res{};
 
   res.SetDecomposable(true);
   res.SetRadius(radius);
@@ -885,7 +885,7 @@ FlatStructuringElement<VDimension>
 FlatStructuringElement<VDimension>::Cross(RadiusType radius)
 {
   // this should work for any number of dimensions
-  Self res = Self();
+  Self res{};
 
   res.m_Decomposable = false;
   res.SetRadius(radius);
@@ -912,7 +912,7 @@ template <unsigned int VDimension>
 FlatStructuringElement<VDimension>
 FlatStructuringElement<VDimension>::Ball(RadiusType radius, bool radiusIsParametric)
 {
-  Self res = Self();
+  Self res{};
 
   res.SetRadius(radius);
   res.m_Decomposable = false;
@@ -989,8 +989,7 @@ FlatStructuringElement<VDimension>::Ball(RadiusType radius, bool radiusIsParamet
   {
     seed[i] = res.GetRadius(i);
   }
-  FloodFilledSpatialFunctionConditionalIterator<ImageType, EllipsoidType> sfi =
-    FloodFilledSpatialFunctionConditionalIterator<ImageType, EllipsoidType>(sourceImage, spatialFunction, seed);
+  FloodFilledSpatialFunctionConditionalIterator<ImageType, EllipsoidType> sfi(sourceImage, spatialFunction, seed);
   sfi.SetCenterInclusionStrategy();
 
   // Iterate through the entire image and set interior pixels to 1
@@ -1020,7 +1019,7 @@ FlatStructuringElement<VDimension>::Annulus(RadiusType   radius,
                                             bool         includeCenter,
                                             bool         radiusIsParametric)
 {
-  Self result = Self();
+  Self result{};
 
   result.SetRadius(radius);
   result.m_Decomposable = false;
@@ -1105,8 +1104,8 @@ FlatStructuringElement<VDimension>::Annulus(RadiusType   radius,
 
   // Define the iterators for each ellipsoid
   using FloodIteratorType = FloodFilledSpatialFunctionConditionalIterator<ImageType, EllipsoidType>;
-  FloodIteratorType itEllipsoidOuter = FloodIteratorType(kernelImage, ellipsoidOuter, seed);
-  FloodIteratorType itEllipsoidInner = FloodIteratorType(kernelImage, ellipsoidInner, seed);
+  FloodIteratorType itEllipsoidOuter(kernelImage, ellipsoidOuter, seed);
+  FloodIteratorType itEllipsoidInner(kernelImage, ellipsoidInner, seed);
   itEllipsoidOuter.SetCenterInclusionStrategy();
   itEllipsoidInner.SetCenterInclusionStrategy();
 
@@ -1163,14 +1162,16 @@ void
 FlatStructuringElement<VDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  if (m_Decomposable)
+
+  os << indent << "Decomposable: " << (m_Decomposable ? "On" : "Off") << std::endl;
+
+  os << "Lines: " << std::endl;
+  for (unsigned int i = 0; i < m_Lines.size(); ++i)
   {
-    os << indent << "SE decomposition:" << std::endl;
-    for (unsigned int i = 0; i < m_Lines.size(); ++i)
-    {
-      os << indent << m_Lines[i] << std::endl;
-    }
+    os << indent.GetNextIndent() << m_Lines[i] << std::endl;
   }
+
+  os << indent << "RadiusIsParametric: " << (m_RadiusIsParametric ? "On" : "Off") << std::endl;
 }
 
 template <unsigned int VDimension>
@@ -1267,7 +1268,7 @@ template <unsigned int VDimension>
 FlatStructuringElement<VDimension>
 FlatStructuringElement<VDimension>::FromImage(const typename FlatStructuringElement<VDimension>::ImageType * image)
 {
-  Self              res = Self();
+  Self              res{};
   RadiusType        size = res.CheckImageSize(image);
   Index<VDimension> centerIdx;
 
@@ -1281,7 +1282,7 @@ FlatStructuringElement<VDimension>::FromImage(const typename FlatStructuringElem
   for (unsigned int j = 0; j < res.Size(); ++j)
   {
     const PixelType & val = image->GetPixel(centerIdx + res.GetOffset(j));
-    // Neighborhood (therefore PixelType) in FlatStructringElement is bool
+    // Neighborhood (therefore PixelType) in FlatStructuringElement is bool
     if (val)
     {
       res[j] = true;

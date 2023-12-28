@@ -24,6 +24,9 @@
 #include "itkMetaDataObject.h"
 #include "itkTestingHashImageFilter.h"
 
+
+static_assert(sizeof(itk::MRCHeaderObject::Header) == 1024, " Ill defined MRC Header struct");
+
 namespace
 {
 
@@ -78,7 +81,7 @@ Test(const std::string & inFileName, const std::string & outFileName, const std:
 
         std::string tagvalue = entryvalue->GetMetaDataObjectValue();
 
-        std::cout << "(" << key << ") ";
+        std::cout << '(' << key << ") ";
         std::cout << " = " << tagvalue << std::endl;
       }
     }

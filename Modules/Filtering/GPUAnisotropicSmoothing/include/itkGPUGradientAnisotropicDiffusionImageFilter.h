@@ -54,6 +54,7 @@ public:
 
   /** Standard class type aliases. */
   using Self = GPUGradientAnisotropicDiffusionImageFilter;
+  using Superclass = GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter>;
   using GPUSuperclass = GPUAnisotropicDiffusionImageFilter<TInputImage, TOutputImage, TParentImageFilter>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -62,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time class information. */
-  itkTypeMacro(GPUGradientAnisotropicDiffusionImageFilter, GPUAnisotropicDiffusionImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUGradientAnisotropicDiffusionImageFilter);
 
   /** Extract information from the superclass. */
   using UpdateBufferType = typename GPUSuperclass::UpdateBufferType;

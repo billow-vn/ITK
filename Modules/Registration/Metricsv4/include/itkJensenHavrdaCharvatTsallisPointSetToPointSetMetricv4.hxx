@@ -23,7 +23,6 @@
 namespace itk
 {
 
-/** Constructor */
 template <typename TPointSet, class TInternalComputationValueType>
 JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>::
   JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4()
@@ -37,7 +36,6 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputa
   , m_Prefactor1(0.0)
 {}
 
-/** Initialize the metric */
 template <typename TPointSet, class TInternalComputationValueType>
 void
 JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>::Initialize()
@@ -54,7 +52,7 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputa
   this->m_MovingDensityFunction->SetEvaluationKNeighborhood(this->m_EvaluationKNeighborhood);
   this->m_MovingDensityFunction->SetInputPointSet(this->m_MovingTransformedPointSet);
 
-  // Pre-calc some values for efficiency
+  // Pre-calculate some values for efficiency
   this->m_TotalNumberOfPoints = static_cast<RealType>(
     this->m_NumberOfValidPoints + this->m_MovingDensityFunction->GetInputPointSet()->GetNumberOfPoints());
   this->m_Prefactor0 = -1.0 / static_cast<RealType>(this->m_TotalNumberOfPoints);
@@ -76,7 +74,6 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputa
   return value;
 }
 
-/** Get both the match Measure and the Derivative Measure  */
 template <typename TPointSet, class TInternalComputationValueType>
 void
 JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>::
@@ -202,19 +199,22 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputa
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Alpha: " << this->m_Alpha << std::endl;
-  os << indent << "Point set sigma: " << this->m_PointSetSigma << std::endl;
-  os << indent << "Evaluation k-neighborhood: " << this->m_EvaluationKNeighborhood << std::endl;
+  os << indent << "UseAnisotropicCovariances: " << (m_UseAnisotropicCovariances ? "On" : "Off") << std::endl;
 
-  if (this->m_UseAnisotropicCovariances)
-  {
-    os << indent << "Kernel sigma: " << this->m_KernelSigma << std::endl;
-    os << indent << "Covariance k-neighborhood: " << this->m_CovarianceKNeighborhood << std::endl;
-  }
-  else
-  {
-    os << indent << "Isotropic covariances are used." << std::endl;
-  }
+  os << indent << "PointSetSigma: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_PointSetSigma)
+     << std::endl;
+  os << indent << "KernelSigma: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_KernelSigma)
+     << std::endl;
+  os << indent << "CovarianceKNeighborhood: " << m_CovarianceKNeighborhood << std::endl;
+  os << indent << "EvaluationKNeighborhood: " << m_EvaluationKNeighborhood << std::endl;
+
+  os << indent << "Alpha: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_Alpha) << std::endl;
+
+  os << indent
+     << "TotalNumberOfPoints: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_TotalNumberOfPoints)
+     << std::endl;
+  os << indent << "Prefactor0: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_Prefactor0) << std::endl;
+  os << indent << "Prefactor1: " << static_cast<typename NumericTraits<RealType>::PrintType>(m_Prefactor1) << std::endl;
 }
 } // end namespace itk
 

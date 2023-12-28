@@ -27,7 +27,7 @@ namespace itk
  *
  * This class encapsulates a deformable transform of points from one
  * N-dimensional space to another N-dimensional space.
- * The deformation field is modelled using B-splines.
+ * The deformation field is modeled using B-splines.
  * A deformation is defined on a sparse regular grid of control points
  * \f$ \vec{\lambda}_j \f$ and is varied by defining a deformation
  * \f$ \vec{g}(\vec{\lambda}_j) \f$ of each control point.
@@ -115,7 +115,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineTransform, BSplineBaseTransform);
+  itkOverrideGetNameOfClassMacro(BSplineTransform);
 
   /** Dimension of the domain space. */
   static constexpr unsigned int SpaceDimension = VDimension;

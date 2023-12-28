@@ -5,8 +5,27 @@ trigger:
     include:
     - master
     - release*
+  paths:
+    exclude:
+    - '*.md'
+    - LICENSE
+    - NOTICE
+    - Documentation/*
+    - Utilities/Debugger/*
+    - Utilities/ITKv5Preparation/*
+    - Utilities/Maintenance/*
+pr:
+  paths:
+    exclude:
+    - '*.md'
+    - LICENSE
+    - NOTICE
+    - Documentation/*
+    - Utilities/Debugger/*
+    - Utilities/ITKv5Preparation/*
+    - Utilities/Maintenance/*
 variables:
-  ExternalDataVersion: 5.2.0
+  ExternalDataVersion: 5.3.0
 jobs:
 - job: macOS
   timeoutInMinutes: 0

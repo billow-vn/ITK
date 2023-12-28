@@ -61,7 +61,7 @@ public:
 };
 
 /**
- *\class MatrixOffsetTransformBase
+ * \class MatrixOffsetTransformBase
  * \brief Matrix and Offset transformation of a vector space (e.g. space coordinates)
  *
  * This class serves as a base class for transforms that can be expressed
@@ -117,7 +117,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(MatrixOffsetTransformBase, Transform);
+  itkOverrideGetNameOfClassMacro(MatrixOffsetTransformBase);
 
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
@@ -462,7 +462,7 @@ public:
    * This populates the parameters an affine transform such that
    * the transform is the inverse of self. If self is not invertible,
    * an exception is thrown.
-   * Note that by default the inverese transform is centered at
+   * Note that by default the inverse transform is centered at
    * the origin. If you need to compute the inverse centered at a point, p,
    *
      \code
@@ -590,8 +590,8 @@ private:
   OutputVectorType m_Translation{};
 
   /** To avoid recomputation of the inverse if not needed */
-  TimeStamp         m_MatrixMTime;
-  mutable TimeStamp m_InverseMatrixMTime;
+  TimeStamp         m_MatrixMTime{};
+  mutable TimeStamp m_InverseMatrixMTime{};
 }; // class MatrixOffsetTransformBase
 } // namespace itk
 

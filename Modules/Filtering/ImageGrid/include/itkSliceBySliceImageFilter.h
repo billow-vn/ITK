@@ -65,7 +65,7 @@ namespace itk
  * \author Gaetan Lehmann
  *
  * This class was taken from the Insight Journal paper:
- * https://insight-journal.org/browse/publication/133
+ * https://www.insight-journal.org/browse/publication/133
  *
  * \ingroup ITKImageGrid
  */
@@ -96,7 +96,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(SliceBySliceImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(SliceBySliceImageFilter);
 
   /** Image related type alias. */
   using InputImageType = TInputImage;
@@ -178,13 +178,13 @@ protected:
   GenerateInputRequestedRegion() override;
 
 private:
-  unsigned int m_Dimension;
+  unsigned int m_Dimension{};
 
-  typename InputFilterType::Pointer m_InputFilter;
+  typename InputFilterType::Pointer m_InputFilter{};
 
-  typename OutputFilterType::Pointer m_OutputFilter;
+  typename OutputFilterType::Pointer m_OutputFilter{};
 
-  IndexValueType m_SliceIndex;
+  IndexValueType m_SliceIndex{};
 };
 } // namespace itk
 

@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(HMinimaImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HMinimaImageFilter);
 
   /** Set/Get the height that a local maximum must be above the local
    * background (local contrast) in order to survive the
@@ -132,7 +132,7 @@ protected:
   GenerateData() override;
 
 private:
-  InputImagePixelType m_Height;
+  InputImagePixelType m_Height{};
   unsigned long       m_NumberOfIterationsUsed{ 1 };
   bool                m_FullyConnected{ false };
 }; // end of class

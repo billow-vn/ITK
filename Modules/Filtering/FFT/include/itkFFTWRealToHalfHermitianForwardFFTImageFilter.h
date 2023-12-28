@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class FFTWRealToHalfHermitianForwardFFTImageFilter
+ * \class FFTWRealToHalfHermitianForwardFFTImageFilter
  *
  * \brief FFTW-based forward Fast Fourier Transform.
  *
@@ -83,7 +83,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWRealToHalfHermitianForwardFFTImageFilter, RealToHalfHermitianForwardFFTImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTWRealToHalfHermitianForwardFFTImageFilter);
 
   /** Define the image dimension. */
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
@@ -129,9 +129,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  bool m_CanUseDestructiveAlgorithm;
+  bool m_CanUseDestructiveAlgorithm{};
 
-  int m_PlanRigor;
+  int m_PlanRigor{};
 };
 
 

@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(CurvesLevelSetFunction, SegmentationLevelSetFunction);
+  itkOverrideGetNameOfClassMacro(CurvesLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using PixelType = typename SuperSuperclass::PixelType;
@@ -153,7 +153,7 @@ private:
   OffsetValueType m_Center{ 0 };
 
   /** Stride length along the y-dimension. */
-  OffsetValueType m_xStride[ImageDimension];
+  OffsetValueType m_xStride[ImageDimension]{};
 
   double m_DerivativeSigma{ 1.0 };
 };

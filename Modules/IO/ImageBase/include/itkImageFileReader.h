@@ -86,7 +86,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageFileReader, ImageSource);
+  itkOverrideGetNameOfClassMacro(ImageFileReader);
 
   /** The size of the output image. */
   using SizeType = typename TOutputImage::SizeType;
@@ -126,7 +126,7 @@ protected:
 
   /** Convert a block of pixels from one type to another. */
   void
-  DoConvertBuffer(void * inputData, size_t numberOfPixels);
+  DoConvertBuffer(const void * inputData, size_t numberOfPixels);
 
   /** Test whether the given filename exist and it is readable, this
    * is intended to be called before attempting to use  ImageIO
@@ -153,19 +153,19 @@ protected:
   void
   GenerateData() override;
 
-  ImageIOBase::Pointer m_ImageIO;
+  ImageIOBase::Pointer m_ImageIO{};
 
-  bool m_UserSpecifiedImageIO; // keep track whether the
-                               // ImageIO is user specified
+  bool m_UserSpecifiedImageIO{}; // keep track whether the
+                                 // ImageIO is user specified
 
-  bool m_UseStreaming;
+  bool m_UseStreaming{};
 
 private:
-  std::string m_ExceptionMessage;
+  std::string m_ExceptionMessage{};
 
   // The region that the ImageIO class will return when we ask to
   // produce the requested region.
-  ImageIORegion m_ActualIORegion;
+  ImageIORegion m_ActualIORegion{};
 };
 
 

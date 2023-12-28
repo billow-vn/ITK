@@ -21,31 +21,25 @@
 namespace itk
 {
 template <typename TImage>
-typename VectorNeighborhoodInnerProduct<TImage>::PixelType
+auto
 VectorNeighborhoodInnerProduct<TImage>::operator()(const std::slice &                        s,
                                                    const ConstNeighborhoodIterator<TImage> & it,
-                                                   const OperatorType &                      op) const
+                                                   const OperatorType &                      op) const -> PixelType
 {
-  PixelType    sum;
-  unsigned int j;
+  PixelType sum{};
 
-  typename OperatorType::ConstIterator o_it;
-
-  for (j = 0; j < VectorDimension; ++j)
-  {
-    sum[j] = NumericTraits<ScalarValueType>::ZeroValue();
-  }
-
-  o_it = op.Begin();
+  typename OperatorType::ConstIterator       o_it = op.Begin();
   const typename OperatorType::ConstIterator op_end = op.End();
 
   const auto start = static_cast<unsigned int>(s.start());
   const auto stride = static_cast<unsigned int>(s.stride());
   for (unsigned int i = start; o_it < op_end; i += stride, ++o_it)
   {
-    for (j = 0; j < VectorDimension; ++j)
+    const auto & neighborPixel = it.GetPixel(i);
+
+    for (unsigned int j = 0; j < VectorDimension; ++j)
     {
-      sum[j] += *o_it * (it.GetPixel(i))[j];
+      sum[j] += *o_it * neighborPixel[j];
     }
   }
 
@@ -53,31 +47,25 @@ VectorNeighborhoodInnerProduct<TImage>::operator()(const std::slice &           
 }
 
 template <typename TImage>
-typename VectorNeighborhoodInnerProduct<TImage>::PixelType
+auto
 VectorNeighborhoodInnerProduct<TImage>::operator()(const std::slice &       s,
                                                    const NeighborhoodType & it,
-                                                   const OperatorType &     op) const
+                                                   const OperatorType &     op) const -> PixelType
 {
-  PixelType    sum;
-  unsigned int j;
+  PixelType sum{};
 
-  typename OperatorType::ConstIterator o_it;
-
-  for (j = 0; j < VectorDimension; ++j)
-  {
-    sum[j] = NumericTraits<ScalarValueType>::ZeroValue();
-  }
-
-  o_it = op.Begin();
+  typename OperatorType::ConstIterator       o_it = op.Begin();
   const typename OperatorType::ConstIterator op_end = op.End();
 
   const auto start = static_cast<unsigned int>(s.start());
   const auto stride = static_cast<unsigned int>(s.stride());
   for (unsigned int i = start; o_it < op_end; i += stride, ++o_it)
   {
-    for (j = 0; j < VectorDimension; ++j)
+    const auto & neighborPixel = it[i];
+
+    for (unsigned int j = 0; j < VectorDimension; ++j)
     {
-      sum[j] += *o_it * it[i][j];
+      sum[j] += *o_it * neighborPixel[j];
     }
   }
 

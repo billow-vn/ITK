@@ -50,8 +50,8 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Pr
 
   itkPrintSelfObjectMacro(MeshIO);
 
-  os << indent << "UserSpecifiedMeshIO flag: " << m_UserSpecifiedMeshIO << "\n";
-  os << indent << "FileName: " << m_FileName << "\n";
+  os << indent << "UserSpecifiedMeshIO flag: " << m_UserSpecifiedMeshIO << '\n';
+  os << indent << "FileName: " << m_FileName << '\n';
 }
 
 template <typename TOutputMesh, typename ConvertPointPixelTraits, typename ConvertCellPixelTraits>
@@ -124,8 +124,8 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
 {
   typename TOutputMesh::Pointer output = this->GetOutput();
 
-  SizeValueType        index = NumericTraits<SizeValueType>::ZeroValue();
-  OutputCellIdentifier id = NumericTraits<OutputCellIdentifier>::ZeroValue();
+  SizeValueType        index{};
+  OutputCellIdentifier id{};
   while (index < m_MeshIO->GetCellBufferSize())
   {
     auto type = static_cast<CellGeometryEnum>(static_cast<int>(buffer[index++]));
@@ -136,7 +136,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputVertexCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Vertex Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Vertex Cell with number of points = " << numberOfPoints);
         }
         OutputCellAutoPointer cell;
         auto *                vertexCell = new OutputVertexCellType;
@@ -155,7 +155,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints < 2)
         {
-          itkExceptionMacro(<< "Invalid Line Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Line Cell with number of points = " << numberOfPoints);
         }
         auto pointIDBuffer = static_cast<OutputPointIdentifier>(buffer[index++]);
         for (unsigned int jj = 1; jj < numberOfPoints; ++jj)
@@ -175,7 +175,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints < 2)
         {
-          itkExceptionMacro(<< "Invalid Line Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Line Cell with number of points = " << numberOfPoints);
         }
         auto *                polyLineCell = new OutputPolyLineCellType;
         OutputCellAutoPointer cell;
@@ -195,7 +195,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputTriangleCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Triangle Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Triangle Cell with number of points = " << numberOfPoints);
         }
 
         OutputCellAutoPointer cell;
@@ -214,7 +214,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputQuadrilateralCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Quadrilateral Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Quadrilateral Cell with number of points = " << numberOfPoints);
         }
 
         OutputCellAutoPointer cell;
@@ -261,7 +261,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputTetrahedronCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Tetrahedron Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Tetrahedron Cell with number of points = " << numberOfPoints);
         }
 
         OutputCellAutoPointer cell;
@@ -280,7 +280,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputHexahedronCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Hexahedron Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Hexahedron Cell with number of points = " << numberOfPoints);
         }
 
         OutputCellAutoPointer cell;
@@ -299,7 +299,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputQuadraticEdgeCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Quadratic edge Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Quadratic edge Cell with number of points = " << numberOfPoints);
         }
 
         OutputCellAutoPointer cell;
@@ -318,7 +318,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
         auto numberOfPoints = static_cast<unsigned int>(buffer[index++]);
         if (numberOfPoints != OutputQuadraticTriangleCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Quadratic triangle Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro("Invalid Quadratic triangle Cell with number of points = " << numberOfPoints);
         }
 
         OutputCellAutoPointer cell;
@@ -334,7 +334,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
       }
       default:
       {
-        itkExceptionMacro(<< "Unknown cell type");
+        itkExceptionMacro("Unknown cell type");
       }
     }
   }
@@ -355,7 +355,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
   {
     // the point pixel types don't match a type conversion needs to be
     // performed
-    itkDebugMacro(<< "Buffer conversion required from: "
+    itkDebugMacro("Buffer conversion required from: "
                   << m_MeshIO->GetComponentTypeAsString(m_MeshIO->GetPointPixelComponentType()) << " to: "
                   << m_MeshIO->GetComponentTypeAsString(
                        MeshIOBase::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::CType)
@@ -372,7 +372,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
   }
   else
   {
-    itkDebugMacro(<< "No buffer conversion required.");
+    itkDebugMacro("No buffer conversion required.");
     m_MeshIO->ReadPointData(static_cast<void *>(outputPointDataBuffer.get()));
   }
 
@@ -396,7 +396,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
   {
     // the cell pixel types don't match a type conversion needs to be
     // performed
-    itkDebugMacro(<< "Buffer conversion required from: "
+    itkDebugMacro("Buffer conversion required from: "
                   << m_MeshIO->GetComponentTypeAsString(m_MeshIO->GetCellPixelComponentType()) << " to: "
                   << m_MeshIO->GetComponentTypeAsString(
                        MeshIOBase::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::CType)
@@ -413,7 +413,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Re
   }
   else
   {
-    itkDebugMacro(<< "No buffer conversion required.");
+    itkDebugMacro("No buffer conversion required.");
     m_MeshIO->ReadCellData(static_cast<void *>(outputCellDataBuffer.get()));
   }
 
@@ -463,8 +463,8 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Ge
         auto * io = dynamic_cast<MeshIOBase *>(allobject.GetPointer());
         msg << "    " << io->GetNameOfClass() << std::endl;
       }
-      msg << "  You probably failed to set a file suffix, or" << std::endl;
-      msg << "  set the suffix to an unsupported type." << std::endl;
+      msg << "  You probably failed to set a file suffix, or" << std::endl
+          << "  set the suffix to an unsupported type." << std::endl;
     }
 
     MeshFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -579,7 +579,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Ge
       case IOComponentEnum::UNKNOWNCOMPONENTTYPE:
       default:
       {
-        itkExceptionMacro(<< "Unknown point component type");
+        itkExceptionMacro("Unknown point component type");
       }
     }
   }
@@ -657,7 +657,7 @@ MeshFileReader<TOutputMesh, ConvertPointPixelTraits, ConvertCellPixelTraits>::Ge
       case IOComponentEnum::UNKNOWNCOMPONENTTYPE:
       default:
       {
-        itkExceptionMacro(<< "Unknown cell component type");
+        itkExceptionMacro("Unknown cell component type");
       }
     }
   }

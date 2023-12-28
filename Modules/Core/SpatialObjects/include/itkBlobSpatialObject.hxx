@@ -23,7 +23,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 BlobSpatialObject<TDimension>::BlobSpatialObject()
 {
@@ -35,7 +35,6 @@ BlobSpatialObject<TDimension>::BlobSpatialObject()
   this->GetProperty().SetAlpha(1);
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 BlobSpatialObject<TDimension>::InternalClone() const
@@ -47,18 +46,9 @@ BlobSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
   return loPtr;
-}
-
-/** Print the blob spatial object */
-template <unsigned int TDimension>
-void
-BlobSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  os << indent << "BlobSpatialObject(" << this << ")" << std::endl;
-  Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace itk

@@ -76,11 +76,8 @@ itkBSplineDecompositionImageFilterTest(int argc, char * argv[])
   {
     std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv);
     std::cerr << " splineOrder";
-    std::cerr << " splinePoles(e.g. 0.12753,-0.48673,0.76439,\
-                 [0.12753,-0.48673,0.76439],\
-                 \"[0.12753 -0.48673 0.76439]\",\
-                 \"(0.12753 -0.48673 0.76439)\", or\
-                 \"0.12753 -0.48673 0.76439\")";
+    std::cerr << " splinePoles(e.g. 0.12753,-0.48673,0.76439, [0.12753,-0.48673,0.76439], \"[0.12753 -0.48673 "
+                 "0.76439]\", \"(0.12753 -0.48673 0.76439)\", or \"0.12753 -0.48673 0.76439\")";
     std::cerr << std::endl;
     return EXIT_FAILURE;
   }
@@ -113,16 +110,7 @@ itkBSplineDecompositionImageFilterTest(int argc, char * argv[])
 
   FilterType::SplinePolesVectorType expectedSplinePoles = ParseSplinePoles<FilterType>(argv[2]);
 
-  int expectedNumberOfPoles = expectedSplinePoles.size();
-  int resultNumberOfPoles = filter->GetNumberOfPoles();
-  if (!itk::Math::ExactlyEquals(expectedNumberOfPoles, resultNumberOfPoles))
-  {
-    std::cout << "Test failed!" << std::endl;
-    std::cout << "Error in GetNumberOfPoles()" << std::endl;
-    std::cout << "Expected: " << expectedNumberOfPoles << std::endl;
-    std::cout << " , but got: " << resultNumberOfPoles << std::endl;
-    return EXIT_FAILURE;
-  }
+  ITK_TEST_EXPECT_EQUAL(filter->GetNumberOfPoles(), expectedSplinePoles.size());
 
   FilterType::SplinePolesVectorType resultSplinePoles = filter->GetSplinePoles();
   double                            tolerance1 = 1e-10;
@@ -132,12 +120,12 @@ itkBSplineDecompositionImageFilterTest(int argc, char * argv[])
     FilterType::SplinePolesVectorType::value_type resultSplinePole = resultSplinePoles[i];
     if (!itk::Math::FloatAlmostEqual(expectedSplinePole, resultSplinePole, 10, tolerance1))
     {
-      std::cout.precision(static_cast<int>(itk::Math::abs(std::log10(tolerance1))));
-      std::cout << "Test failed!" << std::endl;
-      std::cout << "Error in GetSplinePoles() at index: [" << i << "]" << std::endl;
-      std::cout << "Expected: " << expectedSplinePole << std::endl;
-      std::cout << " , but got: " << resultSplinePole << std::endl;
-      std::cout << " Values differ by more than: " << tolerance1 << std::endl;
+      std::cerr.precision(static_cast<int>(itk::Math::abs(std::log10(tolerance1))));
+      std::cerr << "Test failed!" << std::endl;
+      std::cerr << "Error in GetSplinePoles() at index [" << i << ']' << std::endl;
+      std::cerr << "Expected value " << expectedSplinePole << std::endl;
+      std::cerr << " differs from " << resultSplinePole;
+      std::cerr << " by more than " << tolerance1 << std::endl;
       return EXIT_FAILURE;
     }
   }

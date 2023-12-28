@@ -19,6 +19,7 @@
 #define itkResourceProbe_h
 
 #include "itkMacro.h"
+#include "itkIndent.h"
 #include "itkIntTypes.h"
 
 #include <iostream> // For cout.
@@ -176,26 +177,27 @@ protected:
   void
   PrintJSONvar(std::ostream & os, const char * varName, T varValue, unsigned int indent = 4, bool comma = true);
 
-  /** Obsolete member function from ITK 4.8 - 4.13. Does not do anything anymore. */
-  itkLegacyMacro(virtual void GetSystemInformation());
+  /** Cause the object to print itself out. */
+  virtual void
+  Print(std::ostream & os, Indent indent) const;
 
 private:
-  ValueType m_StartValue;
-  ValueType m_TotalValue;
-  ValueType m_MinimumValue;
-  ValueType m_MaximumValue;
-  ValueType m_StandardDeviation;
-  ValueType m_StandardError;
+  ValueType m_StartValue{};
+  ValueType m_TotalValue{};
+  ValueType m_MinimumValue{};
+  ValueType m_MaximumValue{};
+  ValueType m_StandardDeviation{};
+  ValueType m_StandardError{};
 
-  CountType m_NumberOfStarts;
-  CountType m_NumberOfStops;
-  CountType m_NumberOfIteration;
+  CountType m_NumberOfStarts{};
+  CountType m_NumberOfStops{};
+  CountType m_NumberOfIteration{};
 
-  std::vector<ValueType> m_ProbeValueList;
+  std::vector<ValueType> m_ProbeValueList{};
 
-  std::string m_NameOfProbe;
-  std::string m_TypeString;
-  std::string m_UnitString;
+  std::string m_NameOfProbe{};
+  std::string m_TypeString{};
+  std::string m_UnitString{};
 
   static constexpr unsigned int tabwidth = 15;
 };

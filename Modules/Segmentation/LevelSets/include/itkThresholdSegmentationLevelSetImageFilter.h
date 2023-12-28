@@ -103,7 +103,7 @@ public:
   using ThresholdFunctionPointer = typename ThresholdFunctionType::Pointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ThresholdSegmentationLevelSetImageFilter, SegmentationLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(ThresholdSegmentationLevelSetImageFilter);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -207,7 +207,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ThresholdFunctionPointer m_ThresholdFunction;
+  ThresholdFunctionPointer m_ThresholdFunction{};
 };
 } // end namespace itk
 

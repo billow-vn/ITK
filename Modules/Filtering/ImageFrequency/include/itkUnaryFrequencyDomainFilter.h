@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class UnaryFrequencyDomainFilter
+ * \class UnaryFrequencyDomainFilter
  * \brief Performs a unary operation on a frequency domain image
  *
  * A frequency filtering functor needs to be supplied via one of SetFunctor() overloads.
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFrequencyDomainFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(UnaryFrequencyDomainFilter);
 
   /** Typedef to images */
   using ImageType = TImageType;
@@ -201,7 +201,7 @@ protected:
   DynamicThreadedGenerateData(const ImageRegionType & outputRegionForThread) override;
 
 private:
-  std::function<void(const ImageRegionType &)> m_DynamicThreadedGenerateDataFunction;
+  std::function<void(const ImageRegionType &)> m_DynamicThreadedGenerateDataFunction{};
 
   bool m_ActualXDimensionIsOdd{ false };
 };

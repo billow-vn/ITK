@@ -155,7 +155,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AutomaticTopologyMeshSource, MeshSource);
+  itkOverrideGetNameOfClassMacro(AutomaticTopologyMeshSource);
 
   /** Add the point p0 if it's not already there, and return its ID. */
   IdentifierType
@@ -412,9 +412,9 @@ private:
   using CellHashMap = std::
     unordered_map<Array<IdentifierType>, IdentifierType, IdentifierArrayHashFunction, IdentifierArrayEqualsFunction>;
 
-  PointHashMap m_PointsHashTable;
-  CellHashMap  m_CellsHashTable;
-  MeshPointer  m_OutputMesh; // Retained for convenience.
+  PointHashMap m_PointsHashTable{};
+  CellHashMap  m_CellsHashTable{};
+  MeshPointer  m_OutputMesh{}; // Retained for convenience.
 };
 } // end namespace itk
 

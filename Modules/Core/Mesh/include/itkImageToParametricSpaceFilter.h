@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToParametricSpaceFilter, ImageToMeshFilter);
+  itkOverrideGetNameOfClassMacro(ImageToParametricSpaceFilter);
 
   /** Some type alias associated with the input images. */
   using InputImageType = TInputImage;
@@ -107,7 +107,7 @@ protected:
 private:
   /** This variable defines if the indices of input image pixels
    * will be stored as Data at each one of the mesh points. */
-  bool m_ComputeIndices;
+  bool m_ComputeIndices{};
 };
 } // end namespace itk
 

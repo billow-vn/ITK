@@ -55,7 +55,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoadElement, Load);
+  itkOverrideGetNameOfClassMacro(LoadElement);
 
   /** CreateAnother method will clone the existing instance of this type,
    * including its internal member variables. */
@@ -116,7 +116,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
   void
                             AddNextElementInternal(const Element * e);
-  ElementPointersVectorType m_Element; /** pointers to element objects on which the
+  ElementPointersVectorType m_Element{}; /** pointers to element objects on which the
                                   load acts */
 };
 } // end namespace fem

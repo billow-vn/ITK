@@ -213,15 +213,13 @@ PasteImageFilter<TInputImage, TSourceImage, TOutputImage>::DynamicThreadedGenera
     {
       SourceImagePixelType sourceValue = this->GetConstant();
 
-      ImageScanlineIterator<TOutputImage> outputIt(outputPtr, destinationRegion);
-      while (!outputIt.IsAtEnd())
+      for (ImageScanlineIterator outputIt(outputPtr, destinationRegion); !outputIt.IsAtEnd(); outputIt.NextLine())
       {
         while (!outputIt.IsAtEndOfLine())
         {
           outputIt.Set(sourceValue);
           ++outputIt;
         }
-        outputIt.NextLine();
         progress.Completed(outputRegionForThread.GetSize()[0]);
       }
     }
@@ -258,15 +256,13 @@ PasteImageFilter<TInputImage, TSourceImage, TOutputImage>::DynamicThreadedGenera
     {
       SourceImagePixelType sourceValue = this->GetConstant();
 
-      ImageScanlineIterator<TOutputImage> outputIt(outputPtr, destinationRegion);
-      while (!outputIt.IsAtEnd())
+      for (ImageScanlineIterator outputIt(outputPtr, destinationRegion); !outputIt.IsAtEnd(); outputIt.NextLine())
       {
         while (!outputIt.IsAtEndOfLine())
         {
           outputIt.Set(sourceValue);
           ++outputIt;
         }
-        outputIt.NextLine();
         progress.Completed(outputRegionForThread.GetSize()[0]);
       }
     }
@@ -306,12 +302,11 @@ PasteImageFilter<TInputImage, TSourceImage, TOutputImage>::PrintSelf(std::ostrea
 {
   Superclass::PrintSelf(os, indent);
 
-
-  os << indent << "DestinationIndex: " << m_DestinationIndex << std::endl;
+  os << indent << "SourceRegion: " << m_SourceRegion << std::endl;
+  os << indent
+     << "DestinationIndex: " << static_cast<typename NumericTraits<InputImageIndexType>::PrintType>(m_DestinationIndex)
+     << std::endl;
   os << indent << "DestinationSkipAxes: " << m_DestinationSkipAxes << std::endl;
-  os << indent << "PresumedDestinationSize: " << this->GetPresumedDestinationSize() << std::endl;
-  os << indent << "SourceRegion:" << std::endl;
-  m_SourceRegion.Print(os, indent.GetNextIndent());
 }
 } // end namespace itk
 

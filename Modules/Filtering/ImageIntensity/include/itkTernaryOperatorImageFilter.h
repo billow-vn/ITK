@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class TernaryOperatorImageFilter
+ * \class TernaryOperatorImageFilter
  * \brief Return the value of input 2 if input 1 is false, and that of input 3 otherwise.
  *
  * \author Davis Vigneault
@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(TernaryOperatorImageFilter, TernaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(TernaryOperatorImageFilter);
 
 protected:
   TernaryOperatorImageFilter()

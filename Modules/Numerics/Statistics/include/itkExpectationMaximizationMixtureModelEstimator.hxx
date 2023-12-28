@@ -156,13 +156,13 @@ ExpectationMaximizationMixtureModelEstimator<TSample>::CalculateDensities()
 
   typename TSample::ConstIterator iter = m_Sample->Begin();
   typename TSample::ConstIterator last = m_Sample->End();
-  // Note: The data type of componentIndex shoub be unsigned int
+  // Note: The data type of componentIndex should be unsigned int
   //       because itk::Array only supports 'unsigned int' number of elements.
   unsigned int componentIndex;
 
   using FrequencyType = typename TSample::AbsoluteFrequencyType;
   FrequencyType                           frequency;
-  FrequencyType                           zeroFrequency = NumericTraits<FrequencyType>::ZeroValue();
+  FrequencyType                           zeroFrequency{};
   typename TSample::MeasurementVectorType mvector;
   double                                  density;
   double                                  densitySum;
@@ -249,7 +249,7 @@ ExpectationMaximizationMixtureModelEstimator<TSample>::CalculateExpectation() co
         else
         {
           // let's throw an exception
-          itkExceptionMacro(<< "temp is null");
+          itkExceptionMacro("temp is null");
         }
         // m_ComponentVector[componentIndex]->GetWeight(measurementVectorIndex) ) );
       }

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MinMaxCurvatureFlowFunction
+ * \class MinMaxCurvatureFlowFunction
  *
  * This class encapsulate the finite difference equation which drives a
  * min/max curvature flow denoising algorithm.
@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MinMaxCurvatureFlowFunction, CurvatureFlowFunction);
+  itkOverrideGetNameOfClassMacro(MinMaxCurvatureFlowFunction);
 
   /** Inherit some parameters from the superclass type. */
   using typename Superclass::ImageType;
@@ -87,8 +87,7 @@ public:
     return GetRadiusValueType();
   }
 
-  /** This method computes the solution update for each pixel that does not
-   * lie on a the data set boundary. */
+  /** Compute the solution update for each pixel that does not lie on a the data set boundary. */
   PixelType
   ComputeUpdate(const NeighborhoodType & it,
                 void *                   globalData,
@@ -99,7 +98,7 @@ protected:
   ~MinMaxCurvatureFlowFunction() override = default;
 
   using StencilOperatorType = Neighborhood<PixelType, Self::ImageDimension>;
-  StencilOperatorType m_StencilOperator;
+  StencilOperatorType m_StencilOperator{};
 
   /** Initialize the stencil operator to be an N-Dimensional sphere
    * of radius m_StencilRadius. */
@@ -107,7 +106,7 @@ protected:
   InitializeStencilOperator();
 
 private:
-  RadiusValueType m_StencilRadius;
+  RadiusValueType m_StencilRadius{};
 
   // To control overloaded versions of ComputeThreshold
   struct DispatchBase
@@ -116,8 +115,7 @@ private:
   struct Dispatch : public DispatchBase
   {};
 
-  /** This method computes the threshold by averaging the intensity
-   *  in direction perpendicular to the image gradient. */
+  /** Compute the threshold by averaging the intensity in direction perpendicular to the image gradient. */
   PixelType
   ComputeThreshold(const Dispatch<2> &, const NeighborhoodType & it) const;
 

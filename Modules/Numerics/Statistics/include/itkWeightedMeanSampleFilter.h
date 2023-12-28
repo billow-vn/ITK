@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class WeightedMeanSampleFilter
+ * \class WeightedMeanSampleFilter
  * \brief Given a sample where each measurement vector has
  * associated weight value, this filter computes the sample mean
  *
@@ -52,7 +52,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /**Standard Macros */
-  itkTypeMacro(WeightedMeanSampleFilter, MeanSampleFilter);
+  itkOverrideGetNameOfClassMacro(WeightedMeanSampleFilter);
   itkNewMacro(Self);
 
   /** Types derived from the base class */
@@ -97,8 +97,6 @@ public:
 protected:
   WeightedMeanSampleFilter();
   ~WeightedMeanSampleFilter() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   void
   GenerateData() override;

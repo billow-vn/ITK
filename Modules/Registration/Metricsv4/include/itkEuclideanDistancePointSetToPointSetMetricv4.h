@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EuclideanDistancePointSetToPointSetMetricv4, PointSetToPointSetMetricv4);
+  itkOverrideGetNameOfClassMacro(EuclideanDistancePointSetToPointSetMetricv4);
 
   /** Types transferred from the base class */
   using typename Superclass::MeasureType;
@@ -66,6 +66,20 @@ public:
   using typename Superclass::PointType;
   using typename Superclass::PixelType;
   using typename Superclass::PointIdentifier;
+
+  using RealType = MeasureType;
+  /**
+   * Distance threshold to be used to calculate the metric value.
+   * Only point pairs that have distance lesser than this threshold
+   * contribute to the metric. Default is -1 to include all the pairs.
+   */
+  itkSetMacro(DistanceThreshold, RealType);
+
+  /**
+   * Get the Distance threshold to be used to calculate the metric value
+   * Default = -1.
+   */
+  itkGetConstMacro(DistanceThreshold, RealType);
 
   /**
    * Calculates the local metric value for a single point.
@@ -95,6 +109,9 @@ protected:
   /** PrintSelf function */
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
+
+private:
+  RealType m_DistanceThreshold = -1.0;
 };
 } // end namespace itk
 

@@ -35,7 +35,7 @@ class ITKIOImageBase_EXPORT ImageFileWriterException : public ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro(ImageFileWriterException, ExceptionObject);
+  itkOverrideGetNameOfClassMacro(ImageFileWriterException);
 
   /** Constructor. */
   ImageFileWriterException(const char * file,
@@ -65,7 +65,7 @@ public:
  * data. If you wish to write data into a series of files (e.g., a
  * slice per file) use ImageSeriesWriter.
  *
- * A pluggable factory pattern is used that allows different kinds of writers
+ * A plugable factory pattern is used that allows different kinds of writers
  * to be registered (even at run time) without having to modify the
  * code in this class. You can either manually instantiate the ImageIO
  * object and associate it with the ImageFileWriter, or let the class
@@ -99,7 +99,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageFileWriter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageFileWriter);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;
@@ -222,9 +222,9 @@ protected:
   GenerateData() override;
 
 private:
-  std::string m_FileName;
+  std::string m_FileName{};
 
-  ImageIOBase::Pointer m_ImageIO;
+  ImageIOBase::Pointer m_ImageIO{};
   bool                 m_UserSpecifiedImageIO{ false };
 
   ImageIORegion m_PasteIORegion{ TInputImage::ImageDimension };
@@ -247,8 +247,7 @@ ITK_TEMPLATE_EXPORT void
 WriteImage(TImagePointer && image, const std::string & filename, bool compress = false)
 {
   using NonReferenceImagePointer = std::remove_reference_t<TImagePointer>;
-  static_assert(std::is_pointer<NonReferenceImagePointer>::value ||
-                  mpl::IsSmartPointer<NonReferenceImagePointer>::Value,
+  static_assert(std::is_pointer_v<NonReferenceImagePointer> || mpl::IsSmartPointer<NonReferenceImagePointer>::Value,
                 "WriteImage requires a raw pointer or SmartPointer.");
 
   using ImageType = std::remove_const_t<std::remove_reference_t<decltype(*image)>>;

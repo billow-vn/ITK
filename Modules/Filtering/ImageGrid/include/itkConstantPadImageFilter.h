@@ -61,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConstantPadImageFilter, PadImageFilter);
+  itkOverrideGetNameOfClassMacro(ConstantPadImageFilter);
 
   /** Typedef to describe the output image region type. */
   using typename Superclass::OutputImageRegionType;
@@ -113,7 +113,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ConstantBoundaryCondition<TInputImage, TOutputImage> m_InternalBoundaryCondition;
+  ConstantBoundaryCondition<TInputImage, TOutputImage> m_InternalBoundaryCondition{};
 };
 } // end namespace itk
 

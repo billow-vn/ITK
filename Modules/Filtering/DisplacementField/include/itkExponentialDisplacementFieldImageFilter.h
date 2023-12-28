@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExponentialDisplacementFieldImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ExponentialDisplacementFieldImageFilter);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;
@@ -157,15 +157,15 @@ protected:
   using AdderPointer = typename AdderType::Pointer;
 
 private:
-  bool         m_AutomaticNumberOfIterations;
-  unsigned int m_MaximumNumberOfIterations;
+  bool         m_AutomaticNumberOfIterations{};
+  unsigned int m_MaximumNumberOfIterations{};
 
-  bool m_ComputeInverse;
+  bool m_ComputeInverse{};
 
-  DivideByConstantPointer m_Divider;
-  CasterPointer           m_Caster;
-  VectorWarperPointer     m_Warper;
-  AdderPointer            m_Adder;
+  DivideByConstantPointer m_Divider{};
+  CasterPointer           m_Caster{};
+  VectorWarperPointer     m_Warper{};
+  AdderPointer            m_Adder{};
 };
 } // end namespace itk
 

@@ -27,18 +27,13 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TPolyline, typename TOutputImage>
 PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::PolylineMask2DImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
 }
 
-/**
- *
- */
 template <typename TInputImage, typename TPolyline, typename TOutputImage>
 void
 PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::SetInput1(const TInputImage * input)
@@ -48,9 +43,6 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::SetInput1(const
   this->ProcessObject::SetNthInput(0, const_cast<TInputImage *>(input));
 }
 
-/**
- *
- */
 template <typename TInputImage, typename TPolyline, typename TOutputImage>
 void
 PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::SetInput2(const TPolyline * input)
@@ -59,9 +51,6 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::SetInput2(const
   this->ProcessObject::SetNthInput(1, const_cast<TPolyline *>(input));
 }
 
-/**
- *
- */
 template <typename TInputImage, typename TPolyline, typename TOutputImage>
 void
 PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::GenerateData()
@@ -109,7 +98,7 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::GenerateData()
     const auto tmpIndex = outputImagePtr->TransformPhysicalPointToIndex(tmpVertex);
     if (!outputImagePtr->GetBufferedRegion().IsInside(tmpIndex))
     {
-      itkExceptionMacro(<< "Polyline vertex is out of bounds (Vertex,Index): " << tmpVertex << ", " << tmpIndex);
+      itkExceptionMacro("Polyline vertex is out of bounds (Vertex,Index): " << tmpVertex << ", " << tmpIndex);
     }
     ++piter;
   }
@@ -121,7 +110,7 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::GenerateData()
   bool pflag;
 
   /* define background, foreground pixel values and unlabeled pixel value */
-  PixelType zero_val = NumericTraits<PixelType>::ZeroValue();
+  PixelType zero_val{};
   auto      u_val = static_cast<PixelType>(0);
   auto      b_val = static_cast<PixelType>(2);
   auto      f_val = static_cast<PixelType>(255);
@@ -138,7 +127,7 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::GenerateData()
   ImageLineIteratorType imit(outputImagePtr, outputImagePtr->GetLargestPossibleRegion());
   imit.SetDirection(0);
 
-  itkDebugMacro(<< "Generating the mask defined by the polyline.....");
+  itkDebugMacro("Generating the mask defined by the polyline.....");
 
   while (piter != container->End())
   {
@@ -202,7 +191,6 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::GenerateData()
   }
 
   LineIteratorType it(outputImagePtr, startImageIndex, endImageIndex);
-  it.GoToBegin();
 
   while (!it.IsAtEnd())
   {
@@ -232,8 +220,6 @@ PolylineMask2DImageFilter<TInputImage, TPolyline, TOutputImage>::GenerateData()
   /* Mask the input image with the mask generated */
   InputImageConstIteratorType inputI(inputImagePtr, inputImagePtr->GetLargestPossibleRegion());
   OutputImageIteratorType     outputI(outputImagePtr, outputImagePtr->GetLargestPossibleRegion());
-  inputI.GoToBegin();
-  outputI.GoToBegin();
   while (!outputI.IsAtEnd())
   {
     if (outputI.Get() == f_val)

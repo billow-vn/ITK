@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MembershipSample
+ * \class MembershipSample
  * \brief Container for storing the instance-identifiers of other sample with
  * their associated class labels.
  *
@@ -66,7 +66,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Standard macros */
-  itkTypeMacro(MembershipSample, DataObject);
+  itkOverrideGetNameOfClassMacro(MembershipSample);
   itkNewMacro(Self);
 
   /** Typedefs for Measurement vector, measurement, Instance Identifier,
@@ -253,7 +253,7 @@ public:
 
   protected:
     // To ensure const-correctness these method must not be in the public API.
-    // The are purposly not implemented, since they should never be called.
+    // The are purposely not implemented, since they should never be called.
     Iterator();
     Iterator(const Self * sample);
     Iterator(const ConstIterator & it);
@@ -316,11 +316,11 @@ private:
   int
   GetInternalClassLabel(const ClassLabelType classLabel) const;
 
-  UniqueClassLabelsType           m_UniqueClassLabels;
-  ClassLabelHolderType            m_ClassLabelHolder;
-  std::vector<ClassSamplePointer> m_ClassSamples;
-  SampleConstPointer              m_Sample;
-  unsigned int                    m_NumberOfClasses;
+  UniqueClassLabelsType           m_UniqueClassLabels{};
+  ClassLabelHolderType            m_ClassLabelHolder{};
+  std::vector<ClassSamplePointer> m_ClassSamples{};
+  SampleConstPointer              m_Sample{};
+  unsigned int                    m_NumberOfClasses{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

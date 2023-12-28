@@ -89,11 +89,11 @@ LandmarkDisplacementFieldSource<TOutputImage>::PrepareKernelBaseSpline()
   m_KernelTransform->GetModifiableTargetLandmarks()->SetPoints(targets);
   m_KernelTransform->GetModifiableSourceLandmarks()->SetPoints(sources);
 
-  itkDebugMacro(<< "Before ComputeWMatrix() ");
+  itkDebugMacro("Before ComputeWMatrix() ");
 
   m_KernelTransform->ComputeWMatrix();
 
-  itkDebugMacro(<< "After ComputeWMatrix() ");
+  itkDebugMacro("After ComputeWMatrix() ");
 }
 
 /**
@@ -107,7 +107,7 @@ LandmarkDisplacementFieldSource<TOutputImage>::GenerateData()
   // the KernelBased spline.
   this->PrepareKernelBaseSpline();
 
-  itkDebugMacro(<< "Actually executing");
+  itkDebugMacro("Actually executing");
 
   // Get the output pointers
   OutputImageType * outputPtr = this->GetOutput();
@@ -119,8 +119,6 @@ LandmarkDisplacementFieldSource<TOutputImage>::GenerateData()
   using OutputIterator = ImageRegionIteratorWithIndex<TOutputImage>;
 
   OutputImageRegionType region = outputPtr->GetRequestedRegion();
-
-  OutputIterator outIt(outputPtr, region);
 
   // Define a few indices that will be used to translate from an input pixel
   // to an output pixel
@@ -134,10 +132,8 @@ LandmarkDisplacementFieldSource<TOutputImage>::GenerateData()
   // Support for progress methods/callbacks
   ProgressReporter progress(this, 0, region.GetNumberOfPixels(), 10);
 
-  outIt.GoToBegin();
-
   // Walk the output region
-  while (!outIt.IsAtEnd())
+  for (OutputIterator outIt(outputPtr, region); !outIt.IsAtEnd(); ++outIt)
   {
     // Determine the index of the current output pixel
     outputIndex = outIt.GetIndex();
@@ -153,7 +149,6 @@ LandmarkDisplacementFieldSource<TOutputImage>::GenerateData()
     }
 
     outIt.Set(displacement);
-    ++outIt;
     progress.CompletedPixel();
   }
 }

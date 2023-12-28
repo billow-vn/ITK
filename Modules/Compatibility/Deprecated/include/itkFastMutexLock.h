@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class FastMutexLock
+ * \class FastMutexLock
  * \brief Critical section locking class.
  *
  * FastMutexLock allows the locking of variables which are accessed
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information. */
-  itkTypeMacro(FastMutexLock, Object);
+  itkOverrideGetNameOfClassMacro(FastMutexLock);
 
   /** Lock the itkFastMutexLock. */
   void
@@ -92,7 +92,7 @@ protected:
   FastMutexLock() = default;
   ~FastMutexLock() override = default;
 
-  SimpleFastMutexLock m_SimpleFastMutexLock;
+  SimpleFastMutexLock m_SimpleFastMutexLock{};
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 };

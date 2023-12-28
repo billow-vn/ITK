@@ -37,7 +37,7 @@ namespace itk
  * operator[] method.
  *
  * References:
- * Modelled after a slice iterator proposed by Bjarne Stroustrup
+ * Modeled after a slice iterator proposed by Bjarne Stroustrup
  * in C++ Programming Language, Third Edition. Bjarne Stroustrup.  Addison
  * Wesley, Reading, MA. 1997.
  *
@@ -116,7 +116,7 @@ public:
    * is only true if the slice iterators have the same stride and
    * start location. */
   bool
-  operator<(const SliceIterator & orig)
+  operator<(const SliceIterator & orig) const
   {
     return this->m_Pos < orig.m_Pos && this->m_Slice.stride() == orig.m_Slice.stride() &&
            this->m_Slice.start() == orig.m_Slice.start();

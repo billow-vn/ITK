@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorLinearInterpolateNearestNeighborExtrapolateImageFunction, VectorInterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(VectorLinearInterpolateNearestNeighborExtrapolateImageFunction);
 
   /** InputImageType type alias support */
   using typename Superclass::InputImageType;
@@ -136,9 +136,6 @@ public:
 protected:
   VectorLinearInterpolateNearestNeighborExtrapolateImageFunction() = default;
   ~VectorLinearInterpolateNearestNeighborExtrapolateImageFunction() override = default;
-
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
   /** Number of neighbors used in the interpolation */

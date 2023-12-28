@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class OtsuThresholdCalculator
+ * \class OtsuThresholdCalculator
  * \brief Computes the Otsu's threshold for an image.
  *
  * This calculator computes the Otsu's threshold which separates an image
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OtsuThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(OtsuThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;
@@ -89,7 +89,7 @@ protected:
   GenerateData() override;
 
 private:
-  typename OtsuMultipleThresholdsCalculator<THistogram>::Pointer m_OtsuMultipleThresholdsCalculator;
+  typename OtsuMultipleThresholdsCalculator<THistogram>::Pointer m_OtsuMultipleThresholdsCalculator{};
 #if defined(ITKV4_COMPATIBILITY)
   bool m_ReturnBinMidpoint{ true };
 #else

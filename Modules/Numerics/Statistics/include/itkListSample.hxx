@@ -62,7 +62,7 @@ auto
 ListSample<TMeasurementVector>::GetTotalFrequency() const -> TotalAbsoluteFrequencyType
 {
   // Since the entries are unique, the total
-  // frequency is equal to the numbe of entries.
+  // frequency is equal to the number of entries.
   return this->Size();
 }
 
@@ -134,8 +134,7 @@ ListSample<TMeasurementVector>::PrintSelf(std::ostream & os, Indent indent) cons
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Internal Data Container: " << &m_InternalContainer << std::endl;
-  os << indent << "Number of samples: " << this->m_InternalContainer.size() << std::endl;
+  os << indent << "InternalContainer: " << &m_InternalContainer << std::endl;
 }
 } // end of namespace Statistics
 } // end of namespace itk

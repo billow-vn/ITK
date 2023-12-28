@@ -75,8 +75,8 @@ ExhaustiveOptimizerv4<TInternalComputationValueType>::StartWalking()
   // Make sure the scales have been set properly
   if (scales.size() != spaceDimension)
   {
-    itkExceptionMacro(<< "The size of Scales is " << scales.size() << ", but the NumberOfParameters is "
-                      << spaceDimension << ".");
+    itkExceptionMacro("The size of Scales is " << scales.size() << ", but the NumberOfParameters is " << spaceDimension
+                                               << '.');
   }
 
   // Setup first grid position.
@@ -129,8 +129,8 @@ ExhaustiveOptimizerv4<TInternalComputationValueType>::ResumeWalking()
     }
 
     m_StopConditionDescription.str("");
-    m_StopConditionDescription << this->GetNameOfClass() << ": Running. ";
-    m_StopConditionDescription << "@ index " << this->GetCurrentIndex() << " value is " << m_CurrentValue;
+    m_StopConditionDescription << this->GetNameOfClass() << ": Running. "
+                               << "@ index " << this->GetCurrentIndex() << " value is " << m_CurrentValue;
 
     this->InvokeEvent(IterationEvent());
     this->AdvanceOneStep();
@@ -159,7 +159,7 @@ ExhaustiveOptimizerv4<TInternalComputationValueType>::AdvanceOneStep()
   ParametersType newPosition(spaceDimension);
   this->IncrementIndex(newPosition);
 
-  itkDebugMacro(<< "new position = " << newPosition);
+  itkDebugMacro("new position = " << newPosition);
 
   this->m_Metric->SetParameters(newPosition);
 }
@@ -190,8 +190,8 @@ ExhaustiveOptimizerv4<TInternalComputationValueType>::IncrementIndex(ParametersT
   {
     m_Stop = true;
     m_StopConditionDescription.str("");
-    m_StopConditionDescription << this->GetNameOfClass() << ": ";
-    m_StopConditionDescription << "Completed sampling of parametric space of size " << spaceDimension;
+    m_StopConditionDescription << this->GetNameOfClass() << ": "
+                               << "Completed sampling of parametric space of size " << spaceDimension;
   }
 
   const ScalesType & scales = this->GetScales();
@@ -223,16 +223,24 @@ ExhaustiveOptimizerv4<TInternalComputationValueType>::PrintSelf(std::ostream & o
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "InitialPosition = " << m_InitialPosition << std::endl;
-  os << indent << "CurrentValue = " << m_CurrentValue << std::endl;
-  os << indent << "NumberOfSteps = " << m_NumberOfSteps << std::endl;
-  os << indent << "Stop = " << m_Stop << std::endl;
-  os << indent << "StepLength = " << m_StepLength << std::endl;
-  os << indent << "CurrentIndex = " << m_CurrentIndex << std::endl;
-  os << indent << "MaximumMetricValue = " << m_MaximumMetricValue << std::endl;
-  os << indent << "MinimumMetricValue = " << m_MinimumMetricValue << std::endl;
-  os << indent << "MinimumMetricValuePosition = " << m_MinimumMetricValuePosition << std::endl;
-  os << indent << "MaximumMetricValuePosition = " << m_MaximumMetricValuePosition << std::endl;
+  os << indent << "InitialPosition: " << m_InitialPosition << std::endl;
+  os << indent << "CurrentValue: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_CurrentValue)
+     << std::endl;
+  os << indent << "NumberOfSteps: " << static_cast<typename NumericTraits<StepsType>::PrintType>(m_NumberOfSteps)
+     << std::endl;
+  os << indent << "Stop: " << (m_Stop ? "On" : "Off") << std::endl;
+  os << indent << "StepLength: " << m_StepLength << std::endl;
+  os << indent << "CurrentIndex: " << m_CurrentIndex << std::endl;
+  os << indent
+     << "MaximumMetricValue: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_MaximumMetricValue)
+     << std::endl;
+  os << indent
+     << "MinimumMetricValue: " << static_cast<typename NumericTraits<MeasureType>::PrintType>(m_MinimumMetricValue)
+     << std::endl;
+  os << indent << "MinimumMetricValuePosition: " << m_MinimumMetricValuePosition << std::endl;
+  os << indent << "MaximumMetricValuePosition: " << m_MaximumMetricValuePosition << std::endl;
+
+  os << indent << "StopConditionDescription: " << m_StopConditionDescription.str() << std::endl;
 }
 } // end namespace itk
 

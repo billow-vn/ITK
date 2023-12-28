@@ -54,7 +54,7 @@ const typename FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::OutputPixelT
 FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::GetOutputValue(OutputMeshType * oMesh,
                                                                     const NodeType & iNode) const
 {
-  OutputPixelType outputValue = NumericTraits<OutputPixelType>::ZeroValue();
+  OutputPixelType outputValue{};
   oMesh->GetPointData(iNode, &outputValue);
   return outputValue;
 }
@@ -112,14 +112,14 @@ FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::UpdateNeighbors(OutputMeshT
       }
       else
       {
-        itkGenericExceptionMacro(<< "qe_it is nullptr");
+        itkGenericExceptionMacro("qe_it is nullptr");
       }
       qe_it = qe_it->GetOnext();
     } while (qe_it != qe);
   }
   else
   {
-    itkGenericExceptionMacro(<< "qe is nullptr");
+    itkGenericExceptionMacro("qe is nullptr");
   }
 }
 
@@ -130,12 +130,12 @@ FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::UpdateValue(OutputMeshType 
   OutputPointType p;
   oMesh->GetPoint(iNode, &p);
 
-  InputPixelType F = NumericTraits<InputPixelType>::ZeroValue();
+  InputPixelType F{};
   this->m_InputMesh->GetPointData(iNode, &F);
 
   if (F < 0.)
   {
-    itkGenericExceptionMacro(<< "F < 0.");
+    itkGenericExceptionMacro("F < 0.");
   }
 
   OutputQEType * qe = p.GetEdge();
@@ -195,7 +195,7 @@ FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::UpdateValue(OutputMeshType 
       else
       {
         // throw one exception here
-        itkGenericExceptionMacro(<< "qe_it2 is nullptr");
+        itkGenericExceptionMacro("qe_it2 is nullptr");
       }
     } while (qe_it != qe);
 
@@ -211,7 +211,7 @@ FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::UpdateValue(OutputMeshType 
   else
   {
     // throw one exception
-    itkGenericExceptionMacro(<< "qe_it is nullptr");
+    itkGenericExceptionMacro("qe_it is nullptr");
   }
 }
 
@@ -595,7 +595,7 @@ FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::InitializeOutput(OutputMesh
 
       if (cell->GetNumberOfPoints() != 3)
       {
-        itkGenericExceptionMacro(<< "Input mesh has non triangular faces");
+        itkGenericExceptionMacro("Input mesh has non triangular faces");
       }
       ++c_it;
     }
@@ -645,7 +645,7 @@ FastMarchingQuadEdgeMeshFilterBase<TInput, TOutput>::InitializeOutput(OutputMesh
     NodePairContainerConstIterator pointsIter = this->m_ForbiddenPoints->Begin();
     NodePairContainerConstIterator pointsEnd = this->m_ForbiddenPoints->End();
 
-    OutputPixelType zero = NumericTraits<OutputPixelType>::ZeroValue();
+    OutputPixelType zero{};
 
     while (pointsIter != pointsEnd)
     {

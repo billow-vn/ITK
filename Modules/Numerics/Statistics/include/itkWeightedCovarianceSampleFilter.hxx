@@ -31,17 +31,6 @@ WeightedCovarianceSampleFilter<TSample>::WeightedCovarianceSampleFilter()
 }
 
 template <typename TSample>
-void
-WeightedCovarianceSampleFilter<TSample>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-  // m_Weights
-  os << indent << "Weights: " << this->GetWeightsInput() << std::endl;
-  // m_WeightingFunction
-  os << indent << "WeightingFunction: " << this->GetWeightingFunctionInput() << std::endl;
-}
-
-template <typename TSample>
 inline void
 WeightedCovarianceSampleFilter<TSample>::GenerateData()
 {
@@ -103,9 +92,9 @@ WeightedCovarianceSampleFilter<TSample>::ComputeCovarianceMatrixWithWeightingFun
   MeasurementVectorRealType diff;
   NumericTraits<MeasurementVectorRealType>::SetLength(diff, measurementVectorSize);
 
-  WeightValueType totalWeight = NumericTraits<WeightValueType>::ZeroValue();
+  WeightValueType totalWeight{};
 
-  WeightValueType totalSquaredWeight = NumericTraits<WeightValueType>::ZeroValue();
+  WeightValueType totalSquaredWeight{};
 
   typename SampleType::ConstIterator       iter = input->Begin();
   const typename SampleType::ConstIterator end = input->End();
@@ -200,9 +189,9 @@ WeightedCovarianceSampleFilter<TSample>::ComputeCovarianceMatrixWithWeights()
   MeasurementVectorRealType diff;
   NumericTraits<MeasurementVectorRealType>::SetLength(diff, measurementVectorSize);
 
-  WeightValueType totalWeight = NumericTraits<WeightValueType>::ZeroValue();
+  WeightValueType totalWeight{};
 
-  WeightValueType totalSquaredWeight = NumericTraits<WeightValueType>::ZeroValue();
+  WeightValueType totalSquaredWeight{};
 
   typename SampleType::ConstIterator       iter = input->Begin();
   const typename SampleType::ConstIterator end = input->End();

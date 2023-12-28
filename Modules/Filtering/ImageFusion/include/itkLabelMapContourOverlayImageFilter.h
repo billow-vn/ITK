@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class LabelMapContourOverlayImageFilter
+ * \class LabelMapContourOverlayImageFilter
  * \brief Apply a colormap to the contours (outlines) of each object in a label map
  *        and superimpose it on top of the feature image.
  *
@@ -117,7 +117,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapContourOverlayImageFilter, LabelMapFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapContourOverlayImageFilter);
 
   /** Set the feature image */
   void
@@ -248,15 +248,15 @@ protected:
   }
 
 private:
-  double      m_Opacity;
-  int         m_Type;
-  int         m_Priority;
-  SizeType    m_ContourThickness;
-  SizeType    m_DilationRadius;
-  int         m_SliceDimension;
-  FunctorType m_Functor;
+  double      m_Opacity{};
+  int         m_Type{};
+  int         m_Priority{};
+  SizeType    m_ContourThickness{};
+  SizeType    m_DilationRadius{};
+  int         m_SliceDimension{};
+  FunctorType m_Functor{};
 
-  LabelMapPointer m_TempImage;
+  LabelMapPointer m_TempImage{};
 
 }; // end of class
 

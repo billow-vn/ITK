@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class NoiseBaseImageFilter
+ * \class NoiseBaseImageFilter
  *
  * \brief An Abstract Base class for Noise image filters
  *
@@ -50,7 +50,7 @@ public:
   using typename Superclass::OutputImagePixelType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NoiseBaseImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(NoiseBaseImageFilter);
 
   /** Set/Get the seed for random initialization  */
   itkGetConstMacro(Seed, uint32_t);

@@ -68,7 +68,7 @@ PNGImageIO::CanReadFile(const char * file)
 
   if (filename.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 
@@ -298,7 +298,7 @@ PNGImageIO::PrintSelf(std::ostream & os, Indent indent) const
     os << indent << "ColorPalette:" << std::endl;
     for (unsigned int i = 0; i < m_ColorPalette.size(); ++i)
     {
-      os << indent << "[" << i << "]" << itk::NumericTraits<PaletteType::value_type>::PrintType(m_ColorPalette[i])
+      os << indent << '[' << i << ']' << itk::NumericTraits<PaletteType::value_type>::PrintType(m_ColorPalette[i])
          << std::endl;
     }
   }
@@ -390,7 +390,9 @@ PNGImageIO::ReadImageInformation()
       png_get_PLTE(png_ptr, info_ptr, &palette, &num_entry);
 
       if (num_entry < 0)
+      {
         num_entry = 0;
+      }
       auto num_entryI(static_cast<size_t>(num_entry));
 
       m_ColorPalette.resize(num_entryI);
@@ -547,14 +549,14 @@ PNGImageIO::WriteSlice(const std::string & fileName, const void * const buffer)
   png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, (png_voidp) nullptr, nullptr, nullptr);
   if (!png_ptr)
   {
-    itkExceptionMacro(<< "Unable to write PNG file! png_create_write_struct failed.");
+    itkExceptionMacro("Unable to write PNG file! png_create_write_struct failed.");
   }
 
   png_infop info_ptr = png_create_info_struct(png_ptr);
   if (!info_ptr)
   {
     png_destroy_write_struct(&png_ptr, (png_infopp) nullptr);
-    itkExceptionMacro(<< "Unable to write PNG file!. png_create_info_struct failed.");
+    itkExceptionMacro("Unable to write PNG file!. png_create_info_struct failed.");
   }
 
   png_init_io(png_ptr, fp);

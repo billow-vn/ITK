@@ -24,7 +24,7 @@
 
 namespace itk
 {
-/**\class DTITubeSpatialObjectPointEnums
+/** \class DTITubeSpatialObjectPointEnums
  * \brief Contains all enum classes used by DTITubeSpatialObjectPoint class.
  * \ingroup ITKSpatialObjects
  */
@@ -32,7 +32,7 @@ class DTITubeSpatialObjectPointEnums
 {
 public:
   /**
-*\class DTITubeSpatialObjectPointField
+* \class DTITubeSpatialObjectPointField
 * \ingroup ITKSpatialObjects
 * If you add a type here you need to modify the TranslateEnumToChar
 to translate the enum to a string */
@@ -47,7 +47,7 @@ to translate the enum to a string */
 extern ITKSpatialObjects_EXPORT std::ostream &
                                 operator<<(std::ostream & out, const DTITubeSpatialObjectPointEnums::DTITubeSpatialObjectPointField value);
 /**
- *\class DTITubeSpatialObjectPoint
+ * \class DTITubeSpatialObjectPoint
  * \brief Point used for a tube definition
  *
  * This class contains all the functions necessary to define a point
@@ -117,33 +117,33 @@ public:
     return m_TensorMatrix;
   }
 
-  /** Copy one DTITubeSpatialObjectPoint to another */
+  /** Copy one DTITubeSpatialObjectPoint to another. */
   Self &
   operator=(const DTITubeSpatialObjectPoint & rhs);
 
-  /** Add a field to the point list */
+  /** Add a field to the point list. */
   void
   AddField(const char * name, float value);
 
-  /** Add a field to the point list */
+  /** Add a field to the point list. */
   void
   AddField(DTITubeSpatialObjectPointFieldEnum name, float value);
 
-  /** Set a field value */
+  /** Set a field value. */
   void
   SetField(DTITubeSpatialObjectPointFieldEnum name, float value);
 
   void
   SetField(const char * name, float value);
 
-  /** Return the list of extra fields */
+  /** Get the list of fields. */
   const FieldListType &
   GetFields() const
   {
     return m_Fields;
   }
 
-  /** Return the value of the specific fields */
+  /** Get the value of the specified field. */
   float
   GetField(const char * name) const;
 
@@ -151,14 +151,14 @@ public:
   GetField(DTITubeSpatialObjectPointFieldEnum name) const;
 
 protected:
-  float         m_TensorMatrix[6];
-  FieldListType m_Fields;
+  float         m_TensorMatrix[6]{};
+  FieldListType m_Fields{};
 
   /** Print the object */
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  /** Translate the enum to char */
+  /** Translate the enum to a string. */
   std::string
   TranslateEnumToChar(DTITubeSpatialObjectPointFieldEnum name) const;
 };

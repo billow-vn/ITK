@@ -142,7 +142,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(FiniteDifferenceImageFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(FiniteDifferenceImageFilter);
 
   /** Input and output image types. */
   using InputImageType = TInputImage;
@@ -233,7 +233,7 @@ protected:
   ~FiniteDifferenceImageFilter() override = default;
 
   /** State that the filter is in, i.e. UNINITIALIZED or INITIALIZED */
-  bool m_IsInitialized;
+  bool m_IsInitialized{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
@@ -348,18 +348,18 @@ protected:
   {}
 
   /** The maximum number of iterations this filter will run */
-  IdentifierType m_NumberOfIterations;
+  IdentifierType m_NumberOfIterations{};
 
   /** A counter for keeping track of the number of elapsed
       iterations during filtering. */
-  IdentifierType m_ElapsedIterations;
+  IdentifierType m_ElapsedIterations{};
 
   /** Indicates whether the filter automatically resets to UNINITIALIZED state
       after completing, or whether filter must be manually reset */
-  bool m_ManualReinitialization;
+  bool m_ManualReinitialization{};
 
-  double m_RMSChange;
-  double m_MaximumRMSError;
+  double m_RMSChange{};
+  double m_MaximumRMSError{};
 
 private:
   /** Initialize the values of the Function coefficients. This function will
@@ -370,10 +370,10 @@ private:
 
   /** Control whether derivatives use spacing of the input image in
       its calculation. */
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 
   /** The function that will be used in calculating updates for each pixel. */
-  typename FiniteDifferenceFunctionType::Pointer m_DifferenceFunction;
+  typename FiniteDifferenceFunctionType::Pointer m_DifferenceFunction{};
 };
 } // end namespace itk
 

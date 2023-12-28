@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class ShanbhagThresholdCalculator
+ * \class ShanbhagThresholdCalculator
  * \brief Computes the Shanbhag threshold for an image. Aka intermeans
  *
  * Shanhbag A.G. (1994) "Utilization of Information Measure as a Means of
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShanbhagThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(ShanbhagThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

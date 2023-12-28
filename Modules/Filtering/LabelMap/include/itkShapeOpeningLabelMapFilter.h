@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ShapeOpeningLabelMapFilter
+ * \class ShapeOpeningLabelMapFilter
  * \brief Remove objects according to the value of their shape attribute.
  *
  * ShapeOpeningLabelMapFilter removes objects in a label collection image
@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShapeOpeningLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ShapeOpeningLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -167,11 +167,11 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  double m_Lambda;
+  double m_Lambda{};
 
-  bool m_ReverseOrdering;
+  bool m_ReverseOrdering{};
 
-  AttributeType m_Attribute;
+  AttributeType m_Attribute{};
 }; // end of class
 } // end namespace itk
 

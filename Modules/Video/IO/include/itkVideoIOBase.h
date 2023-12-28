@@ -26,7 +26,7 @@
 
 namespace itk
 {
-/**\class VideoIOBaseEnums
+/** \class VideoIOBaseEnums
  * \brief This contains all enum classes used from VideoIOBase class.
  * \ingroup ITKVideoIO
  */
@@ -34,7 +34,7 @@ class VideoIOBaseEnums
 {
 public:
   /**
-   *\class ReadFrom
+   * \class ReadFrom
    * \ingroup ITKVideoIO
    * Enum used to define weather to read from a file or a camera */
   enum class ReadFrom : uint8_t
@@ -47,7 +47,7 @@ public:
 extern ITKVideoIO_EXPORT std::ostream &
                          operator<<(std::ostream & out, const VideoIOBaseEnums::ReadFrom value);
 /**
- *\class VideoIOBase
+ * \class VideoIOBase
  * \brief Abstract superclass defines video IO interface.
  *
  * VideoIOBase is a class that reads and/or writes video data
@@ -86,7 +86,7 @@ public:
   using CameraIDType = SizeValueType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VideoIOBase, Superclass);
+  itkOverrideGetNameOfClassMacro(VideoIOBase);
 
   /** Close the reader and writer and reset members */
   virtual void
@@ -161,10 +161,10 @@ protected:
   /** Member Variables */
   ReadFromEnum       m_ReadFrom{ ReadFromEnum::ReadFromFile };
   TemporalRatioType  m_FramesPerSecond{ 0.0 };
-  FrameOffsetType    m_FrameTotal;
-  FrameOffsetType    m_CurrentFrame;
-  FrameOffsetType    m_IFrameInterval;
-  FrameOffsetType    m_LastIFrame;
+  FrameOffsetType    m_FrameTotal{};
+  FrameOffsetType    m_CurrentFrame{};
+  FrameOffsetType    m_IFrameInterval{};
+  FrameOffsetType    m_LastIFrame{};
   TemporalRatioType  m_Ratio{ 0.0 };
   TemporalOffsetType m_PositionInMSec{ 0.0 };
   bool               m_WriterOpen{ false };

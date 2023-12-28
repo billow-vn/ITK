@@ -30,7 +30,7 @@ namespace Statistics
 {
 
 /**
- *\class ScalarImageToRunLengthMatrixFilter
+ * \class ScalarImageToRunLengthMatrixFilter
  *  \brief This class computes a run length matrix (histogram) from
  *  a given image and a mask image if provided. Run length matrices are
  *  used for image texture description.
@@ -59,7 +59,7 @@ namespace Statistics
  * bin as the original voxel.  The distance component is given by the distance
  * from the original to the final voxel satisfying our jumping criteria.
  *
- * The offset (or offsets) along which the co-occurences are calculated can be
+ * The offset (or offsets) along which the co-occurrences are calculated can be
  * set by the user. Traditionally, only one offset is used per histogram, and
  * offset components in the range [-1, 1] are used. For rotation-invariant
  * features averages of features computed over several histograms with different
@@ -96,7 +96,6 @@ namespace Statistics
  * IJ article: https://www.insight-journal.org/browse/publication/231
  *
  * \sa ScalarImageToRunLengthFeaturesFilter
- * \sa ScalarImageToRunLengthMatrixFilter
  * \sa HistogramToRunLengthFeaturesFilter
  *
  * \author: Nick Tustison
@@ -114,7 +113,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarImageToRunLengthMatrixFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ScalarImageToRunLengthMatrixFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -266,16 +265,16 @@ protected:
   NormalizeOffsetDirection(OffsetType & offset);
 
 private:
-  unsigned int m_NumberOfBinsPerAxis;
-  PixelType    m_Min;
-  PixelType    m_Max;
-  RealType     m_MinDistance;
-  RealType     m_MaxDistance;
-  PixelType    m_InsidePixelValue;
+  unsigned int m_NumberOfBinsPerAxis{};
+  PixelType    m_Min{};
+  PixelType    m_Max{};
+  RealType     m_MinDistance{};
+  RealType     m_MaxDistance{};
+  PixelType    m_InsidePixelValue{};
 
-  MeasurementVectorType m_LowerBound;
-  MeasurementVectorType m_UpperBound;
-  OffsetVectorPointer   m_Offsets;
+  MeasurementVectorType m_LowerBound{};
+  MeasurementVectorType m_UpperBound{};
+  OffsetVectorPointer   m_Offsets{};
 };
 } // end of namespace Statistics
 } // end of namespace itk

@@ -133,7 +133,6 @@ ImagePCAShapeModelEstimator<TInputImage, TOutputImage>::GenerateData()
   OutputIterator                       outIter(this->GetOutput(0), region);
 
   unsigned int i = 0;
-  outIter.GoToBegin();
   while (!outIter.IsAtEnd())
   {
     outIter.Set(static_cast<typename OutputImageType::PixelType>(m_Means[i]));
@@ -364,7 +363,7 @@ ImagePCAShapeModelEstimator<TInputImage, TOutputImage>::EstimatePCAShapeModelPar
   //
   // m_EigenVectors capture the principal shape variations
   // m_EigenValues capture the relative weight of each variation
-  // Multiply original image vetors with the eigenVectorsOfInnerProductMatrix
+  // Multiply original image vectors with the eigenVectorsOfInnerProductMatrix
   // to derive the principal shapes.
 
   m_EigenVectors.set_size(m_NumberOfPixels, m_NumberOfTrainingImages);

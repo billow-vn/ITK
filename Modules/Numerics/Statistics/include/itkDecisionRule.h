@@ -30,7 +30,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class DecisionRule
+ * \class DecisionRule
  *  \brief Base class for decision rules that return a class label
  *  based on a set of discriminant scores.
  *
@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(DecisionRule, Object);
+  itkOverrideGetNameOfClassMacro(DecisionRule);
 
   /** Types for discriminant values and vectors. */
   using MembershipValueType = double;

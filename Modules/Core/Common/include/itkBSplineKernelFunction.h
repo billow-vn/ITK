@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineKernelFunction, KernelFunctionBase);
+  itkOverrideGetNameOfClassMacro(BSplineKernelFunction);
 
   /** Enum of for spline order. */
   static constexpr unsigned int SplineOrder = VSplineOrder;
@@ -82,7 +82,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
-    os << indent << "Spline Order: " << SplineOrder << std::endl;
+
+    os << indent << "SplineOrder: " << SplineOrder << std::endl;
   }
 
 private:

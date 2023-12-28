@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class RegionConstrainedSubsampler
+ * \class RegionConstrainedSubsampler
  * \brief This an abstract subsampler that constrains subsamples
  * to be contained within a given image region.
  *
@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(RegionConstrainedSubsampler, SubsamplerBase);
+  itkOverrideGetNameOfClassMacro(RegionConstrainedSubsampler);
 
   /** type alias alias for the source data container */
   using SampleType = TSample;
@@ -128,10 +128,10 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  RegionType m_RegionConstraint;
-  bool       m_RegionConstraintInitialized;
-  RegionType m_SampleRegion;
-  bool       m_SampleRegionInitialized;
+  RegionType m_RegionConstraint{};
+  bool       m_RegionConstraintInitialized{};
+  RegionType m_SampleRegion{};
+  bool       m_SampleRegionInitialized{};
 }; // end of class RegionConstrainedSubsampler
 
 } // end of namespace Statistics

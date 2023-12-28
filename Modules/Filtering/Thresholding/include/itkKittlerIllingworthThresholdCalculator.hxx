@@ -20,7 +20,6 @@
 
 #include "itkProgressReporter.h"
 #include "itkMath.h"
-#include "itkMath.h"
 
 namespace itk
 {
@@ -103,7 +102,7 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
 
   if (histogram->GetTotalFrequency() == 0)
   {
-    itkExceptionMacro(<< "Histogram is empty");
+    itkExceptionMacro("Histogram is empty");
   }
   SizeValueType    size = histogram->GetSize(0);
   ProgressReporter progress(this, 0, size);
@@ -122,7 +121,7 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
 
   if (itk::Math::abs(As1) < itk::Math::eps)
   {
-    itkGenericExceptionMacro(<< "As1 = 0.");
+    itkGenericExceptionMacro("As1 = 0.");
   }
 
   while (threshold != Tprev)
@@ -134,13 +133,13 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
 
     if (itk::Math::abs(At) < itk::Math::eps)
     {
-      itkGenericExceptionMacro(<< "At = 0.");
+      itkGenericExceptionMacro("At = 0.");
     }
     double mu = Bt / At;
 
     if (itk::Math::abs(As1 - At) < itk::Math::eps)
     {
-      itkWarningMacro(<< "KittlerIllingworthThresholdCalculator: not converging: As1 = At = " << At);
+      itkWarningMacro("KittlerIllingworthThresholdCalculator: not converging: As1 = At = " << At);
       break;
     }
 
@@ -153,17 +152,17 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
 
     if (sigma2 < itk::Math::eps)
     {
-      itkGenericExceptionMacro(<< "sigma2 <= 0");
+      itkGenericExceptionMacro("sigma2 <= 0");
     }
 
     if (itk::Math::abs(tau2) < itk::Math::eps)
     {
-      itkGenericExceptionMacro(<< "tau2 = 0");
+      itkGenericExceptionMacro("tau2 = 0");
     }
 
     if (itk::Math::abs(p) < itk::Math::eps)
     {
-      itkGenericExceptionMacro(<< "p = 0");
+      itkGenericExceptionMacro("p = 0");
     }
 
     // The terms of the quadratic equation to be solved.
@@ -175,7 +174,7 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
     double sqterm = w1 * w1 - w0 * w2;
     if (sqterm < itk::Math::eps)
     {
-      itkWarningMacro(<< "KittlerIllingworthThresholdCalculator: not converging.");
+      itkWarningMacro("KittlerIllingworthThresholdCalculator: not converging.");
       break;
     }
 
@@ -194,7 +193,7 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
       }
       else
       {
-        itkExceptionMacro(<< "KittlerIllingworthThresholdCalculator failed to lookup threshold");
+        itkExceptionMacro("KittlerIllingworthThresholdCalculator failed to lookup threshold");
       }
     }
     else
@@ -206,7 +205,7 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
       // Not sure if this condition is really useful
       if (itk::Math::isnan(temp))
       {
-        itkWarningMacro(<< "KittlerIllingworthThresholdCalculator: NaN, not converging.");
+        itkWarningMacro("KittlerIllingworthThresholdCalculator: NaN, not converging.");
         threshold = Tprev;
         break;
       }
@@ -223,7 +222,7 @@ KittlerIllingworthThresholdCalculator<THistogram, TOutput>::GenerateData()
         }
         else
         {
-          itkExceptionMacro(<< "KittlerIllingworthThresholdCalculator failed to lookup threshold");
+          itkExceptionMacro("KittlerIllingworthThresholdCalculator failed to lookup threshold");
         }
       }
     }

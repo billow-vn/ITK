@@ -22,9 +22,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 AccumulateImageFilter<TInputImage, TOutputImage>::AccumulateImageFilter()
 {
@@ -135,17 +133,14 @@ AccumulateImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
   itkDebugMacro("GenerateInputRequestedRegion End");
 }
 
-/**
- * GenerateData Performs the accumulation
- */
 template <typename TInputImage, typename TOutputImage>
 void
 AccumulateImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
   if (m_AccumulateDimension >= TInputImage::ImageDimension)
   {
-    itkExceptionMacro(<< "AccumulateImageFilter: invalid dimension to accumulate. AccumulateDimension = "
-                      << m_AccumulateDimension);
+    itkExceptionMacro(
+      "AccumulateImageFilter: invalid dimension to accumulate. AccumulateDimension = " << m_AccumulateDimension);
   }
 
   using OutputPixelType = typename TOutputImage::PixelType;
@@ -175,7 +170,6 @@ AccumulateImageFilter<TInputImage, TOutputImage>::GenerateData()
       AccumulatedSize[i] = 1;
     }
   }
-  outputIter.GoToBegin();
   while (!outputIter.IsAtEnd())
   {
     typename TOutputImage::IndexType OutputIndex = outputIter.GetIndex();
@@ -193,7 +187,7 @@ AccumulateImageFilter<TInputImage, TOutputImage>::GenerateData()
     const typename TInputImage::RegionType AccumulatedRegion(AccumulatedIndex, AccumulatedSize);
     inputIterType                          inputIter(inputImage, AccumulatedRegion);
     inputIter.GoToBegin();
-    AccumulateType Value = NumericTraits<AccumulateType>::ZeroValue();
+    AccumulateType Value{};
     while (!inputIter.IsAtEnd())
     {
       Value += static_cast<AccumulateType>(inputIter.Get());

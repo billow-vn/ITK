@@ -107,7 +107,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ObjectToObjectMultiMetricv4, ObjectToObjectMetric);
+  itkOverrideGetNameOfClassMacro(ObjectToObjectMultiMetricv4);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -138,15 +138,15 @@ public:
   itkSetMacro(MetricWeights, WeightsArrayType);
   itkGetMacro(MetricWeights, WeightsArrayType);
 
-  /** Add a metric to the queue */
+  /** Add a metric to the queue. */
   void
   AddMetric(MetricType * metric);
 
-  /** Clear the metric queue */
+  /** Clear the metric queue. */
   void
   ClearMetricQueue();
 
-  /** Get the number of metrics */
+  /** Get the number of metrics. */
   SizeValueType
   GetNumberOfMetrics() const;
 
@@ -186,8 +186,8 @@ public:
   GetDerivative(DerivativeType &) const override;
 
   /** Evaluate the metric value and derivative.
-   * \note \param value will contain the value of only the *first* metric on return.
-   * \param derivative holds the combined derivative on return.
+   * \param firstValue will contain the value of only the *first* metric on return.
+   * \param derivativeResult holds the combined derivative on return.
    *
    * \sa GetValueArray
    * \sa GetWeightedValue */
@@ -227,9 +227,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  MetricQueueType              m_MetricQueue;
-  WeightsArrayType             m_MetricWeights;
-  mutable MetricValueArrayType m_MetricValueArray;
+  MetricQueueType              m_MetricQueue{};
+  WeightsArrayType             m_MetricWeights{};
+  mutable MetricValueArrayType m_MetricValueArray{};
 };
 
 } // end namespace itk

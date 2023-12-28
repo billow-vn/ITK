@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class IsoDataThresholdCalculator
+ * \class IsoDataThresholdCalculator
  * \brief Computes the IsoData threshold for an image. Aka intermeans
  *
  * Iterative procedure based on the isodata algorithm [T.W. Ridler, S. Calvard, Picture
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(IsoDataThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(IsoDataThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

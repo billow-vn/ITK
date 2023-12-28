@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class Hessian3DToVesselnessMeasureImageFilter
+ * \class Hessian3DToVesselnessMeasureImageFilter
  * \brief Line filter to provide a vesselness measure for tubular objects from the
  * hessian matrix.
  *
@@ -102,7 +102,7 @@ public:
     SymmetricEigenAnalysisFixedDimensionImageFilter<ImageDimension, InputImageType, EigenValueImageType>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(Hessian3DToVesselnessMeasureImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(Hessian3DToVesselnessMeasureImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -134,10 +134,10 @@ protected:
   GenerateData() override;
 
 private:
-  typename EigenAnalysisFilterType::Pointer m_SymmetricEigenValueFilter;
+  typename EigenAnalysisFilterType::Pointer m_SymmetricEigenValueFilter{};
 
-  double m_Alpha1;
-  double m_Alpha2;
+  double m_Alpha1{};
+  double m_Alpha2{};
 };
 } // end namespace itk
 

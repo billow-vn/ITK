@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class CoxDeBoorBSplineKernelFunction
+ * \class CoxDeBoorBSplineKernelFunction
  * \brief BSpline kernel used for density estimation and nonparametric
  *  regression.
  *
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CoxDeBoorBSplineKernelFunction, KernelFunctionBase);
+  itkOverrideGetNameOfClassMacro(CoxDeBoorBSplineKernelFunction);
 
   using VectorType = vnl_vector<TRealValueType>;
   using PolynomialType = vnl_real_polynomial;
@@ -134,8 +134,8 @@ private:
   PolynomialType
   CoxDeBoor(const unsigned short, const VectorType, const unsigned int, const unsigned int);
 
-  MatrixType   m_BSplineShapeFunctions;
-  unsigned int m_SplineOrder;
+  MatrixType   m_BSplineShapeFunctions{};
+  unsigned int m_SplineOrder{};
 };
 } // end namespace itk
 

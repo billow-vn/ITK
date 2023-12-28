@@ -22,7 +22,7 @@
 namespace itk
 {
 /**
- *\class ZeroCrossingImageFilter
+ * \class ZeroCrossingImageFilter
  * \brief This filter finds the closest pixel to the zero-crossings
  * (sign changes) in a signed itk::Image.
  *
@@ -89,7 +89,7 @@ public:
   using OutputImageRegionType = typename TOutputImage::RegionType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ZeroCrossingImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ZeroCrossingImageFilter);
 
   /** ImageDimension enumeration   */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -97,7 +97,7 @@ public:
 
   /** ZeroCrossingImageFilter needs a larger input requested
    * region than the output requested region (larger by the kernel
-   * size to do comparisons between the central pixel and ite neighbors).
+   * size to do comparisons between the central pixel and its neighbors).
    * Thus ZeroCrossingImageFilter needs to provide an implementation
    * for GenerateInputRequestedRegion() in order to inform the
    * pipeline execution model.
@@ -129,8 +129,8 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
 
   /**
    * ZeroCrossingImageFilter can be implemented as a multithreaded filter.

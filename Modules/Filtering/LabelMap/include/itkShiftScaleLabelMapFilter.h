@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class ShiftScaleLabelMapFilter
+ * \class ShiftScaleLabelMapFilter
  * \brief Shifts and scales a label map filter, giving the option to change the background value.
  *
  * This filter takes as input a label map and shift, scale and background values
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShiftScaleLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ShiftScaleLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -99,10 +99,10 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  double m_Shift;
-  double m_Scale;
+  double m_Shift{};
+  double m_Scale{};
 
-  bool m_ChangeBackgroundValue;
+  bool m_ChangeBackgroundValue{};
 }; // end of class
 } // end namespace itk
 

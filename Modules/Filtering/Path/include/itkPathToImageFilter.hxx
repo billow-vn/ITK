@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <typename TInputPath, typename TOutputImage>
 PathToImageFilter<TInputPath, TOutputImage>::PathToImageFilter()
 {
@@ -129,7 +129,6 @@ PathToImageFilter<TInputPath, TOutputImage>::GetSpacing() const
   return m_Spacing;
 }
 
-//----------------------------------------------------------------------------
 template <typename TInputPath, typename TOutputImage>
 void
 PathToImageFilter<TInputPath, TOutputImage>::SetOrigin(const double * origin)
@@ -181,15 +180,13 @@ PathToImageFilter<TInputPath, TOutputImage>::GetOrigin() const
   return m_Origin;
 }
 
-//----------------------------------------------------------------------------
-
 template <typename TInputPath, typename TOutputImage>
 void
 PathToImageFilter<TInputPath, TOutputImage>::GenerateData()
 {
   unsigned int i;
 
-  itkDebugMacro(<< "PathToImageFilter::GenerateData() called");
+  itkDebugMacro("PathToImageFilter::GenerateData() called");
 
   // Get the input and output pointers
   const InputPathType * InputPath = this->GetInput();
@@ -233,7 +230,7 @@ PathToImageFilter<TInputPath, TOutputImage>::GenerateData()
   }
   else
   {
-    itkExceptionMacro(<< "Currently, the user MUST specify an image size");
+    itkExceptionMacro("Currently, the user MUST specify an image size");
     // region.SetSize( size );
   }
   region.SetIndex({ { 0 } });
@@ -261,36 +258,38 @@ PathToImageFilter<TInputPath, TOutputImage>::GenerateData()
   }
   else
   {
-    itkExceptionMacro(<< "Currently, the user MUST specify an image spacing");
+    itkExceptionMacro("Currently, the user MUST specify an image spacing");
     // OutputImage->SetSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());
     //   // set spacing
   }
   OutputImage->SetOrigin(origin); //   and origin
   OutputImage->Allocate();        // allocate the image
 
-  ImageRegionIteratorWithIndex<OutputImageType> imageIt(OutputImage, region);
-  for (imageIt.GoToBegin(); !imageIt.IsAtEnd(); ++imageIt)
+  for (ImageRegionIteratorWithIndex<OutputImageType> imageIt(OutputImage, region); !imageIt.IsAtEnd(); ++imageIt)
   {
     imageIt.Set(m_BackgroundValue);
   }
 
-  PathIterator<OutputImageType, InputPathType> pathIt(OutputImage, InputPath);
-  for (pathIt.GoToBegin(); !pathIt.IsAtEnd(); ++pathIt)
+  for (PathIterator<OutputImageType, InputPathType> pathIt(OutputImage, InputPath); !pathIt.IsAtEnd(); ++pathIt)
   {
     pathIt.Set(m_PathValue);
   }
 
-  itkDebugMacro(<< "PathToImageFilter::GenerateData() finished");
-} // end update function
+  itkDebugMacro("PathToImageFilter::GenerateData() finished");
+}
 
 template <typename TInputPath, typename TOutputImage>
 void
 PathToImageFilter<TInputPath, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Size : " << m_Size << std::endl;
-  os << indent << "Path Value : " << m_PathValue << std::endl;
-  os << indent << "Background Value : " << m_BackgroundValue << std::endl;
+
+  os << indent << "Size: " << static_cast<typename NumericTraits<SizeType>::PrintType>(m_Size) << std::endl;
+  os << indent << "Spacing: " << m_Spacing << std::endl;
+  os << indent << "Origin: " << m_Origin << std::endl;
+  os << indent << "PathValue : " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_PathValue) << std::endl;
+  os << indent << "BackgroundValue : " << static_cast<typename NumericTraits<ValueType>::PrintType>(m_BackgroundValue)
+     << std::endl;
 }
 } // end namespace itk
 

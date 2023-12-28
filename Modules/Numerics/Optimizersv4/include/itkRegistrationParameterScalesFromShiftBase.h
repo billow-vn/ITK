@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class RegistrationParameterScalesFromShiftBase
+ * \class RegistrationParameterScalesFromShiftBase
  *  \brief Registration helper base class for estimating scales of
  * transform parameters from the maximum voxel shift caused by a parameter
  * change.
@@ -54,7 +54,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegistrationParameterScalesFromShiftBase, RegistrationParameterScalesEstimator);
+  itkOverrideGetNameOfClassMacro(RegistrationParameterScalesFromShiftBase);
 
   /** Type of scales */
   using typename Superclass::ScalesType;
@@ -106,7 +106,7 @@ protected:
 
 private:
   // A small variation of parameters
-  ParametersValueType m_SmallParameterVariation;
+  ParametersValueType m_SmallParameterVariation{};
 
 }; // class RegistrationParameterScalesFromShiftBase
 

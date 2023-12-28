@@ -32,7 +32,7 @@
 
 namespace itk
 {
-/**\class MRFImageFilterEnums
+/** \class MRFImageFilterEnums
  * \brief Contains all enum classes in MRFImageFilter class;
  * \ingroup ITKMarkovRandomFieldsClassifiers
  */
@@ -55,8 +55,8 @@ public:
 extern ITKMarkovRandomFieldsClassifiers_EXPORT std::ostream &
                                                operator<<(std::ostream & out, const MRFImageFilterEnums::MRFStop value);
 /**
- *\class MRFImageFilter
- * \brief Implementation of a labeller object that uses Markov Random Fields
+ * \class MRFImageFilter
+ * \brief Implementation of a labeler object that uses Markov Random Fields
  * to classify pixels in an image data set.
  *
  * This object classifies pixels based on a Markov Random Field (MRF)
@@ -68,7 +68,7 @@ extern ITKMarkovRandomFieldsClassifiers_EXPORT std::ostream &
  * on a MRF model) and finally, classifies each pixel to the class
  * which has the minimum distance to that pixel (taking the neighborhood
  * influence under consideration). DoNeighborhoodOperation is the function
- * that can be modified to achieve different falvors of MRF filters in
+ * that can be modified to achieve different flavors of MRF filters in
  * derived classes.
  *
  * The classified initial labeled image is needed. It is important
@@ -162,7 +162,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MRFImageFilter, Object);
+  itkOverrideGetNameOfClassMacro(MRFImageFilter);
 
   /** Type definition for the input image. */
   using InputImageType = TInputImage;
@@ -213,7 +213,7 @@ public:
   /** Labelled Image dimension */
   static constexpr unsigned int ClassifiedImageDimension = TClassifiedImage::ImageDimension;
 
-  /** Type definitions for classifier to be used for the MRF lavbelling. */
+  /** Type definitions for classifier to be used for the MRF labeling. */
   using ClassifierType = ImageClassifierBase<TInputImage, TClassifiedImage>;
 
   /** Size and value type alias support */
@@ -233,7 +233,7 @@ public:
 
   using InputImageFaceListIterator = typename InputImageFaceListType::iterator;
 
-  /** Labelled image neighborhood interator type alias */
+  /** Labeled image neighborhood iterator type alias */
   using LabelledImageNeighborhoodIterator = NeighborhoodIterator<TClassifiedImage>;
 
   using LabelledImageNeighborhoodRadiusType = typename LabelledImageNeighborhoodIterator::RadiusType;
@@ -244,7 +244,7 @@ public:
 
   using LabelledImageFaceListIterator = typename LabelledImageFaceListType::iterator;
 
-  /** Set the pointer to the classifer being used. */
+  /** Set the pointer to the classifier being used. */
   void
   SetClassifier(typename ClassifierType::Pointer ptrToClassifier);
 
@@ -267,13 +267,14 @@ public:
   itkSetMacro(SmoothingFactor, double);
   itkGetConstMacro(SmoothingFactor, double);
 
-  /** Set the neighborhood radius */
+  /** Set the neighborhood radius. */
   void
   SetNeighborhoodRadius(const NeighborhoodRadiusType &);
 
-  /** Sets the radius for the neighborhood, calculates size from the
-   * radius, and allocates storage. */
-
+  /** Sets the radius for the neighborhood.
+   *
+   * Calculates size from the radius, and allocates storage.
+   */
   void
   SetNeighborhoodRadius(const SizeValueType);
 
@@ -352,7 +353,7 @@ protected:
   virtual void
   ApplyMRFImageFilter();
 
-  /** Minimization algorithm to be used. */
+  /** Minimize the functional to be used. */
   virtual void
   MinimizeFunctional();
 
@@ -364,8 +365,8 @@ protected:
 
   /** Labelled status image neighborhood iterator type alias */
   using LabelStatusImageNeighborhoodIterator = NeighborhoodIterator<LabelStatusImageType>;
-  // Function implementing the neighborhood operation
 
+  /** Perform the MRF operation with each neighborhood. */
   virtual void
   DoNeighborhoodOperation(const InputImageNeighborhoodIterator & imageIter,
                           LabelledImageNeighborhoodIterator &    labelledIter,
@@ -394,13 +395,13 @@ private:
 
   using LabelStatusImageFaceListIterator = typename LabelStatusImageFaceListType::iterator;
 
-  InputImageNeighborhoodRadiusType       m_InputImageNeighborhoodRadius;
-  LabelledImageNeighborhoodRadiusType    m_LabelledImageNeighborhoodRadius;
-  LabelStatusImageNeighborhoodRadiusType m_LabelStatusImageNeighborhoodRadius;
+  InputImageNeighborhoodRadiusType       m_InputImageNeighborhoodRadius{};
+  LabelledImageNeighborhoodRadiusType    m_LabelledImageNeighborhoodRadius{};
+  LabelStatusImageNeighborhoodRadiusType m_LabelStatusImageNeighborhoodRadius{};
 
   unsigned int m_NumberOfClasses{ 0 };
   unsigned int m_MaximumNumberOfIterations{ 50 };
-  unsigned int m_KernelSize;
+  unsigned int m_KernelSize{};
 
   int          m_ErrorCounter{ 0 };
   int          m_NeighborhoodSize{ 27 };
@@ -408,19 +409,19 @@ private:
   int          m_TotalNumberOfPixelsInInputImage{ 1 };
   double       m_ErrorTolerance{ 0.2 };
   double       m_SmoothingFactor{ 1 };
-  double *     m_ClassProbability{ nullptr }; // Class liklihood
+  double *     m_ClassProbability{ nullptr }; // Class likelihood
   unsigned int m_NumberOfIterations{ 0 };
   MRFStopEnum  m_StopCondition{ MRFStopEnum::MaximumNumberOfIterations };
 
-  LabelStatusImagePointer m_LabelStatusImage;
+  LabelStatusImagePointer m_LabelStatusImage{};
 
-  std::vector<double> m_MRFNeighborhoodWeight;
-  std::vector<double> m_NeighborInfluence;
-  std::vector<double> m_MahalanobisDistance;
-  std::vector<double> m_DummyVector;
+  std::vector<double> m_MRFNeighborhoodWeight{};
+  std::vector<double> m_NeighborInfluence{};
+  std::vector<double> m_MahalanobisDistance{};
+  std::vector<double> m_DummyVector{};
 
   /** Pointer to the classifier to be used for the MRF labelling. */
-  typename ClassifierType::Pointer m_ClassifierPtr;
+  typename ClassifierType::Pointer m_ClassifierPtr{};
 
   /** Set/Get the weighting parameters (Beta Matrix). A default 3 x 3 x 3
    * matrix is provided. However, the user is allowed to override it
@@ -428,7 +429,7 @@ private:
   virtual void
   SetDefaultMRFNeighborhoodWeight();
 
-  // Function implementing the ICM algorithm to label the images
+  /** Apply the ICM algorithm to label the images. */
   void
   ApplyICMLabeller();
 }; // class MRFImageFilter

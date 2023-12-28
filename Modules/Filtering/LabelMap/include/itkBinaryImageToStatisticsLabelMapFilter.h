@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BinaryImageToStatisticsLabelMapFilter
+ * \class BinaryImageToStatisticsLabelMapFilter
  * \brief a convenient class to convert a binary image to a label map and valuate the statistics attributes at once
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
@@ -82,7 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryImageToStatisticsLabelMapFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryImageToStatisticsLabelMapFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -201,13 +201,13 @@ protected:
   GenerateData() override;
 
 private:
-  bool                 m_FullyConnected;
-  OutputImagePixelType m_OutputBackgroundValue;
-  InputImagePixelType  m_InputForegroundValue;
-  bool                 m_ComputeFeretDiameter;
-  bool                 m_ComputePerimeter;
-  unsigned int         m_NumberOfBins;
-  bool                 m_ComputeHistogram;
+  bool                 m_FullyConnected{};
+  OutputImagePixelType m_OutputBackgroundValue{};
+  InputImagePixelType  m_InputForegroundValue{};
+  bool                 m_ComputeFeretDiameter{};
+  bool                 m_ComputePerimeter{};
+  unsigned int         m_NumberOfBins{};
+  bool                 m_ComputeHistogram{};
 }; // end of class
 } // end namespace itk
 

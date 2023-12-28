@@ -31,7 +31,7 @@ namespace itk
 {
 
 /**
- *\class BinaryReconstructionByDilationImageFilter
+ * \class BinaryReconstructionByDilationImageFilter
  *
  * \brief binary reconstruction by dilation of an image
  *
@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryReconstructionByDilationImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryReconstructionByDilationImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -157,9 +157,9 @@ protected:
   GenerateData() override;
 
 private:
-  bool                 m_FullyConnected;
-  OutputImagePixelType m_BackgroundValue;
-  OutputImagePixelType m_ForegroundValue;
+  bool                 m_FullyConnected{};
+  OutputImagePixelType m_BackgroundValue{};
+  OutputImagePixelType m_ForegroundValue{};
 }; // end of class
 
 } // end namespace itk

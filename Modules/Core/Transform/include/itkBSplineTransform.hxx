@@ -72,7 +72,7 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::GetTransformTy
   if (VSplineOrder != 3)
   {
     std::ostringstream n;
-    n << Superclass::GetTransformTypeAsString() << "_" << VSplineOrder;
+    n << Superclass::GetTransformTypeAsString() << '_' << VSplineOrder;
     return n.str();
   }
   return Superclass::GetTransformTypeAsString();
@@ -421,8 +421,9 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::SetFixedParame
   }
   else
   {
-    itkExceptionMacro(<< "Mismatched between parameters size " << passedParameters.size()
-                      << " and the required number of fixed parameters " << this->m_FixedParameters.Size());
+    itkExceptionMacro("Mismatched between parameters size " << passedParameters.size()
+                                                            << " and the required number of fixed parameters "
+                                                            << this->m_FixedParameters.Size());
   }
 
 
@@ -443,7 +444,7 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::SetCoefficient
 
   if (!validArrayOfImages)
   {
-    itkExceptionMacro(<< "SetCoefficientImage() requires that an array of "
+    itkExceptionMacro("SetCoefficientImage() requires that an array of "
                       << "correctly sized images be supplied.");
   }
 
@@ -458,7 +459,7 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::SetCoefficient
     const SizeValueType numberOfPixels_j = images[j]->GetLargestPossibleRegion().GetNumberOfPixels();
     if (numberOfPixels_j * SpaceDimension != totalParameters)
     {
-      itkExceptionMacro(<< "SetCoefficientImage() has array of images that are "
+      itkExceptionMacro("SetCoefficientImage() has array of images that are "
                         << "not the correct size. " << numberOfPixels_j * SpaceDimension << " != " << totalParameters
                         << " for image at index " << j << "  \n"
                         << images[j]);
@@ -539,8 +540,7 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::TransformPoint
     this->m_WeightsFunction->Evaluate(index, weights, supportIndex);
 
     // For each dimension, correlate coefficient with weights
-    SizeType supportSize;
-    supportSize.Fill(SplineOrder + 1);
+    constexpr auto   supportSize = SizeType::Filled(SplineOrder + 1);
     const RegionType supportRegion(supportIndex, supportSize);
 
     outputPoint.Fill(NumericTraits<ScalarType>::ZeroValue());
@@ -606,8 +606,7 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::ComputeJacobia
   // Zero all components of jacobian
   jacobian.SetSize(SpaceDimension, this->GetNumberOfParameters());
   jacobian.Fill(0.0);
-  SizeType supportSize;
-  supportSize.Fill(SplineOrder + 1);
+  constexpr auto supportSize = SizeType::Filled(SplineOrder + 1);
 
   ContinuousIndexType index =
     this->m_CoefficientImages[0]
@@ -641,9 +640,9 @@ BSplineTransform<TParametersValueType, VDimension, VSplineOrder>::ComputeJacobia
 
   SizeValueType numberOfParametersPerDimension = this->GetNumberOfParametersPerDimension();
 
-  ImageRegionConstIteratorWithIndex<ImageType> It(this->m_CoefficientImages[0], supportRegion);
-  unsigned long                                counter = 0;
-  for (It.GoToBegin(); !It.IsAtEnd(); ++It)
+  unsigned long counter = 0;
+  for (ImageRegionConstIteratorWithIndex<ImageType> It(this->m_CoefficientImages[0], supportRegion); !It.IsAtEnd();
+       ++It)
   {
     typename ImageType::OffsetType currentIndex = It.GetIndex() - startIndex;
 

@@ -60,7 +60,7 @@ MergeLabelMapFilter<TImage>::GenerateData()
     }
     default:
     {
-      itkExceptionMacro(<< "No such method: " << this->m_Method);
+      itkExceptionMacro("No such method: " << this->m_Method);
     }
   }
 }
@@ -137,14 +137,14 @@ MergeLabelMapFilter<TImage>::MergeWithStrict()
         }
         else
         {
-          itkExceptionMacro(<< "Label "
-                            << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(newLo->GetLabel())
-                            << " from input " << i << " is already in use.");
+          itkExceptionMacro(
+            "Label " << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(newLo->GetLabel())
+                     << " from input " << i << " is already in use.");
         }
       }
       else
       {
-        itkGenericExceptionMacro(<< "Label "
+        itkGenericExceptionMacro("Label "
                                  << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(newLo->GetLabel())
                                  << " from input " << i << " is output background value.");
       }

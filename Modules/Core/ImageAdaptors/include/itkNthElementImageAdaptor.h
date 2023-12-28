@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class NthElementImageAdaptor
+ * \class NthElementImageAdaptor
  * \brief Presents an image as being composed of the N-th element of its pixels
  *
  * It assumes that the pixels are of container type and have in their API
@@ -67,7 +67,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NthElementImageAdaptor, ImageAdaptor);
+  itkOverrideGetNameOfClassMacro(NthElementImageAdaptor);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

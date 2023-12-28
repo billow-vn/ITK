@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class PolyLineParametricPath
+ * \class PolyLineParametricPath
  * \brief  Represent a path of line segments through ND Space
  *
  * This class is intended to represent parametric paths through an image, where
@@ -66,7 +66,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolyLineParametricPath, ParametricPath);
+  itkOverrideGetNameOfClassMacro(PolyLineParametricPath);
 
   /** Input type */
   using typename Superclass::InputType;
@@ -145,7 +145,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  VertexListPointer m_VertexList;
+  VertexListPointer m_VertexList{};
 };
 } // end namespace itk
 

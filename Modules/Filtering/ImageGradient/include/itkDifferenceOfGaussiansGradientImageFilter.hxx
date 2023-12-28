@@ -27,7 +27,7 @@ namespace itk
 template <typename TInputImage, typename TDataType>
 DifferenceOfGaussiansGradientImageFilter<TInputImage, TDataType>::DifferenceOfGaussiansGradientImageFilter()
 {
-  itkDebugMacro(<< "DifferenceOfGaussiansGradientImageFilter::DifferenceOfGaussiansGradientImageFilter() called");
+  itkDebugMacro("DifferenceOfGaussiansGradientImageFilter::DifferenceOfGaussiansGradientImageFilter() called");
 
   m_Width = 2;
 }
@@ -36,7 +36,7 @@ template <typename TInputImage, typename TDataType>
 void
 DifferenceOfGaussiansGradientImageFilter<TInputImage, TDataType>::GenerateData()
 {
-  itkDebugMacro(<< "DifferenceOfGaussiansGradientImageFilter::GenerateData() called");
+  itkDebugMacro("DifferenceOfGaussiansGradientImageFilter::GenerateData() called");
 
   // Get the input and output pointers
   typename Superclass::InputImagePointer  inputPtr = const_cast<TInputImage *>(this->GetInput(0));
@@ -65,7 +65,7 @@ DifferenceOfGaussiansGradientImageFilter<TInputImage, TDataType>::GenerateData()
   // Create an iterator that will walk the output region
   using OutputIterator = ImageRegionIterator<TOutputImage>;
 
-  OutputIterator outIt = OutputIterator(outputPtr, outputPtr->GetRequestedRegion());
+  OutputIterator outIt(outputPtr, outputPtr->GetRequestedRegion());
 
   // Define a few indices that will be used to translate from an input pixel
   // to an output pixel
@@ -128,7 +128,7 @@ DifferenceOfGaussiansGradientImageFilter<TInputImage, TDataType>::GenerateData()
     progress.CompletedPixel();
   }
 
-  itkDebugMacro(<< "DifferenceOfGaussiansGradientImageFilter::GenerateData() finished");
+  itkDebugMacro("DifferenceOfGaussiansGradientImageFilter::GenerateData() finished");
 }
 
 template <typename TInputImage, typename TDataType>

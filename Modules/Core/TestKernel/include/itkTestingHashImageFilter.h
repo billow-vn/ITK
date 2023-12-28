@@ -26,14 +26,14 @@ namespace itk
 {
 namespace Testing
 {
-/**\class HashImageFilterEnums
+/** \class HashImageFilterEnums
  * \brief Enum classes for HashImageFilter
  * \ingroup ITKTestKernel
  * */
 class HashImageFilterEnums
 {
 public:
-  /**\class HashFunction
+  /** \class HashFunction
    * \ingroup ITKTestKernel
    * Describes the hash function
    */
@@ -47,11 +47,11 @@ extern std::ostream &
 operator<<(std::ostream & out, HashImageFilterEnums::HashFunction value);
 
 /**
- *\class HashImageFilter
+ * \class HashImageFilter
  * \brief Generates a md5 hash string from an image.
  *
  * \note This class utilizes low level buffer pointer access, to work
- * with itk::Image and itk::VectorImage. It is modelled after the access
+ * with itk::Image and itk::VectorImage. It is modeled after the access
  * an ImageFileWriter provides to an ImageIO.
  *
  * \warning The output is not very useful. This filter is derived from
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(HashImageFilter, CastImageFilter);
+  itkOverrideGetNameOfClassMacro(HashImageFilter);
 
   /** Smart Pointer type to a DataObject. */
   using DataObjectPointer = typename DataObject::Pointer;

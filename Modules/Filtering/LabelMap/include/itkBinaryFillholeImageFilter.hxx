@@ -65,7 +65,7 @@ BinaryFillholeImageFilter<TInputImage>::GenerateData()
   // let choose a background value. Background value should not be given by user
   // because closing is extensive so no background pixels will be added
   // it is just needed for internal erosion filter and constant padder
-  InputImagePixelType backgroundValue = NumericTraits<InputImagePixelType>::ZeroValue();
+  InputImagePixelType backgroundValue{};
   if (m_ForegroundValue == backgroundValue)
   {
     // current background value is already used for foreground value
@@ -133,7 +133,7 @@ BinaryFillholeImageFilter<TInputImage>::PrintSelf(std::ostream & os, Indent inde
   os << indent
      << "ForegroundValue: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_ForegroundValue)
      << std::endl;
-  os << indent << "FullyConnected: " << m_FullyConnected << std::endl;
+  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
 }
 
 } // end namespace itk

@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class VotingBinaryImageFilter
+ * \class VotingBinaryImageFilter
  * \brief Applies a voting operation in a neighborhood of each pixel.
  *
  * \note Pixels which are not Foreground or Background will remain unchanged.
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VotingBinaryImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VotingBinaryImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;
@@ -136,13 +136,13 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
 private:
-  InputSizeType m_Radius;
+  InputSizeType m_Radius{};
 
-  InputPixelType m_ForegroundValue;
-  InputPixelType m_BackgroundValue;
+  InputPixelType m_ForegroundValue{};
+  InputPixelType m_BackgroundValue{};
 
-  unsigned int m_BirthThreshold;
-  unsigned int m_SurvivalThreshold;
+  unsigned int m_BirthThreshold{};
+  unsigned int m_SurvivalThreshold{};
 };
 } // end namespace itk
 

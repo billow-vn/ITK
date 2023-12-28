@@ -47,19 +47,16 @@ namespace itk
  *
  *      "Cell Tracking using Coupled Active Surfaces for Nuclei and Membranes"
  *      https://www.insight-journal.org/browse/publication/642
- *      https://hdl.handle.net/10380/3055
  *
  *  That is based on the papers:
  *
  *      "Level Set Segmentation: Active Contours without edge"
  *      https://www.insight-journal.org/browse/publication/322
- *      https://hdl.handle.net/1926/1532
  *
  *      and
  *
  *      "Level set segmentation using coupled active surfaces"
  *      https://www.insight-journal.org/browse/publication/323
- *      https://hdl.handle.net/1926/1533
  *
  *
  * \ingroup ITKReview
@@ -77,7 +74,7 @@ public:
 
   static constexpr unsigned int ImageDimension = TFeatureImage::ImageDimension;
 
-  itkTypeMacro(RegionBasedLevelSetFunctionSharedData, LightObject);
+  itkOverrideGetNameOfClassMacro(RegionBasedLevelSetFunctionSharedData);
 
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;
@@ -172,12 +169,12 @@ public:
   virtual void
   PopulateListImage() = 0;
 
-  LevelSetDataPointerVector m_LevelSetDataPointerVector;
+  LevelSetDataPointerVector m_LevelSetDataPointerVector{};
 
-  unsigned int     m_FunctionCount;
+  unsigned int     m_FunctionCount{};
   unsigned int     m_NumberOfNeighbors{ 6 };
-  ListImagePointer m_NearestNeighborListImage;
-  KdTreePointer    m_KdTree;
+  ListImagePointer m_NearestNeighborListImage{};
+  KdTreePointer    m_KdTree{};
 
 protected:
   RegionBasedLevelSetFunctionSharedData()

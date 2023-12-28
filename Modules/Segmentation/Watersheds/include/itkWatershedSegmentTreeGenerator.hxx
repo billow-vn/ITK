@@ -168,7 +168,7 @@ SegmentTreeGenerator<TScalar>::CompileMergeList(SegmentTableTypePointer segments
     if (segment_ptr->second.edge_list.empty())
     {
       // This is to defend against the referencing below.  This was causing an assert error.
-      itkGenericExceptionMacro(<< "CompileMergeList:: An unexpected and fatal error has occurred.");
+      itkGenericExceptionMacro("CompileMergeList:: An unexpected and fatal error has occurred.");
     }
     labelTO = m_MergedSegmentsTable->RecursiveLookup(segment_ptr->second.edge_list.front().label);
     while (labelTO == labelFROM) // Pop off any bogus merges with ourself
@@ -199,7 +199,7 @@ SegmentTreeGenerator<TScalar>::ExtractMergeHierarchy(SegmentTableTypePointer seg
 {
   typename SegmentTreeType::Pointer list = this->GetOutputSegmentTree();
 
-  // Merges segments up to a specified floodlevel according to the information
+  // Merges segments up to a specified flood level according to the information
   // in the heap of merges.  As two segments are merged, calculates a new
   // possible merges and pushes it onto the heap.
   auto threshold = static_cast<ScalarType>(m_FloodLevel * segments->GetMaximumDepth());
@@ -307,7 +307,7 @@ SegmentTreeGenerator<TScalar>::PruneMergeSegments(SegmentTableTypePointer       
 
   if (from_seg == 0 || to_seg == 0)
   {
-    itkGenericExceptionMacro(<< "PruneMergeSegments:: An unexpected and fatal error has occurred.");
+    itkGenericExceptionMacro("PruneMergeSegments:: An unexpected and fatal error has occurred.");
   }
 
   // Compare the minimum values.
@@ -444,8 +444,8 @@ SegmentTreeGenerator<TScalar>::MergeSegments(SegmentTableTypePointer           s
 
   if (from_seg == nullptr || to_seg == nullptr)
   {
-    itkGenericExceptionMacro(<< "itk::watershed::SegmentTreeGenerator::MergeSegments:: An unexpected and fatal error "
-                                "has occurred. This is probably the result of overthresholding of the input image.");
+    itkGenericExceptionMacro("itk::watershed::SegmentTreeGenerator::MergeSegments:: An unexpected and fatal error "
+                             "has occurred. This is probably the result of overthresholding of the input image.");
   }
 
   // Compare the minimum values.

@@ -28,7 +28,7 @@ namespace itk
 {
 /* Necessary forward declaration see below for definition */
 /**
- *\class LBFGSOptimizerBaseHelperv4
+ * \class LBFGSOptimizerBaseHelperv4
  * \brief Wrapper helper around vnl optimizer.
  *
  * This class is used to translate iteration events, etc, from
@@ -41,7 +41,7 @@ template <typename TInternalVnlOptimizerType>
 class ITK_TEMPLATE_EXPORT LBFGSOptimizerBaseHelperv4;
 
 /**
- *\class LBFGSOptimizerBasev4
+ * \class LBFGSOptimizerBasev4
  * \brief Abstract base for vnl lbfgs algorithm optimizers in ITKv4 registration framework.
  *
  * \note The StopConditionDescription returned by this class is directly from the vnl
@@ -85,7 +85,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LBFGSOptimizerBasev4, SingleValuedNonLinearVnlOptimizerv4);
+  itkOverrideGetNameOfClassMacro(LBFGSOptimizerBasev4);
 
   using MetricType = Superclass::MetricType;
   using ParametersType = Superclass::ParametersType;
@@ -152,9 +152,9 @@ protected:
   bool m_OptimizerInitialized{ false };
 
   using InternalOptimizerAutoPointer = std::unique_ptr<InternalOptimizerType>;
-  InternalOptimizerAutoPointer m_VnlOptimizer;
+  InternalOptimizerAutoPointer m_VnlOptimizer{};
 
-  mutable std::ostringstream m_StopConditionDescription;
+  mutable std::ostringstream m_StopConditionDescription{};
 
   bool         m_Trace{ false };
   unsigned int m_MaximumNumberOfFunctionEvaluations{ 2000 };

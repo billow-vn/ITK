@@ -24,6 +24,7 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkOpenCVVideoIOFactory.h"
 #include "itkOpenCVTestHelper.h"
+#include "itkTestingMacros.h"
 
 #if defined(CV_VERSION_EPOCH) // OpenCV 2.4.x
 #  include "highgui.h"
@@ -37,9 +38,7 @@
 #endif
 
 
-//-----------------------------------------------------------------------------
 // Convert the data in the IplImage to the templated type
-//
 template <typename TPixelType>
 IplImage *
 ConvertIplImageDataType(IplImage * in)
@@ -81,10 +80,7 @@ ConvertIplImageDataType(IplImage * in)
   return out;
 }
 
-
-//-----------------------------------------------------------------------------
 // Templated test function to do the heavy lifting for scalar case
-//
 template <typename TPixelType, unsigned int VDimension>
 int
 itkOpenCVImageBridgeTestTemplatedScalar(char * argv)
@@ -98,9 +94,7 @@ itkOpenCVImageBridgeTestTemplatedScalar(char * argv)
 
   itk::ObjectFactoryBase::RegisterFactory(itk::OpenCVVideoIOFactory::New());
 
-  //
   // Read the image directly
-  //
   auto reader = ReaderType::New();
   reader->SetFileName(argv);
 
@@ -207,9 +201,7 @@ itkOpenCVImageBridgeTestTemplatedScalar(char * argv)
     return EXIT_FAILURE;
   }
 
-  //
   // Clean up and return successfully
-  //
   cvReleaseImage(&dataConvertedInIpl);
   cvReleaseImage(&inIpl);
   cvReleaseImage(&outIpl);
@@ -232,29 +224,21 @@ itkRunScalarTest(char * argv)
   return EXIT_SUCCESS;
 }
 
-
-//-----------------------------------------------------------------------------
-// Main test
-//
 int
 itkOpenCVImageBridgeGrayScaleTest(int argc, char * argv[])
 {
-  //
-  // Check arguments
-  //
+
   if (argc != 4)
   {
-    std::cerr << "Usage: " << argv[0] << "scalar_image1 scalar_image2 scalar_image3" << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv);
+    std::cerr << " scalarImage1 scalarImage2 scalarImage3" << std::endl;
     return EXIT_FAILURE;
   }
 
-  //
   // Test for scalar types
-  //
   // Note: We don't test signed char because ITK seems to have trouble reading
-  //       images with char pixels.
-  //
-  std::cout << "\n================================" << std::endl;
+  // images with char pixels.
   if (itkRunScalarTest<unsigned char>(argv[1]) == EXIT_FAILURE)
   {
     return EXIT_FAILURE;
@@ -276,8 +260,7 @@ itkOpenCVImageBridgeGrayScaleTest(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  std::cout << "\n================================" << std::endl;
-  std::cout << "scalar 513x512" << std::endl;
+  std::cout << "Scalar 513x512" << std::endl;
   if (itkRunScalarTest<unsigned char>(argv[2]) == EXIT_FAILURE)
   {
     return EXIT_FAILURE;
@@ -299,8 +282,7 @@ itkOpenCVImageBridgeGrayScaleTest(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  std::cout << "\n================================" << std::endl;
-  std::cout << "two-byte pixel image" << std::endl;
+  std::cout << "Two-byte pixel image" << std::endl;
   if (itkRunScalarTest<unsigned short>(argv[3]) == EXIT_FAILURE)
   {
     return EXIT_FAILURE;
@@ -314,5 +296,7 @@ itkOpenCVImageBridgeGrayScaleTest(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

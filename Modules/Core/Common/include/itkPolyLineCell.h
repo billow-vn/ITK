@@ -48,7 +48,7 @@ public:
   itkCellInheritedTypedefs(TCellInterface);
 
   /** Standard part of every itk Object. */
-  itkTypeMacro(PolyLineCell, CellInterface);
+  itkOverrideGetNameOfClassMacro(PolyLineCell);
 
   /** The type of boundary for this lines's vertices. */
   using VertexType = VertexCell<TCellInterface>;
@@ -136,7 +136,7 @@ public:
 
 protected:
   /** For storing the points needed for a line segment. */
-  std::vector<PointIdentifier> m_PointIds;
+  std::vector<PointIdentifier> m_PointIds{};
 };
 } // end namespace itk
 

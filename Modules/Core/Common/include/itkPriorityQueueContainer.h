@@ -111,11 +111,11 @@ public:
   using ElementPriorityType = TElementPriority;
   using ElementIdentifierType = TElementIdentifier;
 
-  ElementType           m_Element;
-  ElementPriorityType   m_Priority;
-  ElementIdentifierType m_Location;
+  ElementType           m_Element{};
+  ElementPriorityType   m_Priority{};
+  ElementIdentifierType m_Location{ Superclass::m_ElementNotFound };
 
-  MinPriorityQueueElementWrapper();
+  MinPriorityQueueElementWrapper() = default;
 
   MinPriorityQueueElementWrapper(ElementType element, ElementPriorityType priority);
 
@@ -162,7 +162,7 @@ public:
   using ElementIdentifierType = TElementIdentifier;
 
   using Superclass = MinPriorityQueueElementWrapper<ElementType, ElementPriorityType, ElementIdentifierType>;
-  MaxPriorityQueueElementWrapper();
+  MaxPriorityQueueElementWrapper() = default;
 
   MaxPriorityQueueElementWrapper(ElementType element, ElementPriorityType priority);
 
@@ -205,7 +205,7 @@ public:
   static const ElementIdentifierType m_ElementNotFound;
 
 public:
-  PriorityQueueContainer();
+  PriorityQueueContainer() = default;
   ~PriorityQueueContainer() override = default;
 
   template <typename TInputIterator>
@@ -222,7 +222,7 @@ public:
 
 public:
   itkNewMacro(Self);
-  itkTypeMacro(PriorityQueueContainer, VectorContainer);
+  itkOverrideGetNameOfClassMacro(PriorityQueueContainer);
 
   // void Reserve( ElementIdentifier NbOfElementsToStore )
   //{ this->Superclass->Reserve( NbOfElementsToStore ); }
@@ -254,7 +254,7 @@ public:
 
 protected:
   // One instance of the interface to deal with the functions calls
-  ElementInterfaceType m_Interface;
+  ElementInterfaceType m_Interface{};
 
   inline ElementWrapperType &
   GetElementAtLocation(const ElementIdentifierType & identifier)

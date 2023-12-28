@@ -47,19 +47,16 @@ namespace itk
  *
  *      "Cell Tracking using Coupled Active Surfaces for Nuclei and Membranes"
  *      https://www.insight-journal.org/browse/publication/642
- *      https://hdl.handle.net/10380/3055
  *
  *  That is based on the papers:
  *
  *      "Level Set Segmentation: Active Contours without edge"
  *      https://www.insight-journal.org/browse/publication/322
- *      https://hdl.handle.net/1926/1532
  *
  *      and
  *
  *      "Level set segmentation using coupled active surfaces"
  *      https://www.insight-journal.org/browse/publication/323
- *      https://hdl.handle.net/1926/1533
  *
  *
  * \ingroup ITKReview
@@ -80,7 +77,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkTypeMacro(RegionBasedLevelSetFunctionData, LightObject);
+  itkOverrideGetNameOfClassMacro(RegionBasedLevelSetFunctionData);
 
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;
@@ -135,12 +132,12 @@ public:
   FeatureIndexType
   GetFeatureIndex(const InputIndexType & inputIndex);
 
-  double m_WeightedNumberOfPixelsInsideLevelSet;
-  double m_WeightedNumberOfPixelsOutsideLevelSet;
+  double m_WeightedNumberOfPixelsInsideLevelSet{};
+  double m_WeightedNumberOfPixelsOutsideLevelSet{};
 
-  InputImagePointer m_HeavisideFunctionOfLevelSetImage;
-  InputIndexType    m_Start;
-  InputIndexType    m_End;
+  InputImagePointer m_HeavisideFunctionOfLevelSetImage{};
+  InputIndexType    m_Start{};
+  InputIndexType    m_End{};
 
 protected:
   RegionBasedLevelSetFunctionData();

@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PoolMultiThreader, MultiThreaderBase);
+  itkOverrideGetNameOfClassMacro(PoolMultiThreader);
 
 
   /** Execute the SingleMethod (as define by SetSingleMethod) using
@@ -108,12 +108,12 @@ protected:
 
 private:
   // Thread pool instance and factory
-  ThreadPool::Pointer m_ThreadPool;
+  ThreadPool::Pointer m_ThreadPool{};
 
   /** An array of work unit information containing a work unit id
    *  (0, 1, 2, .. ITK_MAX_THREADS-1), work unit count, and a pointer
    *  to void so that user data can be passed to each thread. */
-  ThreadPoolInfoStruct m_ThreadInfoArray[ITK_MAX_THREADS];
+  ThreadPoolInfoStruct m_ThreadInfoArray[ITK_MAX_THREADS]{};
 
   /** Friends of Multithreader.
    * ProcessObject is a friend so that it can call PrintSelf() on its

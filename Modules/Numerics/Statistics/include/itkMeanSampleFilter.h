@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MeanSampleFilter
+ * \class MeanSampleFilter
  * \brief Given a sample, this filter computes the sample mean
  *
  * The sample is plugged in using SetSample method. Then invoke
@@ -59,7 +59,7 @@ public:
   using SampleType = TSample;
 
   /**Standard Macros */
-  itkTypeMacro(MeanSampleFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(MeanSampleFilter);
   itkNewMacro(Self);
 
   /** Type of each measurement vector in sample */
@@ -106,8 +106,6 @@ public:
 protected:
   MeanSampleFilter();
   ~MeanSampleFilter() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** DataObject pointer */
   using DataObjectPointer = DataObject::Pointer;

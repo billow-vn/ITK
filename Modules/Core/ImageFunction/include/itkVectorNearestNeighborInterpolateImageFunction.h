@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorNearestNeighborInterpolateImageFunction, VectorInterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(VectorNearestNeighborInterpolateImageFunction);
 
   /** InputImageType type alias support */
   using typename Superclass::InputImageType;
@@ -99,11 +99,6 @@ public:
 protected:
   VectorNearestNeighborInterpolateImageFunction() = default;
   ~VectorNearestNeighborInterpolateImageFunction() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
 };
 } // end namespace itk
 

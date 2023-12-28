@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/**\class FastMarchingReachedTargetNodesStoppingCriterionEnums
+/** \class FastMarchingReachedTargetNodesStoppingCriterionEnums
  * \brief Contains all enum classes used by FastMarchingReachedTargetNodesStoppingCriterion class
  * \ingroup ITKFastMarching
  */
@@ -33,7 +33,7 @@ class FastMarchingReachedTargetNodesStoppingCriterionEnums
 {
 public:
   /**
-   *\class TargetCondition
+   * \class TargetCondition
    * \ingroup ITKFastMarching
    * TargetConditionEnum */
   enum class TargetCondition : uint8_t
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingReachedTargetNodesStoppingCriterion, FastMarchingStoppingCriterionBase);
+  itkOverrideGetNameOfClassMacro(FastMarchingReachedTargetNodesStoppingCriterion);
 
   using typename Superclass::OutputPixelType;
   using typename Superclass::NodeType;
@@ -185,11 +185,11 @@ protected:
   ~FastMarchingReachedTargetNodesStoppingCriterion() override = default;
 
   TargetConditionEnum   m_TargetCondition{ TargetConditionEnum::AllTargets };
-  std::vector<NodeType> m_TargetNodes;
-  std::vector<NodeType> m_ReachedTargetNodes;
+  std::vector<NodeType> m_TargetNodes{};
+  std::vector<NodeType> m_ReachedTargetNodes{};
   size_t                m_NumberOfTargetsToBeReached{ 0 };
-  OutputPixelType       m_TargetOffset;
-  OutputPixelType       m_StoppingValue;
+  OutputPixelType       m_TargetOffset{};
+  OutputPixelType       m_StoppingValue{};
   bool                  m_Satisfied{ false };
   bool                  m_Initialized{ false };
 
@@ -212,7 +212,7 @@ protected:
     }
     if (m_NumberOfTargetsToBeReached < 1)
     {
-      itkExceptionMacro(<< "Number of target nodes to be reached is null");
+      itkExceptionMacro("Number of target nodes to be reached is null");
     }
     if (m_NumberOfTargetsToBeReached > m_TargetNodes.size())
     {

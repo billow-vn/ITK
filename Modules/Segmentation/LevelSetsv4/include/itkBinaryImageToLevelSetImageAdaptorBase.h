@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BinaryImageToLevelSetImageAdaptorBase
+ * \class BinaryImageToLevelSetImageAdaptorBase
  *  \ingroup ITKLevelSetsv4
  */
 template <typename TInputImage, typename TLevelSet>
@@ -40,7 +40,7 @@ public:
   using Superclass = Object;
 
   /** Run-time type information */
-  itkTypeMacro(BinaryImageToLevelSetImageAdaptorBase, Object);
+  itkOverrideGetNameOfClassMacro(BinaryImageToLevelSetImageAdaptorBase);
 
   using InputImageType = TInputImage;
   using InputImagePixelType = typename InputImageType::PixelType;
@@ -60,7 +60,7 @@ public:
   virtual void
   Initialize() = 0;
 
-  /** Get the sparse levet set function */
+  /** Get the sparse level set function */
   itkGetModifiableObjectMacro(LevelSet, LevelSetType);
 
   /** Set/Get the input image*/
@@ -74,8 +74,8 @@ protected:
   /** Destructor */
   ~BinaryImageToLevelSetImageAdaptorBase() override = default;
 
-  InputImagePointer m_InputImage;
-  LevelSetPointer   m_LevelSet;
+  InputImagePointer m_InputImage{};
+  LevelSetPointer   m_LevelSet{};
 };
 } // namespace itk
 

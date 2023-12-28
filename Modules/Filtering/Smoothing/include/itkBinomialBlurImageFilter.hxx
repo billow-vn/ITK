@@ -29,7 +29,7 @@ namespace itk
 template <typename TInputImage, typename TOutputImage>
 BinomialBlurImageFilter<TInputImage, TOutputImage>::BinomialBlurImageFilter()
 {
-  itkDebugMacro(<< "BinomialBlurImageFilter::BinomialBlurImageFilter() called");
+  itkDebugMacro("BinomialBlurImageFilter::BinomialBlurImageFilter() called");
 
   // The default is to just do one repetition
   m_Repetitions = 1;
@@ -39,7 +39,7 @@ template <typename TInputImage, typename TOutputImage>
 void
 BinomialBlurImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
-  itkDebugMacro(<< "BinomialBlurImageFilter::GenerateInputRequestedRegion() called");
+  itkDebugMacro("BinomialBlurImageFilter::GenerateInputRequestedRegion() called");
 
   Superclass::GenerateInputRequestedRegion();
 
@@ -95,7 +95,7 @@ template <typename TInputImage, typename TOutputImage>
 void
 BinomialBlurImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
-  itkDebugMacro(<< "BinomialBlurImageFilter::GenerateData() called");
+  itkDebugMacro("BinomialBlurImageFilter::GenerateData() called");
 
   // Get the input and output pointers
   InputImageConstPointer inputPtr = this->GetInput(0);
@@ -132,8 +132,8 @@ BinomialBlurImageFilter<TInputImage, TOutputImage>::GenerateData()
     this, 0, (outputPtr->GetRequestedRegion().GetNumberOfPixels()) * m_Repetitions * 2 * NDimensions);
 
   // Copy the input image to the temporary image
-  TempIterator  tempIt = TempIterator(tempPtr, tempPtr->GetRequestedRegion());
-  InputIterator inputIt = InputIterator(inputPtr, inputPtr->GetRequestedRegion());
+  TempIterator  tempIt(tempPtr, tempPtr->GetRequestedRegion());
+  InputIterator inputIt(inputPtr, inputPtr->GetRequestedRegion());
 
   for (inputIt.GoToBegin(), tempIt.GoToBegin(); !tempIt.IsAtEnd(); ++tempIt, ++inputIt)
   {
@@ -145,23 +145,18 @@ BinomialBlurImageFilter<TInputImage, TOutputImage>::GenerateData()
   typename TTempImage::IndexType index;
   typename TTempImage::IndexType indexShift;
 
-  // How many times has the algorithm executed? (for debug)
-  int num_reps = 0;
-
   // Temporary pixel storage
   double pixelA, pixelB;
 
   // walk the output image forwards and compute blur
   for (unsigned int rep = 0; rep < m_Repetitions; ++rep)
   {
-    ++num_reps;
-
-    itkDebugMacro(<< "Repetition #" << rep);
+    itkDebugMacro("Repetition #" << rep);
 
     // blur each dimension
     for (unsigned int dim = 0; dim < NDimensions; ++dim)
     {
-      TempIterator tempItDir = TempIterator(tempPtr, tempPtr->GetRequestedRegion());
+      TempIterator tempItDir(tempPtr, tempPtr->GetRequestedRegion());
       tempItDir.GoToBegin();
       while (!tempItDir.IsAtEnd())
       {
@@ -197,10 +192,10 @@ BinomialBlurImageFilter<TInputImage, TOutputImage>::GenerateData()
         ++tempItDir;
       } // end walk the image forwards
 
-      itkDebugMacro(<< "End processing forward dimension " << dim);
+      itkDebugMacro("End processing forward dimension " << dim);
 
       //----------------------Reverse pass----------------------
-      TempReverseIterator tempReverseIt = TempReverseIterator(tempPtr, tempPtr->GetRequestedRegion());
+      TempReverseIterator tempReverseIt(tempPtr, tempPtr->GetRequestedRegion());
 
       tempReverseIt.GoToBegin();
 
@@ -237,24 +232,20 @@ BinomialBlurImageFilter<TInputImage, TOutputImage>::GenerateData()
 
         ++tempReverseIt;
       } // end walk the image backwards
-
-      itkDebugMacro(<< "End processing reverse dimension " << dim);
-    } // end dimension loop
-  }   // end number of repetitions loop
+    }   // end dimension loop
+  }     // end number of repetitions loop
 
   // Now, copy the temporary image to the output image. Note that the temp
   // buffer iterator walks a region defined by the output
   using OutputIterator = ImageRegionIterator<TOutputImage>;
 
-  OutputIterator outIt = OutputIterator(outputPtr, outputPtr->GetRequestedRegion());
-  TempIterator   tempIt2 = TempIterator(tempPtr, outputPtr->GetRequestedRegion());
+  OutputIterator outIt(outputPtr, outputPtr->GetRequestedRegion());
+  TempIterator   tempIt2(tempPtr, outputPtr->GetRequestedRegion());
 
   for (outIt.GoToBegin(), tempIt2.GoToBegin(); !outIt.IsAtEnd(); ++outIt, ++tempIt2)
   {
     outIt.Set(static_cast<PixelType>(tempIt2.Get()));
   }
-
-  itkDebugMacro(<< "Binomial blur filter executed " << num_reps << " times");
 }
 
 template <typename TInputImage, typename TOutputImage>

@@ -39,7 +39,7 @@ public:
 
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Derived1, Object);
+  itkOverrideGetNameOfClassMacro(Derived1);
 
   itkNewMacro(Derived1);
 
@@ -77,7 +77,7 @@ public:
 
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Derived2, Object);
+  itkOverrideGetNameOfClassMacro(Derived2);
 
   itkNewMacro(Derived2);
 
@@ -194,13 +194,13 @@ TEST(SmartPointer, Converting)
   EXPECT_TRUE(rcd1ptr == cd1ptr);
 
   // is_convertible<From,To>
-  static_assert(std::is_convertible<Derived1Pointer, BasePointer>::value, "conversion check");
-  static_assert(std::is_convertible<Derived1Pointer, ConstBasePointer>::value, "conversion check");
+  static_assert(std::is_convertible_v<Derived1Pointer, BasePointer>, "conversion check");
+  static_assert(std::is_convertible_v<Derived1Pointer, ConstBasePointer>, "conversion check");
 
-  static_assert(!std::is_convertible<ConstDerived1Pointer, Derived1Pointer>::value, "conversion check");
+  static_assert(!std::is_convertible_v<ConstDerived1Pointer, Derived1Pointer>, "conversion check");
 
-  static_assert(!std::is_convertible<Derived1Pointer, Derived2::Pointer>::value, "conversion check");
-  static_assert(!std::is_convertible<Derived1Pointer, Derived2::ConstPointer>::value, "conversion check");
+  static_assert(!std::is_convertible_v<Derived1Pointer, Derived2::Pointer>, "conversion check");
+  static_assert(!std::is_convertible_v<Derived1Pointer, Derived2::ConstPointer>, "conversion check");
 }
 
 
@@ -356,4 +356,16 @@ TEST(SmartPointer, ConvertingRegisterCount)
     EXPECT_EQ(1, static_cast<const Derived1 *>(bptr.GetPointer())->GetRegisterCount());
     EXPECT_TRUE(d1ptr.IsNull());
   }
+}
+
+
+// Tests that `smartPointer.get()` is equivalent to `smartPointer.GetPointer()`.
+TEST(SmartPointer, GetIsEquivalentToGetPointer)
+{
+  const auto check = [](auto && smartPointer) { EXPECT_EQ(smartPointer.get(), smartPointer.GetPointer()); };
+
+  check(itk::Object::New());
+  check(itk::Object::Pointer{});
+  check(itk::Object::ConstPointer{});
+  check(itk::SmartPointer<itk::Object>{});
 }

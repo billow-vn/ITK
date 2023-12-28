@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class AdditiveGaussianNoiseImageFilter
+ * \class AdditiveGaussianNoiseImageFilter
  *
  * \brief Alter an image with additive Gaussian white noise.
  *
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AdditiveGaussianNoiseImageFilter, NoiseBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(AdditiveGaussianNoiseImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageType;

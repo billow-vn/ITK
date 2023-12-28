@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class WarpImageFilter
+ * \class WarpImageFilter
  * \brief Warps an image using an input displacement field.
  *
  * WarpImageFilter warps an existing image with respect to
@@ -56,7 +56,7 @@ namespace itk
  * Position mapped to outside of the input image buffer are assigned
  * a edge padding value.
  *
- * The LargetPossibleRegion for the output is inherited
+ * The LargestPossibleRegion for the output is inherited
  * from the input displacement field. The output image
  * spacing, origin and orientation may be set via
  * SetOutputSpacing, SetOutputOrigin and
@@ -97,7 +97,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(WarpImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(WarpImageFilter);
 
   /** Typedef to describe the output image region type. */
   using OutputImageRegionType = typename TOutputImage::RegionType;
@@ -272,19 +272,19 @@ protected:
                                       const DisplacementFieldType * fieldPtr,
                                       DisplacementType &            output);
 
-  bool m_DefFieldSameInformation;
+  bool m_DefFieldSameInformation{};
   // variables for deffield interpolator
-  IndexType m_StartIndex, m_EndIndex;
+  IndexType m_StartIndex, m_EndIndex{};
 
 private:
-  PixelType     m_EdgePaddingValue;
-  SpacingType   m_OutputSpacing;
-  PointType     m_OutputOrigin;
-  DirectionType m_OutputDirection;
+  PixelType     m_EdgePaddingValue{};
+  SpacingType   m_OutputSpacing{};
+  PointType     m_OutputOrigin{};
+  DirectionType m_OutputDirection{};
 
-  InterpolatorPointer m_Interpolator;
-  SizeType            m_OutputSize;       // Size of the output image
-  IndexType           m_OutputStartIndex; // output image start index
+  InterpolatorPointer m_Interpolator{};
+  SizeType            m_OutputSize{};       // Size of the output image
+  IndexType           m_OutputStartIndex{}; // output image start index
 };
 } // end namespace itk
 

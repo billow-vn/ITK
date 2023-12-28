@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class KLMSegmentationRegion
+ * \class KLMSegmentationRegion
  * \brief Base class for KLMSegmentationRegion object
  *
  * itkKLMSegmentationRegion is the base class for the KLMSegmentationRegion
@@ -105,7 +105,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(KLMSegmentationRegion, SegmentationRegion);
+  itkOverrideGetNameOfClassMacro(KLMSegmentationRegion);
 
   /** Type definition for an double vector. */
   using MeanRegionIntensityType = vnl_vector<double>;
@@ -240,8 +240,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  RegionBorderVectorType  m_RegionBorderVector;
-  MeanRegionIntensityType m_MeanRegionIntensity;
+  RegionBorderVectorType  m_RegionBorderVector{};
+  MeanRegionIntensityType m_MeanRegionIntensity{};
 }; // class SegmentationRegion
 } // namespace itk
 

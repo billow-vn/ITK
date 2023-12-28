@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class GeometricalQuadEdge
+ * \class GeometricalQuadEdge
  * \brief This class extends the QuadEdge by adding a reference to the Origin.
  *
  * The class is implemented in such a way that it can generate its own Dual.
@@ -358,10 +358,10 @@ public:
   static const OriginRefType m_NoPoint;
 
 protected:
-  OriginRefType      m_Origin;           // Geometrical information
-  PrimalDataType     m_Data;             // User data associated to this edge.
+  OriginRefType      m_Origin{};         // Geometrical information
+  PrimalDataType     m_Data{};           // User data associated to this edge.
   bool               m_DataSet{ false }; // Indicates if the data is set.
-  LineCellIdentifier m_LineCellIdent;
+  LineCellIdentifier m_LineCellIdent{};
 };
 } // namespace itk
 

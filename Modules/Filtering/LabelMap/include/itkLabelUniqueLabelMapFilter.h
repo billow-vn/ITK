@@ -27,7 +27,7 @@
 namespace itk
 {
 /**
- *\class LabelUniqueLabelMapFilter
+ * \class LabelUniqueLabelMapFilter
  * \brief Make sure that the objects are not overlapping
  *
  * AttributeUniqueLabelMapFilter search the overlapping zones in the overlapping
@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelUniqueLabelMapFilter, AttributeUniqueLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(LabelUniqueLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

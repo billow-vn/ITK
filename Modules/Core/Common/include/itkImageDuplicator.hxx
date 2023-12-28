@@ -22,23 +22,14 @@
 
 namespace itk
 {
-/** Constructor */
-template <typename TInputImage>
-ImageDuplicator<TInputImage>::ImageDuplicator()
-{
-  m_InputImage = nullptr;
-  m_DuplicateImage = nullptr;
-  m_InternalImageTime = 0;
-}
 
-/** */
 template <typename TInputImage>
 void
 ImageDuplicator<TInputImage>::Update()
 {
   if (!m_InputImage)
   {
-    itkExceptionMacro(<< "Input image has not been connected");
+    itkExceptionMacro("Input image has not been connected");
   }
 
   // Update only if the input image has been modified
@@ -69,9 +60,13 @@ void
 ImageDuplicator<TInputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Input Image: " << m_InputImage << std::endl;
-  os << indent << "Output Image: " << m_DuplicateImage << std::endl;
-  os << indent << "Internal Image Time: " << m_InternalImageTime << std::endl;
+
+  itkPrintSelfObjectMacro(InputImage);
+  itkPrintSelfObjectMacro(DuplicateImage);
+
+  os << indent
+     << "InternalImageTime: " << static_cast<typename NumericTraits<ModifiedTimeType>::PrintType>(m_InternalImageTime)
+     << std::endl;
 }
 } // end namespace itk
 

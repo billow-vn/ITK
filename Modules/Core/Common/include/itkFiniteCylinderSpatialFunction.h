@@ -48,7 +48,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FiniteCylinderSpatialFunction, InteriorExteriorSpatialFunction);
+  itkOverrideGetNameOfClassMacro(FiniteCylinderSpatialFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -97,17 +97,17 @@ protected:
 
 private:
   /** The center of the cylinder. */
-  InputType m_Center;
+  InputType m_Center{};
 
   /** The medial axis length of the cylinder. */
-  double m_AxisLength;
+  double m_AxisLength{};
 
   /** The radius length of the cylinder. */
-  double m_Radius;
+  double m_Radius{};
 
   /** The orientation vectors (must be orthogonal) of the ellipsoid axes. */
-  InputType m_Orientation;
-  InputType m_NormalizedOrientation;
+  InputType m_Orientation{};
+  InputType m_NormalizedOrientation{};
 };
 } // end namespace itk
 

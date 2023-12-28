@@ -23,9 +23,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::
   FastSymmetricForcesDemonsRegistrationFunction()
@@ -62,9 +60,6 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
   m_SumOfSquaredChange = 0.0;
 }
 
-/**
- * Standard "PrintSelf" method.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PrintSelf(
@@ -73,30 +68,26 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "MovingImageIterpolator: ";
-  os << m_MovingImageInterpolator.GetPointer() << std::endl;
-  os << indent << "FixedImageGradientCalculator: ";
-  os << m_FixedImageGradientCalculator.GetPointer() << std::endl;
-  os << indent << "DenominatorThreshold: ";
-  os << m_DenominatorThreshold << std::endl;
-  os << indent << "IntensityDifferenceThreshold: ";
-  os << m_IntensityDifferenceThreshold << std::endl;
+  os << indent << "Normalizer: " << m_Normalizer << std::endl;
 
-  os << indent << "Metric: ";
-  os << m_Metric << std::endl;
-  os << indent << "SumOfSquaredDifference: ";
-  os << m_SumOfSquaredDifference << std::endl;
-  os << indent << "NumberOfPixelsProcessed: ";
-  os << m_NumberOfPixelsProcessed << std::endl;
-  os << indent << "RMSChange: ";
-  os << m_RMSChange << std::endl;
-  os << indent << "SumOfSquaredChange: ";
-  os << m_SumOfSquaredChange << std::endl;
+  itkPrintSelfObjectMacro(FixedImageGradientCalculator);
+  itkPrintSelfObjectMacro(WarpedMovingImageGradientCalculator);
+  itkPrintSelfObjectMacro(MovingImageInterpolator);
+  itkPrintSelfObjectMacro(MovingImageWarper);
+
+  os << indent << "TimeStep: " << static_cast<typename NumericTraits<TimeStepType>::PrintType>(m_TimeStep) << std::endl;
+
+  os << indent << "DenominatorThreshold: " << m_DenominatorThreshold << std::endl;
+  os << indent << "IntensityDifferenceThreshold: " << m_IntensityDifferenceThreshold << std::endl;
+
+  os << indent << "Metric: " << m_Metric << std::endl;
+  os << indent << "SumOfSquaredDifference: " << m_SumOfSquaredDifference << std::endl;
+  os << indent << "NumberOfPixelsProcessed: "
+     << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfPixelsProcessed) << std::endl;
+  os << indent << "RMSChange: " << m_RMSChange << std::endl;
+  os << indent << "SumOfSquaredChange: " << m_SumOfSquaredChange << std::endl;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::
@@ -105,9 +96,6 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
   m_IntensityDifferenceThreshold = threshold;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::
@@ -116,16 +104,13 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
   return m_IntensityDifferenceThreshold;
 }
 
-/**
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::InitializeIteration()
 {
   if (!this->GetMovingImage() || !this->GetFixedImage() || !m_MovingImageInterpolator)
   {
-    itkExceptionMacro(<< "MovingImage, FixedImage and/or Interpolator not set");
+    itkExceptionMacro("MovingImage, FixedImage and/or Interpolator not set");
   }
 
   // cache fixed image information
@@ -159,15 +144,12 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
   m_SumOfSquaredChange = 0.0;
 }
 
-/**
- * Compute update at a non boundary neighbourhood
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
-typename FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PixelType
+auto
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ComputeUpdate(
   const NeighborhoodType & it,
   void *                   gd,
-  const FloatOffsetType &  itkNotUsed(offset))
+  const FloatOffsetType &  itkNotUsed(offset)) -> PixelType
 {
   auto *          globalData = (GlobalDataStruct *)gd;
   const IndexType FirstIndex = this->GetFixedImage()->GetLargestPossibleRegion().GetIndex();
@@ -254,7 +236,7 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
   if (globalData)
   {
     // do not consider voxel on the border (2 voxels) as there are often
-    // artefacts
+    // artifacts
     // which falsify the metric
     if (!IsOutsideRegion)
     {
@@ -273,17 +255,14 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
   return update;
 }
 
-/**
- * Update the metric and release the per-thread-global data.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ReleaseGlobalDataPointer(
   void * gd) const
 {
-  auto * globalData = (GlobalDataStruct *)gd;
+  const std::unique_ptr<const GlobalDataStruct> globalData(static_cast<GlobalDataStruct *>(gd));
 
-  m_MetricCalculationLock.lock();
+  const std::lock_guard<std::mutex> lockGuard(m_MetricCalculationMutex);
   m_SumOfSquaredDifference += globalData->m_SumOfSquaredDifference;
   m_NumberOfPixelsProcessed += globalData->m_NumberOfPixelsProcessed;
   m_SumOfSquaredChange += globalData->m_SumOfSquaredChange;
@@ -292,9 +271,6 @@ FastSymmetricForcesDemonsRegistrationFunction<TFixedImage, TMovingImage, TDispla
     m_Metric = m_SumOfSquaredDifference / static_cast<double>(m_NumberOfPixelsProcessed);
     m_RMSChange = std::sqrt(m_SumOfSquaredChange / static_cast<double>(m_NumberOfPixelsProcessed));
   }
-  m_MetricCalculationLock.unlock();
-
-  delete globalData;
 }
 } // end namespace itk
 

@@ -24,14 +24,6 @@
 namespace itk
 {
 template <typename TOutput, unsigned int VImageDimension, typename TInput>
-GaussianSpatialFunction<TOutput, VImageDimension, TInput>::GaussianSpatialFunction()
-
-{
-  m_Mean = ArrayType::Filled(10.0);
-  m_Sigma = ArrayType::Filled(5.0);
-}
-
-template <typename TOutput, unsigned int VImageDimension, typename TInput>
 auto
 GaussianSpatialFunction<TOutput, VImageDimension, TInput>::Evaluate(const TInput & position) const -> OutputType
 {
@@ -74,7 +66,7 @@ GaussianSpatialFunction<TOutput, VImageDimension, TInput>::PrintSelf(std::ostrea
   os << indent << "Sigma: " << m_Sigma << std::endl;
   os << indent << "Mean: " << m_Mean << std::endl;
   os << indent << "Scale: " << m_Scale << std::endl;
-  os << indent << "Normalized?: " << m_Normalized << std::endl;
+  os << indent << "Normalized: " << (m_Normalized ? "On" : "Off") << std::endl;
 }
 } // end namespace itk
 

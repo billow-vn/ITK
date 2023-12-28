@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFixedPointSet, typename TMovingImage>
 PointSetToImageMetric<TFixedPointSet, TMovingImage>::PointSetToImageMetric()
 {
@@ -36,45 +34,39 @@ PointSetToImageMetric<TFixedPointSet, TMovingImage>::PointSetToImageMetric()
   m_GradientImage = nullptr;   // computed at initialization
 }
 
-/**
- * Set the parameters that define a unique transform
- */
 template <typename TFixedPointSet, typename TMovingImage>
 void
 PointSetToImageMetric<TFixedPointSet, TMovingImage>::SetTransformParameters(const ParametersType & parameters) const
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform has not been assigned");
+    itkExceptionMacro("Transform has not been assigned");
   }
   m_Transform->SetParameters(parameters);
 }
 
-/**
- * PrintSelf
- */
 template <typename TFixedPointSet, typename TMovingImage>
 void
 PointSetToImageMetric<TFixedPointSet, TMovingImage>::Initialize()
 {
   if (!m_Transform)
   {
-    itkExceptionMacro(<< "Transform is not present");
+    itkExceptionMacro("Transform is not present");
   }
 
   if (!m_Interpolator)
   {
-    itkExceptionMacro(<< "Interpolator is not present");
+    itkExceptionMacro("Interpolator is not present");
   }
 
   if (!m_MovingImage)
   {
-    itkExceptionMacro(<< "MovingImage is not present");
+    itkExceptionMacro("MovingImage is not present");
   }
 
   if (!m_FixedPointSet)
   {
-    itkExceptionMacro(<< "FixedPointSet is not present");
+    itkExceptionMacro("FixedPointSet is not present");
   }
 
   // If the image is provided by a source, update the source.
@@ -109,21 +101,23 @@ PointSetToImageMetric<TFixedPointSet, TMovingImage>::Initialize()
   }
 }
 
-/**
- * PrintSelf
- */
 template <typename TFixedPointSet, typename TMovingImage>
 void
 PointSetToImageMetric<TFixedPointSet, TMovingImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Moving Image: " << m_MovingImage.GetPointer() << std::endl;
-  os << indent << "Fixed  Image: " << m_FixedPointSet.GetPointer() << std::endl;
-  os << indent << "Gradient Image: " << m_GradientImage.GetPointer() << std::endl;
-  os << indent << "Transform:    " << m_Transform.GetPointer() << std::endl;
-  os << indent << "Interpolator: " << m_Interpolator.GetPointer() << std::endl;
-  os << indent << "Number of Pixels Counted: " << m_NumberOfPixelsCounted << std::endl;
-  os << indent << "Compute Gradient: " << m_ComputeGradient << std::endl;
+
+  os << indent << "NumberOfPixelsCounted: "
+     << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfPixelsCounted) << std::endl;
+
+  itkPrintSelfObjectMacro(FixedPointSet);
+  itkPrintSelfObjectMacro(MovingImage);
+  itkPrintSelfObjectMacro(Transform);
+  itkPrintSelfObjectMacro(Interpolator);
+
+  os << indent << "ComputeGradient: " << (m_ComputeGradient ? "On" : "Off") << std::endl;
+
+  itkPrintSelfObjectMacro(GradientImage);
 }
 } // end namespace itk
 

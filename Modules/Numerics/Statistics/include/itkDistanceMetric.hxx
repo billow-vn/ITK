@@ -28,11 +28,9 @@ DistanceMetric<TVector>::DistanceMetric()
 {
   // If the measurement vector type is non-resizable type,
   // initialize the vector size to it.
-  MeasurementVectorType vector;
-
-  if (!MeasurementVectorTraits::IsResizable(vector))
+  if (!MeasurementVectorTraits::IsResizable<MeasurementVectorType>({}))
   {
-    MeasurementVectorSizeType defaultLength = NumericTraits<MeasurementVectorType>::GetLength(vector);
+    MeasurementVectorSizeType defaultLength = NumericTraits<MeasurementVectorType>::GetLength({});
 
     this->m_MeasurementVectorSize = defaultLength;
     this->m_Origin.SetSize(this->m_MeasurementVectorSize);
@@ -53,7 +51,7 @@ DistanceMetric<TVector>::SetOrigin(const OriginType & x)
   {
     if (x.Size() != this->m_MeasurementVectorSize)
     {
-      itkExceptionMacro(<< "Size of the origin must be same as the length of"
+      itkExceptionMacro("Size of the origin must be same as the length of"
                         << " each measurement vector.");
     }
   }

@@ -93,7 +93,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TriangleMeshToBinaryImageFilter, ImageSource);
+  itkOverrideGetNameOfClassMacro(TriangleMeshToBinaryImageFilter);
 
   /** Superclass type alias. */
   using typename Superclass::OutputImageRegionType;
@@ -185,7 +185,7 @@ public:
   itkSetMacro(Size, SizeType);
   itkGetConstMacro(Size, SizeType);
 
-  /** Set the mesh input of this process object.  */
+  /** Set the input mesh. */
   using Superclass::SetInput;
   void
   SetInput(InputMeshType * input);
@@ -200,7 +200,7 @@ public:
     }
   }
 
-  /** Get the mesh input of this process object.  */
+  /** Get the input mesh. */
   InputMeshType *
   GetInput();
 
@@ -224,25 +224,26 @@ protected:
   virtual void
   RasterizeTriangles();
 
+  /** Convert a single polygon/triangle to raster format. */
   static int
   PolygonToImageRaster(PointVector coords, Point1DArray & zymatrix, int extent[6]);
 
-  OutputImageType * m_InfoImage;
+  OutputImageType * m_InfoImage{};
 
-  IndexType m_Index;
+  IndexType m_Index{};
 
-  SizeType m_Size;
+  SizeType m_Size{};
 
-  SpacingType m_Spacing;
+  SpacingType m_Spacing{};
 
-  PointType m_Origin; // start value
+  PointType m_Origin{}; // start value
 
-  double m_Tolerance;
+  double m_Tolerance{};
 
-  ValueType m_InsideValue;
-  ValueType m_OutsideValue;
+  ValueType m_InsideValue{};
+  ValueType m_OutsideValue{};
 
-  DirectionType m_Direction;
+  DirectionType m_Direction{};
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(ThresholdSegmentationLevelSetFunction, SegmentationLevelSetFunction);
+  itkOverrideGetNameOfClassMacro(ThresholdSegmentationLevelSetFunction);
 
   /** Extract some parameters from the superclass. */
   using typename Superclass::ImageType;
@@ -204,12 +204,12 @@ protected:
     os << indent << "SmoothingConductance: " << m_SmoothingConductance << std::endl;
   }
 
-  FeatureScalarType m_UpperThreshold;
-  FeatureScalarType m_LowerThreshold;
-  ScalarValueType   m_EdgeWeight;
-  ScalarValueType   m_SmoothingConductance;
-  int               m_SmoothingIterations;
-  ScalarValueType   m_SmoothingTimeStep;
+  FeatureScalarType m_UpperThreshold{};
+  FeatureScalarType m_LowerThreshold{};
+  ScalarValueType   m_EdgeWeight{};
+  ScalarValueType   m_SmoothingConductance{};
+  int               m_SmoothingIterations{};
+  ScalarValueType   m_SmoothingTimeStep{};
 };
 } // end namespace itk
 

@@ -70,7 +70,7 @@ namespace itk
  * \ingroup ITKImageIntensity
  */
 /* THistogramMeasurement -- The precision level for which to do
-  HistogramMeasurmenets */
+  HistogramMeasurements */
 template <typename TInputImage, typename TOutputImage, typename THistogramMeasurement = typename TInputImage::PixelType>
 class ITK_TEMPLATE_EXPORT HistogramMatchingImageFilter : public ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HistogramMatchingImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HistogramMatchingImageFilter);
 
   /** ImageDimension enumeration. */
   static constexpr unsigned int ImageDimension = TInputImage::ImageDimension;
@@ -234,20 +234,20 @@ private:
   SizeValueType m_NumberOfMatchPoints{ 1 };
   bool          m_ThresholdAtMeanIntensity{ true };
 
-  THistogramMeasurement m_SourceMinValue;
-  THistogramMeasurement m_SourceMaxValue;
+  THistogramMeasurement m_SourceMinValue{};
+  THistogramMeasurement m_SourceMaxValue{};
 
-  THistogramMeasurement m_ReferenceMinValue;
-  THistogramMeasurement m_ReferenceMaxValue;
+  THistogramMeasurement m_ReferenceMinValue{};
+  THistogramMeasurement m_ReferenceMaxValue{};
 
-  HistogramPointer m_SourceHistogram;
-  HistogramPointer m_OutputHistogram;
+  HistogramPointer m_SourceHistogram{};
+  HistogramPointer m_OutputHistogram{};
 
   using TableType = vnl_matrix<double>;
-  TableType m_QuantileTable;
+  TableType m_QuantileTable{};
 
   using GradientArrayType = vnl_vector<double>;
-  GradientArrayType m_Gradients;
+  GradientArrayType m_Gradients{};
   double            m_LowerGradient{ 0.0 };
   double            m_UpperGradient{ 0.0 };
   bool              m_GenerateReferenceHistogramFromImage{ true };

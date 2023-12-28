@@ -28,7 +28,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class DenseFrequencyContainer2
+ * \class DenseFrequencyContainer2
  *  \brief This class is a container for frequencies of bins in an histogram.
  *
  * This class uses the ValarrayImageContainer class to store
@@ -52,12 +52,12 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DenseFrequencyContainer2, Object);
+  itkOverrideGetNameOfClassMacro(DenseFrequencyContainer2);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** InstanceIdentifer type alias */
+  /** InstanceIdentifier type alias */
   using InstanceIdentifier = MeasurementVectorTraits::InstanceIdentifier;
 
   /** Absolute Frequency type alias */
@@ -118,8 +118,8 @@ protected:
 
 private:
   /** Internal storage */
-  FrequencyContainerPointer  m_FrequencyContainer;
-  TotalAbsoluteFrequencyType m_TotalFrequency;
+  FrequencyContainerPointer  m_FrequencyContainer{};
+  TotalAbsoluteFrequencyType m_TotalFrequency{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

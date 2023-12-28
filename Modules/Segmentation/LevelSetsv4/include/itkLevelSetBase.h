@@ -51,7 +51,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetBase, DataObject);
+  itkOverrideGetNameOfClassMacro(LevelSetBase);
 
   static constexpr unsigned int Dimension = VDimension;
 
@@ -85,7 +85,7 @@ public:
   EvaluateMeanCurvature(const InputType & iP) const = 0;
 
   /**
-   *\class DataType
+   * \class DataType
    *  \brief Internal class used for one computed characteristic
    *
    *  It holds the name of the characteristics, its value, and a boolean

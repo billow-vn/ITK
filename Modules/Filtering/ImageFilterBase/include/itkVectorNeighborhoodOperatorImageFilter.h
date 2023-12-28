@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(VectorNeighborhoodOperatorImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorNeighborhoodOperatorImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -166,11 +166,11 @@ protected:
 
 private:
   /** Pointer to the internal operator used to filter the image. */
-  Neighborhood<ScalarValueType, Self::ImageDimension> m_Operator;
+  Neighborhood<ScalarValueType, Self::ImageDimension> m_Operator{};
 
   /** Pointer to a persistent boundary condition object used
    * for the image iterator. */
-  ImageBoundaryConditionPointerType m_BoundsCondition;
+  ImageBoundaryConditionPointerType m_BoundsCondition{};
 };
 } // end namespace itk
 

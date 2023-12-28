@@ -108,7 +108,6 @@ ImageIOBase::SetDimensions(unsigned int i, SizeValueType dim)
 {
   if (i >= m_Dimensions.size())
   {
-    itkWarningMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Dimensions.size());
     itkExceptionMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Dimensions.size());
   }
   this->Modified();
@@ -120,7 +119,6 @@ ImageIOBase::SetOrigin(unsigned int i, double origin)
 {
   if (i >= m_Origin.size())
   {
-    itkWarningMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Origin.size());
     itkExceptionMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Origin.size());
   }
   this->Modified();
@@ -132,7 +130,6 @@ ImageIOBase::SetSpacing(unsigned int i, double spacing)
 {
   if (i >= m_Spacing.size())
   {
-    itkWarningMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Spacing.size());
     itkExceptionMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Spacing.size());
   }
   this->Modified();
@@ -144,7 +141,6 @@ ImageIOBase::SetDirection(unsigned int i, const std::vector<double> & direction)
 {
   if (i >= m_Direction.size())
   {
-    itkWarningMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Direction.size());
     itkExceptionMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Direction.size());
   }
   this->Modified();
@@ -156,7 +152,6 @@ ImageIOBase::SetDirection(unsigned int i, const vnl_vector<double> & direction)
 {
   if (i >= m_Direction.size())
   {
-    itkWarningMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Direction.size());
     itkExceptionMacro("Index: " << i << " is out of bounds, expected maximum is " << m_Direction.size());
   }
   this->Modified();
@@ -328,7 +323,7 @@ ImageIOBase::GetPixelSize() const
 {
   if (m_ComponentType == IOComponentEnum::UNKNOWNCOMPONENTTYPE || m_PixelType == IOPixelEnum::UNKNOWNPIXELTYPE)
   {
-    itkExceptionMacro("Unknown pixel or component type: (" << m_PixelType << ", " << m_ComponentType << ")");
+    itkExceptionMacro("Unknown pixel or component type: (" << m_PixelType << ", " << m_ComponentType << ')');
   }
 
   return this->GetComponentSize() * this->GetNumberOfComponents();
@@ -623,7 +618,7 @@ ImageIOBase::OpenFileForReading(std::ifstream & inputStream, const std::string &
   // Make sure that we have a file to
   if (filename.empty())
   {
-    itkExceptionMacro(<< "A FileName must be specified.");
+    itkExceptionMacro("A FileName must be specified.");
   }
 
   // Close file from any previous image
@@ -633,7 +628,7 @@ ImageIOBase::OpenFileForReading(std::ifstream & inputStream, const std::string &
   }
 
   // Open the new file for reading
-  itkDebugMacro(<< "Opening file for reading: " << filename);
+  itkDebugMacro("Opening file for reading: " << filename);
 
   std::ios::openmode mode = std::ios::in;
   if (!ascii)
@@ -650,8 +645,8 @@ ImageIOBase::OpenFileForReading(std::ifstream & inputStream, const std::string &
 
   if (!inputStream.is_open() || inputStream.fail())
   {
-    itkExceptionMacro(<< "Could not open file: " << filename << " for reading." << std::endl
-                      << "Reason: " << itksys::SystemTools::GetLastSystemError());
+    itkExceptionMacro("Could not open file: " << filename << " for reading." << std::endl
+                                              << "Reason: " << itksys::SystemTools::GetLastSystemError());
   }
 }
 
@@ -661,7 +656,7 @@ ImageIOBase::OpenFileForWriting(std::ofstream & outputStream, const std::string 
   // Make sure that we have a file to
   if (filename.empty())
   {
-    itkExceptionMacro(<< "A FileName must be specified.");
+    itkExceptionMacro("A FileName must be specified.");
   }
 
   // Close file from any previous image
@@ -671,7 +666,7 @@ ImageIOBase::OpenFileForWriting(std::ofstream & outputStream, const std::string 
   }
 
   // Open the new file for writing
-  itkDebugMacro(<< "Opening file for writing: " << filename);
+  itkDebugMacro("Opening file for writing: " << filename);
 
   std::ios::openmode mode = std::ios::out;
   if (truncate)
@@ -699,8 +694,8 @@ ImageIOBase::OpenFileForWriting(std::ofstream & outputStream, const std::string 
 
   if (!outputStream.is_open() || outputStream.fail())
   {
-    itkExceptionMacro(<< "Could not open file: " << filename << " for writing." << std::endl
-                      << "Reason: " << itksys::SystemTools::GetLastSystemError());
+    itkExceptionMacro("Could not open file: " << filename << " for writing." << std::endl
+                                              << "Reason: " << itksys::SystemTools::GetLastSystemError());
   }
 }
 
@@ -717,9 +712,9 @@ WriteBuffer(std::ostream & os, const TComponent * buffer, ImageIOBase::SizeType 
   {
     if (!(i % 6) && i)
     {
-      os << "\n";
+      os << '\n';
     }
-    os << PrintType(*ptr++) << " ";
+    os << PrintType(*ptr++) << ' ';
   }
 }
 } // namespace
@@ -942,7 +937,7 @@ ImageIOBase::ReadBufferAsASCII(std::istream & is, void * buffer, IOComponentEnum
 
 namespace
 {
-std::mutex                       ioDefaultSplitterLock;
+std::mutex                       ioDefaultSplitterMutex;
 ImageRegionSplitterBase::Pointer ioDefaultSplitter;
 
 } // namespace
@@ -954,7 +949,7 @@ ImageIOBase::GetImageRegionSplitter() const
   {
     // thread safe lazy initialization,  prevent race condition on
     // setting, with an atomic set if null.
-    std::lock_guard<std::mutex> lock(ioDefaultSplitterLock);
+    const std::lock_guard<std::mutex> lockGuard(ioDefaultSplitterMutex);
     if (ioDefaultSplitter.IsNull())
     {
       ioDefaultSplitter = ImageRegionSplitterSlowDimension::New().GetPointer();
@@ -1169,7 +1164,7 @@ ImageIOBase::PrintSelf(std::ostream & os, Indent indent) const
   os << indent << "IOByteOrderEnum: " << this->GetByteOrderAsString(m_ByteOrder) << std::endl;
   os << indent << "IORegion: " << std::endl;
   m_IORegion.Print(os, indent.GetNextIndent());
-  os << indent << "Number of Components/Pixel: " << m_NumberOfComponents << "\n";
+  os << indent << "Number of Components/Pixel: " << m_NumberOfComponents << '\n';
   os << indent << "Pixel Type: " << this->GetPixelTypeAsString(m_PixelType) << std::endl;
   os << indent << "Component Type: " << this->GetComponentTypeAsString(m_ComponentType) << std::endl;
   os << indent << "Dimensions: " << m_Dimensions << std::endl;

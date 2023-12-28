@@ -28,7 +28,7 @@
 namespace itk
 {
 /**
- *\class QuasiNewtonOptimizerv4Template
+ * \class QuasiNewtonOptimizerv4Template
  * \brief Implement a Quasi-Newton optimizer with BFGS Hessian estimation.
  *
  * Second order approximation of the cost function is usually more efficient
@@ -74,7 +74,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuasiNewtonOptimizerv4Template, GradientDescentOptimizerv4Template);
+  itkOverrideGetNameOfClassMacro(QuasiNewtonOptimizerv4Template);
 
   /** It should be possible to derive the internal computation type from the class object. */
   using InternalComputationValueType = TInternalComputationValueType;
@@ -128,33 +128,33 @@ protected:
   SizeValueType m_MaximumIterationsWithoutProgress{ 30 };
 
   /** The information about the current step */
-  ParametersType m_CurrentPosition;
-  ParametersType m_OptimalStep;
+  ParametersType m_CurrentPosition{};
+  ParametersType m_OptimalStep{};
 
   /** The information about the previous step */
-  MeasureType    m_PreviousValue;
-  ParametersType m_PreviousPosition;
+  MeasureType    m_PreviousValue{};
+  ParametersType m_PreviousPosition{};
 
   /** The best value so far and relevant information */
-  MeasureType    m_BestValue;
-  ParametersType m_BestPosition;
+  MeasureType    m_BestValue{};
+  ParametersType m_BestPosition{};
   SizeValueType  m_BestIteration{ 0 };
 
   /** The Quasi-Newton step */
-  DerivativeType m_NewtonStep;
+  DerivativeType m_NewtonStep{};
 
   /** Warning message during Quasi-Newton step estimation */
-  std::string m_NewtonStepWarning;
+  std::string m_NewtonStepWarning{};
 
   /** The maximum Quasi-Newton step size to restrict learning rates. */
-  TInternalComputationValueType m_MaximumNewtonStepSizeInPhysicalUnits;
+  TInternalComputationValueType m_MaximumNewtonStepSizeInPhysicalUnits{};
 
   /** The Hessian with local support */
-  HessianArrayType m_HessianArray;
+  HessianArrayType m_HessianArray{};
 
   /** Valid flag for the Quasi-Newton steps.
    */
-  BooleanStdVectorType m_NewtonStepValidFlags;
+  BooleanStdVectorType m_NewtonStepValidFlags{};
 
   /** Estimate a Newton step */
   virtual void
@@ -204,7 +204,7 @@ protected:
 
 private:
   /** Threader for Newton step estimation. */
-  typename DomainThreader<ThreadedIndexedContainerPartitioner, Self>::Pointer m_EstimateNewtonStepThreader;
+  typename DomainThreader<ThreadedIndexedContainerPartitioner, Self>::Pointer m_EstimateNewtonStepThreader{};
 };
 
 /** This helps to meet backward compatibility */

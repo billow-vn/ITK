@@ -21,7 +21,7 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension>
 EllipseSpatialObject<TDimension>::EllipseSpatialObject()
 {
@@ -44,8 +44,6 @@ EllipseSpatialObject<TDimension>::Clear()
   this->Modified();
 }
 
-/** Define the radius of the circle in object space.
- * An ellipse is formed by setting the ObjectToParentTransform */
 template <unsigned int TDimension>
 void
 EllipseSpatialObject<TDimension>::SetRadiusInObjectSpace(double radius)
@@ -65,9 +63,6 @@ EllipseSpatialObject<TDimension>::SetRadiusInObjectSpace(double radius)
   }
 }
 
-/** Test whether a point is inside or outside the object
- *  For computational speed purposes, it is faster if the method does not
- *  check the name of the class and the current depth */
 template <unsigned int TDimension>
 bool
 EllipseSpatialObject<TDimension>::IsInsideInObjectSpace(const PointType & point) const
@@ -97,7 +92,6 @@ EllipseSpatialObject<TDimension>::IsInsideInObjectSpace(const PointType & point)
   return false;
 }
 
-/** Compute the bounds of the ellipse */
 template <unsigned int TDimension>
 void
 EllipseSpatialObject<TDimension>::ComputeMyBoundingBox()
@@ -118,7 +112,6 @@ EllipseSpatialObject<TDimension>::ComputeMyBoundingBox()
   this->GetModifiableMyBoundingBoxInObjectSpace()->ComputeBoundingBox();
 }
 
-/** InternalClone */
 template <unsigned int TDimension>
 typename LightObject::Pointer
 EllipseSpatialObject<TDimension>::InternalClone() const
@@ -128,7 +121,7 @@ EllipseSpatialObject<TDimension>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "Downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("Downcast to type " << this->GetNameOfClass() << " failed.");
   }
   rval->SetRadiusInObjectSpace(this->GetRadiusInObjectSpace());
   rval->SetCenterInObjectSpace(this->GetCenterInObjectSpace());
@@ -136,15 +129,14 @@ EllipseSpatialObject<TDimension>::InternalClone() const
   return loPtr;
 }
 
-/** Print Self function */
 template <unsigned int TDimension>
 void
 EllipseSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) const
 {
-  os << indent << "EllipseSpatialObject(" << this << ")" << std::endl;
+  os << indent << "EllipseSpatialObject(" << this << ')' << std::endl;
   Superclass::PrintSelf(os, indent);
-  os << "Object Radii: " << m_RadiusInObjectSpace << std::endl;
-  os << "Object Center: " << m_CenterInObjectSpace << std::endl;
+  os << indent << "Object Radii: " << m_RadiusInObjectSpace << std::endl;
+  os << indent << "Object Center: " << m_CenterInObjectSpace << std::endl;
 }
 
 } // end namespace itk

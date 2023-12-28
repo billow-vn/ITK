@@ -25,7 +25,7 @@ namespace itk
 {
 
 /**
- *\class MaximumEntropyThresholdCalculator
+ * \class MaximumEntropyThresholdCalculator
  * \brief Computes the MaximumEntropy's threshold for an image.
  *
  * Implements Kapur-Sahoo-Wong (Maximum Entropy) thresholding method
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaximumEntropyThresholdCalculator, HistogramThresholdCalculator);
+  itkOverrideGetNameOfClassMacro(MaximumEntropyThresholdCalculator);
 
   /** Type definition for the input image. */
   using HistogramType = THistogram;

@@ -402,7 +402,7 @@ VoxBoCUBImageIO::CanReadFile(const char * filename)
 
   if (reader == nullptr)
   {
-    itkDebugMacro(<< "The file is not a valid CUB file");
+    itkDebugMacro("The file is not a valid CUB file");
     return false;
   }
 
@@ -610,7 +610,7 @@ VoxBoCUBImageIO::ReadImageInformation()
         {
           if (!oss.str().empty())
           {
-            oss << " ";
+            oss << ' ';
           }
           oss << word;
         }
@@ -622,7 +622,7 @@ VoxBoCUBImageIO::ReadImageInformation()
 }
 
 void
-VoxBoCUBImageIO ::WriteImageInformation()
+VoxBoCUBImageIO::WriteImageInformation()
 {
   if (m_Writer == nullptr)
   {
@@ -643,8 +643,7 @@ VoxBoCUBImageIO ::WriteImageInformation()
   std::ostringstream header;
 
   // Write the identifiers
-  header << m_VB_IDENTIFIER_SYSTEM << std::endl;
-  header << m_VB_IDENTIFIER_FILETYPE << std::endl;
+  header << m_VB_IDENTIFIER_SYSTEM << std::endl << m_VB_IDENTIFIER_FILETYPE << std::endl;
 
   // Write the data type
   switch (m_ComponentType)
@@ -670,19 +669,19 @@ VoxBoCUBImageIO ::WriteImageInformation()
   }
 
   // Write the image dimensions
-  header << m_VB_DIMENSIONS << ":\t" << m_Dimensions[0] << "\t" << m_Dimensions[1] << "\t" << m_Dimensions[2]
+  header << m_VB_DIMENSIONS << ":\t" << m_Dimensions[0] << '\t' << m_Dimensions[1] << '\t' << m_Dimensions[2]
          << std::endl;
 
   // Write the spacing
-  header << m_VB_SPACING << ":\t" << m_Spacing[0] << "\t" << m_Spacing[1] << "\t" << m_Spacing[2] << std::endl;
+  header << m_VB_SPACING << ":\t" << m_Spacing[0] << '\t' << m_Spacing[1] << '\t' << m_Spacing[2] << std::endl;
 
   // Write the origin (have to convert to bytes)
 
   double x = -m_Origin[0] / m_Spacing[0];
   double y = -m_Origin[1] / m_Spacing[1];
   double z = -m_Origin[2] / m_Spacing[2];
-  header << m_VB_ORIGIN << ":\t" << ((x >= 0) ? static_cast<int>(x + .5) : static_cast<int>(x - .5)) << "\t"
-         << ((y >= 0) ? static_cast<int>(y + .5) : static_cast<int>(y - .5)) << "\t"
+  header << m_VB_ORIGIN << ":\t" << ((x >= 0) ? static_cast<int>(x + .5) : static_cast<int>(x - .5)) << '\t'
+         << ((y >= 0) ? static_cast<int>(y + .5) : static_cast<int>(y - .5)) << '\t'
          << ((z >= 0) ? static_cast<int>(z + .5) : static_cast<int>(z - .5)) << std::endl;
 
   // Write the byte order
@@ -738,7 +737,7 @@ VoxBoCUBImageIO ::WriteImageInformation()
 
 /** The write function is not implemented */
 void
-VoxBoCUBImageIO ::Write(const void * buffer)
+VoxBoCUBImageIO::Write(const void * buffer)
 {
   m_Writer = CreateWriter(m_FileName.c_str());
   WriteImageInformation();
@@ -752,7 +751,7 @@ void
 VoxBoCUBImageIO::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "PixelType " << m_PixelType << "\n";
+  os << indent << "PixelType " << m_PixelType << '\n';
 }
 
 bool
@@ -762,7 +761,7 @@ VoxBoCUBImageIO::CheckExtension(const char * filename, bool & isCompressed)
 
   if (fname.empty())
   {
-    itkDebugMacro(<< "No filename specified.");
+    itkDebugMacro("No filename specified.");
     return false;
   }
 
@@ -786,7 +785,7 @@ VoxBoCUBImageIO::CheckExtension(const char * filename, bool & isCompressed)
 }
 
 void
-VoxBoCUBImageIO ::InitializeOrientationMap()
+VoxBoCUBImageIO::InitializeOrientationMap()
 {
   m_OrientationMap["RIP"] = SpatialOrientationEnums::ValidCoordinateOrientations::ITK_COORDINATE_ORIENTATION_RIP;
   m_OrientationMap["LIP"] = SpatialOrientationEnums::ValidCoordinateOrientations::ITK_COORDINATE_ORIENTATION_LIP;
@@ -845,7 +844,7 @@ VoxBoCUBImageIO ::InitializeOrientationMap()
 }
 
 void
-VoxBoCUBImageIO ::SwapBytesIfNecessary(void * buffer, BufferSizeType numberOfBytes)
+VoxBoCUBImageIO::SwapBytesIfNecessary(void * buffer, BufferSizeType numberOfBytes)
 {
   if (m_ComponentType == IOComponentEnum::CHAR)
   {

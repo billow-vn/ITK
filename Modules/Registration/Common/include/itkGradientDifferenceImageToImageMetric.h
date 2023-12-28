@@ -32,7 +32,7 @@ namespace itk
  * \brief Computes similarity between two objects to be registered
  *
  * This Class is templated over the type of the Images to be compared and
- * over the type of transformation and Iterpolator to be used.
+ * over the type of transformation and Interpolator to be used.
  *
  * This metric computes the sum of squared differences between pixels in
  * the derivatives of the moving and fixed images after passing the squared
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientDifferenceImageToImageMetric, ImageToImageMetric);
+  itkOverrideGetNameOfClassMacro(GradientDifferenceImageToImageMetric);
 
   /** Types transferred from the base class */
   using typename Superclass::RealType;
@@ -116,22 +116,21 @@ public:
 
   using MovedGradientPixelType = typename MovedGradientImageType::PixelType;
 
-  /** Get the derivatives of the match measure. */
+  /** Get the derivatives of the similarity measure. */
   void
   GetDerivative(const TransformParametersType & parameters, DerivativeType & derivative) const override;
 
-  /**  Get the value for single valued optimizers. */
+  /** Get the value of the similarity measure for single valued optimizers. */
   MeasureType
   GetValue(const TransformParametersType & parameters) const override;
 
-  /**  Get value and derivatives for multiple valued optimizers. */
+  /** Get value and derivatives of the similarity measure for multiple valued optimizers. */
   void
   GetValueAndDerivative(const TransformParametersType & parameters,
                         MeasureType &                   Value,
                         DerivativeType &                Derivative) const override;
 
-  /** Initialize the Metric by making sure that all the components
-   *  are present and plugged together correctly     */
+  /** Initialize the Metric by making sure that all the components are present and plugged together correctly. */
   void
   Initialize() override;
 
@@ -164,36 +163,36 @@ protected:
 
 private:
   /** The variance of the moving image gradients. */
-  mutable MovedGradientPixelType m_Variance[FixedImageDimension];
+  mutable MovedGradientPixelType m_Variance[FixedImageDimension]{};
 
   /** The range of the moving image gradients. */
-  mutable MovedGradientPixelType m_MinMovedGradient[MovedImageDimension];
-  mutable MovedGradientPixelType m_MaxMovedGradient[MovedImageDimension];
+  mutable MovedGradientPixelType m_MinMovedGradient[MovedImageDimension]{};
+  mutable MovedGradientPixelType m_MaxMovedGradient[MovedImageDimension]{};
   /** The range of the fixed image gradients. */
-  mutable FixedGradientPixelType m_MinFixedGradient[FixedImageDimension];
-  mutable FixedGradientPixelType m_MaxFixedGradient[FixedImageDimension];
+  mutable FixedGradientPixelType m_MinFixedGradient[FixedImageDimension]{};
+  mutable FixedGradientPixelType m_MaxFixedGradient[FixedImageDimension]{};
 
   /** The filter for transforming the moving image. */
-  typename TransformMovingImageFilterType::Pointer m_TransformMovingImageFilter;
+  typename TransformMovingImageFilterType::Pointer m_TransformMovingImageFilter{};
 
   /** The Sobel gradients of the fixed image */
-  CastFixedImageFilterPointer m_CastFixedImageFilter;
+  CastFixedImageFilterPointer m_CastFixedImageFilter{};
 
-  SobelOperator<FixedGradientPixelType, Self::FixedImageDimension> m_FixedSobelOperators[FixedImageDimension];
+  SobelOperator<FixedGradientPixelType, Self::FixedImageDimension> m_FixedSobelOperators[FixedImageDimension]{};
 
-  typename FixedSobelFilter::Pointer m_FixedSobelFilters[Self::FixedImageDimension];
+  typename FixedSobelFilter::Pointer m_FixedSobelFilters[Self::FixedImageDimension]{};
 
-  ZeroFluxNeumannBoundaryCondition<MovedGradientImageType> m_MovedBoundCond;
-  ZeroFluxNeumannBoundaryCondition<FixedGradientImageType> m_FixedBoundCond;
+  ZeroFluxNeumannBoundaryCondition<MovedGradientImageType> m_MovedBoundCond{};
+  ZeroFluxNeumannBoundaryCondition<FixedGradientImageType> m_FixedBoundCond{};
 
   /** The Sobel gradients of the moving image */
-  CastMovedImageFilterPointer m_CastMovedImageFilter;
+  CastMovedImageFilterPointer m_CastMovedImageFilter{};
 
-  SobelOperator<MovedGradientPixelType, Self::MovedImageDimension> m_MovedSobelOperators[MovedImageDimension];
+  SobelOperator<MovedGradientPixelType, Self::MovedImageDimension> m_MovedSobelOperators[MovedImageDimension]{};
 
-  typename MovedSobelFilter::Pointer m_MovedSobelFilters[Self::MovedImageDimension];
+  typename MovedSobelFilter::Pointer m_MovedSobelFilters[Self::MovedImageDimension]{};
 
-  double m_DerivativeDelta;
+  double m_DerivativeDelta{};
 };
 } // end namespace itk
 

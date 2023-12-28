@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class ConjugateGradientLineSearchOptimizerv4Template
+ * \class ConjugateGradientLineSearchOptimizerv4Template
  *  \brief Conjugate gradient descent optimizer with a golden section line search for nonlinear optimization.
  *
  * ConjugateGradientLineSearchOptimizer implements a conjugate gradient descent optimizer
@@ -58,7 +58,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConjugateGradientLineSearchOptimizerv4Template, Superclass);
+  itkOverrideGetNameOfClassMacro(ConjugateGradientLineSearchOptimizerv4Template);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -94,8 +94,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  DerivativeType m_LastGradient;
-  DerivativeType m_ConjugateGradient;
+  DerivativeType m_LastGradient{};
+  DerivativeType m_ConjugateGradient{};
 };
 
 /** This helps to meet backward compatibility */

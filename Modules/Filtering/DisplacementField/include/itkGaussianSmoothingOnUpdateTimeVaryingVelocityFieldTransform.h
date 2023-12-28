@@ -49,7 +49,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform, TimeVaryingVelocityFieldTransform);
+  itkOverrideGetNameOfClassMacro(GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -130,10 +130,10 @@ protected:
   /** Used in GaussianSmoothTimeVaryingVelocityField as variance for the
    * GaussianOperator
    */
-  ScalarType m_GaussianSpatialSmoothingVarianceForTheUpdateField;
-  ScalarType m_GaussianSpatialSmoothingVarianceForTheTotalField;
-  ScalarType m_GaussianTemporalSmoothingVarianceForTheUpdateField;
-  ScalarType m_GaussianTemporalSmoothingVarianceForTheTotalField;
+  ScalarType m_GaussianSpatialSmoothingVarianceForTheUpdateField{};
+  ScalarType m_GaussianSpatialSmoothingVarianceForTheTotalField{};
+  ScalarType m_GaussianTemporalSmoothingVarianceForTheUpdateField{};
+  ScalarType m_GaussianTemporalSmoothingVarianceForTheTotalField{};
 };
 
 } // end namespace itk

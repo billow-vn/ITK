@@ -66,7 +66,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineExponentialDiffeomorphicTransform, ConstantVelocityFieldTransform);
+  itkOverrideGetNameOfClassMacro(BSplineExponentialDiffeomorphicTransform);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -171,8 +171,8 @@ protected:
   PrintSelf(std::ostream &, Indent) const override;
 
 private:
-  ArrayType m_NumberOfControlPointsForTheConstantVelocityField;
-  ArrayType m_NumberOfControlPointsForTheUpdateField;
+  ArrayType m_NumberOfControlPointsForTheConstantVelocityField{};
+  ArrayType m_NumberOfControlPointsForTheUpdateField{};
 
   SplineOrderType m_SplineOrder{ 3 };
 };

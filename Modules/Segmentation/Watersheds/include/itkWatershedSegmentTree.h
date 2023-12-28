@@ -27,7 +27,7 @@ namespace itk
 namespace watershed
 {
 /**
- *\class SegmentTree
+ * \class SegmentTree
  * A data structure for storing segment merge information used in filters of
  * the watershed segmentation algorithm.  See itk::WatershedImageFilter for an
  * overview.
@@ -56,7 +56,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(SegmentTree, DataObject);
+  itkOverrideGetNameOfClassMacro(SegmentTree);
   using ScalarType = TScalar;
 
   /** Elements of the list (nodes of the tree).  A record of a merge
@@ -218,7 +218,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  DequeType m_Deque;
+  DequeType m_Deque{};
 };
 } // end namespace watershed
 } // end namespace itk

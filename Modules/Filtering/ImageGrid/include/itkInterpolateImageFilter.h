@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class InterpolateImageFilter
+ * \class InterpolateImageFilter
  * \brief Interpolate an image from two N-D images.
  *
  * Interpolates an image from two input images of the same type
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(InterpolateImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(InterpolateImageFilter);
 
   /** Inherit type alias from Superclass */
   using typename Superclass::InputImageType;
@@ -103,8 +103,11 @@ public:
   itkSetObjectMacro(Interpolator, InterpolatorType);
   itkGetModifiableObjectMacro(Interpolator, InterpolatorType);
 
-  /** This method is used to set the state of the filter before
-   * multi-threading. */
+  /**
+   * Set up the state of the filter before multi-threading.
+   * InterpolatorType::SetInputImage is not thread-safe and hence
+   * has to be setup before ThreadedGenerateData.
+   */
   void
   BeforeThreadedGenerateData() override;
 
@@ -130,11 +133,11 @@ protected:
 
 
 private:
-  typename InterpolatorType::Pointer m_Interpolator;
+  typename InterpolatorType::Pointer m_Interpolator{};
 
-  typename IntermediateImageType::Pointer m_IntermediateImage;
+  typename IntermediateImageType::Pointer m_IntermediateImage{};
 
-  double m_Distance;
+  double m_Distance{};
 };
 } // end namespace itk
 

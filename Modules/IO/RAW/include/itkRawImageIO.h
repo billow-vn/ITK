@@ -29,7 +29,7 @@
 namespace itk
 {
 /**
- *\class RawImageIO
+ * \class RawImageIO
  *
  * \brief Read and write raw binary images.
  *
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RawImageIO, ImageIOBase);
+  itkOverrideGetNameOfClassMacro(RawImageIO);
 
   /** Pixel type alias support Used to declare pixel type in filters
    * or other operations. */
@@ -169,12 +169,12 @@ protected:
   // void ComputeInternalFileName(unsigned long slice);
 
 private:
-  std::string m_InternalFileName;
+  std::string m_InternalFileName{};
 
-  unsigned long  m_FileDimensionality;
-  bool           m_ManualHeaderSize;
-  SizeValueType  m_HeaderSize;
-  unsigned short m_ImageMask;
+  unsigned long  m_FileDimensionality{};
+  bool           m_ManualHeaderSize{};
+  SizeValueType  m_HeaderSize{};
+  unsigned short m_ImageMask{};
 };
 
 template <typename TPixel, unsigned int VImageDimension>
@@ -206,7 +206,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RawImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(RawImageIOFactory);
 
   /** Register one factory of this type  */
   static void

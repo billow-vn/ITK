@@ -51,8 +51,8 @@ VnlRealToHalfHermitianForwardFFTImageFilter<TInputImage, TOutputImage>::Generate
   {
     if (!VnlFFTCommon::IsDimensionSizeLegal(inputSize[i]))
     {
-      itkExceptionMacro(<< "Cannot compute FFT of image with size " << inputSize
-                        << ". VnlRealToHalfHermitianForwardFFTImageFilter operates "
+      itkExceptionMacro("Cannot compute FFT of image with size "
+                        << inputSize << ". VnlRealToHalfHermitianForwardFFTImageFilter operates "
                         << "only on images whose size in each dimension has a prime "
                         << "factorization consisting of only 2s, 3s, or 5s.");
     }
@@ -71,8 +71,8 @@ VnlRealToHalfHermitianForwardFFTImageFilter<TInputImage, TOutputImage>::Generate
   vnlfft.transform(signal.data_block(), -1);
 
   // Copy the VNL output back to the ITK image.
-  ImageRegionIteratorWithIndex<TOutputImage> oIt(outputPtr, outputPtr->GetLargestPossibleRegion());
-  for (oIt.GoToBegin(); !oIt.IsAtEnd(); ++oIt)
+  for (ImageRegionIteratorWithIndex<TOutputImage> oIt(outputPtr, outputPtr->GetLargestPossibleRegion()); !oIt.IsAtEnd();
+       ++oIt)
   {
     typename OutputImageType::IndexType       index = oIt.GetIndex();
     typename OutputImageType::OffsetValueType offset = inputPtr->ComputeOffset(index);

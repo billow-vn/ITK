@@ -95,8 +95,20 @@ public:
   {
     m_Value = val;
   }
+
+  inline friend std::ostream &
+  operator<<(std::ostream & os, const ImageVoxel & val)
+  {
+    os << "Vpos: " << val.m_Vpos << std::endl;
+    os << "Spos: " << val.m_Spos << std::endl;
+    os << "Value: " << val.m_Value << std::endl;
+    os << "Distance: " << val.m_Distance << std::endl;
+    os << "Index: " << val.m_Index << std::endl;
+
+    return os;
+  }
 };
-/**\class DeformableSimplexMesh3DGradientConstraintForceFilterEnums
+/** \class DeformableSimplexMesh3DGradientConstraintForceFilterEnums
  * \brief Contains all enum classes used by the DeformableSimplexMesh3DGradientConstraintForceFilter class.
  * \ingroup ITKDeformableMesh
  */
@@ -121,9 +133,9 @@ public:
 extern ITKDeformableMesh_EXPORT std::ostream &
                                 operator<<(std::ostream & out, const DeformableSimplexMesh3DGradientConstraintForceFilterEnums::SIDE value);
 /**
- *\class DeformableSimplexMesh3DGradientConstraintForceFilter
+ * \class DeformableSimplexMesh3DGradientConstraintForceFilter
  * \brief
- * Additional to its superclass this class reimplements the external forces methos
+ * Additional to its superclass this class reimplements the external forces methods
  * in which the scan line algorithm is used to find highest gradient is found in
  * the direction of the normal to each vertex within a specified range.
  *
@@ -151,7 +163,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DeformableSimplexMesh3DGradientConstraintForceFilter, DeformableSimplexMesh3DFilter);
+  itkOverrideGetNameOfClassMacro(DeformableSimplexMesh3DGradientConstraintForceFilter);
 
   /** Some type alias. */
   using InputMeshType = TInputMesh;
@@ -213,7 +225,7 @@ protected:
   /**
    * Range of search for Bresenham algorithm (normal line at each vertex)
    */
-  int m_Range;
+  int m_Range{};
 
 private:
   double
@@ -226,13 +238,13 @@ private:
   Clear();
 
   // line starting voxel
-  ImageVoxel * m_StartVoxel;
+  ImageVoxel * m_StartVoxel{};
   // line voxels in direction
-  std::vector<ImageVoxel *> m_Positive;
+  std::vector<ImageVoxel *> m_Positive{};
   // line voxels in -direction
-  std::vector<ImageVoxel *> m_Negative;
+  std::vector<ImageVoxel *> m_Negative{};
 
-  OriginalImagePointer m_Image;
+  OriginalImagePointer m_Image{};
 }; // end of class
 } // namespace itk
 

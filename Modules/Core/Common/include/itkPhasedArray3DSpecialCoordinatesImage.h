@@ -108,7 +108,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PhasedArray3DSpecialCoordinatesImage, SpecialCoordinatesImage);
+  itkOverrideGetNameOfClassMacro(PhasedArray3DSpecialCoordinatesImage);
 
   /** Pixel type alias support Used to declare pixel type in filters
    * or other operations. */
@@ -183,7 +183,7 @@ public:
 
   /** Returns the continuous index from a physical point */
   template <typename TIndexRep, typename TCoordRep>
-  ContinuousIndex<TIndexRep, 3>
+  [[nodiscard]] ContinuousIndex<TIndexRep, 3>
   TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, 3> & point) const
   {
     const RegionType region = this->GetLargestPossibleRegion();
@@ -211,11 +211,15 @@ public:
   /** \brief Get the continuous index from a physical point
    *
    * Returns true if the resulting index is within the image, false otherwise.
+   *
+   * \note For performance reasons, if you do not need to use the `bool` return value, please call the corresponding
+   * overload instead, which has only one parameter (the point), and returns the continuous index.
+   *
    * \sa Transform */
   template <typename TCoordRep, typename TIndexRep>
-  bool
-  TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, 3> &     point,
-                                          ContinuousIndex<TIndexRep, 3> & index) const
+  ITK_NODISCARD("Call the overload which has the point as the only parameter and returns the index")
+  bool TransformPhysicalPointToContinuousIndex(const Point<TCoordRep, 3> &     point,
+                                               ContinuousIndex<TIndexRep, 3> & index) const
   {
     index = this->TransformPhysicalPointToContinuousIndex<TIndexRep>(point);
 
@@ -229,7 +233,7 @@ public:
    * Floating point index results are truncated to integers.
    */
   template <typename TCoordRep>
-  IndexType
+  [[nodiscard]] IndexType
   TransformPhysicalPointToIndex(const Point<TCoordRep, 3> & point) const
   {
     const RegionType region = this->GetLargestPossibleRegion();
@@ -257,10 +261,14 @@ public:
   /** Get the index (discrete) from a physical point.
    * Floating point index results are truncated to integers.
    * Returns true if the resulting index is within the image, false otherwise
+   *
+   * \note For performance reasons, if you do not need to use the `bool` return value, please call the corresponding
+   * overload instead, which has only one parameter (the point), and returns the index.
+   *
    * \sa Transform */
   template <typename TCoordRep>
-  bool
-  TransformPhysicalPointToIndex(const Point<TCoordRep, 3> & point, IndexType & index) const
+  ITK_NODISCARD("Call the overload which has the point as the only parameter and returns the index")
+  bool TransformPhysicalPointToIndex(const Point<TCoordRep, 3> & point, IndexType & index) const
   {
     index = this->TransformPhysicalPointToIndex(point);
 
@@ -300,7 +308,7 @@ public:
 
   /** Returns a physical point from a continuous index. */
   template <typename TCoordRep, typename TIndexRep>
-  Point<TCoordRep, 3>
+  [[nodiscard]] Point<TCoordRep, 3>
   TransformContinuousIndexToPhysicalPoint(const ContinuousIndex<TIndexRep, 3> & index) const
   {
     Point<TCoordRep, 3> point;
@@ -338,7 +346,7 @@ public:
 
   /** Returns a physical point from a discrete index. */
   template <typename TCoordRep>
-  Point<TCoordRep, 3>
+  [[nodiscard]] Point<TCoordRep, 3>
   TransformIndexToPhysicalPoint(const IndexType & index) const
   {
     Point<TCoordRep, 3> point;
@@ -411,10 +419,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double m_AzimuthAngularSeparation;   // in radians
-  double m_ElevationAngularSeparation; // in radians
-  double m_RadiusSampleSize;
-  double m_FirstSampleDistance;
+  double m_AzimuthAngularSeparation{};   // in radians
+  double m_ElevationAngularSeparation{}; // in radians
+  double m_RadiusSampleSize{};
+  double m_FirstSampleDistance{};
 };
 } // end namespace itk
 

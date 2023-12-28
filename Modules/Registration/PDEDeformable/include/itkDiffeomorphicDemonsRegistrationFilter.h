@@ -91,7 +91,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DiffeomorphicDemonsRegistrationFilter, PDEDeformableRegistrationFilter);
+  itkOverrideGetNameOfClassMacro(DiffeomorphicDemonsRegistrationFilter);
 
   /** FixedImage image type. */
   using typename Superclass::FixedImageType;
@@ -179,8 +179,11 @@ protected:
   ApplyUpdate(const TimeStepType & dt) override;
 
 private:
-  /** Downcast the DifferenceFunction using a dynamic_cast to ensure that it is of the correct type.
-   * this method will throw an exception if the function is not of the expected type. */
+  /** Downcast the DifferenceFunction using a dynamic_cast to ensure that it is of the correct type (i.e.
+   * a DemonsRegistrationFunction).
+   *
+   * Throws an exception if the function is not of the expected type.
+   */
   DemonsRegistrationFunctionType *
   DownCastDifferenceFunctionType();
 
@@ -207,10 +210,10 @@ private:
   using FieldInterpolatorOutputType = typename FieldInterpolatorType::OutputType;
   using AdderPointer = typename AdderType::Pointer;
 
-  MultiplyByConstantPointer m_Multiplier;
-  FieldExponentiatorPointer m_Exponentiator;
-  VectorWarperPointer       m_Warper;
-  AdderPointer              m_Adder;
+  MultiplyByConstantPointer m_Multiplier{};
+  FieldExponentiatorPointer m_Exponentiator{};
+  VectorWarperPointer       m_Warper{};
+  AdderPointer              m_Adder{};
   bool                      m_UseFirstOrderExp{ false };
 };
 } // end namespace itk

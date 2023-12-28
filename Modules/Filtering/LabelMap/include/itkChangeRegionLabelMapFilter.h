@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class ChangeRegionLabelMapFilter
+ * \class ChangeRegionLabelMapFilter
  * \brief Change the region of a label map.
  *
  * Change the region of a label map. If the output can't contain some of the objects' lines
@@ -65,7 +65,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ChangeRegionLabelMapFilter, InPlaceImageFilter);
+  itkOverrideGetNameOfClassMacro(ChangeRegionLabelMapFilter);
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -124,7 +124,7 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImageRegionType m_Region;
+  OutputImageRegionType m_Region{};
 };
 } // end namespace itk
 

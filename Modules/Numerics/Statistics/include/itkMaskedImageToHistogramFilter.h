@@ -27,7 +27,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MaskedImageToHistogramFilter
+ * \class MaskedImageToHistogramFilter
  *  \brief Generate a histogram from the masked pixels of an image.
  *
  * This class expands the features of the ImageToHistogramFilter by
@@ -55,7 +55,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaskedImageToHistogramFilter, ImageToHistogramFilter);
+  itkOverrideGetNameOfClassMacro(MaskedImageToHistogramFilter);
 
   /** standard New() method support */
   itkNewMacro(Self);

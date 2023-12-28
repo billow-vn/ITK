@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class InterpolateImageFunction
+ * \class InterpolateImageFunction
  * \brief Base class for all image interpolators.
  *
  * InterpolateImageFunction is the base for all ImageFunctions that
@@ -57,7 +57,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(InterpolateImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(InterpolateImageFunction);
 
   /** OutputType type alias support */
   using typename Superclass::OutputType;

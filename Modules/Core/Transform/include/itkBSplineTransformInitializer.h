@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineTransformInitializer, Object);
+  itkOverrideGetNameOfClassMacro(BSplineTransformInitializer);
 
   /** Type of the transform to initialize. */
   using TransformType = TTransform;
@@ -106,8 +106,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ImagePointer     m_Image;
-  TransformPointer m_Transform;
+  ImagePointer     m_Image{};
+  TransformPointer m_Transform{};
 
   MeshSizeType m_TransformDomainMeshSize{ MeshSizeType::Filled(1) };
   bool         m_SetTransformDomainMeshSizeViaInitializer{ false };

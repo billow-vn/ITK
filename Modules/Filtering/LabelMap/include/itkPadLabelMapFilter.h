@@ -33,7 +33,7 @@
 namespace itk
 {
 /**
- *\class PadLabelMapFilter
+ * \class PadLabelMapFilter
  * \brief Pad a LabelMap image
  *
  * This filter pads a label map.
@@ -64,7 +64,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PadLabelMapFilter, ChangeRegionLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(PadLabelMapFilter);
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -124,8 +124,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  SizeType m_UpperBoundaryPadSize;
-  SizeType m_LowerBoundaryPadSize;
+  SizeType m_UpperBoundaryPadSize{};
+  SizeType m_LowerBoundaryPadSize{};
 };
 } // end namespace itk
 

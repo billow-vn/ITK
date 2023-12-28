@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class VTKPolyDataMeshIOFactory
+ * \class VTKPolyDataMeshIOFactory
  * \brief Create instances of VTKPolyDataMeshIO objects using an object factory.
  * \ingroup ITKIOMeshVTK
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VTKPolyDataMeshIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(VTKPolyDataMeshIOFactory);
 
   /** Register one factory of this type  */
   static void

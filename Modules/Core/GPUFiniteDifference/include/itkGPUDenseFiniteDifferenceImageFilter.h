@@ -66,7 +66,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(GPUDenseFiniteDifferenceImageFilter, GPUFiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUDenseFiniteDifferenceImageFilter);
 
   /** Convenient type alias */
   using InputImageType = typename GPUSuperclass::InputImageType;
@@ -137,7 +137,7 @@ protected:
   AllocateUpdateBuffer() override;
 
   /* GPU kernel handle for GPUApplyUpdate */
-  int m_ApplyUpdateGPUKernelHandle;
+  int m_ApplyUpdateGPUKernelHandle{};
 };
 } // end namespace itk
 

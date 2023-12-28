@@ -26,7 +26,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class SpatialNeighborSubsampler
+ * \class SpatialNeighborSubsampler
  * \brief A subsampler that selects all points
  * within the specified radius of the query point.
  *
@@ -61,7 +61,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(SpatialNeighborSubsampler, RegionConstrainedSubsampler);
+  itkOverrideGetNameOfClassMacro(SpatialNeighborSubsampler);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -123,8 +123,8 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  RadiusType m_Radius;
-  bool       m_RadiusInitialized;
+  RadiusType m_Radius{};
+  bool       m_RadiusInitialized{};
 }; // end of class SpatialNeighborSubsampler
 
 } // end of namespace Statistics

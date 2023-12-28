@@ -40,7 +40,7 @@
 namespace itk
 {
 /**
- *\class IPLCommonImageIO
+ * \class IPLCommonImageIO
  *
  * \author Hans J. Johnson
  * \brief Class that defines how to read GE4 file format.
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(IPLCommonImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(IPLCommonImageIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
@@ -164,9 +164,9 @@ protected:
 
   //
   // data members
-  GEImageHeader *   m_ImageHeader;
-  IOByteOrderEnum   m_SystemByteOrder;
-  IPLFileNameList * m_FilenameList;
+  GEImageHeader *   m_ImageHeader{};
+  IOByteOrderEnum   m_SystemByteOrder{};
+  IPLFileNameList * m_FilenameList{};
   //
   // return 0 on success, -1 on failure
   int

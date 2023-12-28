@@ -369,7 +369,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
     const PDFValueType fixedImageMarginalPDFValue = l_FixedImageMarginalPDF[fixedIndex];
 
     // If fixedImageMarginalPDFValue is <= closeToZero, then the entire row of values is <= closeToZero, so
-    // by definition, each of the individual jointPDFVlaue's must also be close to zero in the line below!
+    // by definition, each of the individual jointPDFValue's must also be close to zero in the line below!
     if (fixedImageMarginalPDFValue > closeToZero)
     {
       // NOTE: If fixedImageMarginalPDFValue <=> closeToZero, logfixedImageMarginalPDFValue is never used
@@ -384,7 +384,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
 
         // check for non-zero bin contribution, if movingImageMarginalPDF <= closeToZero, then so is joinPDFValue
         if (movingImageMarginalPDF > closeToZero &&
-            jointPDFValue > closeToZero) //<-- This check is always false if not isNotNearZerofixedImageMarginalPDFValue
+            jointPDFValue > closeToZero) //<-- This check is always false if not isNotNearZeroFixedImageMarginalPDFValue
         {
           const PDFValueType pRatio = std::log(jointPDFValue / movingImageMarginalPDF);
           sum += jointPDFValue * (pRatio - logfixedImageMarginalPDFValue);
@@ -416,7 +416,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
           }
         } // end if( jointPDFValue > closeToZero && movingImageMarginalPDF > closeToZero )
       }   // end for-loop over moving index
-    }     // end conditional for fixedmarginalPDF > close to zero
+    }     // end conditional for fixedMarginalPDF > close to zero
   }       // end for-loop over fixed index
 
   // Apply the pRatio and sum the per-window derivative
@@ -517,7 +517,7 @@ MattesMutualInformationImageToImageMetricv4<
   TMetricTraits>::ComputeSingleFixedImageParzenWindowIndex(const FixedImagePixelType & value) const
 {
   // Note. The previous version of this metric pre-computed these values
-  // during metric Initializaiton. But with the Metricv4 design, it's
+  // during metric Initialization. But with the Metricv4 design, it's
   // more difficult to do so and retrieve as needed in an efficient way.
 
   // Determine parzen window arguments (see eqn 6 of Mattes paper [2]).
@@ -555,7 +555,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
                                             TMetricTraits>::DerivativeBufferManager ::
   Initialize(size_t                                    maxBufferLength,
              const size_t                              cachedNumberOfLocalParameters,
-             std::mutex *                              parentDerivativeLockPtr,
+             std::mutex *                              parentDerivativeMutexPtr,
              typename JointPDFDerivativesType::Pointer parentJointPDFDerivatives)
 {
   m_CurrentFillSize = 0;
@@ -564,7 +564,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
   m_BufferOffsetContainer.resize(maxBufferLength, 0);
   m_CachedNumberOfLocalParameters = cachedNumberOfLocalParameters;
   m_MaxBufferSize = maxBufferLength;
-  m_ParentJointPDFDerivativesLockPtr = parentDerivativeLockPtr;
+  m_ParentJointPDFDerivativesMutexPtr = parentDerivativeMutexPtr;
   m_ParentJointPDFDerivatives = parentJointPDFDerivatives;
   // Allocate and initialize to zero (note the () at the end of the new
   // operator)
@@ -614,7 +614,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
   if (m_CurrentFillSize == m_MaxBufferSize)
   {
     // Attempt to acquire the lock once
-    std::unique_lock<std::mutex> FirstTryLockHolder(*this->m_ParentJointPDFDerivativesLockPtr, std::try_to_lock);
+    std::unique_lock<std::mutex> FirstTryLockHolder(*this->m_ParentJointPDFDerivativesMutexPtr, std::try_to_lock);
     if (FirstTryLockHolder.owns_lock())
     {
       ReduceBuffer();
@@ -623,7 +623,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
     {
       DoubleBufferSize();
       // Attempt to acquire the lock a second time
-      std::unique_lock<std::mutex> SecondTryLockHolder(*this->m_ParentJointPDFDerivativesLockPtr, std::try_to_lock);
+      std::unique_lock<std::mutex> SecondTryLockHolder(*this->m_ParentJointPDFDerivativesMutexPtr, std::try_to_lock);
       if (SecondTryLockHolder.owns_lock())
       {
         ReduceBuffer();
@@ -631,7 +631,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
     }
     else
     {
-      // when CPU speed is higher than memory bandwith
+      // when CPU speed is higher than memory bandwidth
       // the buffer could grow endlessly, so we limit it
       BlockAndReduce();
     }
@@ -652,7 +652,7 @@ MattesMutualInformationImageToImageMetricv4<TFixedImage,
 {
   if (m_CurrentFillSize > 0)
   {
-    std::lock_guard<std::mutex> LockHolder(*this->m_ParentJointPDFDerivativesLockPtr);
+    const std::lock_guard<std::mutex> lockGuard(*this->m_ParentJointPDFDerivativesMutexPtr);
     ReduceBuffer();
   }
 }

@@ -33,8 +33,7 @@ GPUCastImageFilter<TInputImage, TOutputImage>::GPUCastImageFilter()
     itkExceptionMacro("GPUCastImageFilter supports 1/2/3D image.");
   }
 
-  defines << "#define DIM_" << TInputImage::ImageDimension << "\n";
-  defines << "#define INPIXELTYPE ";
+  defines << "#define DIM_" << TInputImage::ImageDimension << '\n' << "#define INPIXELTYPE ";
   GetTypenameInString(typeid(typename TInputImage::PixelType), defines);
   defines << "#define OUTPIXELTYPE ";
   GetTypenameInString(typeid(typename TOutputImage::PixelType), defines);
@@ -54,9 +53,9 @@ template <typename TInputImage, typename TOutputImage>
 void
 GPUCastImageFilter<TInputImage, TOutputImage>::GPUGenerateData()
 {
-  itkDebugMacro(<< "Calling GPUCastImageFilter::GPUGenerateData()");
+  itkDebugMacro("Calling GPUCastImageFilter::GPUGenerateData()");
   GPUSuperclass::GPUGenerateData();
-  itkDebugMacro(<< "GPUCastImageFilter::GPUGenerateData() finished");
+  itkDebugMacro("GPUCastImageFilter::GPUGenerateData() finished");
 }
 
 

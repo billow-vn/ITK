@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class ReflectiveImageRegionConstIterator
+ * \class ReflectiveImageRegionConstIterator
  * \brief Multi-dimensional image iterator which only walks a region.
  *
  * ReflectiveImageRegionConstIterator is a templated class to represent a
@@ -58,26 +58,26 @@ public:
   using Self = ReflectiveImageRegionConstIterator;
   using Superclass = ImageConstIteratorWithIndex<TImage>;
 
-  /** Index type alias support While this was already typdef'ed in the superclass
+  /** Index type alias support While this was already typedef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc.
    * Note that we have to rescope Index back to itk::Index to that is it not
    * confused with ImageIterator::Index. */
   using IndexType = typename TImage::IndexType;
 
-  /** Image type alias support While this was already typdef'ed in the superclass
+  /** Image type alias support While this was already typedef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc.
    * Note that we have to rescope Image back to itk::Image to that is it not
    * confused with ImageIterator::Image. */
   using ImageType = TImage;
 
   /** PixelContainer type alias support Used to refer to the container for
-   * the pixel data. While this was already typdef'ed in the superclass
+   * the pixel data. While this was already typedef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly
    * with gcc. */
   using PixelContainer = typename TImage::PixelContainer;
   using PixelContainerPointer = typename PixelContainer::Pointer;
 
-  /** Region type alias support While this was already typdef'ed in the
+  /** Region type alias support While this was already typedef'ed in the
    * superclass it needs to be redone here for this subclass to compile
    * properly with gcc.  Note that we have to rescope Region back to
    * itk::ImageRegion so that is it not confused with
@@ -180,9 +180,9 @@ public:
   FillOffsets(const OffsetValueType & value);
 
 private:
-  bool       m_IsFirstPass[TImage::ImageDimension];
-  OffsetType m_BeginOffset;
-  OffsetType m_EndOffset;
+  bool       m_IsFirstPass[TImage::ImageDimension]{};
+  OffsetType m_BeginOffset{};
+  OffsetType m_EndOffset{};
 };
 } // end namespace itk
 

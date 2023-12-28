@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class GradientDescentLineSearchOptimizerv4Template
+ * \class GradientDescentLineSearchOptimizerv4Template
  *  \brief Gradient descent optimizer with a golden section line search.
  *
  * GradientDescentLineSearchOptimizer implements a simple gradient descent optimizer
@@ -70,7 +70,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientDescentLineSearchOptimizerv4Template, GradientDescentOptimizerv4Template);
+  itkOverrideGetNameOfClassMacro(GradientDescentLineSearchOptimizerv4Template);
 
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
@@ -125,22 +125,30 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
+  /** Search the golden section.
+   *
+   * \p a and \p c are the current bounds; the minimum is between them.
+   * \p b is a center point.
+   * \c f(x) is some mathematical function elsewhere defined.
+   * \p a corresponds to \c x1; \p b corresponds to \c x2; \p c corresponds to \c x3.
+   * \c x corresponds to \c x4.
+   */
   TInternalComputationValueType
   GoldenSectionSearch(TInternalComputationValueType a,
                       TInternalComputationValueType b,
                       TInternalComputationValueType c,
                       TInternalComputationValueType metricb = NumericTraits<TInternalComputationValueType>::max());
 
-  TInternalComputationValueType m_LowerLimit;
-  TInternalComputationValueType m_UpperLimit;
-  TInternalComputationValueType m_Phi;
-  TInternalComputationValueType m_Resphi;
-  TInternalComputationValueType m_Epsilon;
+  TInternalComputationValueType m_LowerLimit{};
+  TInternalComputationValueType m_UpperLimit{};
+  TInternalComputationValueType m_Phi{};
+  TInternalComputationValueType m_Resphi{};
+  TInternalComputationValueType m_Epsilon{};
 
   /** Controls the maximum recursion depth for the golden section search */
-  unsigned int m_MaximumLineSearchIterations;
+  unsigned int m_MaximumLineSearchIterations{};
   /** Counts the recursion depth for the golden section search */
-  unsigned int m_LineSearchIterations;
+  unsigned int m_LineSearchIterations{};
 };
 
 /** This helps to meet backward compatibility */

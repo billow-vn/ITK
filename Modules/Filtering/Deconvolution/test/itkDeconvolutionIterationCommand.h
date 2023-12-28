@@ -52,7 +52,7 @@ public:
     const auto * filter = static_cast<const TFilterType *>(object);
     if (filter->GetCurrentEstimate() == nullptr)
     {
-      itkExceptionMacro(<< "CurrentEstimate is nullptr, but should not be.");
+      itkExceptionMacro("CurrentEstimate is nullptr, but should not be.");
     }
   }
 
@@ -66,7 +66,7 @@ protected:
   DeconvolutionIterationCommand() { m_NumberOfIterations = 0; }
 
 private:
-  int m_NumberOfIterations;
+  int m_NumberOfIterations{};
 };
 
 } // end namespace itk

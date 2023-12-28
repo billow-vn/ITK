@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class ImageModelEstimatorBase
+ * \class ImageModelEstimatorBase
  * \brief Base class for model estimation from images used for classification.
  *
  * itkImageModelEstimatorBase is the base class for the ImageModelEstimator
@@ -73,7 +73,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageModelEstimatorBase, LightProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageModelEstimatorBase);
 
   /** Set the number of classes. */
   itkSetMacro(NumberOfModels, unsigned int);
@@ -125,7 +125,10 @@ public:
     m_MembershipFunctions.resize(0);
   }
 
-  /** Stores a MembershipCalculator of a class in its internal vector */
+  /** Add a membership function corresponding to the class index.
+   *
+   * Stores a MembershipCalculator of a class in its internal vector.
+   */
   unsigned int
   AddMembershipFunction(MembershipFunctionPointer function);
 
@@ -147,12 +150,12 @@ private:
   unsigned int m_NumberOfModels{ 0 };
 
   /** Container to hold the membership functions */
-  MembershipFunctionPointerVector m_MembershipFunctions;
+  MembershipFunctionPointerVector m_MembershipFunctions{};
 
   /**Container for holding the training image */
-  InputImagePointer m_InputImage;
+  InputImagePointer m_InputImage{};
 
-  /** The core virtual function to perform modelling of the input data */
+  /** The core virtual function to perform modeling of the input data */
   virtual void
   EstimateModels() = 0;
 }; // class ImageModelEstimator

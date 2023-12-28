@@ -61,7 +61,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EuclideanDistancePointMetric, Object);
+  itkOverrideGetNameOfClassMacro(EuclideanDistancePointMetric);
 
   /** Types transferred from the base class. */
   using typename Superclass::TransformType;
@@ -123,7 +123,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  DistanceMapPointer m_DistanceMap;
+  DistanceMapPointer m_DistanceMap{};
   bool               m_ComputeSquaredDistance{ false };
 };
 } // end namespace itk

@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TreeNode, Object);
+  itkOverrideGetNameOfClassMacro(TreeNode);
 
   /** Get the value of the node */
   const TValue &
@@ -142,10 +142,10 @@ protected:
   TreeNode() = default;
   ~TreeNode() override;
 
-  TValue m_Data;
+  TValue m_Data{};
   Self * m_Parent{ nullptr };
 
-  ChildrenListType m_Children;
+  ChildrenListType m_Children{};
 };
 } // end namespace itk
 

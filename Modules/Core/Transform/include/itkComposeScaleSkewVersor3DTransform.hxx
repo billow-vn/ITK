@@ -78,7 +78,7 @@ template <typename TParametersValueType>
 void
 ComposeScaleSkewVersor3DTransform<TParametersValueType>::SetParameters(const ParametersType & parameters)
 {
-  itkDebugMacro(<< "Setting parameters " << parameters);
+  itkDebugMacro("Setting parameters " << parameters);
 
   // Save parameters. Needed for proper operation of TransformUpdateParameters.
   if (&parameters != &(this->m_Parameters))
@@ -110,7 +110,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::SetParameters(const Par
   newVersor.Set(axis);
   this->SetVarVersor(newVersor);
 
-  itkDebugMacro(<< "Versor is now " << newVersor);
+  itkDebugMacro("Versor is now " << newVersor);
 
   // Matrix must be defined before translation so that offset can be computed
   // from translation
@@ -136,7 +136,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::SetParameters(const Par
   // parameters and cannot know if the parameters have changed.
   this->Modified();
 
-  itkDebugMacro(<< "After setting parameters ");
+  itkDebugMacro("After setting parameters ");
 }
 
 //
@@ -154,7 +154,7 @@ template <typename TParametersValueType>
 auto
 ComposeScaleSkewVersor3DTransform<TParametersValueType>::GetParameters() const -> const ParametersType &
 {
-  itkDebugMacro(<< "Getting parameters ");
+  itkDebugMacro("Getting parameters ");
 
   this->m_Parameters[0] = this->GetVersor().GetX();
   this->m_Parameters[1] = this->GetVersor().GetY();
@@ -172,7 +172,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::GetParameters() const -
   this->m_Parameters[10] = this->GetSkew()[1];
   this->m_Parameters[11] = this->GetSkew()[2];
 
-  itkDebugMacro(<< "After getting parameters " << this->m_Parameters);
+  itkDebugMacro("After getting parameters " << this->m_Parameters);
 
   return this->m_Parameters;
 }
@@ -320,7 +320,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::ComputeJacobianWithResp
   //        [2*(v0*v1+v2*w), 1-2*(v0*v0+v2*v2), 2*(v1*v2-v0*w), o1],
   //        [2*(v0*v2-v1*w), 2*(v1*v2+v0*w), 1-2*(v0*v0+v1*v1), o2],
   //        [0, 0, 0, 1]])
-  // # Quaterion to Matrix from:
+  // # Quaternion to Matrix from:
   // #  https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
   // S = Matrix([[s0, 0, 0, 0], [0, s1, 0, 0], [0, 0, s2, 0], [0, 0, 0, 1]])
   // K = Matrix([[1, k0, k1, 0], [0, 1, k2, 0], [0, 0, 1, 0], [0, 0, 0, 1]])

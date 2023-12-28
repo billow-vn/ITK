@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GetAverageSliceImageFilter, AccumulateImageFilter);
+  itkOverrideGetNameOfClassMacro(GetAverageSliceImageFilter);
 
   /** Set the direction in which to reflect the data. */
   itkGetConstMacro(AveragedOutDimension, unsigned int);
@@ -73,7 +73,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  unsigned int m_AveragedOutDimension;
+  unsigned int m_AveragedOutDimension{};
 };
 } // end namespace itk
 

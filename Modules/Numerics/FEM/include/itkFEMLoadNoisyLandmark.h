@@ -27,9 +27,9 @@ namespace itk
 namespace fem
 {
 /**
- * \class itkFEMLoadNoisyLandmark
+ * \class FEMLoadNoisyLandmark
  * \brief This landmark is derived from the motion of a specific landmark, but
- * allows the existance of noise or outliers
+ * allows the existence of noise or outliers
  *
  * \author Yixun Liu
  *
@@ -52,7 +52,7 @@ public:
   itkSimpleNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoadNoisyLandmark, LoadLandmark);
+  itkOverrideGetNameOfClassMacro(LoadNoisyLandmark);
 
   /** Outlier or not */
   void
@@ -196,17 +196,17 @@ private:
   /**
    * Real displacement of the landmark
    */
-  VectorType m_RealDisplacement;
+  VectorType m_RealDisplacement{};
 
   /**
    * Simulated displacement of the landmark
    */
-  VectorType m_SimulatedDisplacement;
+  VectorType m_SimulatedDisplacement{};
 
   /**
    * Shape function vector
    */
-  VectorType m_Shape;
+  VectorType m_Shape{};
 
   /**
    * Magnitude of the error
@@ -231,13 +231,13 @@ private:
   /**
    * Structure tensor
    */
-  MatrixType m_StructureTensor;
+  MatrixType m_StructureTensor{};
 
   /**
    * Landmark tensor, which can be the stiffness tensor or the product
    * of the stiffness tensor and the structure tensor
    */
-  MatrixType m_LandmarkTensor;
+  MatrixType m_LandmarkTensor{};
 };
 } // end namespace fem
 } // end namespace itk

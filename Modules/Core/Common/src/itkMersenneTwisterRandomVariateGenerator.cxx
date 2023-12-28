@@ -29,12 +29,14 @@ namespace Statistics
 /** Private nested class to easily synchronize global variables across static libraries.*/
 struct MersenneTwisterGlobals
 {
-  MersenneTwisterGlobals()
-    : m_StaticInstance(nullptr)
-    , m_StaticDiffer(0){};
-  MersenneTwisterRandomVariateGenerator::Pointer                  m_StaticInstance;
-  std::recursive_mutex                                            m_StaticInstanceLock;
-  std::atomic<MersenneTwisterRandomVariateGenerator::IntegerType> m_StaticDiffer;
+  ITK_DISALLOW_COPY_AND_MOVE(MersenneTwisterGlobals);
+
+  MersenneTwisterGlobals() = default;
+  ~MersenneTwisterGlobals() = default;
+
+  MersenneTwisterRandomVariateGenerator::Pointer                  m_StaticInstance{};
+  std::mutex                                                      m_StaticInstanceMutex{};
+  std::atomic<MersenneTwisterRandomVariateGenerator::IntegerType> m_StaticDiffer{};
 };
 
 itkGetGlobalSimpleMacro(MersenneTwisterRandomVariateGenerator, MersenneTwisterGlobals, PimplGlobals);
@@ -70,7 +72,7 @@ MersenneTwisterRandomVariateGenerator::Pointer
 MersenneTwisterRandomVariateGenerator::GetInstance()
 {
   itkInitGlobalsMacro(PimplGlobals);
-  std::lock_guard<std::recursive_mutex> mutexHolder(m_PimplGlobals->m_StaticInstanceLock);
+  const std::lock_guard<std::mutex> lockGuard(m_PimplGlobals->m_StaticInstanceMutex);
 
   if (!m_PimplGlobals->m_StaticInstance)
   {
@@ -80,6 +82,15 @@ MersenneTwisterRandomVariateGenerator::GetInstance()
 
   return m_PimplGlobals->m_StaticInstance;
 }
+
+
+void
+MersenneTwisterRandomVariateGenerator::ResetNextSeed()
+{
+  itkInitGlobalsMacro(PimplGlobals);
+  m_PimplGlobals->m_StaticDiffer = 0;
+}
+
 
 MersenneTwisterRandomVariateGenerator::MersenneTwisterRandomVariateGenerator()
 {
@@ -134,7 +145,7 @@ MersenneTwisterRandomVariateGenerator::PrintSelf(std::ostream & os, Indent inden
   os << indent;
   const IntegerType * s = state;
   int                 i = StateVectorLength;
-  for (; i--; os << *s++ << "\t")
+  for (; i--; os << *s++ << '\t')
   {
   }
   os << std::endl;

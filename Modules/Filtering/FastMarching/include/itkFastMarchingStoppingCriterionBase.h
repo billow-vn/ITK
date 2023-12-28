@@ -27,7 +27,7 @@ namespace itk
 {
 
 /**
- *\class FastMarchingStoppingCriterionBase
+ * \class FastMarchingStoppingCriterionBase
   \brief Abstract Stopping Criterion dedicated for Fast Marching Methods
 
   \ingroup ITKFastMarching
@@ -51,7 +51,7 @@ public:
   using OutputDomainPointer = typename Traits::OutputDomainPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingStoppingCriterionBase, StoppingCriterionBase);
+  itkOverrideGetNameOfClassMacro(FastMarchingStoppingCriterionBase);
 
   /** Reinitialize internal values. */
   void
@@ -86,10 +86,10 @@ protected:
   /** Destructor */
   ~FastMarchingStoppingCriterionBase() override = default;
 
-  OutputDomainPointer m_Domain;
+  OutputDomainPointer m_Domain{};
 
-  OutputPixelType m_PreviousValue;
-  OutputPixelType m_CurrentValue;
+  OutputPixelType m_PreviousValue{};
+  OutputPixelType m_CurrentValue{};
 
   /** Inherited classes must implement this method and make sure member variables
   got reinitialized. */

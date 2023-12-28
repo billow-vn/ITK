@@ -23,6 +23,8 @@
 #include "itkIOCommon.h"
 #include "itkFloatingPointExceptions.h"
 
+#include <sstream>
+
 namespace itk
 {
 #define KEY_PREFIX "NRRD_"
@@ -213,7 +215,7 @@ NrrdImageIO::CanReadFile(const char * filename)
 
   if (!extensionFound)
   {
-    itkDebugMacro(<< "The filename extension is not recognized");
+    itkDebugMacro("The filename extension is not recognized");
     return false;
   }
 
@@ -286,7 +288,7 @@ NrrdImageIO::ReadImageInformation()
 
       // don't use macro so that we can free err
       std::ostringstream message;
-      message << "itk::ERROR: " << this->GetNameOfClass() << "(" << this << "): "
+      message << "itk::ERROR: " << this->GetNameOfClass() << '(' << this << "): "
               << "ReadImageInformation: Error reading " << this->GetFileName() << ":\n"
               << err;
       ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
@@ -868,6 +870,21 @@ NrrdImageIO::WriteImageInformation()
   // Nothing needs doing here.
 }
 
+
+// helper function
+template <typename T>
+bool
+_dump_metadata_to_stream(MetaDataDictionary & thisDic, const std::string & key, std::ostringstream & buffer)
+{
+  T value;
+  if (ExposeMetaData<T>(thisDic, key, value))
+  {
+    buffer << value;
+    return true;
+  }
+  return false;
+}
+
 void
 NrrdImageIO::Write(const void * buffer)
 {
@@ -1065,9 +1082,19 @@ NrrdImageIO::Write(const void * buffer)
     else
     {
       // not a NRRD field packed into meta data; just a regular key/value
-      std::string value;
-      ExposeMetaData<std::string>(thisDic, *keyIt, value);
-      nrrdKeyValueAdd(nrrd, keyIt->c_str(), value.c_str());
+      // convert to string and dump to the file
+      // const char *tname = thisDic.Get(*keyIt)->GetNameOfClass();
+      std::ostringstream dump;
+      if (_dump_metadata_to_stream<std::string>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<double>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<float>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<int>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<unsigned int>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<Array<float>>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<Array<double>>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<Array<int>>(thisDic, *keyIt, dump) ||
+          _dump_metadata_to_stream<Array<unsigned int>>(thisDic, *keyIt, dump))
+        nrrdKeyValueAdd(nrrd, keyIt->c_str(), dump.str().c_str());
     }
   }
 

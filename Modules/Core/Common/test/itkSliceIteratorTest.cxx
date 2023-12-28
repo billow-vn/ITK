@@ -98,7 +98,7 @@ PrintRegion(itk::SmartPointer<itk::Image<TPixelType, VDimension>> I)
 
   for (; !iter.IsAtEnd(); ++iter)
   {
-    std::cout << iter.Get() << " ";
+    std::cout << iter.Get() << ' ';
 
     iDim = VDimension - 1;
     bool done = false;
@@ -130,12 +130,12 @@ template <typename TContainer>
 void
 PrintSlice(TContainer s)
 {
-  std::cout << "[";
+  std::cout << '[';
   for (s = s.Begin(); s < s.End(); ++s)
   {
-    std::cout << *s << " ";
+    std::cout << *s << ' ';
   }
-  std::cout << "]" << std::endl;
+  std::cout << ']' << std::endl;
 }
 
 

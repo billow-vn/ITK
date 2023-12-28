@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ComplexToImaginaryImageFilter
+ * \class ComplexToImaginaryImageFilter
  * \brief Computes pixel-wise the imaginary part of a complex image.
  *
  * \ingroup IntensityImageFilters  MultiThreaded
@@ -72,7 +72,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ComplexToImaginaryImageFilter, UnaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(ComplexToImaginaryImageFilter);
 
   using InputPixelType = typename TInputImage::PixelType;
   using OutputPixelType = typename TOutputImage::PixelType;

@@ -23,14 +23,13 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <typename THistogram, typename TImage, typename TFunction>
 HistogramToImageFilter<THistogram, TImage, TFunction>::HistogramToImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 }
 
-/** Set the Input Histogram */
 template <typename THistogram, typename TImage, typename TFunction>
 void
 HistogramToImageFilter<THistogram, TImage, TFunction>::SetInput(const HistogramType * input)
@@ -111,14 +110,11 @@ HistogramToImageFilter<THistogram, TImage, TFunction>::GenerateOutputInformation
   outputImage->SetOrigin(origin);   // and origin
 }
 
-//----------------------------------------------------------------------------
-
-/** Update */
 template <typename THistogram, typename TImage, typename TFunction>
 void
 HistogramToImageFilter<THistogram, TImage, TFunction>::GenerateData()
 {
-  itkDebugMacro(<< "HistogramToImageFilter::Update() called");
+  itkDebugMacro("HistogramToImageFilter::Update() called");
 
   this->AllocateOutputs();
 

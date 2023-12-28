@@ -41,7 +41,7 @@ public:
   using Superclass = EdgeDecimationQuadEdgeMeshFilter<TInput, TOutput, TCriterion>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(QuadricDecimationQuadEdgeMeshFilter, EdgeDecimationQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(QuadricDecimationQuadEdgeMeshFilter);
 
   /** New macro for creation of through a Smart Pointer   */
   itkNewMacro(Self);
@@ -154,7 +154,7 @@ protected:
   Initialize() override;
 
 private:
-  QuadricElementMapType m_Quadric;
+  QuadricElementMapType m_Quadric{};
 };
 } // namespace itk
 #ifndef ITK_MANUAL_INSTANTIATION

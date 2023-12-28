@@ -261,7 +261,9 @@ equal(const itk::VariableLengthVector<TPixel> & pix1, const itk::VariableLengthV
   for (size_t i = 0; i < pix1.GetSize(); ++i)
   {
     if (pix1[i] != pix2[i])
+    {
       return false;
+    }
   }
   return true;
 }
@@ -276,7 +278,9 @@ abs_vector_diff(const itk::VariableLengthVector<TPixel> & pix1, const itk::Varia
   {
     double d = itk::Math::abs(static_cast<double>(pix1[i] - pix2[i]));
     if (d > diff)
+    {
       diff = d;
+    }
   }
   return diff;
 }
@@ -383,9 +387,13 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
   {
     TPixel pix;
     if (tolerance > 0.0)
+    {
       RandomPix(randgen, pix, 100);
+    }
     else
+    {
       RandomPix(randgen, pix);
+    }
     it.Set(pix);
   }
 
@@ -448,7 +456,7 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
     success = EXIT_FAILURE;
   }
 
-  int metaDataInt = itk::NumericTraits<int>::ZeroValue();
+  int metaDataInt{};
   if (!itk::ExposeMetaData<int>(metaDict2, "acquisition:TestInt", metaDataInt) || metaDataInt != 4)
   {
     std::cerr << "Failure reading metaData "
@@ -464,12 +472,16 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
               << "acquisition:TestDoubleArray " << std::endl;
     std::cerr << "metaDataDoubleArray=";
     for (size_t i = 0; i < metaDataDoubleArray.size(); ++i)
-      std::cerr << metaDataDoubleArray[i] << " ";
+    {
+      std::cerr << metaDataDoubleArray[i] << ' ';
+    }
     std::cerr << std::endl;
 
     std::cerr << "metaDataDoubleArray2=";
     for (size_t i = 0; i < metaDataDoubleArray2.size(); ++i)
-      std::cerr << metaDataDoubleArray2[i] << " ";
+    {
+      std::cerr << metaDataDoubleArray2[i] << ' ';
+    }
     std::cerr << std::endl;
 
     success = EXIT_FAILURE;
@@ -483,12 +495,16 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
               << "acquisition:TestFloatArray " << std::endl;
     std::cerr << "metaDataFloatArray=";
     for (size_t i = 0; i < metaDataFloatArray.size(); ++i)
-      std::cerr << metaDataFloatArray[i] << " ";
+    {
+      std::cerr << metaDataFloatArray[i] << ' ';
+    }
     std::cerr << std::endl;
 
     std::cerr << "metaDataFloatArray2=";
     for (size_t i = 0; i < metaDataFloatArray2.size(); ++i)
-      std::cerr << metaDataFloatArray2[i] << " ";
+    {
+      std::cerr << metaDataFloatArray2[i] << ' ';
+    }
     std::cerr << std::endl;
 
     success = EXIT_FAILURE;
@@ -508,7 +524,7 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
       metaDataStdString2 != metaDataStdString)
   {
     std::cerr << "Failure reading metaData "
-              << "StdString " << metaDataStdString2 << " " << metaDataStdString << std::endl;
+              << "StdString " << metaDataStdString2 << ' ' << metaDataStdString << std::endl;
     success = EXIT_FAILURE;
   }
 
@@ -629,9 +645,13 @@ MINCReadWriteTestVector(const char * fileName,
   {
     InternalPixelType pix(vector_length);
     if (tolerance > 0.0)
+    {
       RandomVectorPix<TPixel>(randgen, pix, 100.0);
+    }
     else
+    {
       RandomVectorPix<TPixel>(randgen, pix);
+    }
     it.Set(pix);
   }
 
@@ -685,7 +705,7 @@ MINCReadWriteTestVector(const char * fileName,
     success = EXIT_FAILURE;
   }
 
-  int metaDataInt = itk::NumericTraits<int>::ZeroValue();
+  int metaDataInt{};
   if (!itk::ExposeMetaData<int>(metaDict2, "acquisition:TestInt", metaDataInt) || metaDataInt != 4)
   {
     std::cerr << "Failure reading metaData "
@@ -716,7 +736,7 @@ MINCReadWriteTestVector(const char * fileName,
       metaDataStdString2 != metaDataStdString)
   {
     std::cerr << "Failure reading metaData "
-              << "StdString " << metaDataStdString2 << " " << metaDataStdString << std::endl;
+              << "StdString " << metaDataStdString2 << ' ' << metaDataStdString << std::endl;
     success = EXIT_FAILURE;
   }
 

@@ -85,9 +85,9 @@ ScalarImageToTextureFeaturesFilter<TImageType, THistogramFrequencyContainer, TMa
 }
 
 template <typename TImageType, typename THistogramFrequencyContainer, typename TMaskImageType>
-typename ScalarImageToTextureFeaturesFilter<TImageType, THistogramFrequencyContainer, TMaskImageType>::DataObjectPointer
+auto
 ScalarImageToTextureFeaturesFilter<TImageType, THistogramFrequencyContainer, TMaskImageType>::MakeOutput(
-  DataObjectPointerArraySizeType itkNotUsed(idx))
+  DataObjectPointerArraySizeType itkNotUsed(idx)) -> DataObjectPointer
 {
   return FeatureValueVectorDataObjectType::New().GetPointer();
 }
@@ -138,7 +138,7 @@ ScalarImageToTextureFeaturesFilter<TImageType, THistogramFrequencyContainer, TMa
     }
   }
 
-  // Now get the mean and deviaton of each feature across the offsets.
+  // Now get the mean and deviation of each feature across the offsets.
   m_FeatureMeans->clear();
   m_FeatureStandardDeviations->clear();
   auto * tempFeatureMeans = new double[numFeatures];

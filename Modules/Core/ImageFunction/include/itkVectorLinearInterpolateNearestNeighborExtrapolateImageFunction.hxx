@@ -30,31 +30,17 @@ template <typename TInputImage, typename TCoordRep>
 const unsigned int VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoordRep>::m_Neighbors =
   1 << TInputImage::ImageDimension;
 
-/**
- * PrintSelf
- */
 template <typename TInputImage, typename TCoordRep>
-void
-VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoordRep>::PrintSelf(std::ostream & os,
-                                                                                                  Indent indent) const
-{
-  this->Superclass::PrintSelf(os, indent);
-}
-
-/**
- * Evaluate at image index position
- */
-template <typename TInputImage, typename TCoordRep>
-typename VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoordRep>::OutputType
+auto
 VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoordRep>::EvaluateAtContinuousIndex(
-  const ContinuousIndexType & index) const
+  const ContinuousIndexType & index) const -> OutputType
 {
   unsigned int dim; // index over dimension
 
-  /**
-   * Compute base index = closest index below point
-   * Compute distance from point to base index
-   */
+  //
+  // Compute base index = closest index below point
+  // Compute distance from point to base index
+  //
   IndexType baseIndex;
   IndexType neighIndex;
   double    distance[ImageDimension];
@@ -82,11 +68,11 @@ VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoo
     }
   }
 
-  /**
-   * Interpolated value is the weight some of each of the surrounding
-   * neighbors. The weight for each neighbour is the fraction overlap
-   * of the neighbor pixel with respect to a pixel centered on point.
-   */
+  //
+  // Interpolated value is the weight some of each of the surrounding
+  // neighbors. The weight for each neighbour is the fraction overlap
+  // of the neighbor pixel with respect to a pixel centered on point.
+  //
   OutputType output;
   NumericTraits<OutputType>::SetLength(output, this->GetInputImage()->GetNumberOfComponentsPerPixel());
   output.Fill(0.0);
@@ -140,9 +126,9 @@ VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoo
  * Evaluate at image index position
  */
 template <typename TInputImage, typename TCoordRep>
-typename VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoordRep>::OutputType
+auto
 VectorLinearInterpolateNearestNeighborExtrapolateImageFunction<TInputImage, TCoordRep>::EvaluateAtIndex(
-  const IndexType & index) const
+  const IndexType & index) const -> OutputType
 {
   // Find the index that is closest to the requested one
   // but that lies within the image

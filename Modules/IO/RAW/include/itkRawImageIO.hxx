@@ -83,7 +83,7 @@ RawImageIO<TPixel, VImageDimension>::GetHeaderSize()
 
   if (m_FileName.empty())
   {
-    itkExceptionMacro(<< "A FileName must be specified.");
+    itkExceptionMacro("A FileName must be specified.");
   }
 
   if (!m_ManualHeaderSize)
@@ -135,20 +135,20 @@ RawImageIO<TPixel, VImageDimension>::Read(void * buffer)
   file.seekg((OffsetValueType)streamStart, std::ios::beg);
   if (file.fail())
   {
-    itkExceptionMacro(<< "File seek failed");
+    itkExceptionMacro("File seek failed");
   }
 
   const auto numberOfBytesToBeRead = static_cast<SizeValueType>(this->GetImageSizeInBytes());
 
-  itkDebugMacro(<< "Reading " << numberOfBytesToBeRead << " bytes");
+  itkDebugMacro("Reading " << numberOfBytesToBeRead << " bytes");
 
   const auto componentType = this->GetComponentType();
   if (m_FileType == IOFileEnum::Binary)
   {
     if (!this->ReadBufferAsBinary(file, buffer, numberOfBytesToBeRead))
     {
-      itkExceptionMacro(<< "Read failed: Wanted " << numberOfBytesToBeRead << " bytes, but read " << file.gcount()
-                        << " bytes.");
+      itkExceptionMacro("Read failed: Wanted " << numberOfBytesToBeRead << " bytes, but read " << file.gcount()
+                                               << " bytes.");
     }
   }
   else
@@ -156,7 +156,7 @@ RawImageIO<TPixel, VImageDimension>::Read(void * buffer)
     this->ReadBufferAsASCII(file, buffer, this->GetComponentType(), this->GetImageSizeInComponents());
   }
 
-  itkDebugMacro(<< "Reading Done");
+  itkDebugMacro("Reading Done");
   const SizeValueType numberOfComponents = this->GetImageSizeInComponents();
   ReadRawBytesAfterSwapping(componentType, buffer, m_ByteOrder, numberOfComponents);
 }

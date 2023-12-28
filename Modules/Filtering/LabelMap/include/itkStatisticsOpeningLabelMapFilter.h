@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class StatisticsOpeningLabelMapFilter
+ * \class StatisticsOpeningLabelMapFilter
  * \brief remove the objects according to the value of their statistics attribute
  *
  * StatisticsOpeningLabelMapFilter removes the objects in a label collection image
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsOpeningLabelMapFilter, ShapeOpeningLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(StatisticsOpeningLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

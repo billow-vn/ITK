@@ -29,7 +29,7 @@ namespace itk
  *
  * An attribute opening removes blobs according to criteria
  * such as area. When applied to grayscale images they have the effect of
- * trimming peaks (regions brighter than their surrounings)
+ * trimming peaks (regions brighter than their surroundings)
  * based on area while leaving the rest of the image
  * unchanged.
  *
@@ -37,7 +37,6 @@ namespace itk
  *
  * "Grayscale morphological attribute operations"
  * by Beare R.
- * https://hdl.handle.net/1926/1316
  * https://www.insight-journal.org/browse/publication/203
  *
  *
@@ -86,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AreaOpeningImageFilter, AttributeMorphologyBaseImageFilter);
+  itkOverrideGetNameOfClassMacro(AreaOpeningImageFilter);
 
   /**
    * Set/Get whether the image spacing is used or not - defaults to true.
@@ -124,11 +123,11 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
-    os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+    os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   }
 
 private:
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 };
 } // namespace itk
 #endif

@@ -29,7 +29,7 @@
 #include "ITKVtkGlueExport.h"
 
 /**
- *\class ImageInfo
+ * \class ImageInfo
  * \brief A container for an image and its description
  * \ingroup ITKVtkGlue
  */
@@ -49,7 +49,7 @@ public:
 };
 
 /**
- *\class RGBImageInfo
+ * \class RGBImageInfo
  * \brief A container for an rgb image and its description
  * \ingroup ITKVtkGlue
  */
@@ -68,7 +68,7 @@ public:
 };
 
 /**
- *\class QuickView
+ * \class QuickView
  * \brief A convenient class to render itk images with vtk
  *
  * This class presents a convenient and efficient mechanism to display
@@ -132,7 +132,7 @@ public:
   void
   AddRGBImage(TImage *, bool FlipVertical = true, std::string Description = "");
 
-  /** Render the images. If interact is tru, start a vtk
+  /** Render the images. If interact is true, start a vtk
    * Interactor. If false, return after one render.
    */
   void
@@ -167,14 +167,14 @@ public:
     m_Interpolate = true;
   }
 
-  /** Each render window will take a snaphot */
+  /** Each render window will take a snapshot */
   void
   SnapshotOn()
   {
     m_Snapshot = true;
   }
 
-  /** Each render window will take a snaphot */
+  /** Each render window will take a snapshot */
   void
   SnapshotOff()
   {

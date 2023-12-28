@@ -78,19 +78,16 @@ namespace itk
  *
  *      "Cell Tracking using Coupled Active Surfaces for Nuclei and Membranes"
  *      https://www.insight-journal.org/browse/publication/642
- *      https://hdl.handle.net/10380/3055
  *
  *  That is based on the papers:
  *
  *      "Level Set Segmentation: Active Contours without edge"
  *      https://www.insight-journal.org/browse/publication/322
- *      https://hdl.handle.net/1926/1532
  *
  *      and
  *
  *      "Level set segmentation using coupled active surfaces"
  *      https://www.insight-journal.org/browse/publication/323
- *      https://hdl.handle.net/1926/1533
  *
  *
  * \ingroup ImageFilters
@@ -116,7 +113,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MultiphaseDenseFiniteDifferenceImageFilter, MultiphaseFiniteDifferenceImageFilter);
+  itkOverrideGetNameOfClassMacro(MultiphaseDenseFiniteDifferenceImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same.
    * It is inherited from the superclass. */
@@ -212,7 +209,7 @@ protected:
   void
   ApplyUpdate(TimeStepType dt) override;
 
-  unsigned int m_ReinitializeCounter; // FIXME: Should this be a boolean ?
+  unsigned int m_ReinitializeCounter{}; // FIXME: Should this be a boolean ?
   // unsigned int m_UpdateCounter;        // FIXME: Should this be a boolean ?
 
 private:
@@ -228,7 +225,7 @@ private:
   CalculateChange() override;
 
   /** The buffer that holds the updates for an iteration of the algorithm. */
-  std::vector<InputImagePointer> m_UpdateBuffers;
+  std::vector<InputImagePointer> m_UpdateBuffers{};
 };
 } // end namespace itk
 

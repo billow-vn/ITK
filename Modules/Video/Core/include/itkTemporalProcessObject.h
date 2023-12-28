@@ -29,7 +29,7 @@ namespace itk
 class ITK_FORWARD_EXPORT TemporalDataObject;
 
 /**
- *\class TemporalProcessObject
+ * \class TemporalProcessObject
  * \brief TemporalProcessObject implements a ProcessObject for the itk pipeline
  *        with the notion of a temporal region
  *
@@ -77,7 +77,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TemporalProcessObject, ProcessObject);
+  itkOverrideGetNameOfClassMacro(TemporalProcessObject);
 
   /*-PUBLIC METHODS----------------------------------------------------------*/
 
@@ -166,7 +166,7 @@ protected:
   virtual void
   EnlargeOutputRequestedTemporalRegion(TemporalDataObject * output);
 
-  /** Explicitly handle temporal regions in GeneratOutputRegion. The default
+  /** Explicitly handle temporal regions in GenerateOutputRegion. The default
    * implementation checks to see if a request is currently set and if not, it
    * sets the requested temporal region to match the largest possible temporal
    * region

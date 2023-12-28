@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ShapeLabelMapFilter
+ * \class ShapeLabelMapFilter
  * \brief The valuator class for the ShapeLabelObject
  *
  * ShapeLabelMapFilter can be used to set the attributes values of the
@@ -86,7 +86,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ShapeLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(ShapeLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -148,10 +148,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  bool                   m_ComputeFeretDiameter;
-  bool                   m_ComputePerimeter;
-  bool                   m_ComputeOrientedBoundingBox;
-  LabelImageConstPointer m_LabelImage;
+  bool                   m_ComputeFeretDiameter{};
+  bool                   m_ComputePerimeter{};
+  bool                   m_ComputeOrientedBoundingBox{};
+  LabelImageConstPointer m_LabelImage{};
 
   void
   ComputeFeretDiameter(LabelObjectType * labelObject);

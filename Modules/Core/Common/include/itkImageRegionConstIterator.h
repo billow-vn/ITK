@@ -120,7 +120,7 @@ public:
   static constexpr unsigned int ImageIteratorDimension = Superclass::ImageIteratorDimension;
 
   /**
-   * Index type alias support While these were already typdef'ed in the superclass,
+   * Index type alias support While these were already typedef'ed in the superclass,
    * they need to be redone here for this subclass to compile properly with gcc.
    */
   /** Types inherited from the Superclass */
@@ -136,7 +136,7 @@ public:
   using typename Superclass::AccessorType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageRegionConstIterator, ImageConstIterator);
+  itkOverrideGetNameOfClassMacro(ImageRegionConstIterator);
 
   /** Default constructor. Needed since we provide a cast constructor. */
   ImageRegionConstIterator()
@@ -258,9 +258,9 @@ public:
   }
 
 protected:
-  OffsetValueType m_SpanBeginOffset; // one pixel before the beginning of the span
-                                     // (row)
-  OffsetValueType m_SpanEndOffset;   // one pixel past the end of the span (row)
+  OffsetValueType m_SpanBeginOffset{}; // one pixel before the beginning of the span
+                                       // (row)
+  OffsetValueType m_SpanEndOffset{};   // one pixel past the end of the span (row)
 
 private:
   void

@@ -84,11 +84,6 @@ namespace itk
  * derived classes, operate on meshes, images, etc.  This class computes a
  * value that measures the similarity between the two objects.
  *
- * \note Sparse sampling is not supported by this metric. An exception will be
- * thrown if m_UseSampledPointSet is set. Support for sparse sampling
- * will require a parallel implementation of the neighborhood scanning, which
- * currently caches information as the neighborhood window moves.
- *
  * \ingroup ITKMetricsv4
  */
 template <typename TFixedImage,
@@ -114,7 +109,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ANTSNeighborhoodCorrelationImageToImageMetricv4, ImageToImageMetricv4);
+  itkOverrideGetNameOfClassMacro(ANTSNeighborhoodCorrelationImageToImageMetricv4);
 
   /** superclass types */
   using typename Superclass::MeasureType;
@@ -198,7 +193,7 @@ protected:
 
 private:
   // Radius of the neighborhood window centered at each pixel
-  RadiusType m_Radius;
+  RadiusType m_Radius{};
 };
 
 } // end namespace itk

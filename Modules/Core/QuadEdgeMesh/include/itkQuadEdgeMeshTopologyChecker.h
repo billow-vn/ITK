@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class QuadEdgeMeshTopologyChecker
+ * \class QuadEdgeMeshTopologyChecker
  *  \brief Make some basic checks in order to verify that the considered
  *         mesh is not degenerated and correctly represents a surface
  *         with a potential boundary.
@@ -61,7 +61,7 @@ public:
 
 public:
   itkNewMacro(Self);
-  itkTypeMacro(QuadEdgeMeshTopologyChecker, Object);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshTopologyChecker);
 
   itkSetConstObjectMacro(Mesh, MeshType);
 
@@ -86,13 +86,13 @@ protected:
 private:
   using MeshPointer = typename MeshType::ConstPointer;
 
-  MeshPointer m_Mesh;
+  MeshPointer m_Mesh{};
 
-  PointIdentifier m_ExpectedNumberOfPoints;
-  CellIdentifier  m_ExpectedNumberOfEdges;
-  CellIdentifier  m_ExpectedNumberOfFaces;
-  CellIdentifier  m_ExpectedNumberOfBoundaries;
-  OffsetValueType m_ExpectedGenus;
+  PointIdentifier m_ExpectedNumberOfPoints{};
+  CellIdentifier  m_ExpectedNumberOfEdges{};
+  CellIdentifier  m_ExpectedNumberOfFaces{};
+  CellIdentifier  m_ExpectedNumberOfBoundaries{};
+  OffsetValueType m_ExpectedGenus{};
 };
 } // namespace itk
 

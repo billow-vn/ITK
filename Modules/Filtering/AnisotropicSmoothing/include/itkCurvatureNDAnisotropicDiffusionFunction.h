@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(CurvatureNDAnisotropicDiffusionFunction, ScalarAnisotropicDiffusionFunction);
+  itkOverrideGetNameOfClassMacro(CurvatureNDAnisotropicDiffusionFunction);
 
   /** Inherit some parameters from the superclass type. */
   using typename Superclass::ImageType;
@@ -122,7 +122,7 @@ protected:
 
 private:
   /** Inner product function. */
-  NeighborhoodInnerProduct<ImageType> m_InnerProduct;
+  NeighborhoodInnerProduct<ImageType> m_InnerProduct{};
 
   /** Slices for the ND neighborhood. */
   std::slice x_slice[ImageDimension];
@@ -130,16 +130,16 @@ private:
   std::slice xd_slice[ImageDimension][ImageDimension];
 
   /** Derivative operator */
-  DerivativeOperator<PixelType, Self::ImageDimension> m_DerivativeOperator;
+  DerivativeOperator<PixelType, Self::ImageDimension> m_DerivativeOperator{};
 
   /** Modified global average gradient magnitude term. */
-  PixelType m_K;
+  PixelType m_K{};
 
   /** */
   static double m_MIN_NORM;
 
-  NeighborhoodSizeValueType m_Center;
-  NeighborhoodSizeValueType m_Stride[ImageDimension];
+  NeighborhoodSizeValueType m_Center{};
+  NeighborhoodSizeValueType m_Stride[ImageDimension]{};
 };
 } // end namespace itk
 

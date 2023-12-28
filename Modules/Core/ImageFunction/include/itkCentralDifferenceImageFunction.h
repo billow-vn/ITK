@@ -88,7 +88,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CentralDifferenceImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(CentralDifferenceImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -102,7 +102,7 @@ public:
   /** InputPixelConvert type alias support */
   using InputPixelConvertType = DefaultConvertPixelTraits<InputPixelType>;
 
-  /** OutputType typdef support. */
+  /** OutputType typedef support. */
   using typename Superclass::OutputType;
 
   /** Output convert type alias support */
@@ -142,7 +142,7 @@ public:
   /** Get the interpolator. */
   itkGetModifiableObjectMacro(Interpolator, InterpolatorType);
 
-  /** Evalulate the image derivative by central differencing at specified index.
+  /** Evaluate the image derivative by central differencing at specified index.
    *
    *  No bounds checking is done.
    *  The point is assumed to lie within the image buffer.
@@ -155,7 +155,7 @@ public:
   OutputType
   EvaluateAtIndex(const IndexType & index) const override;
 
-  /** Evalulate the image derivative by central differencing at non-integer
+  /** Evaluate the image derivative by central differencing at non-integer
    *  point.
    *
    *  No bounds checking is done.
@@ -171,7 +171,7 @@ public:
   OutputType
   Evaluate(const PointType & point) const override;
 
-  /** Evalulate the image derivative by central differencing at non-integer
+  /** Evaluate the image derivative by central differencing at non-integer
    *  index.
    *
    *  No bounds checking is done.
@@ -217,47 +217,53 @@ private:
     using Type = T;
   };
 
-  /** Specialized versions of EvaluateAtIndex() method to handle scalar or vector pixel types.*/
+  /** Specialized version of EvaluateAtIndex() method to handle scalar pixel types.*/
   template <typename Type>
   inline void
   EvaluateAtIndexSpecialized(const IndexType & index,
                              OutputType &      orientedDerivative,
                              OutputTypeSpecializationStructType<OutputType>) const;
+
+  /** Specialized version of EvaluateAtIndex() method to handle vector pixel types.*/
   template <typename Type>
   inline void
   EvaluateAtIndexSpecialized(const IndexType & index,
                              OutputType &      derivative,
                              OutputTypeSpecializationStructType<Type>) const;
 
-  /** Specialized versions of EvaluateAtContinuousIndex() method to handle scalar or vector pixel types.*/
+  /** Specialized version of EvaluateAtContinuousIndex() method to handle scalar pixel types.*/
   template <typename Type>
   inline void
   EvaluateAtContinuousIndexSpecialized(const ContinuousIndexType & cindex,
                                        OutputType &                orientedDerivative,
                                        OutputTypeSpecializationStructType<OutputType>) const;
+
+  /** Specialized version of EvaluateAtContinuousIndex() method to handle vector pixel types.*/
   template <typename Type>
   inline void
   EvaluateAtContinuousIndexSpecialized(const ContinuousIndexType & cindex,
                                        OutputType &                derivative,
                                        OutputTypeSpecializationStructType<Type>) const;
 
-  /** Specialized versions of Evaluate() method to handle scalar or vector pixel types.*/
+  /** Specialized version of Evaluate() method to handle scalar pixel types.*/
   // NOTE: for some unknown reason, making these methods inline (as those above are inlined) makes them run *slower*.
   template <typename Type>
   void
   EvaluateSpecialized(const PointType & point,
                       OutputType &      orientedDerivative,
                       OutputTypeSpecializationStructType<OutputType>) const;
+
+  /** Specialized version of Evaluate() method to handle vector pixel types.*/
   template <typename Type>
   void
   EvaluateSpecialized(const PointType & point, OutputType & derivative, OutputTypeSpecializationStructType<Type>) const;
 
   // flag to take or not the image direction into account
   // when computing the derivatives.
-  bool m_UseImageDirection;
+  bool m_UseImageDirection{};
 
   // interpolator
-  InterpolatorPointer m_Interpolator;
+  InterpolatorPointer m_Interpolator{};
 };
 } // end namespace itk
 

@@ -108,7 +108,7 @@ HDF5TransformIOTemplate<TParametersValueType>::GetH5TypeFromString() const
     return H5::PredType::NATIVE_FLOAT;
   }
 
-  itkExceptionMacro(<< "Wrong data precision type " << NameParametersValueTypeString << "for writing in HDF5 File");
+  itkExceptionMacro("Wrong data precision type " << NameParametersValueTypeString << "for writing in HDF5 File");
 }
 
 /** Write a Parameter array to the location specified by name */
@@ -160,20 +160,20 @@ HDF5TransformIOTemplate<TParametersValueType>::WriteFixedParameters(const std::s
 
 /** read a parameter array from the location specified by name */
 template <typename TParametersValueType>
-typename HDF5TransformIOTemplate<TParametersValueType>::ParametersType
-HDF5TransformIOTemplate<TParametersValueType>::ReadParameters(const std::string & DataSetName) const
+auto
+HDF5TransformIOTemplate<TParametersValueType>::ReadParameters(const std::string & DataSetName) const -> ParametersType
 {
 
   H5::DataSet       paramSet = this->m_H5File->openDataSet(DataSetName);
   const H5T_class_t Type = paramSet.getTypeClass();
   if (Type != H5T_FLOAT)
   {
-    itkExceptionMacro(<< "Wrong data type for " << DataSetName << "in HDF5 File");
+    itkExceptionMacro("Wrong data type for " << DataSetName << "in HDF5 File");
   }
   const H5::DataSpace Space = paramSet.getSpace();
   if (Space.getSimpleExtentNdims() != 1)
   {
-    itkExceptionMacro(<< "Wrong # of dims for TransformType "
+    itkExceptionMacro("Wrong # of dims for TransformType "
                       << "in HDF5 File");
   }
   hsize_t dim;
@@ -206,20 +206,21 @@ HDF5TransformIOTemplate<TParametersValueType>::ReadParameters(const std::string 
 
 /** read a parameter array from the location specified by name */
 template <typename TParametersValueType>
-typename HDF5TransformIOTemplate<TParametersValueType>::FixedParametersType
+auto
 HDF5TransformIOTemplate<TParametersValueType>::ReadFixedParameters(const std::string & DataSetName) const
+  -> FixedParametersType
 {
 
   H5::DataSet paramSet = this->m_H5File->openDataSet(DataSetName);
   H5T_class_t Type = paramSet.getTypeClass();
   if (Type != H5T_FLOAT)
   {
-    itkExceptionMacro(<< "Wrong data type for " << DataSetName << "in HDF5 File");
+    itkExceptionMacro("Wrong data type for " << DataSetName << "in HDF5 File");
   }
   const H5::DataSpace Space = paramSet.getSpace();
   if (Space.getSimpleExtentNdims() != 1)
   {
-    itkExceptionMacro(<< "Wrong # of dims for TransformType "
+    itkExceptionMacro("Wrong # of dims for TransformType "
                       << "in HDF5 File");
   }
   hsize_t dim;
@@ -386,7 +387,7 @@ HDF5TransformIOTemplate<TParametersValueType>::WriteOneTransform(const int      
   {
     if (transformIndex != 0)
     {
-      itkExceptionMacro(<< "Composite Transform can only be 1st transform in a file");
+      itkExceptionMacro("Composite Transform can only be 1st transform in a file");
     }
   }
   else
@@ -494,9 +495,7 @@ const std::string
 GetTransformName(int i)
 {
   std::stringstream s;
-  s << HDF5CommonPathNames::transformGroupName;
-  s << "/";
-  s << i;
+  s << HDF5CommonPathNames::transformGroupName << '/' << i;
   return s.str();
 }
 

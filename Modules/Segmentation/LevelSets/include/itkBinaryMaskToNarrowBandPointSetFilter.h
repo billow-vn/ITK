@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BinaryMaskToNarrowBandPointSetFilter, ImageToMeshFilter);
+  itkOverrideGetNameOfClassMacro(BinaryMaskToNarrowBandPointSetFilter);
 
   /** Some type alias associated with the input images. */
   using InputImageType = TInputImage;
@@ -108,7 +108,7 @@ public:
   using NodeType = typename NodeContainer::Element;
 
   /** The ReinitializeLevelSetImageFilter expect the input to be binary
-      within the range [-0.5:0.5]. This filte will scale the input to
+      within the range [-0.5:0.5]. This filter will scale the input to
       fit in this range. */
   using RescaleFilterType = RescaleIntensityImageFilter<InputImageType, RealImageType>;
 
@@ -144,10 +144,10 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  DistanceFilterPointer m_DistanceFilter;
-  RescaleFilterPointer  m_RescaleFilter;
+  DistanceFilterPointer m_DistanceFilter{};
+  RescaleFilterPointer  m_RescaleFilter{};
 
-  float m_BandWidth;
+  float m_BandWidth{};
 };
 } // end namespace itk
 

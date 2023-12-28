@@ -60,7 +60,7 @@ public:
   using typename Superclass::TriangleType;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(DiscretePrincipalCurvaturesQuadEdgeMeshFilter, DiscreteCurvatureQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(DiscretePrincipalCurvaturesQuadEdgeMeshFilter);
 
   using CoefficientType = ConformalMatrixCoefficients<OutputMeshType>;
 
@@ -77,8 +77,8 @@ protected:
   {}
   ~DiscretePrincipalCurvaturesQuadEdgeMeshFilter() override = default;
 
-  OutputCurvatureType m_Gaussian;
-  OutputCurvatureType m_Mean;
+  OutputCurvatureType m_Gaussian{};
+  OutputCurvatureType m_Mean{};
 
   void
   ComputeMeanAndGaussianCurvatures(const OutputPointType & iP)

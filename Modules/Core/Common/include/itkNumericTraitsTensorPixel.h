@@ -143,8 +143,8 @@ public:
     return OneValue();
   }
 
-  static constexpr bool IsSigned = std::is_signed<ValueType>::value;
-  static constexpr bool IsInteger = std::is_integral<ValueType>::value;
+  static constexpr bool IsSigned = std::is_signed_v<ValueType>;
+  static constexpr bool IsInteger = std::is_integral_v<ValueType>;
   static constexpr bool IsComplex = NumericTraits<ValueType>::IsComplex;
 
   /** Fixed length vectors cannot be resized, so an exception will
@@ -156,8 +156,8 @@ public:
   {
     if (s != D * (D + 1) / 2)
     {
-      itkGenericExceptionMacro(<< "Cannot set the size of a SymmetricSecondRankTensor "
-                                  "of dimension "
+      itkGenericExceptionMacro("Cannot set the size of a SymmetricSecondRankTensor "
+                               "of dimension "
                                << D << " ( = size of " << D * (D + 1) / 2 << ") to " << s);
     }
     m.Fill(NumericTraits<T>::ZeroValue());

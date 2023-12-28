@@ -26,7 +26,7 @@ namespace itk
 namespace Accessor
 {
 /**
- *\class ComplexConjugatePixelAccessor
+ * \class ComplexConjugatePixelAccessor
  * \brief Provide access to the conjugate of a std::complex<> value.
  *
  * \ingroup ImageAdaptors
@@ -54,7 +54,7 @@ public:
 } // end namespace Accessor
 
 /**
- *\class ComplexConjugateImageAdaptor
+ * \class ComplexConjugateImageAdaptor
  * \brief Presents each pixel of a complex image as its complex conjugate.
  *
  * \ingroup ImageAdaptors
@@ -78,7 +78,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComplexConjugateImageAdaptor, ImageAdaptor);
+  itkOverrideGetNameOfClassMacro(ComplexConjugateImageAdaptor);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking. */

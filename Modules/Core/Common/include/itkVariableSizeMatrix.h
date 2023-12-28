@@ -30,7 +30,7 @@
 namespace itk
 {
 /**
- *\class VariableSizeMatrix
+ * \class VariableSizeMatrix
  * \brief A templated class holding a M x N size Matrix.
  *
  * This class contains a vnl_matrix in order
@@ -101,7 +101,7 @@ public:
   }
 
   /** Matrix by scalar multiplication.  */
-  Self operator*(const T & value)
+  Self operator*(const T & value) const
   {
     Self result(*this);
 
@@ -118,7 +118,7 @@ public:
 
   /** Matrix by scalar division.  */
   Self
-  operator/(const T & value)
+  operator/(const T & value) const
   {
     Self result(*this);
 

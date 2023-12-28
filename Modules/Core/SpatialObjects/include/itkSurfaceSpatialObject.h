@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro(SurfaceSpatialObject, PointBasedSpatialObject);
+  itkOverrideGetNameOfClassMacro(SurfaceSpatialObject);
 
   /** Restore a spatial object to its initial state, yet preserves Id as well as
    *   parent and children relationships */
@@ -73,21 +73,17 @@ public:
   Clear() override;
 
 #if !defined(ITK_LEGACY_REMOVE)
-  /** Calculate the normalized tangent - Old spelling of function name */
+  /** Approximate the normals of the surface. */
   itkLegacyMacro(bool Approximate3DNormals());
 #endif
 
-  /** Compute the normals to the surface from neighboring points */
+  /** Compute the normals to the surface from neighboring points. */
   bool
   ComputeNormals();
 
 protected:
   SurfaceSpatialObject();
   ~SurfaceSpatialObject() override = default;
-
-  /** Method to print the object.*/
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
   typename LightObject::Pointer
   InternalClone() const override;

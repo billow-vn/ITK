@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorLinearInterpolateImageFunction, VectorInterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(VectorLinearInterpolateImageFunction);
 
   /** InputImageType type alias support */
   using typename Superclass::InputImageType;
@@ -94,8 +94,6 @@ public:
 protected:
   VectorLinearInterpolateImageFunction() = default;
   ~VectorLinearInterpolateImageFunction() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
   /** Number of neighbors used in the interpolation */

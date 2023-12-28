@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/**\class VideoIOFactoryEnums
+/** \class VideoIOFactoryEnums
  * \brief Contains all enum classes used by VideoIOFactory class
  * \ingroup ITKVideoIO
  */
@@ -33,7 +33,7 @@ class VideoIOFactoryEnums
 {
 public:
   /**
-   *\class IOModeEnum
+   * \class IOModeEnum
    * \ingroup ITKVideoIO
    * Mode in which the VideoIO is intended to be used */
   enum class IOMode : uint8_t
@@ -47,7 +47,7 @@ public:
 extern ITKVideoIO_EXPORT std::ostream &
                          operator<<(std::ostream & out, const VideoIOFactoryEnums::IOMode value);
 /**
- *\class VideoIOFactory
+ * \class VideoIOFactory
  * \brief Create instances of VideoIO objects using an object factory.
  *
  * This class will create a VideoIO instance that can read/write to/from the
@@ -76,7 +76,7 @@ public:
   static constexpr IOModeEnum WriteMode = IOModeEnum::WriteMode;
 #endif
   /** Runtime type information (and related methods). **/
-  itkTypeMacro(VideoIOFactory, Object);
+  itkOverrideGetNameOfClassMacro(VideoIOFactory);
 
   /** Create the appropriate ImageIO depending on the particulars of the file.
    *  Note: arg can either be a path for reading/writing from/to a file or a

@@ -44,7 +44,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /**Standard Macros */
-  itkTypeMacro(HistogramAlgorithmBase, Object);
+  itkOverrideGetNameOfClassMacro(HistogramAlgorithmBase);
 
   /** Histogram type alias alias */
   using InputHistogramType = TInputHistogram;
@@ -91,7 +91,7 @@ protected:
 
 private:
   /** Target histogram data pointer */
-  typename TInputHistogram::ConstPointer m_InputHistogram;
+  typename TInputHistogram::ConstPointer m_InputHistogram{};
 }; // end of class
 } // end of namespace itk
 

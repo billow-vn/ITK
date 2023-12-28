@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class OFFMeshIOFactory
+ * \class OFFMeshIOFactory
  * \brief Create instances of OFFMeshIO objects using an object factory.
  * \ingroup ITKIOMeshOFF
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OFFMeshIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(OFFMeshIOFactory);
 
   /** Register one factory of this type  */
   static void

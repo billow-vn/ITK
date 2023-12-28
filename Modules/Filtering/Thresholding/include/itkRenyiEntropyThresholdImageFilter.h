@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class RenyiEntropyThresholdImageFilter
+ * \class RenyiEntropyThresholdImageFilter
  * \brief Threshold an image using the RenyiEntropy Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RenyiEntropyThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(RenyiEntropyThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

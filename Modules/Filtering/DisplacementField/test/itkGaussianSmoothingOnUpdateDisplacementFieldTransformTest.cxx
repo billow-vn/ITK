@@ -61,7 +61,7 @@ itkGaussianSmoothingOnUpdateDisplacementFieldTransformTest(int, char *[])
   /* Test SmoothDisplacementFieldGauss */
   std::cout << "Test SmoothDisplacementFieldGauss" << std::endl;
   using ParametersValueType = DisplacementTransformType::ParametersValueType;
-  ParametersValueType paramsZero = itk::NumericTraits<itk::NumericTraits<ParametersValueType>::ValueType>::ZeroValue();
+  ParametersValueType                            paramsZero{};
   DisplacementTransformType::ParametersType      params;
   DisplacementTransformType::ParametersType      paramsFill(displacementTransform->GetNumberOfParameters());
   DisplacementTransformType::ParametersValueType paramsFillValue = 0.0;
@@ -85,11 +85,17 @@ itkGaussianSmoothingOnUpdateDisplacementFieldTransformTest(int, char *[])
   {
     bool ok = true;
     if (i < linelength && itk::Math::NotAlmostEquals(params[i], paramsZero))
+    {
       ok = false;
+    }
     if (i % linelength == 0 && itk::Math::NotAlmostEquals(params[i], paramsZero))
+    {
       ok = false;
+    }
     if (i % linelength == (linelength - 1) && itk::Math::NotAlmostEquals(params[i], paramsZero))
+    {
       ok = false;
+    }
     if (!ok)
     {
       std::cout << "0-valued boundaries not found when expected "
@@ -106,7 +112,7 @@ itkGaussianSmoothingOnUpdateDisplacementFieldTransformTest(int, char *[])
     for (int j = -2; j < 3; ++j)
     {
       unsigned int index = outlier + static_cast<unsigned int>(i * (int)(dimLength * dimensions) + j);
-      std::cout << params(index) << " ";
+      std::cout << params(index) << ' ';
     }
     std::cout << std::endl;
   }
@@ -128,11 +134,17 @@ itkGaussianSmoothingOnUpdateDisplacementFieldTransformTest(int, char *[])
     {
       bool ok = true;
       if (i < linelength && itk::Math::NotAlmostEquals(params[i], paramsZero))
+      {
         ok = false;
+      }
       if (i % linelength == 0 && itk::Math::NotAlmostEquals(params[i], paramsZero))
+      {
         ok = false;
+      }
       if (i % linelength == (linelength - 1) && itk::Math::NotAlmostEquals(params[i], paramsZero))
+      {
         ok = false;
+      }
       if (!ok)
       {
         std::cout << "0-valued boundaries not found when expected "
@@ -161,7 +173,7 @@ itkGaussianSmoothingOnUpdateDisplacementFieldTransformTest(int, char *[])
     for (int j = -2; j < 3; ++j)
     {
       unsigned int index = outlier + static_cast<unsigned int>(i * (int)(dimLength * dimensions) + j);
-      std::cout << params(index) << " ";
+      std::cout << params(index) << ' ';
       if (itk::Math::AlmostEquals(params(index), paramsFillValue))
       {
         std::cout << "Expected to read a smoothed value at this index."

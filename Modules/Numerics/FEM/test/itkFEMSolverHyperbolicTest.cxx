@@ -20,6 +20,7 @@
 #include "itkFEMSpatialObjectReader.h"
 #include "itkFEMLinearSystemWrapperDenseVNL.h"
 #include "itkFEMLinearSystemWrapperItpack.h"
+#include "itkTestingMacros.h"
 
 
 using FEMSolverType = itk::fem::SolverHyperbolic<2>;
@@ -31,9 +32,7 @@ PrintK(FEMSolverType * S)
 {
   itk::fem::LinearSystemWrapper::Pointer lsw = S->GetLinearSystemWrapper();
 
-  std::cout << std::endl
-            << "k"
-            << "=[";
+  std::cout << std::endl << 'k' << "=[";
   for (unsigned int j = 0; j < lsw->GetSystemOrder(); ++j)
   {
     std::cout << " [";
@@ -51,7 +50,7 @@ PrintK(FEMSolverType * S)
     }
     else
     {
-      std::cout << "]";
+      std::cout << ']';
     }
   }
   std::cout << "];" << std::endl;
@@ -63,9 +62,7 @@ PrintF(FEMSolverType * S)
 {
   itk::fem::LinearSystemWrapper::Pointer lsw = S->GetLinearSystemWrapper();
 
-  std::cout << std::endl
-            << "f"
-            << "=[";
+  std::cout << std::endl << 'f' << "=[";
   for (unsigned int j = 0; j < lsw->GetSystemOrder(); ++j)
   {
     if (j > 0)
@@ -83,15 +80,14 @@ PrintNodalCoordinates(FEMSolverType * S)
 {
   std::cout << std::endl << "Nodal coordinates: " << std::endl;
 
-  std::cout << "xyz"
-            << "=[";
+  std::cout << "xyz=[";
 
   int numberOfNodes = S->GetInput()->GetNumberOfNodes();
   for (int i = 0; i < numberOfNodes; ++i)
   {
     std::cout << " [";
     std::cout << S->GetInput()->GetNode(i)->GetCoordinates();
-    std::cout << "]";
+    std::cout << ']';
   }
   std::cout << "];" << std::endl;
 }
@@ -141,10 +137,10 @@ PrintSolution(FEMSolverType * S)
 
   for (int i = 0; i < numberOfNodes; ++i)
   {
-    std::cout << "Solution Node " << i << ":";
+    std::cout << "Solution Node " << i << ':';
     for (unsigned int d = 0, dof; (dof = S->GetInput()->GetNode(i)->GetDegreeOfFreedom(d)) != invalidID; ++d)
     {
-      std::cout << " " << S->GetSolution(dof);
+      std::cout << ' ' << S->GetSolution(dof);
     }
     std::cout << std::endl;
   }
@@ -156,9 +152,9 @@ itkFEMSolverHyperbolicTest(int argc, char * argv[])
 
   if (argc < 4)
   {
-    std::cout << "Usage: " << argv[0];
-    std::cout << " input-file iterations lsw (0=VNL, 1=Dense VNL, 2=Itpack)";
-    std::cout << std::endl;
+    std::cerr << "Missing parameters." << std::endl;
+    std::cout << "Usage: " << itkNameOfTestExecutableMacro(argv);
+    std::cout << " inputFileName iterations lsw (0=VNL, 1=Dense VNL, 2=Itpack)" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -180,16 +176,9 @@ itkFEMSolverHyperbolicTest(int argc, char * argv[])
   using FEMSpatialObjectReaderPointer = FEMSpatialObjectReaderType::Pointer;
   FEMSpatialObjectReaderPointer SpatialReader = FEMSpatialObjectReaderType::New();
   SpatialReader->SetFileName(argv[1]);
-  try
-  {
-    SpatialReader->Update();
-  }
-  catch (itk::fem::FEMException & e)
-  {
-    std::cout << "Error reading FEM problem: " << argv[1] << "!\n";
-    e.Print(std::cout);
-    return EXIT_FAILURE;
-  }
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(SpatialReader->Update());
+
 
   using FEMObjectSpatialObjectType = itk::FEMObjectSpatialObject<2>;
   FEMObjectSpatialObjectType::ChildrenListType * children = SpatialReader->GetGroup()->GetChildren();
@@ -204,14 +193,31 @@ itkFEMSolverHyperbolicTest(int argc, char * argv[])
 
   femSO->GetFEMObject()->FinalizeMesh();
 
-  /**
-   * Third, create the FEM solver object and generate the solution
-   */
+  // Third, create the FEM solver object and generate the solution
 
   auto SH = FEMSolverType::New();
+
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(SH, SolverHyperbolic, Solver);
+
+
   SH->SetInput(femSO->GetFEMObject());
-  SH->SetTimeStep(.5);
+  ITK_TEST_SET_GET_VALUE(femSO->GetFEMObject(), SH->GetInput());
+
+  FEMSolverType::Float gamma = 0.5;
+  SH->SetGamma(gamma);
+  ITK_TEST_SET_GET_VALUE(gamma, SH->GetGamma());
+
+  FEMSolverType::Float beta = 0.25;
+  SH->SetBeta(beta);
+  ITK_TEST_SET_GET_VALUE(beta, SH->GetBeta());
+
   SH->SetNumberOfIterations(niter);
+  ITK_TEST_SET_GET_VALUE(niter, SH->GetNumberOfIterations());
+
+  FEMSolverType::Float timeStep = 0.5;
+  SH->SetTimeStep(timeStep);
+  ITK_TEST_SET_GET_VALUE(timeStep, SH->GetTimeStep());
+
 
   itk::fem::LinearSystemWrapperDenseVNL lsw_dvnl;
   itk::fem::LinearSystemWrapperItpack   lsw_itpack;
@@ -221,35 +227,28 @@ itkFEMSolverHyperbolicTest(int argc, char * argv[])
   {
     case 0:
       // VNL
-      std::cout << std::endl << ">>>>>Using LinearSystemWrapperVNL" << std::endl;
+      std::cout << std::endl << "Using LinearSystemWrapperVNL" << std::endl;
       SH->SetLinearSystemWrapper(&lsw_vnl);
       break;
     case 1:
       // Dense VNL
-      std::cout << std::endl << ">>>>>Using LinearSystemWrapperDenseVNL" << std::endl;
+      std::cout << std::endl << "Using LinearSystemWrapperDenseVNL" << std::endl;
       SH->SetLinearSystemWrapper(&lsw_dvnl);
       break;
     case 2:
       // IT Pack
-      std::cout << std::endl << ">>>>>Using LinearSystemWrapperItpack" << std::endl;
+      std::cout << std::endl << "Using LinearSystemWrapperItpack" << std::endl;
       SH->SetLinearSystemWrapper(&lsw_itpack);
       break;
     default:
       // Sparse VNL - default
-      std::cout << std::endl << ">>>>>Using LinearSystemWrapperVNL" << std::endl;
+      std::cout << std::endl << "Using LinearSystemWrapperVNL" << std::endl;
       SH->SetLinearSystemWrapper(&lsw_vnl);
       break;
   }
 
-  try
-  {
-    SH->Update();
-  }
-  catch (const itk::ExceptionObject & err)
-  {
-    std::cerr << "ITK exception detected: " << err;
-    return EXIT_FAILURE;
-  }
+  ITK_TRY_EXPECT_NO_EXCEPTION(SH->Update());
+
 
   PrintK(SH);
   PrintF(SH);
@@ -273,5 +272,8 @@ itkFEMSolverHyperbolicTest(int argc, char * argv[])
       }
     }
   }
+
+
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

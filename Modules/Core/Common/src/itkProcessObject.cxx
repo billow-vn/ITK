@@ -85,7 +85,7 @@ ProcessObject::MakeOutput(const DataObjectIdentifierType & name)
    * virtual.
    */
 
-  itkDebugMacro("MakeOutput(" << name << ")");
+  itkDebugMacro("MakeOutput(" << name << ')');
   if (this->IsIndexedOutputName(name))
   {
     return this->MakeOutput(this->MakeIndexFromOutputName(name));
@@ -849,7 +849,7 @@ ProcessObject::AddRequiredInputName(const DataObjectIdentifierType & name, DataO
 
   if (!m_RequiredInputNames.insert(name).second)
   {
-    itkWarningMacro(<< "Input already \"" << name << "\" already required!");
+    itkWarningMacro("Input already \"" << name << "\" already required!");
     // Input already required, but it is not added as indexed input?
     return false;
   }
@@ -1091,14 +1091,14 @@ ProcessObject::MakeIndexFromName(const DataObjectIdentifierType & name) const
   if (name.size() <= baseSize || name.substr(0, baseSize) != baseName)
   {
     itkDebugMacro("MakeIndexFromName(" << name << ") -> exception bad base name");
-    itkExceptionMacro(<< "Not an indexed data object: " << name);
+    itkExceptionMacro("Not an indexed data object: " << name);
   }
   DataObjectIdentifierType       idxStr = name.substr(baseSize);
   DataObjectPointerArraySizeType idx;
   if (!(std::istringstream(idxStr) >> idx))
   {
     itkDebugMacro("MakeIndexFromName(" << name << ") -> exception not an index");
-    itkExceptionMacro(<< "Not an indexed data object: " << name);
+    itkExceptionMacro("Not an indexed data object: " << name);
   }
   itkDebugMacro("MakeIndexFromName(" << name << ") -> " << idx);
   return idx;
@@ -1177,9 +1177,9 @@ ProcessObject::IncrementProgress(float increment)
 bool
 ProcessObject::GetReleaseDataFlag() const
 {
-  if (this->GetPrimaryOutput())
+  if (const auto primaryOutput = this->GetPrimaryOutput())
   {
-    return this->GetPrimaryOutput()->GetReleaseDataFlag();
+    return primaryOutput->GetReleaseDataFlag();
   }
   return false;
 }
@@ -1214,7 +1214,7 @@ ProcessObject::PrintSelf(std::ostream & os, Indent indent) const
       {
         req = " *";
       }
-      os << indent2 << input.first << ": (" << input.second.GetPointer() << ")" << req << std::endl;
+      os << indent2 << input.first << ": (" << input.second.GetPointer() << ')' << req << std::endl;
     }
   }
   else
@@ -1226,7 +1226,7 @@ ProcessObject::PrintSelf(std::ostream & os, Indent indent) const
   unsigned int idx = 0;
   for (auto it = m_IndexedInputs.begin(); it != m_IndexedInputs.end(); ++it, ++idx)
   {
-    os << indent2 << idx << ": " << (*it)->first << " (" << (*it)->second.GetPointer() << ")" << std::endl;
+    os << indent2 << idx << ": " << (*it)->first << " (" << (*it)->second.GetPointer() << ')' << std::endl;
   }
 
   if (!m_RequiredInputNames.empty())
@@ -1253,7 +1253,7 @@ ProcessObject::PrintSelf(std::ostream & os, Indent indent) const
     os << indent << "Outputs: " << std::endl;
     for (const auto & output : m_Outputs)
     {
-      os << indent2 << output.first << ": (" << output.second.GetPointer() << ")" << std::endl;
+      os << indent2 << output.first << ": (" << output.second.GetPointer() << ')' << std::endl;
     }
   }
   else
@@ -1264,7 +1264,7 @@ ProcessObject::PrintSelf(std::ostream & os, Indent indent) const
   idx = 0;
   for (auto it = m_IndexedOutputs.begin(); it != m_IndexedOutputs.end(); ++it, ++idx)
   {
-    os << indent2 << idx << ": " << (*it)->first << " (" << (*it)->second.GetPointer() << ")" << std::endl;
+    os << indent2 << idx << ": " << (*it)->first << " (" << (*it)->second.GetPointer() << ')' << std::endl;
   }
 
   os << indent << "NumberOfRequiredOutputs: " << m_NumberOfRequiredOutputs << std::endl;
@@ -1281,9 +1281,9 @@ ProcessObject::PrintSelf(std::ostream & os, Indent indent) const
 void
 ProcessObject::Update()
 {
-  if (this->GetPrimaryOutput())
+  if (const auto primaryOutput = this->GetPrimaryOutput())
   {
-    this->GetPrimaryOutput()->Update();
+    primaryOutput->Update();
   }
 }
 
@@ -1291,9 +1291,9 @@ ProcessObject::Update()
 void
 ProcessObject::ResetPipeline()
 {
-  if (this->GetPrimaryOutput())
+  if (const auto primaryOutput = this->GetPrimaryOutput())
   {
-    this->GetPrimaryOutput()->ResetPipeline();
+    primaryOutput->ResetPipeline();
   }
   else
   {
@@ -1336,22 +1336,8 @@ ProcessObject::VerifyPreconditions() ITKv5_CONST
   {
     if (this->GetInput(requiredInputName) == nullptr)
     {
-      itkExceptionMacro(<< "Input " << requiredInputName << " is required but not set.");
+      itkExceptionMacro("Input " << requiredInputName << " is required but not set.");
     }
-  }
-
-  /**
-   * Verify the require named inputs.
-   */
-  auto i = m_RequiredInputNames.begin();
-  while (i != m_RequiredInputNames.end())
-  {
-    if (this->GetInput(*i) == nullptr)
-    {
-      itkExceptionMacro(<< "Required Input " << *i << "is not specified!"
-                        << " The required inputs are expected to be the first inputs.");
-    }
-    ++i;
   }
 
   /**
@@ -1361,10 +1347,10 @@ ProcessObject::VerifyPreconditions() ITKv5_CONST
 
   if (validIndexedInputs < this->m_NumberOfRequiredInputs)
   {
-    itkExceptionMacro(<< "At least " << this->m_NumberOfRequiredInputs << " of the first "
-                      << this->m_NumberOfRequiredInputs << " indexed inputs are required but only "
-                      << validIndexedInputs << " are specified."
-                      << " The required inputs are expected to be the first inputs.");
+    itkExceptionMacro("At least " << this->m_NumberOfRequiredInputs << " of the first "
+                                  << this->m_NumberOfRequiredInputs << " indexed inputs are required but only "
+                                  << validIndexedInputs << " are specified."
+                                  << " The required inputs are expected to be the first inputs.");
   }
 }
 
@@ -1827,10 +1813,10 @@ ProcessObject::UpdateLargestPossibleRegion()
 {
   this->UpdateOutputInformation();
 
-  if (this->GetPrimaryOutput())
+  if (const auto primaryOutput = this->GetPrimaryOutput())
   {
-    this->GetPrimaryOutput()->SetRequestedRegionToLargestPossibleRegion();
-    this->GetPrimaryOutput()->Update();
+    primaryOutput->SetRequestedRegionToLargestPossibleRegion();
+    primaryOutput->Update();
   }
 }
 

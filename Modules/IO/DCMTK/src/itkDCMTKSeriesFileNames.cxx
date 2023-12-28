@@ -26,7 +26,7 @@
 
 namespace itk
 {
-DCMTKSeriesFileNames ::DCMTKSeriesFileNames()
+DCMTKSeriesFileNames::DCMTKSeriesFileNames()
 {
   m_InputDirectory = "";
   m_OutputDirectory = "";
@@ -43,7 +43,7 @@ DCMTKSeriesFileNames::SetInputDirectory(const char * name)
 {
   if (!name)
   {
-    itkExceptionMacro(<< "SetInputDirectory() received a nullptr string");
+    itkExceptionMacro("SetInputDirectory() received a nullptr string");
   }
   std::string fname = name;
   this->SetInputDirectory(fname);
@@ -54,8 +54,8 @@ DCMTKSeriesFileNames::SetInputDirectory(std::string const & name)
 {
   if (name.empty())
   {
-    itkWarningMacro(<< "You need to specify a directory where "
-                       "the DICOM files are located");
+    itkWarningMacro("You need to specify a directory where "
+                    "the DICOM files are located");
     return;
   }
   if (m_InputDirectory == name)

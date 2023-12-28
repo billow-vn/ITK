@@ -93,7 +93,7 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(UnsharpMaskImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(UnsharpMaskImageFilter);
 
   /**
    * Method for creation through the object factory.
@@ -164,10 +164,10 @@ protected:
 
 private:
   /** The edge amplification amount */
-  TInternalPrecision m_Amount;
-  TInternalPrecision m_Threshold;
-  SigmaArrayType     m_Sigmas;
-  bool               m_Clamp;
+  TInternalPrecision m_Amount{};
+  TInternalPrecision m_Threshold{};
+  SigmaArrayType     m_Sigmas{};
+  bool               m_Clamp{};
 
   template <typename InPixelType, typename FunctorRealType = TInternalPrecision, typename OutPixelType = InPixelType>
   class UnsharpMaskingFunctor

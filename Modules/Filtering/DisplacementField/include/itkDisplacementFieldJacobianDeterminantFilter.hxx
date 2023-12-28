@@ -151,14 +151,14 @@ DisplacementFieldJacobianDeterminantFilter<TInputImage, TRealType, TOutputImage>
     {
       if (static_cast<TRealType>(this->GetInput()->GetSpacing()[i]) == 0.0)
       {
-        itkExceptionMacro(<< "Image spacing in dimension " << i << " is zero.");
+        itkExceptionMacro("Image spacing in dimension " << i << " is zero.");
       }
       m_DerivativeWeights[i] = static_cast<TRealType>(1.0 / static_cast<TRealType>(this->GetInput()->GetSpacing()[i]));
       m_HalfDerivativeWeights[i] = 0.5 * m_DerivativeWeights[i];
     }
   }
   //
-  // cast might not be necessary, but CastImagefilter is optimized for
+  // cast might not be necessary, but CastImageFilter is optimized for
   // the case where the InputImageType == OutputImageType
   typename CastImageFilter<TInputImage, RealVectorImageType>::Pointer caster =
     CastImageFilter<TInputImage, RealVectorImageType>::New();
@@ -177,25 +177,22 @@ DisplacementFieldJacobianDeterminantFilter<TInputImage, TRealType, TOutputImage>
   ImageRegionIterator<TOutputImage>                     it;
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>::FaceListType faceList;
   NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>                        bC;
-  faceList = bC(dynamic_cast<const RealVectorImageType *>(m_RealValuedInputImage.GetPointer()),
-                outputRegionForThread,
-                m_NeighborhoodRadius);
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>::FaceListType::iterator fit;
-  fit = faceList.begin();
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>::FaceListType faceList =
+    bC(dynamic_cast<const RealVectorImageType *>(m_RealValuedInputImage.GetPointer()),
+       outputRegionForThread,
+       m_NeighborhoodRadius);
 
   TotalProgressReporter progress(this, this->GetOutput()->GetRequestedRegion().GetNumberOfPixels());
 
   // Process each of the data set faces.  The iterator is reinitialized on each
   // face so that it can determine whether or not to check for boundary
   // conditions.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
     bit = ConstNeighborhoodIteratorType(
-      m_NeighborhoodRadius, dynamic_cast<const RealVectorImageType *>(m_RealValuedInputImage.GetPointer()), *fit);
-    it = ImageRegionIterator<TOutputImage>(this->GetOutput(), *fit);
+      m_NeighborhoodRadius, dynamic_cast<const RealVectorImageType *>(m_RealValuedInputImage.GetPointer()), face);
+    it = ImageRegionIterator<TOutputImage>(this->GetOutput(), face);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
@@ -239,7 +236,7 @@ DisplacementFieldJacobianDeterminantFilter<TInputImage, TRealType, TOutputImage>
 
   os << indent << "DerivativeWeights: " << m_DerivativeWeights << std::endl;
   os << indent << "HalfDerivativeWeights: " << m_HalfDerivativeWeights << std::endl;
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   os << indent << "RequestedNumberOfThreads: "
      << static_cast<typename NumericTraits<ThreadIdType>::PrintType>(m_RequestedNumberOfWorkUnits) << std::endl;
   os << indent << "RealValuedInputImage: " << m_RealValuedInputImage.GetPointer() << std::endl;

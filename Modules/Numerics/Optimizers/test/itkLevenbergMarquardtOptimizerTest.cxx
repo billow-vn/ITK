@@ -246,7 +246,7 @@ itkRunLevenbergMarquardOptimization(bool   useGradient,
   parameters.Fill(0.0);
   costFunction->GetValue(parameters);
 
-  std::cout << "Number of Values = " << costFunction->GetNumberOfValues() << "\n";
+  std::cout << "Number of Values = " << costFunction->GetNumberOfValues() << '\n';
 
   try
   {
@@ -317,6 +317,14 @@ itkRunLevenbergMarquardOptimization(bool   useGradient,
     case vnl_nonlinear_minimizer::ERROR_DODGY_INPUT:
       std::cout << " Error Dogy Input";
       break;
+#if VXL_VERSION_MAJOR >= 4
+    // ABNORMAL_TERMINATION_IN_LNSRCH stop condition added in VXL 4.0
+    case vnl_nonlinear_minimizer::ABNORMAL_TERMINATION_IN_LNSRCH:
+      std::cout << "Abnormal termination in line search.  Often caused by "
+                << "rounding errors dominating computation.  This can occur if the function is a very "
+                << "flat surface, or has oscillations.";
+      break;
+#endif
     case vnl_nonlinear_minimizer::CONVERGED_FTOL:
       std::cout << " Converged F  Tolerance";
       break;
@@ -356,9 +364,9 @@ itkRunLevenbergMarquardOptimization(bool   useGradient,
   finalPosition = optimizer->GetCurrentPosition();
 
   std::cout << "Solution        = (";
-  std::cout << finalPosition[0] << ",";
-  std::cout << finalPosition[1] << ",";
-  std::cout << finalPosition[2] << ")" << std::endl;
+  std::cout << finalPosition[0] << ',';
+  std::cout << finalPosition[1] << ',';
+  std::cout << finalPosition[2] << ')' << std::endl;
 
 
   //
@@ -369,7 +377,9 @@ itkRunLevenbergMarquardOptimization(bool   useGradient,
   for (unsigned int j = 0; j < LMCostFunction::SpaceDimension; ++j)
   {
     if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > 0.01)
+    {
       pass = false;
+    }
   }
 
   if (!pass)

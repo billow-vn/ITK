@@ -52,7 +52,7 @@ public:
 } // namespace Functor
 
 /**
- *\class TernaryMagnitudeSquaredImageFilter
+ * \class TernaryMagnitudeSquaredImageFilter
  * \brief Compute the pixel-wise squared magnitude of three images.
  *
  * This class is templated over the types of the three
@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(TernaryMagnitudeSquaredImageFilter, TernaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(TernaryMagnitudeSquaredImageFilter);
 
 protected:
   TernaryMagnitudeSquaredImageFilter()

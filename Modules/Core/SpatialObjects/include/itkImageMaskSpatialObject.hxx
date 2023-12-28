@@ -25,16 +25,13 @@
 
 namespace itk
 {
-/** Constructor */
+
 template <unsigned int TDimension, typename TPixel>
 ImageMaskSpatialObject<TDimension, TPixel>::ImageMaskSpatialObject()
 {
   this->SetTypeName("ImageMaskSpatialObject");
 }
 
-/** Test whether a point is inside or outside the object
- *  For computational speed purposes, it is faster if the method does not
- *  check the name of the class and the current depth */
 template <unsigned int TDimension, typename TPixel>
 bool
 ImageMaskSpatialObject<TDimension, TPixel>::IsInsideInObjectSpace(const PointType & point) const
@@ -114,8 +111,6 @@ ImageMaskSpatialObject<TDimension, TPixel>::ComputeMyBoundingBox()
   }
 }
 
-
-/** InternalClone */
 template <unsigned int TDimension, typename TPixel>
 typename LightObject::Pointer
 ImageMaskSpatialObject<TDimension, TPixel>::InternalClone() const
@@ -127,20 +122,11 @@ ImageMaskSpatialObject<TDimension, TPixel>::InternalClone() const
   typename Self::Pointer rval = dynamic_cast<Self *>(loPtr.GetPointer());
   if (rval.IsNull())
   {
-    itkExceptionMacro(<< "downcast to type " << this->GetNameOfClass() << " failed.");
+    itkExceptionMacro("downcast to type " << this->GetNameOfClass() << " failed.");
   }
 
   return loPtr;
 }
-
-/** Print the object */
-template <unsigned int TDimension, typename TPixel>
-void
-ImageMaskSpatialObject<TDimension, TPixel>::PrintSelf(std::ostream & os, Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
-
 
 template <unsigned int TDimension, typename TPixel>
 auto
@@ -156,7 +142,7 @@ ImageMaskSpatialObject<TDimension, TPixel>::ComputeMyBoundingBoxInIndexSpace() c
   const ImageType & image = *imagePointer;
 
   const auto HasForegroundPixels = [&image](const RegionType & region) {
-    for (const PixelType pixelValue : ImageRegionRange<const ImageType>{ image, region })
+    for (const PixelType pixelValue : ImageRegionRange{ image, region })
     {
       constexpr auto zeroValue = NumericTraits<PixelType>::ZeroValue();
 

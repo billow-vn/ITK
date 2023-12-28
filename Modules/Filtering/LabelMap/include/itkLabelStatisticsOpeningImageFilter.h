@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class LabelStatisticsOpeningImageFilter
+ * \class LabelStatisticsOpeningImageFilter
  * \brief remove the objects according to the value of their statistics attribute
  *
  * LabelStatisticsOpeningImageFilter removes the objects in a labeled image
@@ -88,7 +88,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelStatisticsOpeningImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelStatisticsOpeningImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -184,10 +184,10 @@ protected:
   GenerateData() override;
 
 private:
-  OutputImagePixelType m_BackgroundValue;
-  double               m_Lambda;
-  bool                 m_ReverseOrdering;
-  AttributeType        m_Attribute;
+  OutputImagePixelType m_BackgroundValue{};
+  double               m_Lambda{};
+  bool                 m_ReverseOrdering{};
+  AttributeType        m_Attribute{};
 }; // end of class
 } // end namespace itk
 

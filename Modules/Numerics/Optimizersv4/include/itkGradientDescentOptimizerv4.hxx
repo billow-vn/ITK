@@ -127,14 +127,14 @@ GradientDescentOptimizerv4Template<TInternalComputationValueType>::ResumeOptimiz
         {
           this->m_StopCondition = StopConditionObjectToObjectOptimizerEnum::CONVERGENCE_CHECKER_PASSED;
           this->m_StopConditionDescription << "Convergence checker passed at iteration " << this->m_CurrentIteration
-                                           << ".";
+                                           << '.';
           this->StopOptimization();
           break;
         }
       }
       catch (const std::exception & e)
       {
-        itkWarningMacro(<< "GetConvergenceValue() failed with exception: " << e.what() << std::endl);
+        itkWarningMacro("GetConvergenceValue() failed with exception: " << e.what() << std::endl);
       }
     }
 

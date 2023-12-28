@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class MorphologicalWatershedFromMarkersImageFilter
+ * \class MorphologicalWatershedFromMarkersImageFilter
  *
  * \brief Morphological watershed transform from markers
  *
@@ -111,7 +111,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(MorphologicalWatershedFromMarkersImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(MorphologicalWatershedFromMarkersImageFilter);
 
   /** Set the marker image */
   void

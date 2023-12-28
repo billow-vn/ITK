@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class FrameDifferenceVideoFilter
+ * \class FrameDifferenceVideoFilter
  * \brief Compute the squared intensity difference between frame x and frame
  * x+n
  *
@@ -57,7 +57,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(FrameDifferenceVideoFilter, VideoToVideoFilter);
+  itkOverrideGetNameOfClassMacro(FrameDifferenceVideoFilter);
 
   /** Get/Set the offset for computing frame differences. Defaults to 1. */
   void

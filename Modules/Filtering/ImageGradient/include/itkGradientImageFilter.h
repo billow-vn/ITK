@@ -31,7 +31,7 @@ class VectorImage;
 
 
 /**
- *\class GradientImageFilter
+ * \class GradientImageFilter
  * \brief Computes the gradient of an image using directional derivatives.
  *
  * Computes the gradient of an image using directional derivatives.
@@ -88,7 +88,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GradientImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GradientImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;
@@ -219,14 +219,14 @@ private:
   }
 
 
-  bool m_UseImageSpacing;
+  bool m_UseImageSpacing{};
 
   // flag to take or not the image direction into account
   // when computing the derivatives.
-  bool m_UseImageDirection;
+  bool m_UseImageDirection{};
 
   // allow setting the the m_BoundaryCondition
-  ImageBoundaryCondition<TInputImage, TInputImage> * m_BoundaryCondition;
+  ImageBoundaryCondition<TInputImage, TInputImage> * m_BoundaryCondition{};
 };
 } // end namespace itk
 

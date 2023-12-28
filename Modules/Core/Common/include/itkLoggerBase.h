@@ -28,7 +28,7 @@
 
 namespace itk
 {
-/***\class LoggerBaseEnums
+/*** \class LoggerBaseEnums
  * \brief Contains all enum classes used by LoggerBase class.
  * \ingroup ITKCommon
  */
@@ -51,7 +51,7 @@ public:
     NOTSET
   };
 
-  /**\class TimeStampFormat
+  /** \class TimeStampFormat
    * \ingroup ITKCommon
    * Select the type of format for reporting time stamps */
   enum class TimeStampFormat : uint8_t
@@ -87,7 +87,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LoggerBase, Object);
+  itkOverrideGetNameOfClassMacro(LoggerBase);
 
   using OutputType = MultipleLogOutput::OutputType;
 
@@ -234,20 +234,20 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 protected:
-  PriorityLevelEnum m_PriorityLevel;
+  PriorityLevelEnum m_PriorityLevel{};
 
-  PriorityLevelEnum m_LevelForFlushing;
+  PriorityLevelEnum m_LevelForFlushing{};
 
-  MultipleLogOutput::Pointer m_Output;
+  MultipleLogOutput::Pointer m_Output{};
 
-  RealTimeClock::Pointer m_Clock;
+  RealTimeClock::Pointer m_Clock{};
 
-  TimeStampFormatEnum m_TimeStampFormat;
+  TimeStampFormatEnum m_TimeStampFormat{};
 
-  std::string m_HumanReadableFormat;
+  std::string m_HumanReadableFormat{};
 
 private:
-  std::string m_Name;
+  std::string m_Name{};
 }; // class LoggerBase
 } // namespace itk
 

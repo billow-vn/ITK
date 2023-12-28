@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class BinaryNotImageFilter
+ * \class BinaryNotImageFilter
  * \brief Implements the BinaryNot logical operator pixel-wise between two images.
  *
  * This class is parameterized over the types of the two
@@ -101,7 +101,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryNotImageFilter, UnaryFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryNotImageFilter);
 
   using PixelType = typename TImage::PixelType;
 
@@ -144,8 +144,8 @@ protected:
   }
 
 private:
-  PixelType m_ForegroundValue;
-  PixelType m_BackgroundValue;
+  PixelType m_ForegroundValue{};
+  PixelType m_BackgroundValue{};
 };
 
 } // end namespace itk

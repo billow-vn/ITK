@@ -61,7 +61,7 @@ public:
   using typename Superclass::ContinuousIndexType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NeighborhoodOperatorImageFunction, ImageFunction);
+  itkOverrideGetNameOfClassMacro(NeighborhoodOperatorImageFunction);
 
   /** Dimension of the underlying image. */
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
@@ -123,7 +123,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  mutable NeighborhoodType m_Operator;
+  mutable NeighborhoodType m_Operator{};
 };
 } // end namespace itk
 

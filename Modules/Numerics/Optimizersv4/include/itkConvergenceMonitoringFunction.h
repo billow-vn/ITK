@@ -51,7 +51,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConvergenceMonitoringFunction, Object);
+  itkOverrideGetNameOfClassMacro(ConvergenceMonitoringFunction);
 
   using ScalarType = TScalar;
   using RealType = typename NumericTraits<ScalarType>::RealType;
@@ -109,13 +109,13 @@ protected:
     auto it = this->m_EnergyValues.begin();
     while (it != this->m_EnergyValues.end())
     {
-      os << "(" << it - this->m_EnergyValues.begin() << "): " << *it << " ";
+      os << '(' << it - this->m_EnergyValues.begin() << "): " << *it << ' ';
       ++it;
     }
     os << std::endl;
   }
 
-  EnergyValueContainerType m_EnergyValues;
+  EnergyValueContainerType m_EnergyValues{};
 };
 } // end namespace Function
 } // end namespace itk

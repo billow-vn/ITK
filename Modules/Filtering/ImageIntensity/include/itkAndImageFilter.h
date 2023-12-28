@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class AndImageFilter
+ * \class AndImageFilter
  * \brief Implements the AND bitwise operator pixel-wise between two images.
  *
  * This class is templated over the types of the two
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AndImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(AndImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

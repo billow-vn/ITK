@@ -23,9 +23,7 @@
 
 namespace itk
 {
-/**
- * Default constructor
- */
+
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::LevelSetMotionRegistrationFunction()
 {
@@ -63,9 +61,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   m_SmoothMovingImageInterpolator = static_cast<InterpolatorType *>(DefaultInterpolatorType::New().GetPointer());
 }
 
-/*
- * Standard "PrintSelf" method.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PrintSelf(std::ostream & os,
@@ -73,30 +68,32 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "MovingImageIterpolator: ";
-  os << m_MovingImageInterpolator.GetPointer() << std::endl;
-  os << indent << "IntensityDifferenceThreshold: ";
-  os << m_IntensityDifferenceThreshold << std::endl;
-  os << indent << "GradientMagnitudeThreshold: ";
-  os << m_GradientMagnitudeThreshold << std::endl;
-  os << indent << "Alpha: ";
-  os << m_Alpha << std::endl;
+  os << indent
+     << "FixedImageSpacing: " << static_cast<typename NumericTraits<SpacingType>::PrintType>(m_FixedImageSpacing)
+     << std::endl;
+  os << indent << "FixedImageOrigin: " << static_cast<typename NumericTraits<PointType>::PrintType>(m_FixedImageOrigin)
+     << std::endl;
 
-  os << indent << "Metric: ";
-  os << m_Metric << std::endl;
-  os << indent << "SumOfSquaredDifference: ";
-  os << m_SumOfSquaredDifference << std::endl;
-  os << indent << "NumberOfPixelsProcessed: ";
-  os << m_NumberOfPixelsProcessed << std::endl;
-  os << indent << "RMSChange: ";
-  os << m_RMSChange << std::endl;
-  os << indent << "SumOfSquaredChange: ";
-  os << m_SumOfSquaredChange << std::endl;
+  itkPrintSelfObjectMacro(MovingImageSmoothingFilter);
+
+  itkPrintSelfObjectMacro(MovingImageInterpolator);
+  itkPrintSelfObjectMacro(SmoothMovingImageInterpolator);
+
+  os << indent << "Alpha: " << m_Alpha << std::endl;
+  os << indent << "GradientMagnitudeThreshold: " << m_GradientMagnitudeThreshold << std::endl;
+  os << indent << "IntensityDifferenceThreshold: " << m_IntensityDifferenceThreshold << std::endl;
+  os << indent << "GradientSmoothingStandardDeviations: " << m_GradientSmoothingStandardDeviations << std::endl;
+
+  os << indent << "Metric: " << m_Metric << std::endl;
+  os << indent << "SumOfSquaredDifference: " << m_SumOfSquaredDifference << std::endl;
+  os << indent << "NumberOfPixelsProcessed: "
+     << static_cast<typename NumericTraits<SizeValueType>::PrintType>(m_NumberOfPixelsProcessed) << std::endl;
+  os << indent << "RMSChange: " << m_RMSChange << std::endl;
+  os << indent << "SumOfSquaredChange: " << m_SumOfSquaredChange << std::endl;
+
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::SetAlpha(double alpha)
@@ -104,9 +101,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   m_Alpha = alpha;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GetAlpha() const
@@ -114,9 +108,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   return m_Alpha;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::SetIntensityDifferenceThreshold(
@@ -125,9 +116,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   m_IntensityDifferenceThreshold = threshold;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GetIntensityDifferenceThreshold()
@@ -136,9 +124,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   return m_IntensityDifferenceThreshold;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::SetGradientMagnitudeThreshold(
@@ -147,9 +132,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   m_GradientMagnitudeThreshold = threshold;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GetGradientMagnitudeThreshold() const
@@ -157,9 +139,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   return m_GradientMagnitudeThreshold;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::
@@ -168,9 +147,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   m_GradientSmoothingStandardDeviations = sigma;
 }
 
-/**
- *
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 double
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::
@@ -179,10 +155,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   return m_GradientSmoothingStandardDeviations;
 }
 
-/**
- * Return the flag that defines whether the image spacing should be taken into
- * account in computations.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 bool
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::GetUseImageSpacing() const
@@ -190,10 +162,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   return this->m_UseImageSpacing;
 }
 
-/**
- * Set the flag that defines whether the image spacing should be taken into
- * account in computations.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::SetUseImageSpacing(
@@ -202,16 +170,13 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   this->m_UseImageSpacing = useImageSpacing;
 }
 
-/**
- * Set the function state values before each iteration
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::InitializeIteration()
 {
   if (!this->GetMovingImage() || !this->GetFixedImage() || !m_MovingImageInterpolator)
   {
-    itkExceptionMacro(<< "MovingImage, FixedImage and/or Interpolator not set");
+    itkExceptionMacro("MovingImage, FixedImage and/or Interpolator not set");
   }
 
   // create a smoothed version of the moving image for the calculation
@@ -233,15 +198,12 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   m_SumOfSquaredChange = 0.0;
 }
 
-/**
- * Compute update at a specify neighbourhood
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
-typename LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::PixelType
+auto
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ComputeUpdate(
   const NeighborhoodType & it,
   void *                   gd,
-  const FloatOffsetType &  itkNotUsed(offset))
+  const FloatOffsetType &  itkNotUsed(offset)) -> PixelType
 {
   const IndexType index = it.GetIndex();
 
@@ -391,13 +353,10 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   return update;
 }
 
-/**
- * Compute the global time step for this iteration.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
-typename LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::TimeStepType
+auto
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ComputeGlobalTimeStep(
-  void * GlobalData) const
+  void * GlobalData) const -> TimeStepType
 {
   TimeStepType dt = 1.0;
 
@@ -406,27 +365,19 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
   if (d->m_MaxL1Norm > 0.0)
   {
     dt = 1.0 / d->m_MaxL1Norm;
-    // std::cout << "Computed timestep: " << dt << std::endl;
-  }
-  else
-  {
-    // std::cout << "Using default timestep: " << dt << std::endl;
   }
 
   return dt;
 }
 
-/*
- * Update the metric and release the per-thread-global data.
- */
 template <typename TFixedImage, typename TMovingImage, typename TDisplacementField>
 void
 LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>::ReleaseGlobalDataPointer(
   void * gd) const
 {
-  auto * globalData = (GlobalDataStruct *)gd;
+  const std::unique_ptr<const GlobalDataStruct> globalData(static_cast<GlobalDataStruct *>(gd));
 
-  m_MetricCalculationLock.lock();
+  const std::lock_guard<std::mutex> lockGuard(m_MetricCalculationMutex);
   m_SumOfSquaredDifference += globalData->m_SumOfSquaredDifference;
   m_NumberOfPixelsProcessed += globalData->m_NumberOfPixelsProcessed;
   m_SumOfSquaredChange += globalData->m_SumOfSquaredChange;
@@ -435,9 +386,6 @@ LevelSetMotionRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField
     m_Metric = m_SumOfSquaredDifference / static_cast<double>(m_NumberOfPixelsProcessed);
     m_RMSChange = std::sqrt(m_SumOfSquaredChange / static_cast<double>(m_NumberOfPixelsProcessed));
   }
-  m_MetricCalculationLock.unlock();
-
-  delete globalData;
 }
 } // end namespace itk
 

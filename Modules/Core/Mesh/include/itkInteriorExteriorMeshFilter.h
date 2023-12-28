@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(InteriorExteriorMeshFilter, MeshToMeshFilter);
+  itkOverrideGetNameOfClassMacro(InteriorExteriorMeshFilter);
 
   /** Get/Set the spatial function. */
   itkSetObjectMacro(SpatialFunction, SpatialFunctionType);
@@ -91,7 +91,7 @@ protected:
   GenerateData() override;
 
   /** Transform applied to all the mesh points. */
-  typename SpatialFunctionType::Pointer m_SpatialFunction;
+  typename SpatialFunctionType::Pointer m_SpatialFunction{};
 };
 } // end namespace itk
 

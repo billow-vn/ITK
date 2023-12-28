@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FEMObjectSpatialObject, SpatialObject);
+  itkOverrideGetNameOfClassMacro(FEMObjectSpatialObject);
 
   /** Set the FEM object in the spatial object. */
   void
@@ -78,7 +78,7 @@ public:
   GetMTime() const override;
 
 protected:
-  FEMObjectPointer m_FEMObject;
+  FEMObjectPointer m_FEMObject{};
 
   FEMObjectSpatialObject();
   ~FEMObjectSpatialObject() override;

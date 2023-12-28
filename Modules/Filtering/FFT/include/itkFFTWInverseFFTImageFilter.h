@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class FFTWInverseFFTImageFilter
+ * \class FFTWInverseFFTImageFilter
  *
  * \brief FFTW-based inverse Fast Fourier Transform
  *
@@ -79,7 +79,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FFTWInverseFFTImageFilter, InverseFFTImageFilter);
+  itkOverrideGetNameOfClassMacro(FFTWInverseFFTImageFilter);
 
   /** Define the image dimension. */
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
@@ -132,7 +132,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  int m_PlanRigor;
+  int m_PlanRigor{};
 };
 
 

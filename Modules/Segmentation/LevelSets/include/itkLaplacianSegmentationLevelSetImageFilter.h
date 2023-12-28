@@ -120,7 +120,7 @@ public:
   using LaplacianFunctionType = LaplacianSegmentationLevelSetFunction<OutputImageType, FeatureImageType>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LaplacianSegmentationLevelSetImageFilter, SegmentationLevelSetImageFilter);
+  itkOverrideGetNameOfClassMacro(LaplacianSegmentationLevelSetImageFilter);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -133,7 +133,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  typename LaplacianFunctionType::Pointer m_LaplacianFunction;
+  typename LaplacianFunctionType::Pointer m_LaplacianFunction{};
 };
 } // end namespace itk
 

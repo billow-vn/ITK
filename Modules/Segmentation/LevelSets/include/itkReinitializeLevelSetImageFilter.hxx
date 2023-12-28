@@ -23,9 +23,7 @@
 
 namespace itk
 {
-/**
- * Default constructor.
- */
+
 template <typename TLevelSet>
 ReinitializeLevelSetImageFilter<TLevelSet>::ReinitializeLevelSetImageFilter()
 {
@@ -41,9 +39,6 @@ ReinitializeLevelSetImageFilter<TLevelSet>::ReinitializeLevelSetImageFilter()
   m_OutputNarrowBand = nullptr;
 }
 
-/*
- * Set the input narrowband container.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::SetInputNarrowBand(NodeContainer * ptr)
@@ -55,29 +50,25 @@ ReinitializeLevelSetImageFilter<TLevelSet>::SetInputNarrowBand(NodeContainer * p
   }
 }
 
-/**
- * PrintSelf method.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Level set value: " << m_LevelSetValue << std::endl;
-  os << indent << "Narrowbanding: " << m_NarrowBanding << std::endl;
-  os << indent << "Input narrow bandwidth: " << m_InputNarrowBandwidth;
-  os << std::endl;
-  os << indent << "Output narrow bandwidth: " << m_OutputNarrowBandwidth;
-  os << std::endl;
-  os << indent << "Input narrow band: " << m_InputNarrowBand.GetPointer();
-  os << std::endl;
-  os << indent << "Output narrow band: " << m_OutputNarrowBand.GetPointer();
-  os << std::endl;
+
+  os << indent << "LevelSetValue: " << m_LevelSetValue << std::endl;
+
+  itkPrintSelfObjectMacro(Locator);
+  itkPrintSelfObjectMacro(Marcher);
+
+  os << indent << "Narrowbanding: " << (m_NarrowBanding ? "On" : "Off") << std::endl;
+  os << indent << "InputNarrowBandwidth: " << m_InputNarrowBandwidth << std::endl;
+  os << indent << "OutputNarrowBandwidth: " << m_OutputNarrowBandwidth << std::endl;
+
+  itkPrintSelfObjectMacro(InputNarrowBand);
+  itkPrintSelfObjectMacro(OutputNarrowBand);
 }
 
-/*
- * GenerateInputRequestedRegion method.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::GenerateInputRequestedRegion()
@@ -86,9 +77,6 @@ ReinitializeLevelSetImageFilter<TLevelSet>::GenerateInputRequestedRegion()
   this->Superclass::GenerateInputRequestedRegion();
 }
 
-/*
- * EnlargeOutputRequestedRegion method.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::EnlargeOutputRequestedRegion(DataObject * output)
@@ -105,15 +93,12 @@ ReinitializeLevelSetImageFilter<TLevelSet>::EnlargeOutputRequestedRegion(DataObj
   else
   {
     // pointer could not be cast to TLevelSet *
-    itkWarningMacro(<< "itk::ReinitializeLevelSetImageFilter"
+    itkWarningMacro("itk::ReinitializeLevelSetImageFilter"
                     << "::EnlargeOutputRequestedRegion cannot cast " << typeid(output).name() << " to "
                     << typeid(TLevelSet *).name());
   }
 }
 
-/*
- * Allocate/initialize memory.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::AllocateOutput()
@@ -131,9 +116,6 @@ ReinitializeLevelSetImageFilter<TLevelSet>::AllocateOutput()
   this->m_Marcher->SetOutputDirection(this->GetInput()->GetDirection());
 }
 
-/*
- * Generate the output data.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::GenerateData()
@@ -150,9 +132,6 @@ ReinitializeLevelSetImageFilter<TLevelSet>::GenerateData()
   }
 }
 
-/*
- * Generate the output data - full set version.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::GenerateDataFull()
@@ -225,9 +204,6 @@ ReinitializeLevelSetImageFilter<TLevelSet>::GenerateDataFull()
   }
 }
 
-/*
- * Generate output data - narrowband version.
- */
 template <typename TLevelSet>
 void
 ReinitializeLevelSetImageFilter<TLevelSet>::GenerateDataNarrowBand()

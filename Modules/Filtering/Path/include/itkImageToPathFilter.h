@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ImageToPathFilter
+ * \class ImageToPathFilter
  * \brief Base class for filters that take an image as input and produce an path as output.
  *
  * ImageToPathFilter is the base class for all process objects that output
@@ -52,7 +52,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToPathFilter, PathSource);
+  itkOverrideGetNameOfClassMacro(ImageToPathFilter);
 
   /** Some convenient type alias. */
   using InputImageType = TInputImage;

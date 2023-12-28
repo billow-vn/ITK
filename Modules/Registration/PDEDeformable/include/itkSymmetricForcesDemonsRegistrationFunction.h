@@ -75,7 +75,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SymmetricForcesDemonsRegistrationFunction, PDEDeformableRegistrationFunction);
+  itkOverrideGetNameOfClassMacro(SymmetricForcesDemonsRegistrationFunction);
 
   /** MovingImage image type. */
   using typename Superclass::MovingImageType;
@@ -150,7 +150,10 @@ public:
     return global;
   }
 
-  /** Release memory for global data structure. */
+  /** Release memory for global data structure.
+   *
+   * Updates the metric and releases the per-thread-global data.
+   */
   void
   ReleaseGlobalDataPointer(void * gd) const override;
 
@@ -158,8 +161,10 @@ public:
   void
   InitializeIteration() override;
 
-  /** This method is called by a finite difference solver image filter at
-   * each pixel that does not lie on a data set boundary */
+  /** Compute update at a non boundary neighbourhood.
+   *
+   * Called by a finite difference solver image filter at each pixel that does not lie on a data set boundary.
+   */
   PixelType
   ComputeUpdate(const NeighborhoodType & it, void * gd, const FloatOffsetType & offset = FloatOffsetType(0.0)) override;
 
@@ -209,36 +214,36 @@ protected:
 
 private:
   /** Cache fixed image information. */
-  SpacingType m_FixedImageSpacing;
-  PointType   m_FixedImageOrigin;
-  double      m_Normalizer;
+  SpacingType m_FixedImageSpacing{};
+  PointType   m_FixedImageOrigin{};
+  double      m_Normalizer{};
 
   /** Function to compute derivatives of the fixed image. */
-  GradientCalculatorPointer m_FixedImageGradientCalculator;
+  GradientCalculatorPointer m_FixedImageGradientCalculator{};
 
   /** Function to interpolate the moving image. */
-  InterpolatorPointer m_MovingImageInterpolator;
+  InterpolatorPointer m_MovingImageInterpolator{};
 
   /** The global timestep. */
-  TimeStepType m_TimeStep;
+  TimeStepType m_TimeStep{};
 
   /** Threshold below which the denominator term is considered zero. */
-  double m_DenominatorThreshold;
+  double m_DenominatorThreshold{};
 
   /** Threshold below which two intensity value are assumed to match. */
-  double m_IntensityDifferenceThreshold;
+  double m_IntensityDifferenceThreshold{};
 
   /** The metric value is the mean square difference in intensity between
    * the fixed image and transforming moving image computed over the
    * the overlapping region between the two images. */
-  mutable double        m_Metric;
-  mutable double        m_SumOfSquaredDifference;
-  mutable SizeValueType m_NumberOfPixelsProcessed;
-  mutable double        m_RMSChange;
-  mutable double        m_SumOfSquaredChange;
+  mutable double        m_Metric{};
+  mutable double        m_SumOfSquaredDifference{};
+  mutable SizeValueType m_NumberOfPixelsProcessed{};
+  mutable double        m_RMSChange{};
+  mutable double        m_SumOfSquaredChange{};
 
   /** Mutex lock to protect modification to metric. */
-  mutable std::mutex m_MetricCalculationLock;
+  mutable std::mutex m_MetricCalculationMutex{};
 };
 } // end namespace itk
 

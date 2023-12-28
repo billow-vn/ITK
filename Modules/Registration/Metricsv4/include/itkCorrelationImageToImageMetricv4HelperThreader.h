@@ -47,7 +47,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  itkTypeMacro(CorrelationImageToImageMetricv4HelperThreader, ImageToImageMetricv4GetValueAndDerivativeThreader);
+  itkOverrideGetNameOfClassMacro(CorrelationImageToImageMetricv4HelperThreader);
 
   itkNewMacro(Self);
 
@@ -138,7 +138,7 @@ private:
 
   /** Internal pointer to the metric object in use by this threader.
    *  This will avoid costly dynamic casting in tight loops. */
-  TCorrelationMetric * m_CorrelationAssociate;
+  TCorrelationMetric * m_CorrelationAssociate{};
 };
 
 } // end namespace itk

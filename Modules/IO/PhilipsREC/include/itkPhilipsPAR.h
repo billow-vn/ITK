@@ -27,7 +27,7 @@
  *         The Pennsylvania State University 2005
  *
  * This implementation was contributed as a paper to the Insight Journal
- * https://hdl.handle.net/1926/1381
+ * https://www.insight-journal.org/browse/publication/237
  *
  */
 
@@ -223,7 +223,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PhilipsPAR, Superclass);
+  itkOverrideGetNameOfClassMacro(PhilipsPAR);
 
   // Reads the PAR file parameters in "parFile" and stores the PAR parameters in
   // pPar.
@@ -308,10 +308,10 @@ private:
   GetGeneralInfoString(std::string file, int lineNum);
 
   /** Filename to read. */
-  std::string m_FileName;
+  std::string m_FileName{};
 
   /** Vector of strings for storing each line of PAR file. */
-  std::vector<std::string> m_PARFileLines;
+  std::vector<std::string> m_PARFileLines{};
 };
 } // end namespace itk
 

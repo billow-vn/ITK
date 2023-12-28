@@ -77,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AutoPointerDataObjectDecorator, DataObject);
+  itkOverrideGetNameOfClassMacro(AutoPointerDataObjectDecorator);
 
   /** Set the contained object */
   virtual void
@@ -103,7 +103,7 @@ protected:
 
 protected:
 private:
-  ComponentPointer m_Component;
+  ComponentPointer m_Component{};
 };
 } // end namespace itk
 

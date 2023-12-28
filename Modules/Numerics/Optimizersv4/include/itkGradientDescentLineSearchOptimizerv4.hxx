@@ -22,9 +22,6 @@
 namespace itk
 {
 
-/**
- * Default constructor
- */
 template <typename TInternalComputationValueType>
 GradientDescentLineSearchOptimizerv4Template<
   TInternalComputationValueType>::GradientDescentLineSearchOptimizerv4Template()
@@ -39,20 +36,31 @@ GradientDescentLineSearchOptimizerv4Template<
   this->m_ReturnBestParametersAndValue = true;
 }
 
-/**
- *PrintSelf
- */
 template <typename TInternalComputationValueType>
 void
 GradientDescentLineSearchOptimizerv4Template<TInternalComputationValueType>::PrintSelf(std::ostream & os,
                                                                                        Indent         indent) const
 {
   Superclass::PrintSelf(os, indent);
+
+  os << indent
+     << "LowerLimit: " << static_cast<typename NumericTraits<TInternalComputationValueType>::PrintType>(m_LowerLimit)
+     << std::endl;
+  os << indent
+     << "UpperLimit: " << static_cast<typename NumericTraits<TInternalComputationValueType>::PrintType>(m_UpperLimit)
+     << std::endl;
+  os << indent << "Phi: " << static_cast<typename NumericTraits<TInternalComputationValueType>::PrintType>(m_Phi)
+     << std::endl;
+  os << indent << "Resphi: " << static_cast<typename NumericTraits<TInternalComputationValueType>::PrintType>(m_Resphi)
+     << std::endl;
+  os << indent
+     << "Epsilon: " << static_cast<typename NumericTraits<TInternalComputationValueType>::PrintType>(m_Epsilon)
+     << std::endl;
+
+  os << indent << "MaximumLineSearchIterations: " << m_MaximumLineSearchIterations << std::endl;
+  os << indent << "LineSearchIterations: " << m_LineSearchIterations << std::endl;
 }
 
-/**
- * Advance one Step following the gradient direction
- */
 template <typename TInternalComputationValueType>
 void
 GradientDescentLineSearchOptimizerv4Template<TInternalComputationValueType>::AdvanceOneStep()
@@ -94,11 +102,6 @@ GradientDescentLineSearchOptimizerv4Template<TInternalComputationValueType>::Adv
 }
 
 
-// a and c are the current bounds; the minimum is between them.
-// b is a center point
-// f(x) is some mathematical function elsewhere defined
-// a corresponds to x1; b corresponds to x2; c corresponds to x3
-// x corresponds to x4
 template <typename TInternalComputationValueType>
 TInternalComputationValueType
 GradientDescentLineSearchOptimizerv4Template<TInternalComputationValueType>::GoldenSectionSearch(
@@ -107,7 +110,7 @@ GradientDescentLineSearchOptimizerv4Template<TInternalComputationValueType>::Gol
   TInternalComputationValueType c,
   TInternalComputationValueType metricb)
 {
-  itkDebugMacro("GoldenSectionSearch: " << a << " " << b << " " << c << " " << metricb);
+  itkDebugMacro("GoldenSectionSearch: " << a << ' ' << b << ' ' << c << ' ' << metricb);
 
   if (this->m_LineSearchIterations > this->m_MaximumLineSearchIterations)
   {

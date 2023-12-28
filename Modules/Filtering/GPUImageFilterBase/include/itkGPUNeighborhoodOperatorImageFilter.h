@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GPUNeighborhoodOperatorImageFilter, GPUImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUNeighborhoodOperatorImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
@@ -188,9 +188,9 @@ private:
   /** Default boundary condition
   DefaultBoundaryCondition m_DefaultBoundaryCondition;*/
 
-  int m_NeighborhoodOperatorFilterGPUKernelHandle;
+  int m_NeighborhoodOperatorFilterGPUKernelHandle{};
 
-  typename NeighborhoodGPUBufferType::Pointer m_NeighborhoodGPUBuffer;
+  typename NeighborhoodGPUBufferType::Pointer m_NeighborhoodGPUBuffer{};
 };
 } // end namespace itk
 

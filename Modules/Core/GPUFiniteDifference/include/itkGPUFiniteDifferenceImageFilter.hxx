@@ -180,12 +180,12 @@ GPUFiniteDifferenceImageFilter<TInputImage, TOutputImage, TParentImageFilter>::G
 }
 
 template <typename TInputImage, typename TOutputImage, typename TParentImageFilter>
-typename GPUFiniteDifferenceImageFilter<TInputImage, TOutputImage, TParentImageFilter>::TimeStepType
+auto
 GPUFiniteDifferenceImageFilter<TInputImage, TOutputImage, TParentImageFilter>::ResolveTimeStep(
   const std::vector<TimeStepType> & timeStepList,
-  const BooleanStdVectorType &      valid) const
+  const BooleanStdVectorType &      valid) const -> TimeStepType
 {
-  TimeStepType oMin = NumericTraits<TimeStepType>::ZeroValue();
+  TimeStepType oMin{};
   bool         flag = false;
 
   auto t_it = timeStepList.begin();
@@ -294,22 +294,20 @@ GPUFiniteDifferenceImageFilter<TInputImage, TOutputImage, TParentImageFilter>::P
                                                                                          Indent         indent) const
 {
   GPUSuperclass::PrintSelf(os, indent);
-  CPUSuperclass::PrintSelf(os, indent);
-  /*
-    os << indent << "UseImageSpacing: " << ( m_UseImageSpacing ? "On" : "Off" ) << std::endl;
-    os << indent << "State: " << m_State << std::endl;
-    os << std::endl;
-    if ( m_DifferenceFunction )
-      {
-      os << indent << "DifferenceFunction: " << std::endl;
-      m_DifferenceFunction->Print( os, indent.GetNextIndent() );
-      }
-    else
-      {
-      os << indent << "DifferenceFunction: " << "(None)" << std::endl;
-      }
-    os << std::endl;
-  */
+
+  os << indent << "InitTime: " << std::endl;
+  m_InitTime.Print(os, indent.GetNextIndent());
+  os << indent << "ComputeUpdateTime: " << std::endl;
+  m_ComputeUpdateTime.Print(os, indent.GetNextIndent());
+  os << indent << "ApplyUpdateTime: " << std::endl;
+  m_ApplyUpdateTime.Print(os, indent.GetNextIndent());
+  os << indent << "SmoothFieldTime: " << std::endl;
+  m_SmoothFieldTime.Print(os, indent.GetNextIndent());
+
+  itkPrintSelfObjectMacro(DifferenceFunction);
+
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  os << indent << "State: " << m_State << std::endl;
 }
 
 } // end namespace itk

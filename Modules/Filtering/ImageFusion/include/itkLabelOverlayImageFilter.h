@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class LabelOverlayImageFilter
+ * \class LabelOverlayImageFilter
  * \brief Apply a colormap to a label image and put it on top of the
  *  input image
  *
@@ -80,26 +80,24 @@ public:
   using InputPixelType = typename TInputImage::PixelType;
 
   /** Runtime information support. */
-  itkTypeMacro(LabelOverlayImageFilter, BinaryGeneratorImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelOverlayImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Set the label image */
+  /** Set/Get the label image. */
   void
   SetLabelImage(const TLabelImage * input);
-
-  /** Get the label image */
   const LabelImageType *
   GetLabelImage() const;
 
   /** Set/Get the opacity of the colored label image. The value must be
-   * between 0 and 1
+   * between 0 and 1.
    */
   itkSetMacro(Opacity, double);
   itkGetConstReferenceMacro(Opacity, double);
 
-  /** Set/Get the background value */
+  /** Set/Get the background value. */
   itkSetMacro(BackgroundValue, LabelPixelType);
   itkGetConstReferenceMacro(BackgroundValue, LabelPixelType);
 
@@ -111,18 +109,18 @@ public:
   // End concept checking
 #endif
 
-  /** Empty the color LUT container */
+  /** Empty the color LUT container. */
   void
   ResetColors();
 
-  /** Get number of colors in the LUT container */
+  /** Get number of colors in the LUT container. */
   unsigned int
   GetNumberOfColors() const;
 
-  /** type of the color component */
+  /** type of the color component. */
   using ComponentType = typename OutputPixelType::ComponentType;
 
-  /** Add color to the LUT container */
+  /** Add color to the LUT container. */
   void
   AddColor(ComponentType r, ComponentType g, ComponentType b);
 
@@ -150,9 +148,9 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  FunctorType    m_Functor;
-  double         m_Opacity;
-  LabelPixelType m_BackgroundValue;
+  FunctorType    m_Functor{};
+  double         m_Opacity{};
+  LabelPixelType m_BackgroundValue{};
 };
 } // end namespace itk
 

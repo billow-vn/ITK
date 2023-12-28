@@ -188,9 +188,9 @@ protected:
   void
   LinkLabels(const InternalLabelType label1, const InternalLabelType label2)
   {
-    std::lock_guard<std::mutex> mutexHolder(m_Mutex);
-    InternalLabelType           E1 = this->LookupSet(label1);
-    InternalLabelType           E2 = this->LookupSet(label2);
+    const std::lock_guard<std::mutex> lockGuard(m_Mutex);
+    InternalLabelType                 E1 = this->LookupSet(label1);
+    InternalLabelType                 E2 = this->LookupSet(label2);
 
     if (E1 < E2)
     {
@@ -390,7 +390,7 @@ protected:
   {
     // Create a neighborhood so that we can generate a table of offsets
     // to "previous" line indexes
-    // We are going to mis-use the neighborhood iterators to compute the
+    // We are going to misuse the neighborhood iterators to compute the
     // offset for us. All this messing around produces an array of
     // offsets that will be used to index the map
     typename TOutputImage::Pointer output = m_EnclosingFilter->GetOutput();

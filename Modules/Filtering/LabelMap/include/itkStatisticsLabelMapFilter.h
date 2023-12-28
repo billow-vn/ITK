@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class StatisticsLabelMapFilter
+ * \class StatisticsLabelMapFilter
  * \brief The valuator class for the StatisticsLabelObject
  *
  * StatisticsLabelMapFilter can be used to set the attributes values
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsLabelMapFilter, ShapeLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(StatisticsLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -139,8 +139,7 @@ public:
   {
     constexpr size_t bitsShift = std::min(8 * sizeof(FeatureImagePixelType), 8 * sizeof(m_NumberOfBins) - 1);
 
-    return std::is_integral<FeatureImagePixelType>::value && sizeof(FeatureImagePixelType) <= 2 ? 1u << bitsShift
-                                                                                                : 128u;
+    return std::is_integral_v<FeatureImagePixelType> && sizeof(FeatureImagePixelType) <= 2 ? 1u << bitsShift : 128u;
   }
 
 protected:
@@ -157,8 +156,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  FeatureImagePixelType m_Minimum{ NumericTraits<FeatureImagePixelType>::ZeroValue() };
-  FeatureImagePixelType m_Maximum{ NumericTraits<FeatureImagePixelType>::ZeroValue() };
+  FeatureImagePixelType m_Minimum{};
+  FeatureImagePixelType m_Maximum{};
   unsigned int          m_NumberOfBins{ GetDefaultNumberOfBins() };
   bool                  m_ComputeHistogram{ true };
 }; // end of class

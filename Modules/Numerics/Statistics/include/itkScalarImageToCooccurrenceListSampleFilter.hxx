@@ -79,9 +79,7 @@ ScalarImageToCooccurrenceListSampleFilter<TImage>::GenerateData()
 
   using FaceCalculatorType = itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>;
 
-  FaceCalculatorType                                  faceCalculator;
-  typename FaceCalculatorType::FaceListType           faceList;
-  typename FaceCalculatorType::FaceListType::iterator fit;
+  FaceCalculatorType faceCalculator;
 
   using ShapeNeighborhoodIterator = typename ShapedNeighborhoodIteratorType::ConstIterator;
 
@@ -93,21 +91,21 @@ ScalarImageToCooccurrenceListSampleFilter<TImage>::GenerateData()
 
   auto * output = static_cast<SampleType *>(this->ProcessObject::GetOutput(0));
 
-  // constant for a coocurrence matrix.
+  // constant for a cooccurrence matrix.
   constexpr unsigned int measurementVectorSize = 2;
 
   output->SetMeasurementVectorSize(measurementVectorSize);
 
-  faceList = faceCalculator(input, input->GetRequestedRegion(), radius);
+  typename FaceCalculatorType::FaceListType faceList = faceCalculator(input, input->GetRequestedRegion(), radius);
 
   OffsetType center_offset;
   center_offset.Fill(0);
 
   bool isInside;
 
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    ShapedNeighborhoodIteratorType it(radius, input, *fit);
+    ShapedNeighborhoodIteratorType it(radius, input, face);
 
     auto iter = m_OffsetTable.begin();
     while (iter != m_OffsetTable.end())
@@ -137,7 +135,7 @@ ScalarImageToCooccurrenceListSampleFilter<TImage>::GenerateData()
           coords[1] = pixel_intensity;
 
           output->PushBack(coords);
-          // std::cout << "Pushing: " << coords[0] << "\t" << coords[1] <<
+          // std::cout << "Pushing: " << coords[0] << '\t' << coords[1] <<
           // std::endl;
         }
 

@@ -35,13 +35,6 @@ namespace itk
 {
 
 template <typename TPixel, unsigned int VImageDimension>
-Image<TPixel, VImageDimension>::Image()
-{
-  m_Buffer = PixelContainer::New();
-}
-
-
-template <typename TPixel, unsigned int VImageDimension>
 void
 Image<TPixel, VImageDimension>::Allocate(bool initializePixels)
 {
@@ -126,8 +119,8 @@ Image<TPixel, VImageDimension>::Graft(const DataObject * data)
     else
     {
       // pointer could not be cast back down
-      itkExceptionMacro(<< "itk::Image::Graft() cannot cast " << typeid(data).name() << " to "
-                        << typeid(const Self *).name());
+      itkExceptionMacro("itk::Image::Graft() cannot cast " << typeid(data).name() << " to "
+                                                           << typeid(const Self *).name());
     }
   }
 }
@@ -147,8 +140,7 @@ Image<TPixel, VImageDimension>::GetNumberOfComponentsPerPixel() const
 {
   // use the GetLength() method which works with variable length arrays,
   // to make it work with as much pixel types as possible
-  const auto p = PixelType();
-  return NumericTraits<PixelType>::GetLength(p);
+  return NumericTraits<PixelType>::GetLength({});
 }
 
 

@@ -24,7 +24,7 @@ namespace itk
 {
 
 /**
- *\class ImageFilterToVideoFilterWrapper
+ * \class ImageFilterToVideoFilterWrapper
  * \brief Wrap an ImageToImageFilter as a VideoToVideoFilter that operates on
  * a single frame at a time
  *
@@ -59,7 +59,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(ImageFilterToVideoFilterWrapper, VideoToVideoFilter);
+  itkOverrideGetNameOfClassMacro(ImageFilterToVideoFilterWrapper);
 
   /** Set the filter to use in the internal pipeline */
   itkSetObjectMacro(ImageFilter, ImageFilterType);
@@ -80,7 +80,7 @@ protected:
   TemporalStreamingGenerateData() override;
 
   /** Pointer to filter to use for internal filter */
-  typename ImageFilterType::Pointer m_ImageFilter;
+  typename ImageFilterType::Pointer m_ImageFilter{};
 
 private:
 }; // end class ImageFilterToVideoFilterWrapper

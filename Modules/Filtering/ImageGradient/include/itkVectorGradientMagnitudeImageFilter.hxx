@@ -52,7 +52,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>::PrintS
   os << indent << "DerivativeWeights: " << m_DerivativeWeights << std::endl;
   os << indent << "ComponentWeights: " << m_ComponentWeights << std::endl;
   os << indent << "SqrtComponentWeights: " << m_SqrtComponentWeights << std::endl;
-  os << indent << "UseImageSpacing: " << m_UseImageSpacing << std::endl;
+  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
   os << indent << "UsePrincipleComponents: " << m_UsePrincipleComponents << std::endl;
   os << indent << "RequestedNumberOfThreads: "
      << static_cast<typename NumericTraits<ThreadIdType>::PrintType>(m_RequestedNumberOfWorkUnits) << std::endl;
@@ -142,7 +142,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>::Before
   {
     if (m_ComponentWeights[i] < 0)
     {
-      itkExceptionMacro(<< "Component weights must be positive numbers");
+      itkExceptionMacro("Component weights must be positive numbers");
     }
     m_SqrtComponentWeights[i] = std::sqrt(m_ComponentWeights[i]);
   }
@@ -156,7 +156,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>::Before
     {
       if (static_cast<TRealType>(this->GetInput()->GetSpacing()[i]) == 0.0)
       {
-        itkExceptionMacro(<< "Image spacing in dimension " << i << " is zero.");
+        itkExceptionMacro("Image spacing in dimension " << i << " is zero.");
       }
       m_DerivativeWeights[i] = static_cast<TRealType>(1.0 / static_cast<TRealType>(this->GetInput()->GetSpacing()[i]));
     }
@@ -175,7 +175,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>::Before
     this->SetNumberOfWorkUnits(m_RequestedNumberOfWorkUnits);
   }
   //
-  // cast might not be necessary, but CastImagefilter is optimized for
+  // cast might not be necessary, but CastImageFilter is optimized for
   // the case where the InputImageType == OutputImageType
   typename CastImageFilter<TInputImage, RealVectorImageType>::Pointer caster =
     CastImageFilter<TInputImage, RealVectorImageType>::New();
@@ -195,24 +195,21 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>::Dynami
   ImageRegionIterator<TOutputImage>                     it;
 
   // Find the data-set boundary "faces"
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>::FaceListType faceList;
-  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>                        bC;
-  RadiusType                                                                                      r1;
+  NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType> bC;
+  RadiusType                                                               r1;
   r1.Fill(1);
-  faceList = bC(m_RealValuedInputImage.GetPointer(), outputRegionForThread, r1);
-
-  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>::FaceListType::iterator fit;
-  fit = faceList.begin();
+  typename NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<RealVectorImageType>::FaceListType faceList =
+    bC(m_RealValuedInputImage.GetPointer(), outputRegionForThread, r1);
 
   TotalProgressReporter progress(this, this->GetOutput()->GetRequestedRegion().GetNumberOfPixels());
 
   // Process each of the data set faces.  The iterator is reinitialized on each
   // face so that it can determine whether or not to check for boundary
   // conditions.
-  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+  for (const auto & face : faceList)
   {
-    bit = ConstNeighborhoodIteratorType(r1, m_RealValuedInputImage.GetPointer(), *fit);
-    it = ImageRegionIterator<TOutputImage>(this->GetOutput(), *fit);
+    bit = ConstNeighborhoodIteratorType(r1, m_RealValuedInputImage.GetPointer(), face);
+    it = ImageRegionIterator<TOutputImage>(this->GetOutput(), face);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 

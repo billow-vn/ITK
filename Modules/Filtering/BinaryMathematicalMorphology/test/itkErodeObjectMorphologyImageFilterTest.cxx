@@ -138,25 +138,22 @@ itkErodeObjectMorphologyImageFilterTest(int, char *[])
 
   // Connect the input image
   filter->SetInput(inputImage);
-  filter->SetKernel(ball);
-  filter->SetErodeValue(fgValue);
-  filter->SetBackgroundValue(5);
+  ITK_TEST_SET_GET_VALUE(inputImage, filter->GetInput());
 
-  // Exercise Set/Get methods for Background Value
-  const unsigned short backGround = filter->GetBackgroundValue();
-  if (backGround != 5)
-  {
-    std::cerr << "Set/Get Background value problem." << std::endl;
-    return EXIT_FAILURE;
-  }
+  filter->SetKernel(ball);
+  ITK_TEST_SET_GET_VALUE(ball, filter->GetKernel());
+
+  filter->SetErodeValue(fgValue);
+  ITK_TEST_SET_GET_VALUE(fgValue, filter->GetErodeValue());
+
+  unsigned short backgroundValue = 5;
+  filter->SetBackgroundValue(backgroundValue);
+  ITK_TEST_SET_GET_VALUE(backgroundValue, filter->GetBackgroundValue());
+
+  std::cout << "BoundaryCondition: " << filter->GetBoundaryCondition() << std::endl;
 
   // Get the Smart Pointer to the Filter Output
   myImageType::Pointer outputImage = filter->GetOutput();
-
-
-  // Test the itkGetMacro
-  unsigned short value = filter->GetErodeValue();
-  std::cout << "filter->GetErodeValue(): " << value << std::endl;
 
   // Execute the filter
   ITK_TRY_EXPECT_NO_EXCEPTION(filter->Update());
@@ -164,7 +161,7 @@ itkErodeObjectMorphologyImageFilterTest(int, char *[])
   // Create an iterator for going through the image output
   myIteratorType it2(outputImage, outputImage->GetBufferedRegion());
 
-  //  Print the content of the result image
+  // Print the content of the result image
   std::cout << "Result " << std::endl;
   i = 0;
   while (!it2.IsAtEnd())
@@ -180,5 +177,6 @@ itkErodeObjectMorphologyImageFilterTest(int, char *[])
 
   // All objects should be automatically destroyed at this point
 
+  std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

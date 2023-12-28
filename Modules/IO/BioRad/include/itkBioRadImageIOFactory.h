@@ -35,7 +35,7 @@
 namespace itk
 {
 /**
- *\class BioRadImageIOFactory
+ * \class BioRadImageIOFactory
  * \brief Create instances of BioRadImageIO objects using an object factory.
  * \ingroup ITKIOBioRad
  */
@@ -61,7 +61,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BioRadImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(BioRadImageIOFactory);
 
   /** Register one factory of this type  */
   static void

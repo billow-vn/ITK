@@ -50,7 +50,7 @@ public:
   using Superclass = Object;
 
   /** Run-time type information */
-  itkTypeMacro(LevelSetContainerBase, Object);
+  itkOverrideGetNameOfClassMacro(LevelSetContainerBase);
 
   /** type alias related to the type of level set*/
   using LevelSetType = TLevelSet;
@@ -95,7 +95,7 @@ public:
   friend class Iterator;
 
   /**
-   *\class ConstIterator
+   * \class ConstIterator
     \ingroup ITKLevelSetsv4
     */
   class ConstIterator
@@ -172,7 +172,7 @@ public:
   };
 
   /**
-   *\class Iterator
+   * \class Iterator
     \ingroup ITKLevelSetsv4 */
   class Iterator
   {
@@ -313,9 +313,9 @@ protected:
   SetContainer(const LevelSetContainerType & iContainer);
 
 private:
-  HeavisideConstPointer       m_Heaviside;
-  DomainMapImageFilterPointer m_DomainMapFilter;
-  LevelSetContainerType       m_Container;
+  HeavisideConstPointer       m_Heaviside{};
+  DomainMapImageFilterPointer m_DomainMapFilter{};
+  LevelSetContainerType       m_Container{};
 };
 } // namespace itk
 

@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScaleSkewVersor3DTransform, VersorRigid3DTransform);
+  itkOverrideGetNameOfClassMacro(ScaleSkewVersor3DTransform);
 
   /** Dimension of parameters. */
   static constexpr unsigned int InputSpaceDimension = 3;
@@ -183,10 +183,10 @@ protected:
 
 private:
   /**  Vector containing the scale. */
-  ScaleVectorType m_Scale;
+  ScaleVectorType m_Scale{};
 
   /**  Vector containing the skew */
-  SkewVectorType m_Skew;
+  SkewVectorType m_Skew{};
 }; // class ScaleSkewVersor3DTransform
 } // namespace itk
 

@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class LevelSetDomainPartitionImage
+ * \class LevelSetDomainPartitionImage
  *
  * \brief Helper class used to partition domain and efficiently compute overlap.
  * \ingroup ITKLevelSetsv4
@@ -45,7 +45,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkTypeMacro(LevelSetDomainPartitionImage, LevelSetDomainPartitionBase);
+  itkOverrideGetNameOfClassMacro(LevelSetDomainPartitionImage);
 
   using ImageType = TImage;
   using ImagePointer = typename ImageType::Pointer;
@@ -102,9 +102,9 @@ protected:
   void
   AllocateListDomain() override;
 
-  ImageConstPointer              m_Image;
-  ListImagePointer               m_ListDomain;
-  LevelSetDomainRegionVectorType m_LevelSetDomainRegionVector;
+  ImageConstPointer              m_Image{};
+  ListImagePointer               m_ListDomain{};
+  LevelSetDomainRegionVectorType m_LevelSetDomainRegionVector{};
 };
 } // end namespace itk
 

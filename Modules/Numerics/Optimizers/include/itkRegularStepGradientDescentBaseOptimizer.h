@@ -24,7 +24,7 @@
 
 namespace itk
 {
-/**\class RegularStepGradientDescentBaseOptimizerEnums
+/** \class RegularStepGradientDescentBaseOptimizerEnums
  *\brief Contains all enum classes for RegularStepGradientDescentBaseOptimizer class.
  * \ingroup ITKOptimizers
  */
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegularStepGradientDescentBaseOptimizer, SingleValuedNonLinearOptimizer);
+  itkOverrideGetNameOfClassMacro(RegularStepGradientDescentBaseOptimizer);
 
   using StopConditionEnum = RegularStepGradientDescentBaseOptimizerEnums::StopCondition;
 #if !defined(ITK_LEGACY_REMOVE)
@@ -172,21 +172,21 @@ protected:
 
 private:
 protected:
-  DerivativeType m_Gradient;
-  DerivativeType m_PreviousGradient;
+  DerivativeType m_Gradient{};
+  DerivativeType m_PreviousGradient{};
 
   bool               m_Stop{ false };
-  bool               m_Maximize;
-  MeasureType        m_Value;
-  double             m_GradientMagnitudeTolerance;
-  double             m_MaximumStepLength;
-  double             m_MinimumStepLength;
-  double             m_CurrentStepLength;
-  double             m_RelaxationFactor;
-  StopConditionEnum  m_StopCondition;
-  SizeValueType      m_NumberOfIterations;
-  SizeValueType      m_CurrentIteration;
-  std::ostringstream m_StopConditionDescription;
+  bool               m_Maximize{};
+  MeasureType        m_Value{};
+  double             m_GradientMagnitudeTolerance{};
+  double             m_MaximumStepLength{};
+  double             m_MinimumStepLength{};
+  double             m_CurrentStepLength{};
+  double             m_RelaxationFactor{};
+  StopConditionEnum  m_StopCondition{};
+  SizeValueType      m_NumberOfIterations{};
+  SizeValueType      m_CurrentIteration{};
+  std::ostringstream m_StopConditionDescription{};
 };
 } // end namespace itk
 

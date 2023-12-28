@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- *
- */
+
 template <typename TOutputMesh>
 MeshSource<TOutputMesh>::MeshSource()
 {
@@ -38,18 +36,12 @@ MeshSource<TOutputMesh>::MeshSource()
   m_GenerateDataNumberOfRegions = 0;
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 typename MeshSource<TOutputMesh>::DataObjectPointer MeshSource<TOutputMesh>::MakeOutput(DataObjectPointerArraySizeType)
 {
   return TOutputMesh::New().GetPointer();
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 auto
 MeshSource<TOutputMesh>::GetOutput() -> OutputMeshType *
@@ -57,9 +49,6 @@ MeshSource<TOutputMesh>::GetOutput() -> OutputMeshType *
   return itkDynamicCastInDebugMode<TOutputMesh *>(this->GetPrimaryOutput());
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 auto
 MeshSource<TOutputMesh>::GetOutput(unsigned int idx) -> OutputMeshType *
@@ -67,21 +56,15 @@ MeshSource<TOutputMesh>::GetOutput(unsigned int idx) -> OutputMeshType *
   return itkDynamicCastInDebugMode<TOutputMesh *>(this->ProcessObject::GetOutput(idx));
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 void
 MeshSource<TOutputMesh>::SetOutput(OutputMeshType * output)
 {
-  itkWarningMacro(<< "SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible "
-                     "combination with DisconnectPipeline() instead.");
+  itkWarningMacro("SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible "
+                  "combination with DisconnectPipeline() instead.");
   this->ProcessObject::SetNthOutput(0, output);
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 void
 MeshSource<TOutputMesh>::GenerateInputRequestedRegion()
@@ -89,9 +72,6 @@ MeshSource<TOutputMesh>::GenerateInputRequestedRegion()
   Superclass::GenerateInputRequestedRegion();
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 void
 MeshSource<TOutputMesh>::GraftOutput(DataObject * graft)
@@ -99,16 +79,13 @@ MeshSource<TOutputMesh>::GraftOutput(DataObject * graft)
   this->GraftNthOutput(0, graft);
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 void
 MeshSource<TOutputMesh>::GraftOutput(const DataObjectIdentifierType & key, DataObject * graft)
 {
   if (!graft)
   {
-    itkExceptionMacro(<< "Requested to graft output that is a nullptr pointer");
+    itkExceptionMacro("Requested to graft output that is a nullptr pointer");
   }
 
   // we use the process object method since all out output may not be
@@ -119,24 +96,18 @@ MeshSource<TOutputMesh>::GraftOutput(const DataObjectIdentifierType & key, DataO
   output->Graft(graft);
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 void
 MeshSource<TOutputMesh>::GraftNthOutput(unsigned int idx, DataObject * graft)
 {
   if (idx >= this->GetNumberOfIndexedOutputs())
   {
-    itkExceptionMacro(<< "Requested to graft output " << idx << " but this filter only has "
-                      << this->GetNumberOfIndexedOutputs() << " indexed Outputs.");
+    itkExceptionMacro("Requested to graft output " << idx << " but this filter only has "
+                                                   << this->GetNumberOfIndexedOutputs() << " indexed Outputs.");
   }
   this->GraftOutput(this->MakeNameFromOutputIndex(idx), graft);
 }
 
-/**
- *
- */
 template <typename TOutputMesh>
 void
 MeshSource<TOutputMesh>::PrintSelf(std::ostream & os, Indent indent) const

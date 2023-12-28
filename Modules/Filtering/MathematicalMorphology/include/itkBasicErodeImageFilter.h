@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BasicErodeImageFilter, MorphologyImageFilter);
+  itkOverrideGetNameOfClassMacro(BasicErodeImageFilter);
 
   /** Declaration of pixel type. */
   using typename Superclass::PixelType;
@@ -111,7 +111,7 @@ protected:
 private:
   // Default boundary condition for erosion filter, defaults to
   // NumericTraits<PixelType>::max()
-  DefaultBoundaryConditionType m_ErodeBoundaryCondition;
+  DefaultBoundaryConditionType m_ErodeBoundaryCondition{};
 }; // end of class
 } // end namespace itk
 

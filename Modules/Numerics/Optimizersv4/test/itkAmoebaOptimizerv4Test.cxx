@@ -53,7 +53,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
 
-  itkTypeMacro(itkAmoebaOptimizerv4TestMetric1, ObjectToObjectMetricBase);
+  itkOverrideGetNameOfClassMacro(itkAmoebaOptimizerv4TestMetric1);
 
   enum
   {
@@ -165,7 +165,7 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(itkAmoebaOptimizerv4TestMetric2, ObjectToObjectMetricBase);
+  itkOverrideGetNameOfClassMacro(itkAmoebaOptimizerv4TestMetric2);
 
   enum
   {
@@ -343,6 +343,11 @@ AmoebaTest1()
   ITK_EXERCISE_BASIC_OBJECT_METHODS(itkOptimizer, AmoebaOptimizerv4, SingleValuedNonLinearVnlOptimizerv4);
 
 
+  ITK_TEST_EXPECT_TRUE(itkOptimizer->CanUseScales());
+
+  bool doEstimateScales = true;
+  ITK_TEST_SET_GET_BOOLEAN(itkOptimizer, DoEstimateScales, doEstimateScales);
+
   // set optimizer parameters
   itk::SizeValueType numberOfIterations = 10;
   itkOptimizer->SetNumberOfIterations(numberOfIterations);
@@ -361,6 +366,12 @@ AmoebaTest1()
   double fTolerance = -0.001;
   itkOptimizer->SetFunctionConvergenceTolerance(fTolerance);
   ITK_TEST_SET_GET_VALUE(fTolerance, itkOptimizer->GetFunctionConvergenceTolerance());
+
+  OptimizerType::DerivativeType cachedDerivative{};
+  ITK_TEST_EXPECT_EQUAL(cachedDerivative, itkOptimizer->GetCachedDerivative());
+
+  OptimizerType::ParametersType cachedCurrentPos{};
+  ITK_TEST_EXPECT_EQUAL(cachedCurrentPos, itkOptimizer->GetCachedCurrentPosition());
 
   auto metric = itkAmoebaOptimizerv4TestMetric1::New();
   itkOptimizer->SetMetric(metric);
@@ -432,7 +443,9 @@ AmoebaTest1()
   for (unsigned int j = 0; j < 2; ++j)
   {
     if (itk::Math::abs(finalPosition[j] - trueParameters[j]) > xTolerance)
+    {
       pass = false;
+    }
   }
 
   if (!pass)

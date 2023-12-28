@@ -20,6 +20,7 @@
 
 #include "itkImageScanlineIterator.h"
 #include "itkMakeUniqueForOverwrite.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -27,11 +28,19 @@ template <typename TInputImage, typename TOutputImage>
 void
 STAPLEImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
-  os << indent << "m_MaximumIterations = " << m_MaximumIterations << std::endl;
-  os << indent << "m_ForegroundValue = " << m_ForegroundValue << std::endl;
-  os << indent << "m_ConfidenceWeight = " << m_ConfidenceWeight << std::endl;
-  os << indent << "m_ElapsedIterations = " << m_ElapsedIterations << std::endl;
+
+  os << indent
+     << "ForegroundValue: " << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_ForegroundValue)
+     << std::endl;
+  os << indent << "ElapsedIterations: " << m_ElapsedIterations << std::endl;
+  os << indent << "MaximumIterations: " << m_MaximumIterations << std::endl;
+  os << indent << "ConfidenceWeight: " << m_ConfidenceWeight << std::endl;
+
+  os << indent << "Sensitivity: " << m_Sensitivity << std::endl;
+  os << indent << "Specificity: " << m_Specificity << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -81,7 +90,7 @@ STAPLEImageFilter<TInputImage, TOutputImage>::GenerateData()
   {
     if (this->GetInput(i)->GetRequestedRegion() != W->GetRequestedRegion())
     {
-      itkExceptionMacro(<< "One or more input images do not contain matching RequestedRegions");
+      itkExceptionMacro("One or more input images do not contain matching RequestedRegions");
     }
 
     in = IteratorType(this->GetInput(i), W->GetRequestedRegion());

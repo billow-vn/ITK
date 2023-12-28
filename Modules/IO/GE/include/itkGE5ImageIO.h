@@ -39,7 +39,7 @@
 namespace itk
 {
 /**
- *\class GE5ImageIO
+ * \class GE5ImageIO
  *
  * \author Hans J. Johnson
  * \brief Class that defines how to read GE5 file format.
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GE5ImageIO, Superclass);
+  itkOverrideGetNameOfClassMacro(GE5ImageIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 

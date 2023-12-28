@@ -92,7 +92,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineInterpolateImageFunction, InterpolateImageFunction);
+  itkOverrideGetNameOfClassMacro(BSplineInterpolateImageFunction);
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -180,9 +180,9 @@ public:
   CovariantVectorType
   EvaluateDerivative(const PointType & point) const
   {
-    ContinuousIndexType index;
+    const ContinuousIndexType index =
+      this->GetInputImage()->template TransformPhysicalPointToContinuousIndex<TCoordRep>(point);
 
-    this->GetInputImage()->TransformPhysicalPointToContinuousIndex(point, index);
     // No thread info passed in, so call method that doesn't need thread ID.
     return (this->EvaluateDerivativeAtContinuousIndex(index));
   }
@@ -222,9 +222,8 @@ public:
   void
   EvaluateValueAndDerivative(const PointType & point, OutputType & value, CovariantVectorType & deriv) const
   {
-    ContinuousIndexType index;
-
-    this->GetInputImage()->TransformPhysicalPointToContinuousIndex(point, index);
+    const ContinuousIndexType index =
+      this->GetInputImage()->template TransformPhysicalPointToContinuousIndex<TCoordRep>(point);
 
     // No thread info passed in, so call method that doesn't need thread ID.
     this->EvaluateValueAndDerivativeAtContinuousIndex(index, value, deriv);
@@ -356,14 +355,14 @@ protected:
 
   // These are needed by the smoothing spline routine.
   // temp storage for processing of Coefficients
-  std::vector<CoefficientDataType> m_Scratch;
+  std::vector<CoefficientDataType> m_Scratch{};
   // Image size
-  typename TImageType::SizeType m_DataLength;
+  typename TImageType::SizeType m_DataLength{};
   // User specified spline order (3rd or cubic is the default)
-  unsigned int m_SplineOrder;
+  unsigned int m_SplineOrder{};
 
   // Spline coefficients
-  typename CoefficientImageType::ConstPointer m_Coefficients;
+  typename CoefficientImageType::ConstPointer m_Coefficients{};
 
 private:
   /** Determines the weights for interpolation of the value x */
@@ -396,25 +395,25 @@ private:
   void
   ApplyMirrorBoundaryConditions(vnl_matrix<long> & evaluateIndex, unsigned int splineOrder) const;
 
-  Iterator m_CIterator;                         // Iterator for
-                                                // traversing spline
-                                                // coefficients.
-  unsigned long m_MaxNumberInterpolationPoints; // number of
-                                                // neighborhood
-                                                // points used for
-                                                // interpolation
-  std::vector<IndexType> m_PointsToIndex;       // Preallocation of
-                                                // interpolation
-                                                // neighborhood
-                                                // indices
+  Iterator m_CIterator{};                         // Iterator for
+                                                  // traversing spline
+                                                  // coefficients.
+  unsigned long m_MaxNumberInterpolationPoints{}; // number of
+                                                  // neighborhood
+                                                  // points used for
+                                                  // interpolation
+  std::vector<IndexType> m_PointsToIndex{};       // Preallocation of
+                                                  // interpolation
+                                                  // neighborhood
+                                                  // indices
 
-  CoefficientFilterPointer m_CoefficientFilter;
+  CoefficientFilterPointer m_CoefficientFilter{};
 
   // flag to take or not the image direction into account when computing the
   // derivatives.
-  bool m_UseImageDirection;
+  bool m_UseImageDirection{};
 
-  ThreadIdType                          m_NumberOfWorkUnits;
+  ThreadIdType                          m_NumberOfWorkUnits{};
   std::unique_ptr<vnl_matrix<long>[]>   m_ThreadedEvaluateIndex;
   std::unique_ptr<vnl_matrix<double>[]> m_ThreadedWeights;
   std::unique_ptr<vnl_matrix<double>[]> m_ThreadedWeightsDerivative;

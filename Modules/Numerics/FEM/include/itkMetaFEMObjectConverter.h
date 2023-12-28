@@ -56,7 +56,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MetaFEMObjectConverter, MetaConverterBase);
+  itkOverrideGetNameOfClassMacro(MetaFEMObjectConverter);
 
   using typename Superclass::SpatialObjectType;
   using SpatialObjectPointer = typename SpatialObjectType::Pointer;
@@ -68,16 +68,16 @@ public:
   using FEMObjectSpatialObjectConstPointer = typename FEMObjectSpatialObjectType::ConstPointer;
   using FEMObjectMetaObjectType = MetaFEMObject;
 
-  /** Convert the MetaObject to Spatial Object */
+  /** Convert the MetaObject to a SpatialObject. */
   SpatialObjectPointer
   MetaObjectToSpatialObject(const MetaObjectType * mo) override;
 
-  /** Convert the SpatialObject to MetaObject */
+  /** Convert the SpatialObject to a MetaObject. */
   MetaObjectType *
   SpatialObjectToMetaObject(const SpatialObjectType * spatialObject) override;
 
 protected:
-  /** Create the specific MetaObject for this class */
+  /** Create the specific MetaObject for this class. */
   MetaObjectType *
   CreateMetaObject() override;
 

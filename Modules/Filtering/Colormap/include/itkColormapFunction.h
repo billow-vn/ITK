@@ -53,7 +53,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ColormapFunction, Object);
+  itkOverrideGetNameOfClassMacro(ColormapFunction);
 
   using RGBPixelType = TRGBPixel;
   using RGBComponentType = typename TRGBPixel::ComponentType;
@@ -97,9 +97,7 @@ protected:
 
     auto     d = static_cast<RealType>(maxInputValue - minInputValue);
     RealType value = (static_cast<RealType>(v) - static_cast<RealType>(minInputValue)) / d;
-
-    value = std::max(0.0, value);
-    value = std::min(1.0, value);
+    value = std::clamp(value, 0.0, 1.0);
     return value;
   }
 
@@ -133,11 +131,11 @@ protected:
   }
 
 private:
-  ScalarType m_MinimumInputValue;
-  ScalarType m_MaximumInputValue;
+  ScalarType m_MinimumInputValue{};
+  ScalarType m_MaximumInputValue{};
 
-  RGBComponentType m_MinimumRGBComponentValue;
-  RGBComponentType m_MaximumRGBComponentValue;
+  RGBComponentType m_MinimumRGBComponentValue{};
+  RGBComponentType m_MaximumRGBComponentValue{};
 };
 } // end namespace Function
 } // end namespace itk

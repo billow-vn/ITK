@@ -268,7 +268,7 @@ template <typename TInputImage>
 void
 ImageTransformer<TInputImage>::GenerateData()
 {
-  // Call a method that can be overriden by a subclass to allocate
+  // Call a method that can be overridden by a subclass to allocate
   // memory for the filter's outputs
   this->AllocateOutputs();
 
@@ -296,7 +296,7 @@ ImageTransformer<TInputImage>::ThreadedGenerateData(const InputImageRegionType &
   // 'noreturn' function does return
   std::ostringstream message;
 
-  message << "itk::ERROR: " << this->GetNameOfClass() << "(" << this << "): "
+  message << "itk::ERROR: " << this->GetNameOfClass() << '(' << this << "): "
           << "Subclass should override this method!!!";
   ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
   throw e_;
@@ -342,7 +342,7 @@ ImageTransformer<TInputImage>::ThreaderCallback(void * arg)
   }
   // else
   //   {
-  //   otherwise don't use this thread. Sometimes the threads dont
+  //   otherwise don't use this thread. Sometimes the threads don't
   //   break up very well and it is just as efficient to leave a
   //   few threads idle.
   //   }

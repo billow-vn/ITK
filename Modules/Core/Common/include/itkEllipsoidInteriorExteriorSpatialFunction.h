@@ -49,7 +49,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EllipsoidInteriorExteriorSpatialFunction, InteriorExteriorSpatialFunction);
+  itkOverrideGetNameOfClassMacro(EllipsoidInteriorExteriorSpatialFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -81,7 +81,7 @@ public:
   Evaluate(const InputType & position) const override;
 
 protected:
-  EllipsoidInteriorExteriorSpatialFunction();
+  EllipsoidInteriorExteriorSpatialFunction() = default;
   ~EllipsoidInteriorExteriorSpatialFunction() override = default;
 
   void
@@ -89,10 +89,10 @@ protected:
 
 private:
   /** The center of the ellipsoid. */
-  InputType m_Center;
+  InputType m_Center{};
 
   /** The axes lengths of the ellipsoid. */
-  InputType m_Axes;
+  InputType m_Axes{ MakeFilled<InputType>(1.0f) };
 
   /** The orientation vectors (must be orthogonal) of the ellipsoid axes. */
   OrientationType m_Orientations{};

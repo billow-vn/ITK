@@ -26,15 +26,15 @@ namespace itk
  * Get the match Measure
  */
 template <typename TFixedPointSet, typename TMovingImage>
-typename MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::MeasureType
+auto
 MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValue(
-  const TransformParametersType & parameters) const
+  const TransformParametersType & parameters) const -> MeasureType
 {
   FixedPointSetConstPointer fixedPointSet = this->GetFixedPointSet();
 
   if (!fixedPointSet)
   {
-    itkExceptionMacro(<< "Fixed point set has not been assigned");
+    itkExceptionMacro("Fixed point set has not been assigned");
   }
 
   PointIterator pointItr = fixedPointSet->GetPoints()->Begin();
@@ -43,7 +43,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValue(
   PointDataIterator pointDataItr = fixedPointSet->GetPointData()->Begin();
   PointDataIterator pointDataEnd = fixedPointSet->GetPointData()->End();
 
-  MeasureType measure = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType measure{};
 
   this->m_NumberOfPixelsCounted = 0;
 
@@ -71,7 +71,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValue(
 
   if (!this->m_NumberOfPixelsCounted)
   {
-    itkExceptionMacro(<< "All the points mapped to outside of the moving image");
+    itkExceptionMacro("All the points mapped to outside of the moving image");
   }
   else
   {
@@ -92,14 +92,14 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetDerivative(
 {
   if (!this->GetGradientImage())
   {
-    itkExceptionMacro(<< "The gradient image is null, maybe you forgot to call Initialize()");
+    itkExceptionMacro("The gradient image is null, maybe you forgot to call Initialize()");
   }
 
   FixedPointSetConstPointer fixedPointSet = this->GetFixedPointSet();
 
   if (!fixedPointSet)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   this->m_NumberOfPixelsCounted = 0;
@@ -136,7 +136,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetDerivative(
       // Now compute the derivatives
       this->m_Transform->ComputeJacobianWithRespectToParametersCachedTemporaries(inputPoint, jacobian, jacobianCache);
 
-      // Get the gradient by NearestNeighboorInterpolation:
+      // Get the gradient by NearestNeighborInterpolation:
       // which is equivalent to round up the point components.
       using CoordRepType = typename OutputPointType::CoordRepType;
       using MovingImageContinuousIndexType = ContinuousIndex<CoordRepType, MovingImageType::ImageDimension>;
@@ -150,7 +150,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetDerivative(
       const GradientPixelType gradient = this->GetGradientImage()->GetPixel(mappedIndex);
       for (unsigned int par = 0; par < ParametersDimension; ++par)
       {
-        RealType sum = NumericTraits<RealType>::ZeroValue();
+        RealType sum{};
         for (unsigned int dim = 0; dim < Self::FixedPointSetDimension; ++dim)
         {
           sum += 2.0 * diff * jacobian(dim, par) * gradient[dim];
@@ -165,7 +165,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetDerivative(
 
   if (!this->m_NumberOfPixelsCounted)
   {
-    itkExceptionMacro(<< "All the points mapped to outside of the moving image");
+    itkExceptionMacro("All the points mapped to outside of the moving image");
   }
   else
   {
@@ -188,18 +188,18 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValueAndDeriv
 {
   if (!this->GetGradientImage())
   {
-    itkExceptionMacro(<< "The gradient image is null, maybe you forgot to call Initialize()");
+    itkExceptionMacro("The gradient image is null, maybe you forgot to call Initialize()");
   }
 
   FixedPointSetConstPointer fixedPointSet = this->GetFixedPointSet();
 
   if (!fixedPointSet)
   {
-    itkExceptionMacro(<< "Fixed image has not been assigned");
+    itkExceptionMacro("Fixed image has not been assigned");
   }
 
   this->m_NumberOfPixelsCounted = 0;
-  MeasureType measure = NumericTraits<MeasureType>::ZeroValue();
+  MeasureType measure{};
 
   this->SetTransformParameters(parameters);
 
@@ -236,7 +236,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValueAndDeriv
 
       measure += diff * diff;
 
-      // Get the gradient by NearestNeighboorInterpolation:
+      // Get the gradient by NearestNeighborInterpolation:
       // which is equivalent to round up the point components.
       using CoordRepType = typename OutputPointType::CoordRepType;
       using MovingImageContinuousIndexType = ContinuousIndex<CoordRepType, MovingImageType::ImageDimension>;
@@ -250,7 +250,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValueAndDeriv
       const GradientPixelType gradient = this->GetGradientImage()->GetPixel(mappedIndex);
       for (unsigned int par = 0; par < ParametersDimension; ++par)
       {
-        RealType sum = NumericTraits<RealType>::ZeroValue();
+        RealType sum{};
         for (unsigned int dim = 0; dim < Self::FixedPointSetDimension; ++dim)
         {
           sum += 2.0 * diff * jacobian(dim, par) * gradient[dim];
@@ -265,7 +265,7 @@ MeanSquaresPointSetToImageMetric<TFixedPointSet, TMovingImage>::GetValueAndDeriv
 
   if (!this->m_NumberOfPixelsCounted)
   {
-    itkExceptionMacro(<< "All the points mapped to outside of the moving image");
+    itkExceptionMacro("All the points mapped to outside of the moving image");
   }
   else
   {

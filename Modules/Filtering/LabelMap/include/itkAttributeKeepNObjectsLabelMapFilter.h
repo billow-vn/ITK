@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class AttributeKeepNObjectsLabelMapFilter
+ * \class AttributeKeepNObjectsLabelMapFilter
  * \brief keep N objects according to their attribute value
  *
  * AttributeKeepNObjectsLabelMapFilter keeps the N objects in a label collection image
@@ -71,7 +71,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributeKeepNObjectsLabelMapFilter, InPlaceLabelMapFilter);
+  itkOverrideGetNameOfClassMacro(AttributeKeepNObjectsLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -142,8 +142,8 @@ protected:
   };
 
 private:
-  bool          m_ReverseOrdering;
-  SizeValueType m_NumberOfObjects;
+  bool          m_ReverseOrdering{};
+  SizeValueType m_NumberOfObjects{};
 
 }; // end of class
 

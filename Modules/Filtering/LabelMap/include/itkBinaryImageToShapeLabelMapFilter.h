@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class BinaryImageToShapeLabelMapFilter
+ * \class BinaryImageToShapeLabelMapFilter
  * \brief Converts a binary image to a label map and valuate the shape attributes.
  *
  * A convenient class that converts a binary image to a label map and valuates the
@@ -97,7 +97,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(BinaryImageToShapeLabelMapFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(BinaryImageToShapeLabelMapFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by face connectivity or
@@ -176,12 +176,12 @@ protected:
   GenerateData() override;
 
 private:
-  bool                 m_FullyConnected;
-  OutputImagePixelType m_OutputBackgroundValue;
-  InputImagePixelType  m_InputForegroundValue;
-  bool                 m_ComputeFeretDiameter;
-  bool                 m_ComputePerimeter;
-  bool                 m_ComputeOrientedBoundingBox;
+  bool                 m_FullyConnected{};
+  OutputImagePixelType m_OutputBackgroundValue{};
+  InputImagePixelType  m_InputForegroundValue{};
+  bool                 m_ComputeFeretDiameter{};
+  bool                 m_ComputePerimeter{};
+  bool                 m_ComputeOrientedBoundingBox{};
 }; // end of class
 } // end namespace itk
 

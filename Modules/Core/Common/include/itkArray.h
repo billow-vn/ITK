@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class Array
+ * \class Array
  *  \brief Array class with size defined at construction time.
  *
  * This class derives from the vnl_vector<> class.
@@ -55,11 +55,11 @@ public:
 
 public:
   /** Default constructor. It is created with an empty array
-   *  it has to be allocated later by assignment              */
-  Array();
+   *  it has to be allocated later by assignment */
+  Array() = default;
 
   /** Copy constructor.  Uses VNL copy constructor with correct
-   *  setting for memory management.                          */
+   *  setting for memory management. */
   Array(const Array &);
 
   /** Construct from a VnlVectorType */
@@ -212,7 +212,7 @@ template <typename TValue>
 std::ostream &
 operator<<(std::ostream & os, const Array<TValue> & arr)
 {
-  os << "[";
+  os << '[';
   const unsigned int length = arr.size();
   if (length >= 1)
   {
@@ -223,7 +223,7 @@ operator<<(std::ostream & os, const Array<TValue> & arr)
     }
     os << arr[last];
   }
-  os << "]";
+  os << ']';
   return os;
 }
 

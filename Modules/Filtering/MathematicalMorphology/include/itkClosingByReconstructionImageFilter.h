@@ -84,7 +84,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ClosingByReconstructionImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ClosingByReconstructionImageFilter);
 
   /** Set kernel (structuring element). */
   itkSetMacro(Kernel, KernelType);
@@ -137,9 +137,9 @@ protected:
 
 private:
   /** kernel or structuring element to use. */
-  KernelType m_Kernel;
-  bool       m_FullyConnected;
-  bool       m_PreserveIntensities;
+  KernelType m_Kernel{};
+  bool       m_FullyConnected{};
+  bool       m_PreserveIntensities{};
 }; // end of class
 } // end namespace itk
 

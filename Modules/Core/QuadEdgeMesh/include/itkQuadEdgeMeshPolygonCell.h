@@ -23,7 +23,7 @@
 namespace itk
 {
 /**
- *\class QuadEdgeMeshPolygonCell
+ * \class QuadEdgeMeshPolygonCell
  * Class that connects the QE with itk
  *
  * \param TCellInterface Basic type for the itk*Cell. This usually comes
@@ -94,7 +94,7 @@ public:
 
 public:
   /** Standard part of every itk Object. */
-  itkTypeMacro(QuadEdgeMeshPolygonCell, TCellInterface);
+  itkOverrideGetNameOfClassMacro(QuadEdgeMeshPolygonCell);
 
   /** Object memory management methods. */
   QuadEdgeMeshPolygonCell(PointIdentifier nPoints = 0);
@@ -209,7 +209,7 @@ public:
     }
     else
     {
-      return &*(m_PointIds.begin());
+      return &m_PointIds.front();
     }
   }
 
@@ -238,7 +238,7 @@ public:
     }
     else
     {
-      return &*(m_PointIds.begin());
+      return &m_PointIds.front();
     }
   }
 
@@ -280,7 +280,7 @@ public:
 
 protected:
   using PointIDListType = std::vector<PointIdentifier>;
-  mutable PointIDListType m_PointIds;
+  mutable PointIDListType m_PointIds{};
 
 private:
   void
@@ -301,17 +301,17 @@ private:
   /** In order to have constant time access at the itk level instead of
    * doing a search in the Mesh::Cell container.
    */
-  CellIdentifier m_Ident;
+  CellIdentifier m_Ident{};
 
   /**
    * Entry point into the edge ring.
    */
-  QuadEdgeType * m_EdgeRingEntry;
+  QuadEdgeType * m_EdgeRingEntry{};
 
   /**
    * List of EdgeCells created by the constructor for proper deletion
    */
-  EdgeCellListType m_EdgeCellList;
+  EdgeCellListType m_EdgeCellList{};
 };
 } // end namespace itk
 

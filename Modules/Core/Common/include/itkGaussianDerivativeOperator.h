@@ -56,7 +56,7 @@ extern ITKCommon_EXPORT std::ostream &
  *
  * GaussianDerivativeOperator can be used to calculate Gaussian derivatives
  * by taking its inner product with to a Neighborhood
- * (NeighborhooIterator) that is swept across an image region.
+ * (NeighborhoodIterator) that is swept across an image region.
  * It is a directional operator.  N successive applications
  * oriented along each dimensional direction will calculate separable,
  * efficient, N-D Gaussian derivatives of an image region.
@@ -110,7 +110,7 @@ public:
   using Superclass = NeighborhoodOperator<TPixel, VDimension, TAllocator>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaussianDerivativeOperator, NeighborhoodOperator);
+  itkOverrideGetNameOfClassMacro(GaussianDerivativeOperator);
 
   using InterpolationModeEnum = GaussianDerivativeOperatorEnums::InterpolationMode;
 
@@ -174,7 +174,7 @@ public:
     constexpr double Min = 0.00001;
     const double     Max = 1.0 - Min;
 
-    m_MaximumError = std::max(Min, std::min(Max, maxerror));
+    m_MaximumError = std::clamp(maxerror, Min, Max);
   }
   double
   GetMaximumError()

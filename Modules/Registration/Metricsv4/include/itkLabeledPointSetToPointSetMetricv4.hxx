@@ -20,13 +20,13 @@
 
 
 #include "itkEuclideanDistancePointSetToPointSetMetricv4.h"
+#include "itkPrintHelper.h"
 
 #include <algorithm>
 
 namespace itk
 {
 
-/** Constructor */
 template <typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 LabeledPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>::
   LabeledPointSetToPointSetMetricv4()
@@ -132,7 +132,7 @@ typename LabeledPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInt
   auto fixedPointSet = FixedPointSetType::New();
   fixedPointSet->Initialize();
 
-  typename FixedPointSetType::PointIdentifier count = NumericTraits<PointIdentifier>::ZeroValue();
+  typename FixedPointSetType::PointIdentifier count{};
 
   typename FixedPointSetType::PointsContainerConstIterator It = this->m_FixedPointSet->GetPoints()->Begin();
   typename FixedPointSetType::PointDataContainerIterator   ItD = this->m_FixedPointSet->GetPointData()->Begin();
@@ -158,7 +158,7 @@ typename LabeledPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInt
   auto movingPointSet = MovingPointSetType::New();
   movingPointSet->Initialize();
 
-  typename MovingPointSetType::PointIdentifier count = NumericTraits<PointIdentifier>::ZeroValue();
+  typename MovingPointSetType::PointIdentifier count{};
 
   typename MovingPointSetType::PointsContainerConstIterator It = this->m_MovingPointSet->GetPoints()->Begin();
   typename MovingPointSetType::PointDataContainerIterator   ItD = this->m_MovingPointSet->GetPointData()->Begin();
@@ -236,30 +236,23 @@ LabeledPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComp
   }
 }
 
-/** PrintSelf method */
 template <typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
 LabeledPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>::PrintSelf(
   std::ostream & os,
   Indent         indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  os << "Fixed label set: ";
-  typename LabelSetType::const_iterator itF;
-  for (itF = this->m_FixedPointSetLabels.begin(); itF != this->m_FixedPointSetLabels.end(); ++itF)
-  {
-    os << *itF << " ";
-  }
-  os << std::endl;
+  itkPrintSelfObjectMacro(PointSetMetric);
 
-  os << "Moving label set: ";
-  typename LabelSetType::const_iterator itM;
-  for (itM = this->m_MovingPointSetLabels.begin(); itM != this->m_MovingPointSetLabels.end(); ++itM)
-  {
-    os << *itM << " ";
-  }
-  os << std::endl;
+  os << indent << "PointSetMetricClones: " << m_PointSetMetricClones << std::endl;
+
+  os << indent << "FixedPointSetLabels: " << m_FixedPointSetLabels << std::endl;
+  os << indent << "MovingPointSetLabels: " << m_MovingPointSetLabels << std::endl;
+  os << indent << "CommonPointSetLabels: " << m_CommonPointSetLabels << std::endl;
 }
 
 } // end namespace itk

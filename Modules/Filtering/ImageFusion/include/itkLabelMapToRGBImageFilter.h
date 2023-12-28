@@ -28,7 +28,7 @@ namespace itk
 {
 
 /**
- *\class LabelMapToRGBImageFilter
+ * \class LabelMapToRGBImageFilter
  * \brief Convert a LabelMap to a colored image
  *
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
@@ -78,7 +78,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToRGBImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(LabelMapToRGBImageFilter);
 
   /** Set/Get the rgb functor - defaults to a reasonable set of colors.
    * This can be used to apply a different colormap.
@@ -117,7 +117,7 @@ protected:
   GenerateOutputInformation() override;
 
 private:
-  FunctorType m_Functor;
+  FunctorType m_Functor{};
 }; // end of class
 
 } // end namespace itk

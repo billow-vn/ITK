@@ -28,7 +28,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class KdTreeGenerator
+ * \class KdTreeGenerator
  *  \brief This class generates a KdTree object without centroid information.
  *
  * The KdTree object stores measurement vectors in a k-d tree structure
@@ -80,7 +80,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(KdTreeGenerator, Object);
+  itkOverrideGetNameOfClassMacro(KdTreeGenerator);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -110,14 +110,16 @@ public:
   /** Typedef for the smart pointer to the Subsample */
   using SubsamplePointer = typename SubsampleType::Pointer;
 
-  /** Sets the input sample that provides the measurement vectors. */
+  /** Set/Get the input sample that provides the measurement vectors. */
   void
   SetSample(TSample * sample);
+  itkGetConstMacro(SourceSample, TSample *);
 
   /** Sets the number of measurement vectors that can be stored in a
    * terminal node. */
   void
   SetBucketSize(unsigned int size);
+  itkGetConstMacro(BucketSize, unsigned int);
 
   /** Returns the pointer to the generated k-d tree. */
   OutputPointer
@@ -176,31 +178,31 @@ protected:
 
 private:
   /** Pointer to the input (source) sample */
-  TSample * m_SourceSample;
+  TSample * m_SourceSample{};
 
   /** Smart pointer to the internal Subsample object. This class needs
    * a Subsample object because the partitioning process involves sorting
    * and selection. */
-  SubsamplePointer m_Subsample;
+  SubsamplePointer m_Subsample{};
 
   /** The number of measurement vectors that can be stored in a terminal
    * node. */
-  unsigned int m_BucketSize;
+  unsigned int m_BucketSize{};
 
   /** Pointer to the resulting k-d tree. */
-  OutputPointer m_Tree;
+  OutputPointer m_Tree{};
 
   /** Temporary lower bound for the TreeGenerationLoop */
-  MeasurementVectorType m_TempLowerBound;
+  MeasurementVectorType m_TempLowerBound{};
 
   /** Temporary upper bound for the TreeGenerationLoop */
-  MeasurementVectorType m_TempUpperBound;
+  MeasurementVectorType m_TempUpperBound{};
 
   /** Temporary mean for the TreeGenerationLoop */
-  MeasurementVectorType m_TempMean;
+  MeasurementVectorType m_TempMean{};
 
   /** Length of a measurement vector */
-  MeasurementVectorSizeType m_MeasurementVectorSize;
+  MeasurementVectorSizeType m_MeasurementVectorSize{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

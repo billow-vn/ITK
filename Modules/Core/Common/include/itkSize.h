@@ -211,6 +211,19 @@ public:
     std::fill_n(begin(), size(), value);
   } // MATCH std::array assign, ITK Fill
 
+  /** Multiplies all elements. Yields the number of pixels of an image of this size. */
+  [[nodiscard]] constexpr SizeValueType
+  CalculateProductOfElements() const
+  {
+    SizeValueType product{ 1 };
+
+    for (const SizeValueType value : m_InternalArray)
+    {
+      product *= value;
+    }
+    return product;
+  }
+
   /** Size is an "aggregate" class.  Its data is public (m_InternalArray)
    * allowing for fast and convenient instantiations/assignments.
    * ( See main class documentation for an example of initialization)
@@ -418,7 +431,7 @@ template <unsigned int VDimension>
 std::ostream &
 operator<<(std::ostream & os, const Size<VDimension> & obj)
 {
-  os << "[";
+  os << '[';
   for (unsigned int i = 0; i + 1 < VDimension; ++i)
   {
     os << obj[i] << ", ";
@@ -427,7 +440,7 @@ operator<<(std::ostream & os, const Size<VDimension> & obj)
   {
     os << obj[VDimension - 1];
   }
-  os << "]";
+  os << ']';
   return os;
 }
 
@@ -490,16 +503,11 @@ auto
 MakeSize(const T... values)
 {
   const auto toValueType = [](const auto value) {
-    static_assert(std::is_integral<decltype(value)>::value, "Each value must have an integral type!");
+    static_assert(std::is_integral_v<decltype(value)>, "Each value must have an integral type!");
     return static_cast<SizeValueType>(value);
   };
   return Size<sizeof...(T)>{ { toValueType(values)... } };
 }
-
-
-// static constexpr definition explicitly needed in C++11
-template <unsigned int VDimension>
-constexpr unsigned int Size<VDimension>::Dimension;
 
 } // end namespace itk
 

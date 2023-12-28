@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FastMarchingThresholdStoppingCriterion, FastMarchingStoppingCriterionBase);
+  itkOverrideGetNameOfClassMacro(FastMarchingThresholdStoppingCriterion);
 
   using typename Superclass::OutputPixelType;
   using typename Superclass::NodeType;
@@ -76,7 +76,7 @@ protected:
 
   ~FastMarchingThresholdStoppingCriterion() override = default;
 
-  OutputPixelType m_Threshold;
+  OutputPixelType m_Threshold{};
 
   void
   SetCurrentNode(const NodeType &) override

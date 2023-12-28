@@ -76,7 +76,7 @@ LevelSetEquationChanAndVeseInternalTerm<TInput, TLevelSetContainer>::Initialize(
   }
   else
   {
-    itkWarningMacro(<< "m_Heaviside is nullptr");
+    itkWarningMacro("m_Heaviside is nullptr");
   }
 }
 
@@ -134,15 +134,16 @@ LevelSetEquationChanAndVeseInternalTerm<TInput, TLevelSetContainer>::Value(const
   }
   else
   {
-    itkWarningMacro(<< "m_Heaviside is nullptr");
+    itkWarningMacro("m_Heaviside is nullptr");
   }
   return NumericTraits<LevelSetOutputPixelType>::ZeroValue();
 }
 
 template <typename TInput, typename TLevelSetContainer>
-typename LevelSetEquationChanAndVeseInternalTerm<TInput, TLevelSetContainer>::LevelSetOutputRealType
+auto
 LevelSetEquationChanAndVeseInternalTerm<TInput, TLevelSetContainer>::Value(const LevelSetInputIndexType & inputIndex,
                                                                            const LevelSetDataType &       data)
+  -> LevelSetOutputRealType
 {
   if (this->m_Heaviside.IsNotNull())
   {
@@ -163,7 +164,7 @@ LevelSetEquationChanAndVeseInternalTerm<TInput, TLevelSetContainer>::Value(const
   }
   else
   {
-    itkWarningMacro(<< "m_Heaviside is nullptr");
+    itkWarningMacro("m_Heaviside is nullptr");
   }
   return NumericTraits<LevelSetOutputPixelType>::ZeroValue();
 }

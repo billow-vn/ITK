@@ -33,7 +33,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class MahalanobisDistanceMetric
+ * \class MahalanobisDistanceMetric
  * \brief MahalanobisDistanceMetric class computes a Mahalanobis
  *  distance given a mean and covariance.
  *
@@ -53,8 +53,8 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Strandard macros */
-  itkTypeMacro(MahalanobisDistanceMetric, DistanceMetric);
+  /** Standard macros */
+  itkOverrideGetNameOfClassMacro(MahalanobisDistanceMetric);
   itkNewMacro(Self);
 
   /** Typedef to represent the measurement vector type */
@@ -122,12 +122,12 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  MeanVectorType       m_Mean;       // mean
-  CovarianceMatrixType m_Covariance; // covariance matrix
+  MeanVectorType       m_Mean{};       // mean
+  CovarianceMatrixType m_Covariance{}; // covariance matrix
 
   // inverse covariance matrix which is automatically calculated
   // when covariance matrix is set.  This speeds up the GetProbability()
-  CovarianceMatrixType m_InverseCovariance;
+  CovarianceMatrixType m_InverseCovariance{};
 
   double m_Epsilon{ 1e-100 };
   double m_DoubleMax{ 1e+20 };

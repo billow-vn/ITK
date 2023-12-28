@@ -64,11 +64,11 @@ CoxDeBoorBSplineKernelFunction<VSplineOrder, TRealValueType>::GenerateBSplineSha
 }
 
 template <unsigned int VSplineOrder, typename TRealValueType>
-typename CoxDeBoorBSplineKernelFunction<VSplineOrder, TRealValueType>::PolynomialType
+auto
 CoxDeBoorBSplineKernelFunction<VSplineOrder, TRealValueType>::CoxDeBoor(const unsigned short order,
                                                                         const VectorType     knots,
                                                                         const unsigned int   whichBasisFunction,
-                                                                        const unsigned int   whichPiece)
+                                                                        const unsigned int whichPiece) -> PolynomialType
 {
   VectorType           tmp(2);
   PolynomialType       poly1(TRealValueType{ 0.0 });
@@ -224,8 +224,8 @@ void
 CoxDeBoorBSplineKernelFunction<VSplineOrder, TRealValueType>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Spline Order: " << this->m_SplineOrder << std::endl;
-  os << indent << "Piecewise Polynomial Pieces: " << std::endl;
+
+  os << indent << "BSplineShapeFunctions: " << std::endl;
 
   TRealValueType a{ 0.0 };
   TRealValueType b{ 0.0 };
@@ -253,8 +253,10 @@ CoxDeBoorBSplineKernelFunction<VSplineOrder, TRealValueType>::PrintSelf(std::ost
       b += TRealValueType{ 1.0 };
     }
 
-    os << ",  X \\in [" << a << ", " << b << "]" << std::endl;
+    os << ",  X \\in [" << a << ", " << b << ']' << std::endl;
   }
+
+  os << indent << "SplineOrder: " << m_SplineOrder << std::endl;
 }
 } // namespace itk
 

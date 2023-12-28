@@ -21,9 +21,7 @@
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TFeatureImage, typename TOutputPixel>
 ShapePriorMAPCostFunctionBase<TFeatureImage, TOutputPixel>::ShapePriorMAPCostFunctionBase()
 {
@@ -32,22 +30,17 @@ ShapePriorMAPCostFunctionBase<TFeatureImage, TOutputPixel>::ShapePriorMAPCostFun
   m_FeatureImage = nullptr;
 }
 
-/**
- * PrintSelf
- */
 template <typename TFeatureImage, typename TOutputPixel>
 void
 ShapePriorMAPCostFunctionBase<TFeatureImage, TOutputPixel>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "ShapeFunction: " << m_ShapeFunction.GetPointer() << std::endl;
-  os << indent << "ActiveRegion:  " << m_ActiveRegion.GetPointer() << std::endl;
-  os << indent << "FeatureImage:  " << m_FeatureImage.GetPointer() << std::endl;
+
+  itkPrintSelfObjectMacro(ShapeFunction);
+  itkPrintSelfObjectMacro(ActiveRegion);
+  itkPrintSelfObjectMacro(FeatureImage);
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
 auto
 ShapePriorMAPCostFunctionBase<TFeatureImage, TOutputPixel>::GetValue(const ParametersType & parameters) const
@@ -57,26 +50,23 @@ ShapePriorMAPCostFunctionBase<TFeatureImage, TOutputPixel>::GetValue(const Param
           this->ComputeLogShapePriorTerm(parameters) + this->ComputeLogPosePriorTerm(parameters));
 }
 
-/**
- *
- */
 template <typename TFeatureImage, typename TOutputPixel>
 void
 ShapePriorMAPCostFunctionBase<TFeatureImage, TOutputPixel>::Initialize()
 {
   if (!m_ShapeFunction)
   {
-    itkExceptionMacro(<< "ShapeFunction is not present.");
+    itkExceptionMacro("ShapeFunction is not present.");
   }
 
   if (!m_ActiveRegion)
   {
-    itkExceptionMacro(<< "ActiveRegion is not present.");
+    itkExceptionMacro("ActiveRegion is not present.");
   }
 
   if (!m_FeatureImage)
   {
-    itkExceptionMacro(<< "FeatureImage is not present.");
+    itkExceptionMacro("FeatureImage is not present.");
   }
 }
 } // end namespace itk

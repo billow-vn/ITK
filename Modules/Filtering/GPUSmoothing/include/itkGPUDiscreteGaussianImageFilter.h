@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GPUDiscreteGaussianImageFilter, GPUImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(GPUDiscreteGaussianImageFilter);
 
   /** Image type information. */
   using InputImageType = TInputImage;
@@ -114,10 +114,10 @@ protected:
 
 private:
   /** Intermediate 1D Gaussian filters */
-  typename FirstFilterType::Pointer                     m_FirstFilter;
-  typename LastFilterType::Pointer                      m_LastFilter;
-  std::vector<typename IntermediateFilterType::Pointer> m_IntermediateFilters;
-  typename SingleFilterType::Pointer                    m_SingleFilter;
+  typename FirstFilterType::Pointer                     m_FirstFilter{};
+  typename LastFilterType::Pointer                      m_LastFilter{};
+  std::vector<typename IntermediateFilterType::Pointer> m_IntermediateFilters{};
+  typename SingleFilterType::Pointer                    m_SingleFilter{};
 };
 } // end namespace itk
 

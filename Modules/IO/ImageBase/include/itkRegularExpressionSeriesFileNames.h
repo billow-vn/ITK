@@ -82,7 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RegularExpressionSeriesFileNames, Object);
+  itkOverrideGetNameOfClassMacro(RegularExpressionSeriesFileNames);
 
   /* -------- Define the API for RegularExpressionSeriesFileNames ---------- */
   /** The directory containing the files. */
@@ -120,12 +120,12 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  std::string  m_Directory;
+  std::string  m_Directory{};
   unsigned int m_SubMatch{ 1 };
   bool         m_NumericSort{ false };
-  std::string  m_RegularExpression;
+  std::string  m_RegularExpression{};
 
-  std::vector<std::string> m_FileNames;
+  std::vector<std::string> m_FileNames{};
 };
 } // namespace itk
 

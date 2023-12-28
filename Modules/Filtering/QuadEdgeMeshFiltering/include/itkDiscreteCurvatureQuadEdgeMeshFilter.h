@@ -61,7 +61,7 @@ public:
   using TriangleType = TriangleHelper<OutputPointType>;
 
   /** Run-time type information (and related methods).   */
-  itkTypeMacro(DiscreteCurvatureQuadEdgeMeshFilter, QuadEdgeMeshToQuadEdgeMeshFilter);
+  itkOverrideGetNameOfClassMacro(DiscreteCurvatureQuadEdgeMeshFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking
@@ -121,7 +121,7 @@ protected:
 
 private:
   /** Cache output pointer to avoid calls in inner loop to GetOutput() */
-  OutputMeshType * m_OutputMesh;
+  OutputMeshType * m_OutputMesh{};
 };
 } // end namespace itk
 

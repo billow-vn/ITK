@@ -23,10 +23,10 @@
 namespace itk
 {
 template <typename TImageType>
-typename LevelSetFunction<TImageType>::ScalarValueType
+auto
 LevelSetFunction<TImageType>::ComputeCurvatureTerm(const NeighborhoodType & neighborhood,
                                                    const FloatOffsetType &  offset,
-                                                   GlobalDataStruct *       gd)
+                                                   GlobalDataStruct *       gd) -> ScalarValueType
 {
   if (m_UseMinimalCurvature == false)
   {
@@ -50,16 +50,16 @@ LevelSetFunction<TImageType>::ComputeCurvatureTerm(const NeighborhoodType & neig
 }
 
 template <typename TImageType>
-typename LevelSetFunction<TImageType>::ScalarValueType
+auto
 LevelSetFunction<TImageType>::ComputeMinimalCurvature(const NeighborhoodType & itkNotUsed(neighborhood),
                                                       const FloatOffsetType &  itkNotUsed(offset),
-                                                      GlobalDataStruct *       gd)
+                                                      GlobalDataStruct *       gd) -> ScalarValueType
 {
   unsigned int          i, j, n;
   ScalarValueType       gradMag = std::sqrt(gd->m_GradMagSqr);
   ScalarValueType       Pgrad[ImageDimension][ImageDimension];
   ScalarValueType       tmp_matrix[ImageDimension][ImageDimension];
-  const ScalarValueType ZERO = NumericTraits<ScalarValueType>::ZeroValue();
+  const ScalarValueType ZERO{};
 
   vnl_matrix_fixed<ScalarValueType, ImageDimension, ImageDimension> Curve;
   const ScalarValueType                                             MIN_EIG = NumericTraits<ScalarValueType>::min();
@@ -119,10 +119,10 @@ LevelSetFunction<TImageType>::ComputeMinimalCurvature(const NeighborhoodType & i
 }
 
 template <typename TImageType>
-typename LevelSetFunction<TImageType>::ScalarValueType
+auto
 LevelSetFunction<TImageType>::Compute3DMinimalCurvature(const NeighborhoodType & neighborhood,
                                                         const FloatOffsetType &  offset,
-                                                        GlobalDataStruct *       gd)
+                                                        GlobalDataStruct *       gd) -> ScalarValueType
 {
   ScalarValueType mean_curve = this->ComputeMeanCurvature(neighborhood, offset, gd);
 
@@ -148,13 +148,13 @@ LevelSetFunction<TImageType>::Compute3DMinimalCurvature(const NeighborhoodType &
 }
 
 template <typename TImageType>
-typename LevelSetFunction<TImageType>::ScalarValueType
+auto
 LevelSetFunction<TImageType>::ComputeMeanCurvature(const NeighborhoodType & itkNotUsed(neighborhood),
                                                    const FloatOffsetType &  itkNotUsed(offset),
-                                                   GlobalDataStruct *       gd)
+                                                   GlobalDataStruct *       gd) -> ScalarValueType
 {
   // Calculate the mean curvature
-  ScalarValueType curvature_term = NumericTraits<ScalarValueType>::ZeroValue();
+  ScalarValueType curvature_term{};
   unsigned int    i, j;
 
   for (i = 0; i < ImageDimension; ++i)
@@ -280,13 +280,13 @@ LevelSetFunction<TImageType>::Initialize(const RadiusType & r)
 }
 
 template <typename TImageType>
-typename LevelSetFunction<TImageType>::PixelType
+auto
 LevelSetFunction<TImageType>::ComputeUpdate(const NeighborhoodType & it,
                                             void *                   globalData,
-                                            const FloatOffsetType &  offset)
+                                            const FloatOffsetType &  offset) -> PixelType
 {
   unsigned int          i, j;
-  const ScalarValueType ZERO = NumericTraits<ScalarValueType>::ZeroValue();
+  const ScalarValueType ZERO{};
   const ScalarValueType center_value = it.GetCenterPixel();
 
   const NeighborhoodScalesType neighborhoodScales = this->ComputeNeighborhoodScales();

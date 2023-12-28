@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ThreadedImageRegionPartitioner, ThreadedDomainPartitioner);
+  itkOverrideGetNameOfClassMacro(ThreadedImageRegionPartitioner);
 
   /** Type of the object being threaded over */
   using typename Superclass::DomainType;
@@ -87,13 +87,13 @@ public:
                   DomainType &       subRegion) const override;
 
 protected:
-  ThreadedImageRegionPartitioner();
+  ThreadedImageRegionPartitioner() = default;
   ~ThreadedImageRegionPartitioner() override = default;
 
   using ImageRegionSplitterType = ImageRegionSplitterSlowDimension;
 
 private:
-  ImageRegionSplitterType::Pointer m_ImageRegionSplitter;
+  ImageRegionSplitterType::Pointer m_ImageRegionSplitter{ ImageRegionSplitterType::New() };
 };
 
 } // end namespace itk

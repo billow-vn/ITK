@@ -95,7 +95,7 @@ public:
   using DirectionType = typename InputImageType::DirectionType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ChangeInformationImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ChangeInformationImageFilter);
 
   /** Copy the information from another Image.  By default,
    *  the information is copied from the input image. */
@@ -223,7 +223,7 @@ public:
   GenerateData() override;
 
 protected:
-  ChangeInformationImageFilter();
+  ChangeInformationImageFilter() = default;
   ~ChangeInformationImageFilter() override = default;
 
   void
@@ -239,21 +239,21 @@ protected:
   {}
 
 private:
-  InputImagePointer m_ReferenceImage;
+  InputImagePointer m_ReferenceImage{ nullptr };
 
-  bool m_CenterImage;
-  bool m_ChangeSpacing;
-  bool m_ChangeOrigin;
-  bool m_ChangeDirection;
-  bool m_ChangeRegion;
-  bool m_UseReferenceImage;
+  bool m_CenterImage{ false };
+  bool m_ChangeSpacing{ false };
+  bool m_ChangeOrigin{ false };
+  bool m_ChangeDirection{ false };
+  bool m_ChangeRegion{ false };
+  bool m_UseReferenceImage{ false };
 
-  SpacingType   m_OutputSpacing;
-  PointType     m_OutputOrigin;
-  DirectionType m_OutputDirection;
+  SpacingType   m_OutputSpacing{ MakeFilled<SpacingType>(1.0) };
+  PointType     m_OutputOrigin{};
+  DirectionType m_OutputDirection{ DirectionType::GetIdentity() };
 
-  OutputImageOffsetType m_OutputOffset;
-  OutputImageOffsetType m_Shift;
+  OutputImageOffsetType m_OutputOffset{};
+  OutputImageOffsetType m_Shift{};
 };
 } // end namespace itk
 

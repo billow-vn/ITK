@@ -35,7 +35,7 @@ namespace itk
 namespace Statistics
 {
 /**
- *\class KdTreeNode
+ * \class KdTreeNode
  *  \brief This class defines the interface of its derived classes.
  *
  * The methods defined in this class are a superset of the methods
@@ -132,7 +132,7 @@ struct ITK_TEMPLATE_EXPORT KdTreeNode
 };                                 // end of class
 
 /**
- *\class KdTreeNonterminalNode
+ * \class KdTreeNonterminalNode
  *  \brief This is a subclass of the KdTreeNode.
  *
  * KdTreeNonterminalNode doesn't store the information related with the
@@ -237,15 +237,15 @@ struct ITK_TEMPLATE_EXPORT KdTreeNonterminalNode : public KdTreeNode<TSample>
   }
 
 private:
-  unsigned int       m_PartitionDimension;
-  MeasurementType    m_PartitionValue;
-  InstanceIdentifier m_InstanceIdentifier;
-  Superclass *       m_Left;
-  Superclass *       m_Right;
+  unsigned int       m_PartitionDimension{};
+  MeasurementType    m_PartitionValue{};
+  InstanceIdentifier m_InstanceIdentifier{};
+  Superclass *       m_Left{};
+  Superclass *       m_Right{};
 }; // end of class
 
 /**
- *\class KdTreeWeightedCentroidNonterminalNode
+ * \class KdTreeWeightedCentroidNonterminalNode
  *  \brief This is a subclass of the KdTreeNode.
  *
  * KdTreeNonterminalNode does have the information related with the
@@ -366,19 +366,19 @@ struct ITK_TEMPLATE_EXPORT KdTreeWeightedCentroidNonterminalNode : public KdTree
   }
 
 private:
-  MeasurementVectorSizeType m_MeasurementVectorSize;
-  unsigned int              m_PartitionDimension;
-  MeasurementType           m_PartitionValue;
-  CentroidType              m_WeightedCentroid;
-  CentroidType              m_Centroid;
-  InstanceIdentifier        m_InstanceIdentifier;
-  unsigned int              m_Size;
-  Superclass *              m_Left;
-  Superclass *              m_Right;
+  MeasurementVectorSizeType m_MeasurementVectorSize{};
+  unsigned int              m_PartitionDimension{};
+  MeasurementType           m_PartitionValue{};
+  CentroidType              m_WeightedCentroid{};
+  CentroidType              m_Centroid{};
+  InstanceIdentifier        m_InstanceIdentifier{};
+  unsigned int              m_Size{};
+  Superclass *              m_Left{};
+  Superclass *              m_Right{};
 }; // end of class
 
 /**
- *\class KdTreeTerminalNode
+ * \class KdTreeTerminalNode
  *  \brief This class is the node that doesn't have any child node. The
  *  IsTerminal method returns true for this class. This class stores the
  *  instance identifiers belonging to this node, while the nonterminal
@@ -486,16 +486,16 @@ struct ITK_TEMPLATE_EXPORT KdTreeTerminalNode : public KdTreeNode<TSample>
   }
 
 private:
-  std::vector<InstanceIdentifier> m_InstanceIdentifiers;
+  std::vector<InstanceIdentifier> m_InstanceIdentifiers{};
 }; // end of class
 
 /**
- *\class KdTree
+ * \class KdTree
  *  \brief This class provides methods for k-nearest neighbor search and
  *  related data structures for a k-d tree.
  *
  * An object of this class stores instance identifiers in a k-d tree
- * that is a binary tree with childrens split along a dimension among
+ * that is a binary tree with children split along a dimension among
  * k-dimensions. The dimension of the split (or partition) is determined
  * for each nonterminal node that has two children. The split process is
  * terminated when the node has no children (when the number of
@@ -536,7 +536,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(KdTree, Object);
+  itkOverrideGetNameOfClassMacro(KdTree);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -568,7 +568,7 @@ public:
   using InstanceIdentifierVectorType = std::vector<InstanceIdentifier>;
 
   /**
-   *\class NearestNeighbors
+   * \class NearestNeighbors
    * \brief data structure for storing k-nearest neighbor search result
    * (k number of Neighbors)
    *
@@ -813,22 +813,22 @@ protected:
 
 private:
   /** Pointer to the input sample */
-  const TSample * m_Sample;
+  const TSample * m_Sample{};
 
   /** Number of measurement vectors can be stored in a terminal node. */
-  int m_BucketSize;
+  int m_BucketSize{};
 
   /** Pointer to the root node */
-  KdTreeNodeType * m_Root;
+  KdTreeNodeType * m_Root{};
 
   /** Pointer to the empty terminal node */
-  KdTreeNodeType * m_EmptyTerminalNode;
+  KdTreeNodeType * m_EmptyTerminalNode{};
 
   /** Distance metric smart pointer */
-  typename DistanceMetricType::Pointer m_DistanceMetric;
+  typename DistanceMetricType::Pointer m_DistanceMetric{};
 
   /** Measurement vector size */
-  MeasurementVectorSizeType m_MeasurementVectorSize;
+  MeasurementVectorSizeType m_MeasurementVectorSize{};
 }; // end of class
 } // end of namespace Statistics
 } // end of namespace itk

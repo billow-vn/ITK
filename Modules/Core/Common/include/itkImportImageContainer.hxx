@@ -33,15 +33,6 @@
 namespace itk
 {
 template <typename TElementIdentifier, typename TElement>
-ImportImageContainer<TElementIdentifier, TElement>::ImportImageContainer()
-{
-  m_ImportPointer = nullptr;
-  m_ContainerManageMemory = true;
-  m_Capacity = 0;
-  m_Size = 0;
-}
-
-template <typename TElementIdentifier, typename TElement>
 ImportImageContainer<TElementIdentifier, TElement>::~ImportImageContainer()
 {
   DeallocateManagedMemory();
@@ -53,7 +44,7 @@ ImportImageContainer<TElementIdentifier, TElement>::~ImportImageContainer()
  */
 template <typename TElementIdentifier, typename TElement>
 void
-ImportImageContainer<TElementIdentifier, TElement>::Reserve(ElementIdentifier size, const bool UseDefaultConstructor)
+ImportImageContainer<TElementIdentifier, TElement>::Reserve(ElementIdentifier size, const bool UseValueInitialization)
 {
   // Reserve has a Resize semantics. We keep it that way for
   // backwards compatibility .
@@ -62,7 +53,7 @@ ImportImageContainer<TElementIdentifier, TElement>::Reserve(ElementIdentifier si
   {
     if (size > m_Capacity)
     {
-      TElement * temp = this->AllocateElements(size, UseDefaultConstructor);
+      TElement * temp = this->AllocateElements(size, UseValueInitialization);
       // only copy the portion of the data used in the old buffer
       std::copy_n(m_ImportPointer, m_Size, temp);
 
@@ -82,7 +73,7 @@ ImportImageContainer<TElementIdentifier, TElement>::Reserve(ElementIdentifier si
   }
   else
   {
-    m_ImportPointer = this->AllocateElements(size, UseDefaultConstructor);
+    m_ImportPointer = this->AllocateElements(size, UseValueInitialization);
     m_Capacity = size;
     m_Size = size;
     m_ContainerManageMemory = true;
@@ -162,22 +153,19 @@ ImportImageContainer<TElementIdentifier, TElement>::SetImportPointer(TElement * 
 template <typename TElementIdentifier, typename TElement>
 TElement *
 ImportImageContainer<TElementIdentifier, TElement>::AllocateElements(ElementIdentifier size,
-                                                                     bool              UseDefaultConstructor) const
+                                                                     bool              UseValueInitialization) const
 {
-  // Encapsulate all image memory allocation here to throw an
-  // exception when memory allocation fails even when the compiler
-  // does not do this by default.
   TElement * data;
 
   try
   {
-    if (UseDefaultConstructor)
+    if (UseValueInitialization)
     {
-      data = new TElement[size](); // POD types initialized to 0, others use default constructor.
+      data = new TElement[size]();
     }
     else
     {
-      data = new TElement[size]; // Faster but uninitialized
+      data = new TElement[size];
     }
   }
   catch (...)

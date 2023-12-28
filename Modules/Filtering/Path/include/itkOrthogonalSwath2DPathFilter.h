@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class OrthogonalSwath2DPathFilter
+ * \class OrthogonalSwath2DPathFilter
  * \brief Filter that optimizes a 2D path relative to an image.
  *
  * OrthogonalSwath2DPathFilter produces an OrthogonallyCorrected2DParametricPath
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OrthogonalSwath2DPathFilter, PathAndImageToPathFilter);
+  itkOverrideGetNameOfClassMacro(OrthogonalSwath2DPathFilter);
 
   /** Some convenient type alias. */
   using InputPathType = TFourierSeriesPath;

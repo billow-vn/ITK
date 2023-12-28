@@ -53,7 +53,7 @@ ExpandImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Inden
   {
     os << m_ExpandFactors[j] << ", ";
   }
-  os << m_ExpandFactors[j] << "]" << std::endl;
+  os << m_ExpandFactors[j] << ']' << std::endl;
 
   os << indent << "Interpolator: ";
   os << m_Interpolator.GetPointer() << std::endl;
@@ -96,7 +96,7 @@ ExpandImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   if (!m_Interpolator || !this->GetInput())
   {
-    itkExceptionMacro(<< "Interpolator and/or Input not set");
+    itkExceptionMacro("Interpolator and/or Input not set");
   }
 
   // Connect input image to interpolator
@@ -112,11 +112,6 @@ ExpandImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   // Get the input and output pointers
   OutputImagePointer outputPtr = this->GetOutput();
 
-  // Iterator for walking the output
-  using OutputIterator = ImageScanlineIterator<TOutputImage>;
-
-  OutputIterator outIt(outputPtr, outputRegionForThread);
-
   // Report progress on a per scanline basis
   const SizeValueType ln = outputRegionForThread.GetSize(0);
   if (ln == 0)
@@ -125,7 +120,7 @@ ExpandImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
   }
 
   // Walk the output region, and interpolate the input image
-  while (!outIt.IsAtEnd())
+  for (ImageScanlineIterator outIt(outputPtr, outputRegionForThread); !outIt.IsAtEnd(); outIt.NextLine())
   {
     const typename OutputImageType::IndexType outputIndex = outIt.GetIndex();
 
@@ -156,8 +151,6 @@ ExpandImageFilter<TInputImage, TOutputImage>::DynamicThreadedGenerateData(
       // scanline.
       inputIndex[0] += lineDelta;
     }
-
-    outIt.NextLine();
   }
 }
 

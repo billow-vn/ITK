@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StimulateImageIO, ImageIOBase);
+  itkOverrideGetNameOfClassMacro(StimulateImageIO);
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -109,7 +109,7 @@ public:
   Write(const void * buffer) override;
 
   /** Two values used for applying intensity windowing to the data set. The pair
-   *  of numbers represent a low value and a hight value. Pixel values below the
+   *  of numbers represent a low value and a high value. Pixel values below the
    *  low_value will be displayed as black and voxels with values above the
    *  high_value will be displayed as white. Pixels with values within the display
    *  range are displayed with a grey value that is scaled linearly between the
@@ -136,10 +136,10 @@ protected:
   InternalReadImageInformation(std::ifstream & file);
 
 private:
-  std::string m_DataFileName;
-  char        m_SdtOrient[256];
-  float       m_DisplayRange[2];
-  char        m_FidName[256];
+  std::string m_DataFileName{};
+  char        m_SdtOrient[256]{};
+  float       m_DisplayRange[2]{};
+  char        m_FidName[256]{};
 };
 } // end namespace itk
 

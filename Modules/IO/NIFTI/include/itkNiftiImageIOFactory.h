@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *\class NiftiImageIOFactory
+ * \class NiftiImageIOFactory
  * \brief Create instances of NiftiImageIO objects using an object factory.
  * \ingroup ITKIONIFTI
  */
@@ -52,7 +52,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NiftiImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(NiftiImageIOFactory);
 
   /** Register one factory of this type  */
   static void

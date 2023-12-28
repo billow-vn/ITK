@@ -73,7 +73,7 @@ RegistrationParameterScalesFromJacobian<TMetric>::EstimateStepScale(const Parame
   this->ComputeSampleStepScales(step, sampleScales);
 
   const auto numSamples = static_cast<const SizeValueType>(this->m_SamplePoints.size());
-  FloatType  scaleSum = NumericTraits<FloatType>::ZeroValue();
+  FloatType  scaleSum{};
 
   // checking each sample point
   for (SizeValueType c = 0; c < numSamples; ++c)
@@ -91,7 +91,7 @@ RegistrationParameterScalesFromJacobian<TMetric>::EstimateLocalStepScales(const 
 {
   if (!this->IsDisplacementFieldTransform())
   {
-    itkExceptionMacro(<< "EstimateLocalStepScales: the transform doesn't have local support.");
+    itkExceptionMacro("EstimateLocalStepScales: the transform doesn't have local support.");
   }
 
   this->CheckAndSetInputs();

@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class DCMTKImageIOFactory
+ * \class DCMTKImageIOFactory
  * \brief Create instances of DCMTKImageIO objects using an object factory.
  * \ingroup ITKIODCMTK
  */
@@ -51,7 +51,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DCMTKImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(DCMTKImageIOFactory);
 
   /** Register one factory of this type  */
   static void

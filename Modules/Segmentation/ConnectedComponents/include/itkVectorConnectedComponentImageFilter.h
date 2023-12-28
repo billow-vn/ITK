@@ -37,7 +37,7 @@ namespace itk
 namespace Functor
 {
 /**
- *\class SimilarVectorsFunctor
+ * \class SimilarVectorsFunctor
  *
  *  \brief A connected components filter that labels the
  *         objects in a vector image.  Two vectors are pointing
@@ -51,7 +51,7 @@ template <typename TInput>
 class SimilarVectorsFunctor
 {
 public:
-  SimilarVectorsFunctor() { m_Threshold = itk::NumericTraits<typename TInput::ValueType>::ZeroValue(); }
+  SimilarVectorsFunctor() = default;
 
   ~SimilarVectorsFunctor() = default;
 
@@ -78,7 +78,7 @@ public:
   operator()(const TInput & a, const TInput & b) const
   {
     using RealValueType = typename NumericTraits<typename TInput::ValueType>::RealType;
-    RealValueType dotProduct = NumericTraits<RealValueType>::ZeroValue();
+    RealValueType dotProduct{};
     for (unsigned int i = 0; i < NumericTraits<TInput>::GetLength(a); ++i)
     {
       dotProduct += a[i] * b[i];
@@ -87,12 +87,12 @@ public:
   }
 
 protected:
-  typename TInput::ValueType m_Threshold;
+  typename TInput::ValueType m_Threshold{};
 };
 } // end namespace Functor
 
 /**
- *\class VectorConnectedComponentImageFilter
+ * \class VectorConnectedComponentImageFilter
  *
  *  \brief A connected components filter that labels the
  *         objects in a vector image.  Two vectors are pointing
@@ -125,7 +125,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorConnectedComponentImageFilter, ConnectedComponentFunctorImageFilter);
+  itkOverrideGetNameOfClassMacro(VectorConnectedComponentImageFilter);
 
   using InputValueType = typename TInputImage::PixelType::ValueType;
 

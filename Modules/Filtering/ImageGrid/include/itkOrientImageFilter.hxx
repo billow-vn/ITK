@@ -467,13 +467,13 @@ void
 DumpDirections(const std::string & prompt, const typename ImageType::Pointer & image)
 {
   const typename ImageType::DirectionType & dir = image->GetDirection();
-  std::cerr << prompt << " " << SO_OrientationToString(itk::SpatialOrientationAdapter().FromDirectionCosines(dir))
+  std::cerr << prompt << ' ' << SO_OrientationToString(itk::SpatialOrientationAdapter().FromDirectionCosines(dir))
             << std::endl;
   for (unsigned int i = 0; i < 3; ++i)
   {
     for (unsigned int j = 0; j < 3; ++j)
     {
-      std::cerr << dir[i][j] << " ";
+      std::cerr << dir[i][j] << ' ';
     }
     std::cerr << std::endl;
   }
@@ -518,7 +518,7 @@ OrientImageFilter<TInputImage, TOutputImage>::GenerateData()
     permute->SetOrder(m_PermuteOrder);
     permute->ReleaseDataFlagOn();
     DEBUG_EXECUTE(std::cerr << "Permute Axes: "; for (unsigned int i = 0; i < 3; ++i) {
-      std::cerr << m_PermuteOrder[i] << " ";
+      std::cerr << m_PermuteOrder[i] << ' ';
     } std::cerr << std::endl;
                   permute->Update();
                   DumpDirections<TInputImage>("after permute", permute->GetOutput());)
@@ -536,18 +536,18 @@ OrientImageFilter<TInputImage, TOutputImage>::GenerateData()
     flip->FlipAboutOriginOff();
     flip->ReleaseDataFlagOn();
     DEBUG_EXECUTE(std::cerr << "Flip Axes: ";
-                  for (unsigned int i = 0; i < 3; ++i) { std::cerr << m_FlipAxes[i] << " "; } std::cerr << std::endl;
+                  for (unsigned int i = 0; i < 3; ++i) { std::cerr << m_FlipAxes[i] << ' '; } std::cerr << std::endl;
                   flip->Update();
                   DumpDirections<TInputImage>("after flip", flip->GetOutput());)
     castInput = flip->GetOutput();
   }
   else
   {
-    itkDebugMacro(<< "No need to flip");
+    itkDebugMacro("No need to flip");
   }
 
   //
-  // Cast might not be necessary, but CastImagefilter is optimized for
+  // Cast might not be necessary, but CastImageFilter is optimized for
   // the case where the InputImageType == OutputImageType
   cast->SetInput(castInput);
   cast->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
@@ -610,10 +610,10 @@ OrientImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Inden
 
   axes = m_CodeToString.find(m_DesiredCoordinateOrientation);
   os << indent << "Desired Coordinate Orientation: " << static_cast<long>(this->GetDesiredCoordinateOrientation())
-     << " (" << axes->second << ")" << std::endl;
+     << " (" << axes->second << ')' << std::endl;
   axes = m_CodeToString.find(m_GivenCoordinateOrientation);
   os << indent << "Given Coordinate Orientation: " << static_cast<long>(this->GetGivenCoordinateOrientation()) << " ("
-     << axes->second << ")" << std::endl;
+     << axes->second << ')' << std::endl;
   os << indent << "Use Image Direction: " << m_UseImageDirection << std::endl;
   os << indent << "Permute Axes: " << m_PermuteOrder << std::endl;
   os << indent << "Flip Axes: " << m_FlipAxes << std::endl;

@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelOverlapMeasuresImageFilter, ImageSink);
+  itkOverrideGetNameOfClassMacro(LabelOverlapMeasuresImageFilter);
 
   /** Image related type alias. */
   using LabelImageType = TLabelImage;
@@ -196,12 +196,15 @@ public:
 protected:
   LabelOverlapMeasuresImageFilter();
   ~LabelOverlapMeasuresImageFilter() override = default;
+
+  /** Type to use for printing label values (e.g. in warnings). */
+  using PrintType = typename NumericTraits<LabelType>::PrintType;
+
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   void
   BeforeStreamedGenerateData() override;
-
 
   void
   ThreadedStreamedGenerateData(const RegionType &) override;
@@ -210,9 +213,9 @@ protected:
   MergeMap(MapType & m1, MapType & m2) const;
 
 private:
-  MapType m_LabelSetMeasures;
+  MapType m_LabelSetMeasures{};
 
-  std::mutex m_Mutex;
+  std::mutex m_Mutex{};
 }; // end of class
 
 } // end namespace itk

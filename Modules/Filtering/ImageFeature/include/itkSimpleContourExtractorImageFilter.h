@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class SimpleContourExtractorImageFilter
+ * \class SimpleContourExtractorImageFilter
  * \brief Computes an image of contours which will be the contour
  * of the first image.
  *
@@ -73,7 +73,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SimpleContourExtractorImageFilter, BoxImageFilter);
+  itkOverrideGetNameOfClassMacro(SimpleContourExtractorImageFilter);
 
   /** Image type alias support */
   using InputPixelType = typename InputImageType::PixelType;
@@ -147,10 +147,10 @@ protected:
 
 
 private:
-  InputPixelType  m_InputForegroundValue;
-  InputPixelType  m_InputBackgroundValue;
-  OutputPixelType m_OutputForegroundValue;
-  OutputPixelType m_OutputBackgroundValue;
+  InputPixelType  m_InputForegroundValue{};
+  InputPixelType  m_InputBackgroundValue{};
+  OutputPixelType m_OutputForegroundValue{};
+  OutputPixelType m_OutputBackgroundValue{};
 };
 } // end namespace itk
 

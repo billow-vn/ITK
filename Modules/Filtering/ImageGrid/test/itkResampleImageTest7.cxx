@@ -146,9 +146,9 @@ itkResampleImageTest7(int, char *[])
   {
     if (itk::Math::NotAlmostEquals(itNoSDI.Value(), itSDI.Value()))
     {
-      std::cout << "Pixels differ " << itNoSDI.Value() << " " << itSDI.Value() << std::endl;
+      std::cout << "Pixels differ " << itNoSDI.Value() << ' ' << itSDI.Value() << std::endl;
       std::cerr << "Test failed!" << std::endl;
-      std::cerr << "Error in pixel value at index [" << itNoSDI.GetIndex() << "]" << std::endl;
+      std::cerr << "Error in pixel value at index [" << itNoSDI.GetIndex() << ']' << std::endl;
       std::cerr << "Expected difference " << itNoSDI.Get() - itSDI.Get() << std::endl;
       std::cerr << " differs from 0 ";
       return EXIT_FAILURE;
@@ -158,7 +158,7 @@ itkResampleImageTest7(int, char *[])
   {
     std::cerr << "Test failed!" << std::endl;
     std::cerr << "Iterators don't agree on end of image" << std::endl;
-    std::cerr << "at index [" << itNoSDI.GetIndex() << "]" << std::endl;
+    std::cerr << "at index [" << itNoSDI.GetIndex() << ']' << std::endl;
     return EXIT_FAILURE;
   }
 

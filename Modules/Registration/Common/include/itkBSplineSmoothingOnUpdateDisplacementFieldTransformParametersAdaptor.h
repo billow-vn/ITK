@@ -46,8 +46,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BSplineSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor,
-               DisplacementFieldTransformParametersAdaptor);
+  itkOverrideGetNameOfClassMacro(BSplineSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor);
 
   using TransformType = TTransform;
   using ScalarType = typename TransformType::ScalarType;
@@ -127,10 +126,10 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  ArrayType        m_NumberOfControlPointsForTheUpdateField;
-  ArrayType        m_NumberOfControlPointsForTheTotalField;
-  ModifiedTimeType m_NumberOfControlPointsForTheUpdateFieldSetTime;
-  ModifiedTimeType m_NumberOfControlPointsForTheTotalFieldSetTime;
+  ArrayType        m_NumberOfControlPointsForTheUpdateField{};
+  ArrayType        m_NumberOfControlPointsForTheTotalField{};
+  ModifiedTimeType m_NumberOfControlPointsForTheUpdateFieldSetTime{};
+  ModifiedTimeType m_NumberOfControlPointsForTheTotalFieldSetTime{};
 
 
 }; // class BSplineSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor

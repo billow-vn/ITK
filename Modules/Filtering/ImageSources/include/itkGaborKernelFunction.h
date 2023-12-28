@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class GaborKernelFunction
+ * \class GaborKernelFunction
  * \brief Gabor kernel used for various computer vision tasks.
  *
  * This class encapsulates a complex Gabor kernel used for
@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GaborKernelFunction, KernelFunctionBase);
+  itkOverrideGetNameOfClassMacro(GaborKernelFunction);
 
   /** Evaluate the function. */
   TRealValueType
@@ -121,13 +121,13 @@ protected:
   }
 
 private:
-  TRealValueType m_Sigma;
+  TRealValueType m_Sigma{};
 
-  TRealValueType m_Frequency;
+  TRealValueType m_Frequency{};
 
-  TRealValueType m_PhaseOffset;
+  TRealValueType m_PhaseOffset{};
 
-  bool m_CalculateImaginaryPart;
+  bool m_CalculateImaginaryPart{};
 };
 } // end namespace itk
 

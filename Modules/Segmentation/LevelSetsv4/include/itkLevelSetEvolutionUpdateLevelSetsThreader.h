@@ -27,8 +27,8 @@ namespace itk
 {
 
 /**
- *\class LevelSetEvolutionUpdateLevelSetsThreader
- * \brief Threade the UpdateLevelSets method.
+ * \class LevelSetEvolutionUpdateLevelSetsThreader
+ * \brief Thread the UpdateLevelSets method.
  *
  * Thread the \c UpdateLevelSets method of the LevelSetEvolution class.
  *
@@ -56,7 +56,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run time type information. */
-  itkTypeMacro(LevelSetEvolutionUpdateLevelSetsThreader, DomainThreader);
+  itkOverrideGetNameOfClassMacro(LevelSetEvolutionUpdateLevelSetsThreader);
 
   /** Standard New macro. */
   itkNewMacro(Self);
@@ -87,7 +87,7 @@ protected:
   using RMSChangeAccumulatorType = CompensatedSummation<LevelSetOutputRealType>;
   using RMSChangeAccumulatorPerThreadType = std::vector<RMSChangeAccumulatorType>;
 
-  RMSChangeAccumulatorPerThreadType m_RMSChangeAccumulatorPerThread;
+  RMSChangeAccumulatorPerThreadType m_RMSChangeAccumulatorPerThread{};
 };
 
 } // end namespace itk

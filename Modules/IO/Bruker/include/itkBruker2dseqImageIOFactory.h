@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class Bruker2dseqImageIOFactory
+ * \class Bruker2dseqImageIOFactory
  * \brief Create instances of Bruker2dseqImageIO objects using an object factory.
  *
  * \author Don C. Bigler
@@ -58,7 +58,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Bruker2dseqImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(Bruker2dseqImageIOFactory);
 
   /** Register one factory of this type  */
   static void

@@ -124,7 +124,7 @@ itkImageMaskSpatialObjectTest2(int, char *[])
       {
         std::cerr << "ERROR: ValueAtInWorldSpace is wrong. " << outsideIfZeroValue
                   << " << computed, but should not be very close to 0.0." << std::endl;
-        std::cerr << "     : Index=" << constIndex << "\n     : PhysicalPoint=" << point << "." << std::endl;
+        std::cerr << "     : Index=" << constIndex << "\n     : PhysicalPoint=" << point << '.' << std::endl;
         retval = EXIT_FAILURE;
         break;
       }
@@ -199,7 +199,7 @@ itkImageMaskSpatialObjectTest2(int, char *[])
     {
       point += incrementVector;
       const bool isInside = maskSO->IsInsideInWorldSpace(point);
-      double     value = itk::NumericTraits<PixelType>::ZeroValue();
+      double     value{};
       maskSO->ValueAtInWorldSpace(point, value);
       const bool isZero = (itk::Math::ExactlyEquals(value, itk::NumericTraits<PixelType>::ZeroValue()));
       if ((isInside && isZero) || (!isInside && !isZero))

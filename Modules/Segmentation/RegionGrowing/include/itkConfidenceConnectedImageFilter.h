@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class ConfidenceConnectedImageFilter
+ * \class ConfidenceConnectedImageFilter
  * \brief Segment pixels with similar statistics using connectivity
  *
  * This filter extracts a connected set of pixels whose pixel
@@ -57,7 +57,7 @@ namespace itk
  * \ingroup ITKRegionGrowing
  *
  * \sphinx
- * \sphinxexample{Segmentation/RegionGrowing/SegmentPixelsWithSimilarStats,SegmentPixelsWithSimilarStats}
+ * \sphinxexample{Segmentation/RegionGrowing/SegmentPixelsWithSimilarStats,Segment Pixels With Similar Statistics}
  * \endsphinx
  */
 template <typename TInputImage, typename TOutputImage>
@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods).  */
-  itkTypeMacro(ConfidenceConnectedImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ConfidenceConnectedImageFilter);
 
   using InputImageType = TInputImage;
   using InputImagePointer = typename InputImageType::Pointer;
@@ -137,7 +137,7 @@ public:
    * executed using the Update() method. */
   itkGetConstReferenceMacro(Variance, InputRealType);
 
-  /** Method to access seed container */
+  /** Method to access seed container. */
   virtual const SeedsContainerType &
   GetSeeds() const;
 
@@ -164,13 +164,13 @@ protected:
   GenerateData() override;
 
 private:
-  SeedsContainerType   m_Seeds;
-  double               m_Multiplier;
-  unsigned int         m_NumberOfIterations;
-  OutputImagePixelType m_ReplaceValue;
-  unsigned int         m_InitialNeighborhoodRadius;
-  InputRealType        m_Mean;
-  InputRealType        m_Variance;
+  SeedsContainerType   m_Seeds{};
+  double               m_Multiplier{};
+  unsigned int         m_NumberOfIterations{};
+  OutputImagePixelType m_ReplaceValue{};
+  unsigned int         m_InitialNeighborhoodRadius{};
+  InputRealType        m_Mean{};
+  InputRealType        m_Variance{};
 };
 } // end namespace itk
 

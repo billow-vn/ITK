@@ -25,12 +25,11 @@
 #include "itkMath.h"
 #include "itkNumericTraits.h"
 #include "itkMath.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
-/**
- * Constructor
- */
+
 template <typename TInputImage, typename TOutputImage>
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::IsolatedConnectedImageFilter()
 {
@@ -45,30 +44,34 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::IsolatedConnectedImageF
   m_ThresholdingFailed = false;
 }
 
-/**
- * Standard PrintSelf method.
- */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   this->Superclass::PrintSelf(os, indent);
+
+  os << indent << "Seeds1: " << std::endl;
+  os << indent << "Seeds2: " << std::endl;
+
   os << indent << "Lower: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_Lower)
      << std::endl;
   os << indent << "Upper: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_Upper)
      << std::endl;
+
   os << indent
      << "ReplaceValue: " << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_ReplaceValue)
      << std::endl;
+
   os << indent
      << "IsolatedValue: " << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_IsolatedValue)
      << std::endl;
   os << indent << "IsolatedValueTolerance: "
      << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_IsolatedValueTolerance) << std::endl;
-  os << indent << "FindUpperThreshold: " << static_cast<typename NumericTraits<bool>::PrintType>(m_FindUpperThreshold)
-     << std::endl;
-  os << indent << "Thresholding Failed: " << static_cast<typename NumericTraits<bool>::PrintType>(m_ThresholdingFailed)
-     << std::endl;
+
+  os << indent << "FindUpperThreshold: " << (m_FindUpperThreshold ? "On" : "Off") << std::endl;
+  os << indent << "ThresholdingFailed: " << (m_ThresholdingFailed ? "On" : "Off") << std::endl;
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -91,7 +94,6 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::EnlargeOutputRequestedR
   output->SetRequestedRegionToLargestPossibleRegion();
 }
 
-/** Add seed point 1. This seed will be isolated from Seed2 (if possible). */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::AddSeed1(const IndexType & seed)
@@ -100,9 +102,6 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::AddSeed1(const IndexTyp
   this->Modified();
 }
 
-/** \deprecated
- * Set seed point 1. This seed will be isolated from Seed2 (if possible).
- *  This method is deprecated, please use AddSeed1() */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::SetSeed1(const IndexType & seed)
@@ -111,7 +110,6 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::SetSeed1(const IndexTyp
   this->AddSeed1(seed);
 }
 
-/** Clear all the seeds1. */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::ClearSeeds1()
@@ -123,7 +121,6 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::ClearSeeds1()
   }
 }
 
-/** Add seed point 2. This seed will be isolated from Seed1 (if possible). */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::AddSeed2(const IndexType & seed)
@@ -132,9 +129,6 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::AddSeed2(const IndexTyp
   this->Modified();
 }
 
-
-/** Set seed point 2. This seed will be isolated from Seed1 (if
- *  possible).  This method is deprecated, please use AddSeed2() */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::SetSeed2(const IndexType & seed)
@@ -143,7 +137,6 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::SetSeed2(const IndexTyp
   this->AddSeed2(seed);
 }
 
-/** Clear all the seeds2. */
 template <typename TInputImage, typename TOutputImage>
 void
 IsolatedConnectedImageFilter<TInputImage, TOutputImage>::ClearSeeds2()
@@ -204,7 +197,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
 
   float             progressWeight = 0.0f;
   float             cumulatedProgress = 0.0f;
-  IteratorType      it = IteratorType(outputImage, function, m_Seeds1);
+  IteratorType      it(outputImage, function, m_Seeds1);
   IterationReporter iterate(this, 0, 1);
 
   // If the upper threshold has not been set, find it.
@@ -233,7 +226,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
       while (!it.IsAtEnd())
       {
         it.Set(m_ReplaceValue);
-        if (it.GetIndex() == *m_Seeds2.begin())
+        if (it.GetIndex() == m_Seeds2.front())
         {
           break;
         }
@@ -244,7 +237,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
       // Find the sum of the intensities in m_Seeds2.  If the second
       // seeds are not included, the sum should be zero.  Otherwise,
       // it will be other than zero.
-      InputRealType                               seedIntensitySum = NumericTraits<InputRealType>::ZeroValue();
+      InputRealType                               seedIntensitySum{};
       typename SeedsContainerType::const_iterator si = m_Seeds2.begin();
       typename SeedsContainerType::const_iterator li = m_Seeds2.end();
       while (si != li)
@@ -298,7 +291,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
       while (!it.IsAtEnd())
       {
         it.Set(m_ReplaceValue);
-        if (it.GetIndex() == *m_Seeds2.begin())
+        if (it.GetIndex() == m_Seeds2.front())
         {
           break;
         }
@@ -309,7 +302,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
       // Find the sum of the intensities in m_Seeds2.  If the second
       // seeds are not included, the sum should be zero.  Otherwise,
       // it will be other than zero.
-      InputRealType                               seedIntensitySum = NumericTraits<InputRealType>::ZeroValue();
+      InputRealType                               seedIntensitySum{};
       typename SeedsContainerType::const_iterator si = m_Seeds2.begin();
       typename SeedsContainerType::const_iterator li = m_Seeds2.end();
       while (si != li)
@@ -367,8 +360,8 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   // Find the sum of the intensities in m_Seeds2.  If the second
   // seeds are not included, the sum should be zero.  Otherwise,
   // it will be other than zero.
-  InputRealType                               seed1IntensitySum = NumericTraits<InputRealType>::ZeroValue();
-  InputRealType                               seed2IntensitySum = NumericTraits<InputRealType>::ZeroValue();
+  InputRealType                               seed1IntensitySum{};
+  InputRealType                               seed2IntensitySum{};
   typename SeedsContainerType::const_iterator si1 = m_Seeds1.begin();
   typename SeedsContainerType::const_iterator li1 = m_Seeds1.end();
   while (si1 != li1)

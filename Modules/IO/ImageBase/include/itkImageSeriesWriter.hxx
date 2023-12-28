@@ -71,12 +71,12 @@ ImageSeriesWriter<TInputImage, TOutputImage>::Write()
 {
   const InputImageType * inputImage = this->GetInput();
 
-  itkDebugMacro(<< "Writing an image file");
+  itkDebugMacro("Writing an image file");
 
   // Make sure input is available
   if (inputImage == nullptr)
   {
-    itkExceptionMacro(<< "No input to writer!");
+    itkExceptionMacro("No input to writer!");
   }
 
   // Make sure the data is up-to-date.
@@ -120,7 +120,7 @@ ImageSeriesWriter<TInputImage, TOutputImage>::GenerateNumericFileNames()
 
   if (!inputImage)
   {
-    itkExceptionMacro(<< "Input image is nullptr");
+    itkExceptionMacro("Input image is nullptr");
   }
 
   m_FileNames.clear();
@@ -151,7 +151,7 @@ template <typename TInputImage, typename TOutputImage>
 void
 ImageSeriesWriter<TInputImage, TOutputImage>::GenerateData()
 {
-  itkDebugMacro(<< "Writing a series of files");
+  itkDebugMacro("Writing a series of files");
   if (m_FileNames.empty())
   {
     // this method will be deprecated. It is here only to maintain the old API
@@ -171,7 +171,7 @@ ImageSeriesWriter<TInputImage, TOutputImage>::WriteFiles()
 
   if (!inputImage)
   {
-    itkExceptionMacro(<< "Input image is nullptr");
+    itkExceptionMacro("Input image is nullptr");
   }
 
   // We need two regions. One for the input, one for the output.
@@ -241,11 +241,11 @@ ImageSeriesWriter<TInputImage, TOutputImage>::WriteFiles()
 
   if (m_FileNames.size() != expectedNumberOfFiles)
   {
-    itkExceptionMacro(<< "The number of filenames passed is " << m_FileNames.size() << " but " << expectedNumberOfFiles
-                      << " were expected ");
+    itkExceptionMacro("The number of filenames passed is " << m_FileNames.size() << " but " << expectedNumberOfFiles
+                                                           << " were expected ");
   }
 
-  itkDebugMacro(<< "Number of files to write = " << m_FileNames.size());
+  itkDebugMacro("Number of files to write = " << m_FileNames.size());
 
   ProgressReporter progress(this, 0, expectedNumberOfFiles, expectedNumberOfFiles);
 
@@ -281,14 +281,14 @@ ImageSeriesWriter<TInputImage, TOutputImage>::WriteFiles()
         if (slice > m_MetaDataDictionaryArray->size() - 1)
         {
           itkExceptionMacro("The slice number: " << slice + 1 << " exceeds the size of the MetaDataDictionaryArray "
-                                                 << m_MetaDataDictionaryArray->size() << ".");
+                                                 << m_MetaDataDictionaryArray->size() << '.');
         }
         DictionaryRawPointer dictionary = (*m_MetaDataDictionaryArray)[slice];
         m_ImageIO->SetMetaDataDictionary((*dictionary));
       }
       else
       {
-        itkExceptionMacro(<< "Attempted to use a MetaDataDictionaryArray without specifying an ImageIO!");
+        itkExceptionMacro("Attempted to use a MetaDataDictionaryArray without specifying an ImageIO!");
       }
     }
     else
@@ -352,15 +352,7 @@ ImageSeriesWriter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Inden
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Image IO: ";
-  if (m_ImageIO.IsNull())
-  {
-    os << "(none)\n";
-  }
-  else
-  {
-    os << m_ImageIO << "\n";
-  }
+  itkPrintSelfObjectMacro(ImageIO);
 
   os << indent << "StartIndex: " << m_StartIndex << std::endl;
   os << indent << "IncrementIndex: " << m_IncrementIndex << std::endl;

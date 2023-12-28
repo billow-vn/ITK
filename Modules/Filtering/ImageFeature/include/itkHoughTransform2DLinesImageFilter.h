@@ -102,7 +102,7 @@ public:
   using OutputImageRegionType = typename InputImageType::RegionType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HoughTransform2DLinesImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(HoughTransform2DLinesImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -186,8 +186,8 @@ private:
   double m_AngleResolution{ 500 };
   double m_Threshold{ 0 };
 
-  OutputImagePointer m_SimplifyAccumulator;
-  LinesListType      m_LinesList;
+  OutputImagePointer m_SimplifyAccumulator{};
+  LinesListType      m_LinesList{};
   LinesListSizeType  m_NumberOfLines{ 1 };
   double             m_DiscRadius{ 10 };
   double             m_Variance{ 5 };

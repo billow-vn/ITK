@@ -28,14 +28,7 @@
 #ifndef itkChangeRegionLabelMapFilter_hxx
 #define itkChangeRegionLabelMapFilter_hxx
 #include "itkProgressReporter.h"
-/*
- *
- * This code was contributed in the Insight Journal paper:
- * "Label object representation and manipulation with ITK"
- * by Lehmann G.
- * https://www.insight-journal.org/browse/publication/176
- *
- */
+
 
 namespace itk
 {
@@ -143,7 +136,7 @@ ChangeRegionLabelMapFilter<TInputImage>::ThreadedProcessLabelObject(LabelObjectT
   // remove the object if it is empty
   if (labelObject->Empty())
   {
-    std::lock_guard<std::mutex> mutexHolder(this->m_LabelObjectContainerLock);
+    const std::lock_guard<std::mutex> lockGuard(this->m_LabelObjectContainerLock);
     this->GetOutput()->RemoveLabelObject(labelObject);
   }
 }

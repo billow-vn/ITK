@@ -54,12 +54,12 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FreeSurferBinaryMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(FreeSurferBinaryMeshIO);
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
   /** Determine if the file can be read with this MeshIO implementation.
-   * \param FileNameToRead The name of the file to test for reading.
+   * \param fileName The name of the file to test for reading.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can read the file specified.
    */
@@ -86,7 +86,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this MeshIO implementation.
-   * \param FileNameToWrite The name of the file to test for writing.
+   * \param fileName The name of the file to test for writing.
    * \post Sets classes MeshIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this MeshIO can write the file specified.
    */
@@ -134,7 +134,7 @@ protected:
       data.get(), this->m_NumberOfPoints * this->m_PointDimension, &outputFile);
   }
 
-  /** Write cells to utput stream */
+  /** Write cells to output stream */
   template <typename T>
   void
   WriteCells(T * buffer, std::ofstream & outputFile)
@@ -148,7 +148,7 @@ protected:
       data.get(), this->m_NumberOfCells * numberOfCellPoints, &outputFile);
   }
 
-  /** Read cells from a data buffer, used when writting mesh */
+  /** Read cells from a data buffer, used when writing mesh */
   template <typename TInput, typename TOutput>
   void
   ReadCellsBuffer(TInput * input, TOutput * output)
@@ -198,7 +198,7 @@ protected:
 private:
   StreamOffsetType m_FilePosition{ 0 };
   itk::uint32_t    m_FileTypeIdentifier{ 0 };
-  std::ifstream    m_InputFile;
+  std::ifstream    m_InputFile{};
 };
 } // end namespace itk
 

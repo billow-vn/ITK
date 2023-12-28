@@ -25,7 +25,7 @@
 namespace itk
 {
 /**
- *\class OrthogonallyCorrected2DParametricPath
+ * \class OrthogonallyCorrected2DParametricPath
  * \brief  Represent an orthogonally corrected 2D parametric path
  *
  * Description
@@ -54,7 +54,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OrthogonallyCorrected2DParametricPath, ParametricPath);
+  itkOverrideGetNameOfClassMacro(OrthogonallyCorrected2DParametricPath);
 
   /** Input type */
   using InputType = Superclass::InputType;
@@ -121,8 +121,8 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  OriginalPathConstPointer         m_OriginalPath;
-  OrthogonalCorrectionTablePointer m_OrthogonalCorrectionTable;
+  OriginalPathConstPointer         m_OriginalPath{};
+  OrthogonalCorrectionTablePointer m_OrthogonalCorrectionTable{};
 };
 } // namespace itk
 

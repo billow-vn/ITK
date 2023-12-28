@@ -106,7 +106,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ValuedRegionalExtremaImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(ValuedRegionalExtremaImageFilter);
 
   /**
    * Set/Get whether the connected components are defined strictly by
@@ -156,7 +156,7 @@ protected:
   GenerateData() override;
 
 private:
-  typename TInputImage::PixelType m_MarkerValue;
+  typename TInputImage::PixelType m_MarkerValue{};
 
   bool m_FullyConnected{ false };
   bool m_Flat{ false };

@@ -26,27 +26,12 @@
 namespace itk
 {
 
-// Constructor with default arguments
-template <typename TParametersValueType, unsigned int VDimension, unsigned int VSplineOrder>
-BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::BSplineBaseTransform()
-  : Superclass(0)
-  , m_CoefficientImages(Self::ArrayOfImagePointerGeneratorHelper())
-{
-  this->m_InternalParametersBuffer = ParametersType(0);
-
-  // Instantiate a weights function
-  this->m_WeightsFunction = WeightsFunctionType::New();
-}
-
 // Set the parameters
 template <typename TParametersValueType, unsigned int VDimension, unsigned int VSplineOrder>
 void
 BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::SetIdentity()
 {
-  if (this->m_InternalParametersBuffer.Size() != this->GetNumberOfParameters())
-  {
-    this->m_InternalParametersBuffer.SetSize(this->GetNumberOfParameters());
-  }
+  this->m_InternalParametersBuffer.SetSize(this->GetNumberOfParameters());
   this->m_InternalParametersBuffer.Fill(0.0);
 
   this->SetParameters(this->m_InternalParametersBuffer);
@@ -62,8 +47,8 @@ BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::SetParamet
   // expected number of parameters
   if (parameters.Size() != this->GetNumberOfParameters())
   {
-    itkExceptionMacro(<< "Mismatch between parameters size " << parameters.Size()
-                      << " and expected number of parameters " << this->GetNumberOfParameters()
+    itkExceptionMacro("Mismatch between parameters size "
+                      << parameters.Size() << " and expected number of parameters " << this->GetNumberOfParameters()
                       << (this->m_CoefficientImages[0]->GetLargestPossibleRegion().GetNumberOfPixels() == 0
                             ? ". \nSince the size of the grid region is 0, perhaps you forgot to "
                               "SetGridRegion or SetFixedParameters before setting the Parameters."
@@ -95,8 +80,8 @@ BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::SetParamet
   // expected number of parameters
   if (parameters.Size() != this->GetNumberOfParameters())
   {
-    itkExceptionMacro(<< "Mismatched between parameters size " << parameters.size() << " and region size "
-                      << this->GetNumberOfParameters());
+    itkExceptionMacro("Mismatched between parameters size " << parameters.size() << " and region size "
+                                                            << this->GetNumberOfParameters());
   }
 
   // copy parameters to this->m_InternalParametersBuffer
@@ -265,14 +250,13 @@ BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::
   this->m_WeightsFunction->Evaluate(index, weights, supportIndex);
 
   // For each dimension, copy the weight to the support region
-  SizeType supportSize;
-  supportSize.Fill(SplineOrder + 1);
+  constexpr auto   supportSize = SizeType::Filled(SplineOrder + 1);
   const RegionType supportRegion(supportIndex, supportSize);
   unsigned long    counter = 0;
 
   using IteratorType = ImageRegionIterator<ImageType>;
 
-  IteratorType                coeffIterator = IteratorType(this->m_CoefficientImages[0], supportRegion);
+  IteratorType                coeffIterator(this->m_CoefficientImages[0], supportRegion);
   const ParametersValueType * basePointer = this->m_CoefficientImages[0]->GetBufferPointer();
   while (!coeffIterator.IsAtEnd())
   {
@@ -309,8 +293,9 @@ BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::ArrayOfIma
 
 // Transform a point
 template <typename TParametersValueType, unsigned int VDimension, unsigned int VSplineOrder>
-typename BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::OutputPointType
+auto
 BSplineBaseTransform<TParametersValueType, VDimension, VSplineOrder>::TransformPoint(const InputPointType & point) const
+  -> OutputPointType
 {
   WeightsType             weights;
   ParameterIndexArrayType indices;

@@ -30,7 +30,7 @@
 namespace itk
 {
 /**
- *\class KLMDynamicBorderArray
+ * \class KLMDynamicBorderArray
  * \brief  Object maintaining a reference to a list of borders associated
  * with a region.
  *
@@ -114,7 +114,7 @@ public:
 };
 
 /**
- *\class KLMSegmentationBorder
+ * \class KLMSegmentationBorder
  * \brief Base class for KLMSegmentationBorder object
  *
  * itkKLMSegmentationBorder is the base class for the KLMSegmentationBorder
@@ -151,7 +151,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(KLMSegmentationBorder, SegmentationBorder);
+  itkOverrideGetNameOfClassMacro(KLMSegmentationBorder);
 
   /** Set the region 1 associated with the border */
   void
@@ -194,9 +194,9 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
 private:
-  double                  m_Lambda;
-  KLMSegmentationRegion * m_Region1;
-  KLMSegmentationRegion * m_Region2;
+  double                  m_Lambda{};
+  KLMSegmentationRegion * m_Region1{};
+  KLMSegmentationRegion * m_Region2{};
 };
 } // end namespace itk
 

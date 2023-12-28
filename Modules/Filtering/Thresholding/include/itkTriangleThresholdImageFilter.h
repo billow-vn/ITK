@@ -26,7 +26,7 @@ namespace itk
 {
 
 /**
- *\class TriangleThresholdImageFilter
+ * \class TriangleThresholdImageFilter
  * \brief Threshold an image using the Triangle Threshold
  *
  * This filter creates a binary thresholded image that separates an
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(TriangleThresholdImageFilter, HistogramThresholdImageFilter);
+  itkOverrideGetNameOfClassMacro(TriangleThresholdImageFilter);
 
   using InputImageType = TInputImage;
   using OutputImageType = TOutputImage;

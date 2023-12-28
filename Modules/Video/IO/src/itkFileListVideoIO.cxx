@@ -18,6 +18,7 @@
 #include "itkFileListVideoIO.h"
 
 #include "itkImageIOFactory.h"
+#include "itkPrintHelper.h"
 
 namespace itk
 {
@@ -56,7 +57,7 @@ FileListVideoIO::SetFileName(const char * fileList)
 }
 
 std::vector<std::string>
-FileListVideoIO ::SplitFileNames(const std::string & fileList)
+FileListVideoIO::SplitFileNames(const std::string & fileList)
 {
   std::vector<std::string> out;
 
@@ -148,7 +149,7 @@ FileListVideoIO::ReadImageInformation()
     std::string filename = m_FileNames[0];
     if (!this->CanReadFile(filename.c_str()))
     {
-      itkExceptionMacro(<< "Cannot Read File: " << filename);
+      itkExceptionMacro("Cannot Read File: " << filename);
     }
 
     // Open the internal IO (don't use local so that spacing, origin, direction
@@ -204,7 +205,7 @@ FileListVideoIO::Read(void * buffer)
   // non-zero)
   if (m_Dimensions[0] == 0)
   {
-    itkExceptionMacro(<< "Cannot read frame with zero dimension. May need to call ReadImageInformation");
+    itkExceptionMacro("Cannot read frame with zero dimension. May need to call ReadImageInformation");
   }
 
   // If video is not already open, open it and keep it open
@@ -464,7 +465,7 @@ FileListVideoIO::ResetMembers()
 }
 
 bool
-FileListVideoIO ::VerifyExtensions(const std::vector<std::string> & fileList) const
+FileListVideoIO::VerifyExtensions(const std::vector<std::string> & fileList) const
 {
   for (size_t i = 1; i < fileList.size(); ++i)
   {
@@ -488,21 +489,13 @@ FileListVideoIO ::VerifyExtensions(const std::vector<std::string> & fileList) co
 void
 FileListVideoIO::PrintSelf(std::ostream & os, Indent indent) const
 {
+  using namespace print_helper;
+
   Superclass::PrintSelf(os, indent);
 
-  if (!m_ImageIO.IsNull())
-  {
-    os << indent << "Internal ImageIO:" << std::endl;
-    m_ImageIO->Print(os, indent.GetNextIndent());
-  }
+  itkPrintSelfObjectMacro(ImageIO);
 
-  os << indent << "Image filenames:" << std::endl;
-  auto it = m_FileNames.begin();
-  while (it != m_FileNames.end())
-  {
-    os << indent << *it << std::endl;
-    ++it;
-  }
+  os << indent << "FileNames: " << m_FileNames << std::endl;
 }
 
 } // end namespace itk
