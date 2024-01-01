@@ -7,89 +7,10 @@ set(ITKDCMTK_NO_SRC 1)
 
 include(CMakeParseArguments)
 
-
-if(DCMTK_USE_ICU)
-  option(ITK_USE_SYSTEM_ICU "Use an installed version of ICU" OFF)
-  if(NOT ITK_USE_SYSTEM_ICU)
-    set(ITKDCMTK_PREREQS ${ITKDCMTK_BINARY_DIR}/DCMTK_Prereqs)
-    set(ITKDCMTK_ICU_LIBRARIES )
-    if(WIN32)
-      message(FATAL_ERROR "ICU is not built as part of ITK on Windows. Please compile it outside of ITK.")
-    else()
-      set(ITKDCMTK_ICU_LIBRARY_NAMES uc data)
-    endif()
-    foreach(lib_name ${ITKDCMTK_ICU_LIBRARY_NAMES})
-      set(lib ICU::${lib_name})
-      list(APPEND ITKDCMTK_ICU_LIBRARIES ${lib})
-      add_library(${lib} STATIC IMPORTED GLOBAL)
-      if(CMAKE_CONFIGURATION_TYPES)
-        foreach(c ${CMAKE_CONFIGURATION_TYPES})
-          string(TOUPPER "${c}" C)
-          set(debug_suffix)
-          if("${C}" STREQUAL "DEBUG")
-            set(lib_path ${ITKDCMTK_PREREQS}/${c}/lib/${lib_prefix}icu${lib_name}d${CMAKE_STATIC_LIBRARY_SUFFIX})
-          else()  # For all non-debug, use release
-            set(lib_path ${ITKDCMTK_PREREQS}/Release/lib/${lib_prefix}icu${lib_name}${CMAKE_STATIC_LIBRARY_SUFFIX})
-          endif()
-          set_property(TARGET ${lib} PROPERTY IMPORTED_LOCATION_${C} ${lib_path})
-        endforeach()
-      else()
-        set(lib_path ${ITKDCMTK_PREREQS}/lib/${lib_prefix}icu${lib_name}${CMAKE_STATIC_LIBRARY_SUFFIX})
-        set_property(TARGET ${lib} PROPERTY IMPORTED_LOCATION ${lib_path})
-      endif()
-      list(APPEND ICU_BYPRODUCTS "${lib_path}")
-    endforeach()
-
-    set(ICU_URL "http://download.icu-project.org/files/icu4c/58.2/icu4c-58_2-src.tgz")
-    set(ICU_MD5 fac212b32b7ec7ab007a12dff1f3aea1)
-    # If not Debug, use Release (for Release, MinSizeRel,...)
-    if(CMAKE_CONFIGURATION_TYPES)
-      set(ICU_ROOT_DIR ${ITKDCMTK_PREREQS}/$<$<CONFIG:Debug>:Debug>$<$<NOT:$<CONFIG:Debug>>:Release>)
-    else()
-      set(ICU_ROOT_DIR ${ITKDCMTK_PREREQS})
-    endif()
-    set(CHARSET_CONVERSION_ARGS
-      -DDCMTK_WITH_STDLIBC_ICONV:BOOL=OFF
-      -DDCMTK_WITH_ICU:BOOL=ON
-      -DDCMTK_ENABLE_CHARSET_CONVERSION:STRING=ICU
-      -DICU_ROOT:PATH=${ICU_ROOT_DIR}
-      )
-    itk_download_attempt_check(icu)
-    ExternalProject_Add(icu
-    URL ${ICU_URL}
-    URL_MD5 ${ICU_MD5}
-    PREFIX ${ITKDCMTK_BINARY_DIR}
-    UPDATE_COMMAND ""
-    BUILD_BYPRODUCTS ${ICU_BYPRODUCTS}
-    CONFIGURE_COMMAND <SOURCE_DIR>/source/configure --prefix=${ITKDCMTK_PREREQS}
-      --with-data-packaging=static
-      --enable-static=yes
-      --enable-shared=no
-      "CC=${CMAKE_C_COMPILER_LAUNCHER} ${CMAKE_C_COMPILER}"
-      "CXX=${CMAKE_CXX_COMPILER_LAUNCHER} ${CMAKE_CXX_COMPILER}"
-      "CFLAGS=-fPIC"
-      "CXXFLAGS=-fPIC"
-    )
-    set(ICU_DEPENDENCY icu)
-  endif()
-else(DCMTK_USE_ICU)
-  set(CHARSET_CONVERSION_ARGS
-     -DDCMTK_WITH_ICU:BOOL=OFF
-     )
-endif()
-
-if(APPLE)
-  # Character set conversion creates linking errors on MacOS. We disable
-  # `iconv` which is likely going to be found on the system by DCMTK, and
-  # that is going to create linking errors.
-  list(APPEND
-      CHARSET_CONVERSION_ARGS
-        -DDCMTK_WITH_ICONV:BOOL=OFF
-      )
-endif()
-
 set(_ITKDCMTK_LIB_NAMES dcmdata dcmimage dcmimgle dcmjpeg dcmjpls
-    dcmnet dcmpstat dcmqrdb dcmsr dcmtls ijg12 ijg16 ijg8 oflog ofstd)
+    dcmnet dcmpstat dcmqrdb dcmsr dcmtls ijg12 ijg16 ijg8 oflog ofstd
+    oficonv i2d dcmxml dcmtkcharls cmr dcmdsig dcmwlm dcmrt dcmiod dcmfg dcmseg dcmtract dcmpmap dcmect
+)
 if(WIN32)
   set(ITKDCMTK_LIBDEP_WIN iphlpapi ws2_32 netapi32 wsock32)
 endif()
@@ -236,9 +157,10 @@ endforeach()
     -DDCMTK_ENABLE_CXX11:BOOL=ON
     -DDCMTK_FORCE_FPIC_ON_UNIX:BOOL=ON
     -DBUILD_APPS:BOOL=OFF        # Only DCMTK libraries are needed
-    -DDCMTK_WITH_OPENSSL:BOOL=OFF
+    -DDCMTK_WITH_OPENSSL:BOOL=ON
     -DDCMTK_WITH_PNG:BOOL=ON
-    -DDCMTK_WITH_XML:BOOL=OFF
+    -DDCMTK_WITH_XML:BOOL=ON
+    -DDCMTK_WITH_ICU:BOOL=ON
     -DDCMTK_WITH_TIFF:BOOL=ON
     -DDCMTK_WITH_ZLIB:BOOL=ON)
 
@@ -255,7 +177,7 @@ endforeach()
   set(ITKDCMTK_LIBDEP "")
   list(APPEND ITKDCMTK_LIBDEP ${ITKDCMTK_LIBDEP_WIN})
   foreach(lib ITKJPEG_LIBRARIES ITKTIFF_LIBRARIES ITKPNG_LIBRARIES
-      ITKZLIB_LIBRARIES ITKDCMTK_ICU_LIBRARIES)
+      ITKZLIB_LIBRARIES)
     foreach(_lib ${${lib}})
       if(TARGET ${_lib})
         list(APPEND ITKDCMTK_LIBDEP ${_lib})
@@ -314,7 +236,7 @@ endforeach()
     -DCMAKE_MSVC_RUNTIME_LIBRARY:STRING=${CMAKE_MSVC_RUNTIME_LIBRARY}
     -DDCMTK_DEFAULT_DICT:STRING=builtin
     -DDCMTK_WITH_DOXYGEN:BOOL=OFF
-    -DDCMTK_WITH_SNDFILE:BOOL=OFF
+    -DDCMTK_WITH_SNDFILE:BOOL=ON
     -DDCMTK_WITH_WRAP:BOOL=OFF
     -DDCMTK_ENABLE_PRIVATE_TAGS:BOOL=ON
     -DJPEG_LIBRARY:PATH=${DCMTKJPEG_LIBRARIES}
@@ -338,7 +260,7 @@ endforeach()
     -DCMAKE_INSTALL_LIBDIR:PATH=${CMAKE_INSTALL_LIBDIR}
     -DCMAKE_INSTALL_BINDIR:PATH=${CMAKE_INSTALL_BINDIR}
     ${CHARSET_CONVERSION_ARGS}
-    DEPENDS ${JPEG_DEPENDENCY} ${PNG_DEPENDENCY} ${TIFF_DEPENDENCY} ${ICU_DEPENDENCY}
+    DEPENDS ${JPEG_DEPENDENCY} ${PNG_DEPENDENCY} ${TIFF_DEPENDENCY}
     BUILD_BYPRODUCTS ${DCMTK_BYPRODUCTS}
     )
   foreach(lib ${_ITKDCMTK_LIB_NAMES})
@@ -354,4 +276,4 @@ endforeach()
   # run DCMTK's cmake install script
   install(SCRIPT
     ${CMAKE_CURRENT_BINARY_DIR}/${DCMTK_EPNAME}-build/cmake_install.cmake)
-endif(ITK_USE_SYSTEM_DCMTK)
+endif()

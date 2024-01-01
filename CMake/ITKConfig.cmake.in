@@ -14,6 +14,8 @@
 # specify them individually.
 # See `itk_module_config()` documentation for more information about factory modules.
 
+cmake_policy(SET CMP0057 NEW) # support if IN_LIST
+
 @ITK_CONFIG_CODE@
 
 # The C and C++ flags added by ITK to the cmake-configured flags.
