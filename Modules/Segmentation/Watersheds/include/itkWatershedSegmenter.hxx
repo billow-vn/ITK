@@ -175,18 +175,13 @@ Segmenter<TInputImage>::GenerateData()
   Self::MinMax(input, regionToProcess, minimum, maximum);
   // cap the maximum in the image so that we can always define a pixel
   // value that is one greater than the maximum value in the image.
-  if (std::is_integral_v<InputPixelType>
-        // clang-format off
-CLANG_PRAGMA_PUSH
-CLANG_SUPPRESS_Wfloat_equal
-      // clang-format on
-      && maximum == NumericTraits<InputPixelType>::max())
-    // clang-format off
-CLANG_PRAGMA_POP
-    // clang-format on
-    {
-      maximum -= NumericTraits<InputPixelType>::OneValue();
-    }
+  ITK_GCC_PRAGMA_PUSH
+  ITK_GCC_SUPPRESS_Wfloat_equal
+  if (std::is_integral_v<InputPixelType> && maximum == NumericTraits<InputPixelType>::max())
+  {
+    maximum -= NumericTraits<InputPixelType>::OneValue();
+  }
+  ITK_GCC_PRAGMA_POP
   // threshold the image.
   Self::Threshold(thresholdImage,
                   input,
@@ -274,7 +269,7 @@ CLANG_PRAGMA_POP
   // flat-region connectivity) and constructs the appropriate Boundary
   // data structures.
   //
-  if (m_DoBoundaryAnalysis == true)
+  if (m_DoBoundaryAnalysis)
   {
     this->InitializeBoundary();
     this->AnalyzeBoundaryFlow(thresholdImage, flatRegions, maximum + NumericTraits<InputPixelType>::OneValue());
@@ -312,13 +307,13 @@ CLANG_PRAGMA_POP
   this->UpdateSegmentTable(thresholdImage, thresholdImage->GetRequestedRegion());
   this->UpdateProgress(0.6);
 
-  if (m_DoBoundaryAnalysis == true)
+  if (m_DoBoundaryAnalysis)
   {
     this->CollectBoundaryInformation(flatRegions);
   }
   this->UpdateProgress(0.7);
 
-  if (m_SortEdgeLists == true)
+  if (m_SortEdgeLists)
   {
     this->GetSegmentTable()->SortEdgeLists();
   }
@@ -561,7 +556,7 @@ Segmenter<TInputImage>::AnalyzeBoundaryFlow(InputImageTypePointer thresholdImage
             isSteepest = false;
           }
 
-          if (isSteepest == true)
+          if (isSteepest)
           {
             // Label this pixel. It will be safely treated as a local
             // minimum by the rest of the segmentation algorithm.
@@ -1197,16 +1192,21 @@ Segmenter<TInputImage>::Threshold(InputImageTypePointer destination,
     while (!dIt.IsAtEnd())
     {
       InputPixelType tmp = sIt.Get();
+      ITK_GCC_PRAGMA_PUSH
+      ITK_GCC_SUPPRESS_Wfloat_equal
       if (tmp < threshold)
       {
         dIt.Set(threshold);
       }
-      CLANG_PRAGMA_PUSH
-      CLANG_SUPPRESS_Wfloat_equal else if (tmp == NumericTraits<InputPixelType>::max()) CLANG_PRAGMA_POP
+      else if (tmp == NumericTraits<InputPixelType>::max())
       {
         dIt.Set(tmp - NumericTraits<InputPixelType>::OneValue());
       }
-      else { dIt.Set(tmp); }
+      else
+      {
+        dIt.Set(tmp);
+      }
+      ITK_GCC_PRAGMA_POP
       ++dIt;
       ++sIt;
     }
@@ -1354,13 +1354,9 @@ Segmenter<TInputImage>::Segmenter()
   m_SortEdgeLists = true;
   m_Connectivity.direction = nullptr;
   m_Connectivity.index = nullptr;
-  typename OutputImageType::Pointer  img = static_cast<OutputImageType *>(this->MakeOutput(0).GetPointer());
-  typename SegmentTableType::Pointer st = static_cast<SegmentTableType *>(this->MakeOutput(1).GetPointer());
-  typename BoundaryType::Pointer     bd = static_cast<BoundaryType *>(this->MakeOutput(2).GetPointer());
-  this->SetNumberOfRequiredOutputs(3);
-  this->ProcessObject::SetNthOutput(0, img.GetPointer());
-  this->ProcessObject::SetNthOutput(1, st.GetPointer());
-  this->ProcessObject::SetNthOutput(2, bd.GetPointer());
+
+  // Make the outputs (OutputImage, SegmentTable, Boundary).
+  ProcessObject::MakeRequiredOutputs(*this, 3);
 
   // Allocate memory for connectivity
   m_Connectivity.size = 2 * ImageDimension;

@@ -464,35 +464,14 @@ MeshFileWriter<TInputMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "File Name: " << (m_FileName.data() ? m_FileName.data() : "(none)") << std::endl;
+  os << indent << "FileName: " << m_FileName << std::endl;
 
-  os << indent << "Mesh IO: ";
-  if (m_MeshIO.IsNull())
-  {
-    os << "(none)\n";
-  }
-  else
-  {
-    os << m_MeshIO << '\n';
-  }
+  itkPrintSelfObjectMacro(MeshIO);
 
-  if (m_UseCompression)
-  {
-    os << indent << "Compression: On\n";
-  }
-  else
-  {
-    os << indent << "Compression: Off\n";
-  }
-
-  if (m_FactorySpecifiedMeshIO)
-  {
-    os << indent << "FactorySpecifiedMeshIO: On\n";
-  }
-  else
-  {
-    os << indent << "FactorySpecifiedMeshIO: Off\n";
-  }
+  itkPrintSelfBooleanMacro(UserSpecifiedMeshIO);
+  itkPrintSelfBooleanMacro(FactorySpecifiedMeshIO);
+  itkPrintSelfBooleanMacro(UseCompression);
+  itkPrintSelfBooleanMacro(FileTypeIsBINARY);
 }
 } // end namespace itk
 

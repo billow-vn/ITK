@@ -99,7 +99,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(FastMarchingUpwindGradientImageFilter);
 
   /** Inherited type alias. */
@@ -246,7 +246,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   virtual void
-  VerifyPreconditions() ITKv5_CONST override;
+  VerifyPreconditions() const override;
 
   void
   Initialize(LevelSetImageType *) override;

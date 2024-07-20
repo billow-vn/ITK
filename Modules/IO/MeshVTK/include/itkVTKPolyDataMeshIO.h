@@ -62,7 +62,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(VTKPolyDataMeshIO);
 
   /**-------- This part of the interfaces deals with reading data. ----- */
@@ -740,7 +740,7 @@ protected:
       // documentation.
       if (this->m_NumberOfPointPixelComponents == 3)
       {
-        T zero(itk::NumericTraits<T>::ZeroValue());
+        T zero(T{});
         T e12;
         while (i < num)
         {
@@ -931,7 +931,7 @@ protected:
       const SizeValueType num = this->m_NumberOfCellPixelComponents * this->m_NumberOfCellPixels;
       if (this->m_NumberOfCellPixelComponents == 2)
       {
-        T zero(itk::NumericTraits<T>::ZeroValue());
+        T zero(T{});
         T e12;
         while (i < num)
         {
@@ -1149,6 +1149,16 @@ private:
 
   static void
   ReadComponentsAsASCII(std::ifstream & inputFile, double * const buffer, const SizeValueType numberOfComponents);
+
+  template <typename TOffset>
+  void
+  ReadCellsBufferAsBINARYOffsetType(std::ifstream & inputFile, void * buffer);
+
+  template <typename TOffset, typename TConnectivity>
+  void
+  ReadCellsBufferAsBINARYConnectivityType(std::ifstream & inputFile, void * buffer);
+
+  uint8_t m_ReadMeshVersionMajor{ 4 };
 };
 } // end namespace itk
 

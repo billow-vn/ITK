@@ -34,11 +34,13 @@ AffineTransform<TParametersValueType, VDimension>::AffineTransform(unsigned int 
   : Superclass(parametersDimension)
 {}
 
+#if !defined(ITK_LEGACY_REMOVE)
 template <typename TParametersValueType, unsigned int VDimension>
 AffineTransform<TParametersValueType, VDimension>::AffineTransform(const MatrixType &       matrix,
                                                                    const OutputVectorType & offset)
   : Superclass(matrix, offset)
 {}
+#endif
 
 template <typename TParametersValueType, unsigned int VDimension>
 void
@@ -259,9 +261,7 @@ template <typename TParametersValueType, unsigned int VDimension>
 auto
 AffineTransform<TParametersValueType, VDimension>::GetInverseTransform() const -> InverseTransformBasePointer
 {
-  Pointer inv = New();
-
-  return this->GetInverse(inv) ? inv.GetPointer() : nullptr;
+  return Superclass::InvertTransform(*this);
 }
 
 template <typename TParametersValueType, unsigned int VDimension>

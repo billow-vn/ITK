@@ -34,7 +34,6 @@ class ComplexToComplexFFTImageFilterEnums
 {
 public:
   /**
-   * \class TransformDirection
    * \ingroup ITKFFT
    * \ingroup FourierTransform
    * */
@@ -90,7 +89,7 @@ public:
 
   static constexpr unsigned int ImageDimension = InputImageType::ImageDimension;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ComplexToComplexFFTImageFilter);
 
   /** Customized object creation methods that support configuration-based

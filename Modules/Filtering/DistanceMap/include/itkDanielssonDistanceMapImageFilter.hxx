@@ -22,6 +22,7 @@
 
 #include "itkReflectiveImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
+#include <algorithm> // For max.
 
 namespace itk
 {
@@ -29,20 +30,11 @@ namespace itk
 template <typename TInputImage, typename TOutputImage, typename TVoronoiImage>
 DanielssonDistanceMapImageFilter<TInputImage, TOutputImage, TVoronoiImage>::DanielssonDistanceMapImageFilter()
 {
-  this->SetNumberOfRequiredOutputs(3);
-
-  // distance map
-  this->SetNthOutput(0, this->MakeOutput(0));
-
-  // voronoi map
-  this->SetNthOutput(1, this->MakeOutput(1));
-
-  // distance vectors
-  this->SetNthOutput(2, this->MakeOutput(2));
+  // Make the outputs (distance map, voronoi map, distance vectors).
+  ProcessObject::MakeRequiredOutputs(*this, 3);
 
   m_SquaredDistance = false;
   m_InputIsBinary = false;
-  m_UseImageSpacing = true;
 }
 
 template <typename TInputImage, typename TOutputImage, typename TVoronoiImage>
@@ -120,10 +112,7 @@ DanielssonDistanceMapImageFilter<TInputImage, TOutputImage, TVoronoiImage>::Prep
 
   for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
   {
-    if (maxLength < size[dim])
-    {
-      maxLength = size[dim];
-    }
+    maxLength = std::max(maxLength, size[dim]);
   }
 
   ImageRegionConstIteratorWithIndex<InputImageType> it(inputImage, region);

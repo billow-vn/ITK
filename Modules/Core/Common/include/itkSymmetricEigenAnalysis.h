@@ -38,7 +38,7 @@ const TValueType *
 GetPointerToMatrixData(const vnl_matrix_fixed<TValueType, VRows, VColumns> & inputMatrix)
 {
   return inputMatrix.data_block();
-};
+}
 template <typename TValueType>
 const TValueType *
 GetPointerToMatrixData(const vnl_matrix<TValueType> & inputMatrix)
@@ -51,7 +51,7 @@ const TValueType *
 GetPointerToMatrixData(const itk::Matrix<TValueType, VRows, VColumns> & inputMatrix)
 {
   return inputMatrix.GetVnlMatrix().data_block();
-};
+}
 
 /** Sort input to be ordered by magnitude, and returns container with the
  * permutations required for the sorting.
@@ -119,7 +119,7 @@ permuteColumnsWithSortIndices(QMatrix & eigenVectors, const std::vector<int> & i
 class SymmetricEigenAnalysisEnums
 {
 public:
-  /** \class EigenValueOrder
+  /**
    * \ingroup ITKCommon
    * Order of eigen values
    * OrderByValue:      lambda_1 < lambda_2 < ....
@@ -763,9 +763,6 @@ public:
   static constexpr EigenValueOrderEnum OrderByMagnitude = EigenValueOrderEnum::OrderByMagnitude;
   static constexpr EigenValueOrderEnum DoNotOrder = EigenValueOrderEnum::DoNotOrder;
 #endif
-
-  SymmetricEigenAnalysisFixedDimension() = default;
-  ~SymmetricEigenAnalysisFixedDimension() = default;
 
   using MatrixType = TMatrix;
   using EigenMatrixType = TEigenMatrix;

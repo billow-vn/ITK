@@ -61,7 +61,7 @@ itkEuclideanDistancePointSetMetricTest2Run()
   fixedPoint[0] = pointMax / 2.0;
   fixedPoint[1] = pointMax / 2.0;
   fixedPoints->SetPoint(4, fixedPoint);
-  if (Dimension == 3)
+  if constexpr (Dimension == 3)
   {
     fixedPoint[0] = pointMax / 2.0;
     fixedPoint[1] = pointMax / 2.0;
@@ -80,7 +80,7 @@ itkEuclideanDistancePointSetMetricTest2Run()
     fixedPoint = fixedPoints->GetPoint(n);
     movingPoint[0] = fixedPoint[0] + (n + 1) * 0.5;
     movingPoint[1] = fixedPoint[1] - (n + 2) * 0.5;
-    if (Dimension == 3)
+    if constexpr (Dimension == 3)
     {
       movingPoint[2] = fixedPoint[2] + (n + 3) * 0.5;
     }
@@ -119,9 +119,7 @@ itkEuclideanDistancePointSetMetricTest2Run()
   typename RegionType::IndexType regionIndex;
   regionIndex.Fill(0);
 
-  RegionType region;
-  region.SetSize(regionSize);
-  region.SetIndex(regionIndex);
+  RegionType region{ regionIndex, regionSize };
 
   auto displacementField = FieldType::New();
   displacementField->SetOrigin(origin);
@@ -219,8 +217,7 @@ itkEuclideanDistancePointSetMetricTest2Run()
   bool derivative2IsZero = true;
   for (itk::SizeValueType n = 0; n < metric->GetNumberOfParameters(); ++n)
   {
-    if (itk::Math::NotExactlyEquals(derivative2[n],
-                                    itk::NumericTraits<typename PointSetMetricType::DerivativeValueType>::ZeroValue()))
+    if (itk::Math::NotExactlyEquals(derivative2[n], typename PointSetMetricType::DerivativeValueType{}))
     {
       derivative2IsZero = false;
     }
@@ -237,9 +234,7 @@ itkEuclideanDistancePointSetMetricTest2Run()
   // one that doesn't match the displacement field.
   typename RegionType::SizeType badSize;
   badSize.Fill(static_cast<itk::SizeValueType>(pointMax / 2.0));
-  RegionType badRegion;
-  badRegion.SetSize(badSize);
-  badRegion.SetIndex(regionIndex);
+  RegionType badRegion{ regionIndex, badSize };
   metric->SetVirtualDomain(spacing, origin, direction, badRegion);
   ITK_TRY_EXPECT_EXCEPTION(metric->Initialize());
 

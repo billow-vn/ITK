@@ -639,6 +639,10 @@ macro(itk_wrap_simple_type wrap_class swig_name)
     string(APPEND ITK_WRAP_PYTHON_SWIG_EXT "DECL_PYTHON_POINTSET_CLASS(${swig_name})\n\n")
   endif()
 
+  if("${cpp_name}" STREQUAL "itk::PolyLineParametricPath")
+    string(APPEND ITK_WRAP_PYTHON_SWIG_EXT "DECL_PYTHON_POLYLINEPARAMETRICPATH_CLASS(${swig_name})\n\n")
+  endif()
+
   if("${cpp_name}" STREQUAL "itk::Mesh")
     string(APPEND ITK_WRAP_PYTHON_SWIG_EXT "DECL_PYTHON_MESH_CLASS(${swig_name})\n\n")
   endif()
@@ -719,20 +723,6 @@ macro(itk_wrap_simple_type wrap_class swig_name)
       "std::vector"
       "vector${swig_name}"
       "${cpp_name}< ${template_params} > ")
-  endif()
-
-  if("${cpp_name}" STREQUAL "itk::PCAShapeSignedDistanceFunction"
-     AND NOT
-         "${swig_name}"
-         MATCHES
-         "Pointer$")
-
-    set(import_text "%include ${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/python/itkImage_ext.i\n")
-    string(FIND ${ITK_WRAP_PYTHON_SWIG_EXT} ${import_text} pos)
-    if(${pos} EQUAL -1)
-      string(PREPEND ITK_WRAP_PYTHON_SWIG_EXT "${import_text}")
-    endif()
-    unset(import_text)
   endif()
 
   if("${cpp_name}" STREQUAL "itk::Index")

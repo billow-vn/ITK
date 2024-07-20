@@ -78,7 +78,7 @@ public:
   /** Default constructor. */
   ImageBoundaryCondition() = default;
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkVirtualGetNameOfClassMacro(ImageBoundaryCondition);
 
   /** Utility for printing the boundary condition. */
@@ -129,9 +129,9 @@ public:
    * pixel values in the outputRequestedRegion.
    */
   virtual RegionType
-  GetInputRequestedRegion(const RegionType & inputLargestPossibleRegion, const RegionType & outputRequestedRegion) const
+  GetInputRequestedRegion(const RegionType &                  inputLargestPossibleRegion,
+                          [[maybe_unused]] const RegionType & itkNotUsed(outputRequestedRegion)) const
   {
-    (void)outputRequestedRegion;
     return inputLargestPossibleRegion;
   }
 

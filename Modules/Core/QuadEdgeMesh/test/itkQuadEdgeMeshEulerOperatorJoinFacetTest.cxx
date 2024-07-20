@@ -83,7 +83,8 @@ itkQuadEdgeMeshEulerOperatorJoinFacetTest(int, char *[])
   std::cout << "OK" << std::endl;
 #endif
 
-  (void)joinFacet->GetNameOfClass();
+  ITK_TEST_EXPECT_EQUAL(std::string_view("QuadEdgeMeshEulerOperatorJoinFacetFunction"),
+                        std::string_view(joinFacet->GetNameOfClass()));
 
   joinFacet->SetInput(mesh);
 

@@ -37,7 +37,7 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
   this->m_FixedParameters.Fill(0.0);
 }
 
-
+#if !defined(ITK_LEGACY_REMOVE)
 template <typename TParametersValueType, unsigned int VInputDimension, unsigned int VOutputDimension>
 MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimension>::MatrixOffsetTransformBase(
   const MatrixType &       matrix,
@@ -48,7 +48,10 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
   m_MatrixMTime.Modified();
   std::copy_n(offset.begin(), VOutputDimension, m_Translation.begin());
   this->ComputeMatrixParameters();
+  this->m_FixedParameters.SetSize(VInputDimension);
+  this->m_FixedParameters.Fill(0.0);
 }
+#endif
 
 template <typename TParametersValueType, unsigned int VInputDimension, unsigned int VOutputDimension>
 void
@@ -57,33 +60,19 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
 {
   Superclass::PrintSelf(os, indent);
 
-  unsigned int i, j;
-
   os << indent << "Matrix: " << std::endl;
-  for (i = 0; i < VInputDimension; ++i)
-  {
-    os << indent.GetNextIndent();
-    for (j = 0; j < VOutputDimension; ++j)
-    {
-      os << m_Matrix[i][j] << ' ';
-    }
-    os << std::endl;
-  }
+  this->m_Matrix.PrintSelf(os, indent.GetNextIndent());
 
   os << indent << "Offset: " << m_Offset << std::endl;
   os << indent << "Center: " << m_Center << std::endl;
   os << indent << "Translation: " << m_Translation << std::endl;
 
   os << indent << "Inverse: " << std::endl;
-  for (i = 0; i < VInputDimension; ++i)
-  {
-    os << indent.GetNextIndent();
-    for (j = 0; j < VOutputDimension; ++j)
-    {
-      os << this->GetInverseMatrix()[i][j] << ' ';
-    }
-    os << std::endl;
-  }
+
+  const auto & inverseMatrix = this->GetInverseMatrix();
+
+  inverseMatrix.PrintSelf(os, indent.GetNextIndent());
+
   os << indent << "Singular: " << m_Singular << std::endl;
 }
 
@@ -94,9 +83,11 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
 {
   m_Matrix.SetIdentity();
   m_MatrixMTime.Modified();
-  m_Offset.Fill(NumericTraits<OutputVectorValueType>::ZeroValue());
-  m_Translation.Fill(NumericTraits<OutputVectorValueType>::ZeroValue());
-  m_Center.Fill(NumericTraits<InputPointValueType>::ZeroValue());
+  m_Offset.Fill(OutputVectorValueType{});
+  m_Translation.Fill(OutputVectorValueType{});
+  // Fixed parameters must be preserved when setting the transform to identity
+  // the center is part of the stationary fixed parameters
+  // and should not be modified by SetIdentity. m_Center.Fill(InputPointValueType{});
   m_Singular = false;
   m_InverseMatrix.SetIdentity();
   m_InverseMatrixMTime = m_MatrixMTime;
@@ -199,13 +190,14 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
 {
   OutputCovariantVectorType result; // Converted vector
 
+  const auto & inverseMatrix = this->GetInverseMatrix();
+
   for (unsigned int i = 0; i < VOutputDimension; ++i)
   {
-    result[i] = NumericTraits<ScalarType>::ZeroValue();
+    result[i] = ScalarType{};
     for (unsigned int j = 0; j < VInputDimension; ++j)
     {
-      result[i] += this->GetInverseMatrix()[j][i] * vec[j]; // Inverse
-                                                            // transposed
+      result[i] += inverseMatrix[j][i] * vec[j]; // Inverse transposed
     }
   }
   return result;
@@ -222,6 +214,9 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
 
   vnl_vector<TParametersValueType> vnl_vect(vectorDim);
   vnl_matrix<TParametersValueType> vnl_mat(vectorDim, vect.Size(), 0.0);
+
+  const auto & inverseMatrix = this->GetInverseMatrix();
+
   for (unsigned int i = 0; i < vectorDim; ++i)
   {
     vnl_vect[i] = vect[i];
@@ -229,7 +224,7 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
     {
       if ((i < VInputDimension) && (j < VInputDimension))
       {
-        vnl_mat(i, j) = this->GetInverseMatrix()(j, i);
+        vnl_mat(i, j) = inverseMatrix(j, i);
       }
       else if (i == j)
       {
@@ -258,11 +253,14 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
 
   JacobianType jacobian;
   jacobian.SetSize(InverseMatrixType::RowDimensions, InverseMatrixType::ColumnDimensions);
+
+  const auto & inverseMatrix = this->GetInverseMatrix();
+
   for (unsigned int i = 0; i < InverseMatrixType::RowDimensions; ++i)
   {
     for (unsigned int j = 0; j < InverseMatrixType::ColumnDimensions; ++j)
     {
-      jacobian(i, j) = this->GetInverseMatrix()(i, j);
+      jacobian(i, j) = inverseMatrix(i, j);
     }
   }
 
@@ -321,12 +319,15 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
     }
   }
 
+
+  const auto & inverseMatrix = this->GetInverseMatrix();
+
   for (unsigned int i = 0; i < VInputDimension; ++i)
   {
     for (unsigned int j = 0; j < VOutputDimension; ++j)
     {
       jacobian(j, i) = this->GetMatrix()(j, i);
-      invJacobian(i, j) = this->GetInverseMatrix()(i, j);
+      invJacobian(i, j) = inverseMatrix(i, j);
     }
   }
 
@@ -365,12 +366,14 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
     }
   }
 
+  const auto & inverseMatrix = this->GetInverseMatrix();
+
   for (unsigned int i = 0; i < VInputDimension; ++i)
   {
     for (unsigned int j = 0; j < VOutputDimension; ++j)
     {
       jacobian(j, i) = this->GetMatrix()(j, i);
-      invJacobian(i, j) = this->GetInverseMatrix()(i, j);
+      invJacobian(i, j) = inverseMatrix(i, j);
     }
   }
 
@@ -425,15 +428,15 @@ MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimensio
   }
 
   inverse->SetFixedParameters(this->GetFixedParameters());
-  this->GetInverseMatrix();
+  const auto & inverseMatrix = this->GetInverseMatrix();
   if (m_Singular)
   {
     return false;
   }
 
-  inverse->m_Matrix = this->GetInverseMatrix();
+  inverse->m_Matrix = inverseMatrix;
   inverse->m_InverseMatrix = m_Matrix;
-  inverse->m_Offset = -(this->GetInverseMatrix() * m_Offset);
+  inverse->m_Offset = -(inverseMatrix * m_Offset);
   inverse->ComputeTranslation();
   inverse->ComputeMatrixParameters();
 
@@ -446,9 +449,7 @@ auto
 MatrixOffsetTransformBase<TParametersValueType, VInputDimension, VOutputDimension>::GetInverseTransform() const
   -> InverseTransformBasePointer
 {
-  auto inv = InverseTransformType::New();
-
-  return GetInverse(inv) ? inv.GetPointer() : nullptr;
+  return Superclass::InvertTransform(*this);
 }
 
 

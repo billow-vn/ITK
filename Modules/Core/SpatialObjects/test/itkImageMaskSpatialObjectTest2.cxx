@@ -76,11 +76,9 @@ itkImageMaskSpatialObjectTest2(int, char *[])
   constexpr unsigned int     index_offset = 6543;
   const ImageType::IndexType index = { { index_offset, index_offset, index_offset } };
 
-  ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  ImageType::RegionType region{ index, size };
   image->SetRegions(region);
-  image->Allocate(true); // initialize buffer to zero
+  image->AllocateInitialized();
 
   ImageType::RegionType  insideRegion;
   constexpr unsigned int INSIDE_SIZE = 30;
@@ -201,7 +199,7 @@ itkImageMaskSpatialObjectTest2(int, char *[])
       const bool isInside = maskSO->IsInsideInWorldSpace(point);
       double     value{};
       maskSO->ValueAtInWorldSpace(point, value);
-      const bool isZero = (itk::Math::ExactlyEquals(value, itk::NumericTraits<PixelType>::ZeroValue()));
+      const bool isZero = (itk::Math::ExactlyEquals(value, PixelType{}));
       if ((isInside && isZero) || (!isInside && !isZero))
       {
         ImageType::IndexType pointIndex = image->TransformPhysicalPointToIndex(point);

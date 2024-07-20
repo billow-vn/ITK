@@ -95,7 +95,7 @@ DerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
   oper.CreateDirectional();
   oper.FlipAxes();
 
-  if (m_UseImageSpacing == true)
+  if (m_UseImageSpacing)
   {
     if (this->GetInput()->GetSpacing()[m_Direction] == 0.0)
     {
@@ -147,7 +147,7 @@ DerivativeImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, I
 
   os << indent << "Order: " << m_Order << std::endl;
   os << indent << "Direction: " << m_Direction << std::endl;
-  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseImageSpacing);
 }
 } // end namespace itk
 

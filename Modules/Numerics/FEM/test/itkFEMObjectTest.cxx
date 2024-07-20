@@ -18,14 +18,20 @@
 
 
 #include "itkFEMElement2DC0LinearLineStress.h"
-#include "itkFEMSpatialObjectWriter.h"
+#include "itkFEMElementBase.h"
+#include "itkFEMFactoryBase.h"
+#include "itkFEMMaterialLinearElasticity.h"
+#include "itkFEMLoadBCMFC.h"
+#include "itkFEMLoadBC.h"
+#include "itkFEMLoadNode.h"
+#include "itkFEMObject.h"
 
 
 int
 itkFEMObjectTest(int, char *[])
 {
   // Need to register default FEM object types,
-  // and setup SpatialReader to recognize FEM types
+  // and setup spatialReader to recognize FEM types
   // which is all currently done as a HACK in
   // the initialization of the itk::FEMFactoryBase::GetFactory()
   itk::FEMFactoryBase::GetFactory()->RegisterDefaultTypes();

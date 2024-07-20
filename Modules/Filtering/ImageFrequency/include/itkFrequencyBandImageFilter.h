@@ -64,7 +64,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(FrequencyBandImageFilter);
 
   /** Typedef to images */
@@ -188,7 +188,7 @@ protected:
 
   /* Checks the logic of FrequencyThresholds. */
   void
-  VerifyPreconditions() ITKv5_CONST override;
+  VerifyPreconditions() const override;
 
   /* This is the box functor, which implements the filter's behavior. */
   void

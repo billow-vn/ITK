@@ -45,9 +45,11 @@ MultiphaseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputImage, 
     unsigned int i;
     if (m_UseImageSpacing)
     {
+      const auto & spacing = m_LevelSet[0]->GetSpacing();
+
       for (i = 0; i < ImageDimension; ++i)
       {
-        coeffs[i] = 1.0 / m_LevelSet[0]->GetSpacing()[i];
+        coeffs[i] = 1.0 / spacing[i];
       }
     }
     else
@@ -274,7 +276,7 @@ MultiphaseFiniteDifferenceImageFilter<TInputImage, TFeatureImage, TOutputImage, 
   Superclass::PrintSelf(os, indent);
 
   os << indent << "ElapsedIterations: " << this->m_ElapsedIterations << std::endl;
-  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseImageSpacing);
   os << indent << "State: " << this->m_InitializedState << std::endl;
   os << indent << "MaximumRMSError: " << m_MaximumRMSError << std::endl;
   os << indent << "NumberOfIterations: " << this->m_NumberOfIterations << std::endl;

@@ -90,7 +90,8 @@ public:
     return VVectorDimension;
   }
 
-  /** Set a vnl_vector_ref referencing the same memory block. */
+  /** Copy values from the vnl_vector input to the internal memory block.  The minimum of
+   *  VVectorDimension and vnl_vector::size() elements are copied. */
   void
   SetVnlVector(const vnl_vector<T> &);
 
@@ -110,7 +111,7 @@ public:
   /** Constructor to initialize entire vector to one value.
    * \warning Not intended to convert a scalar value into
    * a Vector filled with that value.
-   * \deprecated */
+   * Deprecated */
   Vector(const ValueType & r);
 #else
   /** Constructor to initialize entire vector to one value,

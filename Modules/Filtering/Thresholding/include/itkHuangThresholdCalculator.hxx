@@ -21,7 +21,6 @@
 
 #include "itkMath.h"
 #include "itkProgressReporter.h"
-#include "itkMath.h"
 
 namespace itk
 {
@@ -33,7 +32,7 @@ HuangThresholdCalculator<THistogram, TOutput>::GenerateData()
   const HistogramType * histogram = this->GetInput();
 
   TotalAbsoluteFrequencyType total = histogram->GetTotalFrequency();
-  if (total == NumericTraits<TotalAbsoluteFrequencyType>::ZeroValue())
+  if (total == TotalAbsoluteFrequencyType{})
   {
     itkExceptionMacro("Histogram is empty");
   }

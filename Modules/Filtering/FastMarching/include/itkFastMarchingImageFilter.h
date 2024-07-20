@@ -26,7 +26,6 @@
 
 #include <functional>
 #include <queue>
-#include "itkMath.h"
 
 namespace itk
 {
@@ -147,7 +146,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(FastMarchingImageFilter);
 
   /** Typedef support of level set method types. */

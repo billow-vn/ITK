@@ -276,7 +276,7 @@ public:
   inline vnl_matrix_fixed<T, VColumns, VRows>
   GetInverse() const
   {
-    if (vnl_determinant(m_Matrix) == NumericTraits<T>::ZeroValue())
+    if (vnl_determinant(m_Matrix) == T{})
     {
       itkGenericExceptionMacro("Singular matrix. Determinant is 0.");
     }
@@ -305,6 +305,21 @@ public:
     using std::swap;
     swap(this->m_Matrix, other.m_Matrix);
   }
+
+   inline void PrintSelf(std::ostream & os, Indent indent) const
+   {
+      os << indent << "Matrix (" << VRows << "x" << VColumns << ")\n";
+      for (unsigned int r = 0; r < VRows; ++r)
+      {
+        os << indent << "  ";
+        for (unsigned int c = 0; c < VColumns; ++c)
+        {
+          os << m_Matrix(r, c) << " ";
+        }
+        os << "\n";
+      }
+
+   }
 
 private:
   InternalMatrixType m_Matrix{};

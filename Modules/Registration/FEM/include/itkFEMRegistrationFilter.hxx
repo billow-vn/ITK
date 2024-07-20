@@ -658,7 +658,7 @@ FEMRegistrationFilter<TMovingImage, TFixedImage, TFemObject>::InterpolateVectorF
   Sol.set_size(ImageDimension);
   Gpt.set_size(ImageDimension);
 
-  if (ImageDimension == 2)
+  if constexpr (ImageDimension == 2)
   {
     Element::ConstPointer eltp;
     for (; !fieldIter.IsAtEnd(); ++fieldIter)
@@ -697,7 +697,7 @@ FEMRegistrationFilter<TMovingImage, TFixedImage, TFemObject>::InterpolateVectorF
     }
   }
 
-  if (ImageDimension == 3)
+  if constexpr (ImageDimension == 3)
   {
     // FIXME SHOULD BE 2.0 over meshpixperelt
     rstep = 1.25 / (static_cast<double>(m_MeshPixelsPerElementAtEachResolution[m_CurrentLevel]));
@@ -1482,10 +1482,10 @@ FEMRegistrationFilter<TMovingImage, TFixedImage, TFemObject>::PrintSelf(std::ost
   os << indent << "MinJacobian: " << m_MinJacobian << std::endl;
   os << indent << "Alpha: " << m_Alpha << std::endl;
 
-  os << indent << "UseLandmarks: " << (m_UseLandmarks ? "On" : "Off") << std::endl;
-  os << indent << "UseMassMatrix: " << (m_UseNormalizedGradient ? "On" : "Off") << std::endl;
-  os << indent << "UseNormalizedGradient: " << (m_UseNormalizedGradient ? "On" : "Off") << std::endl;
-  os << indent << "CreateMeshFromImage: " << (m_CreateMeshFromImage ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseLandmarks);
+  itkPrintSelfBooleanMacro(UseNormalizedGradient);
+  itkPrintSelfBooleanMacro(UseNormalizedGradient);
+  itkPrintSelfBooleanMacro(CreateMeshFromImage);
   os << indent << "EmployRegridding: " << m_EmployRegridding << std::endl;
   os << indent << "DescentDirection: " << m_DescentDirection << std::endl;
   os << indent << "EnergyReductionFactor: " << m_EnergyReductionFactor << std::endl;

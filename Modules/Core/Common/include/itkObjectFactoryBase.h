@@ -67,7 +67,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ObjectFactoryBase);
 
   /** Create and return an instance of the named itk object.
@@ -218,12 +218,10 @@ public:
     {};
 
     // Factory registration, made thread-safe by "magic statics" (as introduced with C++11).
-    static const FactoryRegistration staticFactoryRegistration = [] {
+    [[maybe_unused]] static const FactoryRegistration staticFactoryRegistration = [] {
       RegisterFactoryInternal(TFactory::New());
       return FactoryRegistration{};
     }();
-
-    (void)staticFactoryRegistration;
   }
 
   /** Initialize the static members of ObjectFactoryBase. */

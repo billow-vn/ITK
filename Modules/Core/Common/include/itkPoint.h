@@ -137,13 +137,7 @@ public:
   bool
   operator==(const Self & pt) const
   {
-    bool same = true;
-
-    for (unsigned int i = 0; i < VPointDimension && same; ++i)
-    {
-      same = (Math::ExactlyEquals((*this)[i], pt[i]));
-    }
-    return same;
+    return this->BaseArray::operator==(pt);
   }
 
   ITK_UNEQUAL_OPERATOR_MEMBER_FUNCTION(Self);
@@ -343,9 +337,6 @@ public:
   using PointContainerPointer = typename PointContainerType::Pointer;
   using PointType = typename PointContainerType::Element;
   using WeightContainerType = TWeightContainer;
-
-  BarycentricCombination() = default;
-  ~BarycentricCombination() = default;
 
   static PointType
   Evaluate(const PointContainerPointer & points, const WeightContainerType & weights);

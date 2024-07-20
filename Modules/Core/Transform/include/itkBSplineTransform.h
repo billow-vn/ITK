@@ -114,7 +114,7 @@ public:
   /** New macro for creation of through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(BSplineTransform);
 
   /** Dimension of the domain space. */
@@ -302,14 +302,14 @@ private:
 
   /** Methods have empty implementations */
   void
-  SetFixedParametersGridSizeFromTransformDomainInformation() const override{};
+  SetFixedParametersGridSizeFromTransformDomainInformation() const override{}
   void
-  SetFixedParametersGridOriginFromTransformDomainInformation() const override{};
+  SetFixedParametersGridOriginFromTransformDomainInformation() const override{}
   void
   SetFixedParametersGridSpacingFromTransformDomainInformation() const override
   {}
   void
-  SetFixedParametersGridDirectionFromTransformDomainInformation() const override{};
+  SetFixedParametersGridDirectionFromTransformDomainInformation() const override{}
 
   /** Check if a continuous index is inside the valid region. */
   bool

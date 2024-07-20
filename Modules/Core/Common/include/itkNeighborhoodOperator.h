@@ -93,6 +93,11 @@ public:
   void
   SetDirection(const unsigned long direction)
   {
+    if (direction >= VDimension)
+    {
+      itkExceptionMacro(<< " Can not set direction " << direction << " greater than dimensionality of neighborhood "
+                        << VDimension);
+    }
     m_Direction = direction;
   }
 
@@ -170,7 +175,7 @@ protected:
   {
     for (unsigned int i = 0; i < this->Size(); ++i)
     {
-      this->operator[](i) = NumericTraits<PixelType>::ZeroValue();
+      this->operator[](i) = PixelType{};
     }
   }
 

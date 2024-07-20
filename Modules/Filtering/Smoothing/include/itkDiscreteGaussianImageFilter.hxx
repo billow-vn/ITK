@@ -87,12 +87,14 @@ DiscreteGaussianImageFilter<TInputImage, TOutputImage>::GetKernelVarianceArray()
       itkExceptionMacro("Could not get kernel variance! UseImageSpacing is ON but no input image was provided");
     }
 
+    const auto & spacing = this->GetInput()->GetSpacing();
+
     ArrayType adjustedVariance;
     // Adjusted variance = var / (spacing ^ 2)
     for (unsigned int dim = 0; dim < ImageDimension; ++dim)
     {
       // convert the variance from physical units to pixels
-      double s = this->GetInput()->GetSpacing()[dim];
+      double s = spacing[dim];
       s = s * s;
       adjustedVariance[dim] = m_Variance[dim] / s;
     }
@@ -343,7 +345,7 @@ DiscreteGaussianImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream &
   os << indent << "MaximumError: " << m_MaximumError << std::endl;
   os << indent << "MaximumKernelWidth: " << m_MaximumKernelWidth << std::endl;
   os << indent << "FilterDimensionality: " << m_FilterDimensionality << std::endl;
-  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseImageSpacing);
   os << indent << "RealBoundaryCondition: " << m_RealBoundaryCondition << std::endl;
 }
 } // end namespace itk

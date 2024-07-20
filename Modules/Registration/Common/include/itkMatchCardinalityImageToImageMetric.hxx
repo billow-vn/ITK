@@ -67,7 +67,7 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::GetNonconstValue(
   std::vector<SizeValueType>::iterator        cIt;
   for (mIt = m_ThreadMatches.begin(), cIt = m_ThreadCounts.begin(); mIt != m_ThreadMatches.end(); ++mIt, ++cIt)
   {
-    *mIt = NumericTraits<MeasureType>::ZeroValue();
+    *mIt = MeasureType{};
     *cIt = 0;
   }
 
@@ -81,12 +81,7 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::GetNonconstValue(
   str.Metric = this;
 
   this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
-  this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
-
-  // multithread the execution
-  //
-  //
-  this->GetMultiThreader()->SingleMethodExecute();
+  this->GetMultiThreader()->SetSingleMethodAndExecute(this->ThreaderCallback, &str);
 
   // Collect the contribution to the metric for each thread
   //
@@ -272,7 +267,7 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>::PrintSelf(std::os
 
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "MeasureMatches: " << (m_MeasureMatches ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(MeasureMatches);
 
   os << indent << "ThreadMatches: " << m_ThreadMatches << std::endl;
   os << indent << "ThreadCounts: " << m_ThreadCounts << std::endl;

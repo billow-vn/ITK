@@ -26,8 +26,8 @@
 #include "itkImageRegionIterator.h"
 #include "itkOffset.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "itkShapedNeighborhoodIterator.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
+#include <algorithm> // For min.
 
 /*
  *
@@ -99,13 +99,7 @@ void
 BoxAccumulateFunction(const TInputImage *               inputImage,
                       const TOutputImage *              outputImage,
                       typename TInputImage::RegionType  inputRegion,
-                      typename TOutputImage::RegionType outputRegion
-#if defined(ITKV4_COMPATIBILITY)
-                      ,
-                      ProgressReporter & progress)
-#else
-)
-#endif
+                      typename TOutputImage::RegionType outputRegion)
 {
   // type alias
   using InputImageType = TInputImage;
@@ -125,7 +119,7 @@ BoxAccumulateFunction(const TInputImage *               inputImage,
   itk_impl_details::setConnectivityEarlyBox(&noutIt, true);
 
   ConstantBoundaryCondition<OutputImageType> oBC;
-  oBC.SetConstant(NumericTraits<OutputPixelType>::ZeroValue());
+  oBC.SetConstant(OutputPixelType{});
   noutIt.OverrideBoundaryCondition(&oBC);
   // This uses several iterators. An alternative and probably better
   // approach would be to copy the input to the output and convolve
@@ -162,9 +156,6 @@ BoxAccumulateFunction(const TInputImage *               inputImage,
       sum += sIt.Get() * weights[k];
     }
     noutIt.SetCenterPixel(sum + inIt.Get());
-#if defined(ITKV4_COMPATIBILITY)
-    progress.CompletedPixel();
-#endif
   }
 }
 
@@ -207,13 +198,7 @@ BoxMeanCalculatorFunction(const TInputImage *               accImage,
                           TOutputImage *                    outputImage,
                           typename TInputImage::RegionType  inputRegion,
                           typename TOutputImage::RegionType outputRegion,
-                          typename TInputImage::SizeType    radius
-#if defined(ITKV4_COMPATIBILITY)
-                          ,
-                          ProgressReporter & progress)
-#else
-)
-#endif
+                          typename TInputImage::SizeType    radius)
 {
   // type alias
   using InputImageType = TInputImage;
@@ -313,9 +298,6 @@ BoxMeanCalculatorFunction(const TInputImage *               accImage,
           ++(cornerItVec[k]);
         }
         oIt.Set(static_cast<OutputPixelType>(sum / pixelscount));
-#if defined(ITKV4_COMPATIBILITY)
-        progress.CompletedPixel();
-#endif
       }
     }
     else
@@ -359,10 +341,7 @@ BoxMeanCalculatorFunction(const TInputImage *               accImage,
             if (unitCorners[k][j] > 0)
             {
               // leading edge - crop it
-              if (thisCorner[j] > static_cast<OffsetValueType>(regionLimit[j]))
-              {
-                thisCorner[j] = static_cast<OffsetValueType>(regionLimit[j]);
-              }
+              thisCorner[j] = std::min(thisCorner[j], static_cast<OffsetValueType>(regionLimit[j]));
             }
             else
             {
@@ -381,9 +360,6 @@ BoxMeanCalculatorFunction(const TInputImage *               accImage,
         }
 
         oIt.Set(static_cast<OutputPixelType>(sum / (AccPixType)edgepixelscount));
-#if defined(ITKV4_COMPATIBILITY)
-        progress.CompletedPixel();
-#endif
       }
     }
   }
@@ -395,13 +371,7 @@ BoxSigmaCalculatorFunction(const TInputImage *               accImage,
                            TOutputImage *                    outputImage,
                            typename TInputImage::RegionType  inputRegion,
                            typename TOutputImage::RegionType outputRegion,
-                           typename TInputImage::SizeType    radius
-#if defined(ITKV4_COMPATIBILITY)
-                           ,
-                           ProgressReporter & progress)
-#else
-)
-#endif
+                           typename TInputImage::SizeType    radius)
 {
   // type alias
   using InputImageType = TInputImage;
@@ -505,9 +475,6 @@ BoxSigmaCalculatorFunction(const TInputImage *               accImage,
         }
 
         oIt.Set(static_cast<OutputPixelType>(std::sqrt((squareSum - sum * sum / pixelscount) / (pixelscount - 1))));
-#if defined(ITKV4_COMPATIBILITY)
-        progress.CompletedPixel();
-#endif
       }
     }
     else
@@ -552,10 +519,7 @@ BoxSigmaCalculatorFunction(const TInputImage *               accImage,
             if (unitCorners[k][j] > 0)
             {
               // leading edge - crop it
-              if (thisCorner[j] > static_cast<OffsetValueType>(regionLimit[j]))
-              {
-                thisCorner[j] = static_cast<OffsetValueType>(regionLimit[j]);
-              }
+              thisCorner[j] = std::min(thisCorner[j], static_cast<OffsetValueType>(regionLimit[j]));
             }
             else
             {
@@ -577,9 +541,6 @@ BoxSigmaCalculatorFunction(const TInputImage *               accImage,
 
         oIt.Set(
           static_cast<OutputPixelType>(std::sqrt((squareSum - sum * sum / edgepixelscount) / (edgepixelscount - 1))));
-#if defined(ITKV4_COMPATIBILITY)
-        progress.CompletedPixel();
-#endif
       }
     }
   }
@@ -590,13 +551,7 @@ void
 BoxSquareAccumulateFunction(const TInputImage *               inputImage,
                             TOutputImage *                    outputImage,
                             typename TInputImage::RegionType  inputRegion,
-                            typename TOutputImage::RegionType outputRegion
-#if defined(ITKV4_COMPATIBILITY)
-                            ,
-                            ProgressReporter & progress)
-#else
-)
-#endif
+                            typename TOutputImage::RegionType outputRegion)
 {
   // type alias
   using InputImageType = TInputImage;
@@ -618,7 +573,7 @@ BoxSquareAccumulateFunction(const TInputImage *               inputImage,
   itk_impl_details::setConnectivityEarlyBox(&noutIt, true);
 
   ConstantBoundaryCondition<OutputImageType> oBC;
-  oBC.SetConstant(NumericTraits<OutputPixelType>::ZeroValue());
+  oBC.SetConstant(OutputPixelType{});
   noutIt.OverrideBoundaryCondition(&oBC);
   // This uses several iterators. An alternative and probably better
   // approach would be to copy the input to the output and convolve
@@ -661,9 +616,6 @@ BoxSquareAccumulateFunction(const TInputImage *               inputImage,
     o[0] = sum + i;
     o[1] = squareSum + i * i;
     noutIt.SetCenterPixel(o);
-#if defined(ITKV4_COMPATIBILITY)
-    progress.CompletedPixel();
-#endif
   }
 }
 } // namespace itk

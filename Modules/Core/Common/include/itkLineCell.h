@@ -32,11 +32,6 @@ namespace itk
  *
  * Template parameters for LineCell:
  *
- * \tparam TPixelType The type associated with a point, cell, or boundary
- * for use in storing its data.
- *
- * \tparam TCellTraits Type information of mesh containing cell.
- *
  * \ingroup MeshObjects
  * \ingroup ITKCommon
  */
@@ -51,7 +46,7 @@ public:
   itkCellCommonTypedefs(LineCell);
   itkCellInheritedTypedefs(TCellInterface);
 
-  /** Standard part of every itk Object. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(LineCell);
 
   /** The type of boundary for this lines's vertices. */

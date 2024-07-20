@@ -94,7 +94,7 @@ public:
   using PointType = typename InputImageType::PointType;
   using DirectionType = typename InputImageType::DirectionType;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ChangeInformationImageFilter);
 
   /** Copy the information from another Image.  By default,
@@ -235,7 +235,7 @@ protected:
    * \sa ProcessObject::VerifyInputInformation
    */
   void
-  VerifyInputInformation() ITKv5_CONST override
+  VerifyInputInformation() const override
   {}
 
 private:

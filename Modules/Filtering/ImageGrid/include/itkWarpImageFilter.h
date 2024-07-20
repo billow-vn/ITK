@@ -96,7 +96,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods) */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(WarpImageFilter);
 
   /** Typedef to describe the output image region type. */
@@ -251,7 +251,7 @@ protected:
    * \sa ProcessObject::VerifyInputInformation
    */
   void
-  VerifyInputInformation() ITKv5_CONST override;
+  VerifyInputInformation() const override;
 
   /** This function should be in an interpolator but none of the ITK
    * interpolators at this point handle edge conditions properly

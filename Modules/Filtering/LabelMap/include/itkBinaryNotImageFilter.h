@@ -58,8 +58,6 @@ template <typename TPixel>
 class BinaryNot
 {
 public:
-  BinaryNot() = default;
-  ~BinaryNot() = default;
   bool
   operator==(const BinaryNot &) const
   {
@@ -100,7 +98,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(BinaryNotImageFilter);
 
   using PixelType = typename TImage::PixelType;

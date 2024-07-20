@@ -67,9 +67,7 @@ itkGradientRecursiveGaussianFilterTest3Run(typename TImageType::PixelType &   my
   myIndexType start;
   start.Fill(0);
 
-  myRegionType region;
-  region.SetIndex(start);
-  region.SetSize(size);
+  myRegionType region{ start, size };
 
   // Initialize Image A
   inputImage->SetRegions(region);
@@ -226,7 +224,7 @@ itkGradientRecursiveGaussianFilterTest3(int argc, char * argv[])
   myGradImage1DType::Pointer scalarPixelGradImage = nullptr;
   myScalarPixelType          pixelBorder;
   myScalarPixelType          pixelFill;
-  pixelBorder = itk::NumericTraits<myScalarPixelType>::ZeroValue();
+  pixelBorder = myScalarPixelType{};
   pixelFill = static_cast<myScalarPixelType>(100.0);
   runResult = itkGradientRecursiveGaussianFilterTest3Run<myImageScalarType, myGradImage1DType, myComponents1D>(
     pixelBorder, pixelFill, scalarPixelGradImage, argv[2]);

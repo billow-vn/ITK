@@ -49,7 +49,7 @@ FastMarchingUpwindGradientImageFilter<TLevelSet, TSpeedImage>::PrintSelf(std::os
   itkPrintSelfObjectMacro(ReachedTargetPoints);
   itkPrintSelfObjectMacro(GradientImage);
 
-  os << indent << "GenerateGradientImage: " << (m_GenerateGradientImage ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(GenerateGradientImage);
   os << indent << "TargetOffset: " << m_TargetOffset << std::endl;
   os << indent << "TargetReachedMode: " << m_TargetReachedMode << std::endl;
   os << indent << "TargetValue: " << m_TargetValue << std::endl;
@@ -60,7 +60,7 @@ FastMarchingUpwindGradientImageFilter<TLevelSet, TSpeedImage>::PrintSelf(std::os
 
 template <typename TLevelSet, typename TSpeedImage>
 void
-FastMarchingUpwindGradientImageFilter<TLevelSet, TSpeedImage>::VerifyPreconditions() ITKv5_CONST
+FastMarchingUpwindGradientImageFilter<TLevelSet, TSpeedImage>::VerifyPreconditions() const
 {
   Superclass::VerifyPreconditions();
 
@@ -105,7 +105,7 @@ FastMarchingUpwindGradientImageFilter<TLevelSet, TSpeedImage>::Initialize(LevelS
 
     GradientPixelType zeroGradient;
     using GradientPixelValueType = typename GradientPixelType::ValueType;
-    zeroGradient.Fill(NumericTraits<GradientPixelValueType>::ZeroValue());
+    zeroGradient.Fill(GradientPixelValueType{});
     for (gradientIt.GoToBegin(); !gradientIt.IsAtEnd(); ++gradientIt)
     {
       gradientIt.Set(zeroGradient);

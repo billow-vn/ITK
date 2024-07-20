@@ -74,9 +74,7 @@ itkLevelSetEquationLaplacianTermTest(int argc, char * argv[])
   InputImageType::IndexType index;
   index.Fill(0);
 
-  InputImageType::RegionType region;
-  region.SetIndex(index);
-  region.SetSize(size);
+  InputImageType::RegionType region{ index, size };
 
   // Binary initialization
   auto binary = InputImageType::New();
@@ -84,7 +82,7 @@ itkLevelSetEquationLaplacianTermTest(int argc, char * argv[])
   binary->SetSpacing(spacing);
   binary->SetOrigin(origin);
   binary->Allocate();
-  binary->FillBuffer(itk::NumericTraits<InputPixelType>::ZeroValue());
+  binary->FillBuffer(InputPixelType{});
 
   index.Fill(10);
   size.Fill(30);

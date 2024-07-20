@@ -210,7 +210,8 @@ itkQuadEdgeMeshEulerOperatorJoinVertexTest(int argc, char * argv[])
   std::cout << "OK" << std::endl;
 #endif
 
-  (void)joinVertex->GetNameOfClass();
+  ITK_TEST_EXPECT_EQUAL(std::string_view("QuadEdgeMeshEulerOperatorJoinVertexFunction"),
+                        std::string_view(joinVertex->GetNameOfClass()));
 
   joinVertex->SetInput(mesh);
 

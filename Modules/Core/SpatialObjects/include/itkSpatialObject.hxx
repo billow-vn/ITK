@@ -39,7 +39,7 @@ void
 SpatialObject<TDimension>::Clear()
 {
   typename BoundingBoxType::PointType pnt;
-  pnt.Fill(NumericTraits<typename BoundingBoxType::PointType::ValueType>::ZeroValue());
+  pnt.Fill(typename BoundingBoxType::PointType::ValueType{});
   m_FamilyBoundingBoxInObjectSpace->SetMinimum(pnt);
   m_FamilyBoundingBoxInObjectSpace->SetMaximum(pnt);
   m_FamilyBoundingBoxInWorldSpace->SetMinimum(pnt);
@@ -70,11 +70,9 @@ SpatialObject<TDimension>::SetId(int id)
   if (id != m_Id)
   {
     m_Id = id;
-    auto it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      (*it)->SetParentId(id);
-      ++it;
+      child->SetParentId(id);
     }
     this->Modified();
   }
@@ -140,8 +138,7 @@ SpatialObject<TDimension>::DerivativeAtInWorldSpace(const PointType &           
                                                     const std::string &          name,
                                                     const DerivativeOffsetType & offset)
 {
-  PointType pnt;
-  pnt = this->GetObjectToWorldTransformInverse()->TransformPoint(point);
+  const PointType pnt = m_ObjectToWorldTransformInverse->TransformType::TransformPoint(point);
   this->DerivativeAtInObjectSpace(pnt, order, value, depth, name, offset);
 }
 
@@ -183,9 +180,16 @@ SpatialObject<TDimension>::IsInsideInWorldSpace(const PointType &   point,
                                                 unsigned int        depth,
                                                 const std::string & name) const
 {
-  PointType pnt;
-  pnt = this->GetObjectToWorldTransformInverse()->TransformPoint(point);
+  const PointType pnt = m_ObjectToWorldTransformInverse->TransformType::TransformPoint(point);
   return IsInsideInObjectSpace(pnt, depth, name);
+}
+
+template <unsigned int TDimension>
+bool
+SpatialObject<TDimension>::IsInsideInWorldSpace(const PointType & point) const
+{
+  const PointType pnt = m_ObjectToWorldTransformInverse->TransformType::TransformPoint(point);
+  return IsInsideInObjectSpace(pnt);
 }
 
 template <unsigned int TDimension>
@@ -194,17 +198,13 @@ SpatialObject<TDimension>::IsInsideChildrenInObjectSpace(const PointType &   poi
                                                          unsigned int        depth,
                                                          const std::string & name) const
 {
-  auto it = m_ChildrenList.begin();
-
-  PointType pnt;
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    pnt = (*it)->GetObjectToParentTransformInverse()->TransformPoint(point);
-    if ((*it)->IsInsideInObjectSpace(pnt, depth, name))
+    const PointType pnt = child->GetObjectToParentTransformInverse()->TransformPoint(point);
+    if (child->IsInsideInObjectSpace(pnt, depth, name))
     {
       return true;
     }
-    ++it;
   }
 
   return false;
@@ -239,8 +239,7 @@ SpatialObject<TDimension>::IsEvaluableAtInWorldSpace(const PointType &   point,
                                                      unsigned int        depth,
                                                      const std::string & name) const
 {
-  PointType pnt;
-  pnt = this->GetObjectToWorldTransformInverse()->TransformPoint(point);
+  const PointType pnt = m_ObjectToWorldTransformInverse->TransformType::TransformPoint(point);
   return this->IsEvaluableAtInObjectSpace(pnt, depth, name);
 }
 
@@ -250,17 +249,13 @@ SpatialObject<TDimension>::IsEvaluableAtChildrenInObjectSpace(const PointType & 
                                                               unsigned int        depth,
                                                               const std::string & name) const
 {
-  auto it = m_ChildrenList.begin();
-
-  PointType pnt;
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    pnt = (*it)->GetObjectToParentTransformInverse()->TransformPoint(point);
-    if ((*it)->IsEvaluableAtInObjectSpace(pnt, depth, name))
+    const PointType pnt = child->GetObjectToParentTransformInverse()->TransformPoint(point);
+    if (child->IsEvaluableAtInObjectSpace(pnt, depth, name))
     {
       return true;
     }
-    ++it;
   }
 
   return false;
@@ -308,8 +303,7 @@ SpatialObject<TDimension>::ValueAtInWorldSpace(const PointType &   point,
                                                unsigned int        depth,
                                                const std::string & name) const
 {
-  PointType pnt;
-  pnt = this->GetObjectToWorldTransformInverse()->TransformPoint(point);
+  const PointType pnt = m_ObjectToWorldTransformInverse->TransformType::TransformPoint(point);
   return this->ValueAtInObjectSpace(pnt, value, depth, name);
 }
 
@@ -320,18 +314,14 @@ SpatialObject<TDimension>::ValueAtChildrenInObjectSpace(const PointType &   poin
                                                         unsigned int        depth,
                                                         const std::string & name) const
 {
-  auto it = m_ChildrenList.begin();
-
-  PointType pnt;
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    pnt = (*it)->GetObjectToParentTransformInverse()->TransformPoint(point);
-    if ((*it)->IsEvaluableAtInObjectSpace(pnt, depth, name))
+    const PointType pnt = child->GetObjectToParentTransformInverse()->TransformPoint(point);
+    if (child->IsEvaluableAtInObjectSpace(pnt, depth, name))
     {
-      (*it)->ValueAtInObjectSpace(pnt, value, depth, name);
+      child->ValueAtInObjectSpace(pnt, value, depth, name);
       return true;
     }
-    ++it;
   }
 
   value = m_DefaultOutsideValue;
@@ -408,15 +398,9 @@ SpatialObject<TDimension>::GetFamilyBoundingBoxInWorldSpace() const -> const Bou
   auto       transformedCorners = PointsContainer::New();
   transformedCorners->Reserve(static_cast<typename PointsContainer::ElementIdentifier>(corners.size()));
 
-  auto it = corners.begin();
-  auto itTrans = transformedCorners->begin();
-  while (it != corners.end())
-  {
-    PointType pnt = this->GetObjectToWorldTransform()->TransformPoint(*it);
-    *itTrans = pnt;
-    ++it;
-    ++itTrans;
-  }
+  std::transform(corners.cbegin(), corners.cend(), transformedCorners->begin(), [this](const auto & point) {
+    return m_ObjectToWorldTransform->TransformPoint(point);
+  });
 
   m_FamilyBoundingBoxInWorldSpace->SetPoints(transformedCorners);
   m_FamilyBoundingBoxInWorldSpace->ComputeBoundingBox();
@@ -428,8 +412,7 @@ template <unsigned int TDimension>
 void
 SpatialObject<TDimension>::AddChild(Self * pointer)
 {
-  typename ChildrenListType::iterator pos;
-  pos = std::find(m_ChildrenList.begin(), m_ChildrenList.end(), pointer);
+  const typename ChildrenListType::iterator pos = std::find(m_ChildrenList.begin(), m_ChildrenList.end(), pointer);
   if (pos == m_ChildrenList.end())
   {
     m_ChildrenList.push_back(pointer);
@@ -449,8 +432,7 @@ template <unsigned int TDimension>
 bool
 SpatialObject<TDimension>::RemoveChild(Self * pointer)
 {
-  typename ChildrenListType::iterator pos;
-  pos = std::find(m_ChildrenList.begin(), m_ChildrenList.end(), pointer);
+  const typename ChildrenListType::iterator pos = std::find(m_ChildrenList.begin(), m_ChildrenList.end(), pointer);
   if (pos != m_ChildrenList.end())
   {
     m_ChildrenList.erase(pos);
@@ -523,7 +505,7 @@ SpatialObject<TDimension>::ProtectedComputeObjectToWorldTransform()
   m_ObjectToWorldTransform->SetParameters(this->GetObjectToParentTransform()->GetParameters());
   if (this->HasParent())
   {
-    m_ObjectToWorldTransform->Compose(this->GetParent()->GetObjectToWorldTransform(), false);
+    m_ObjectToWorldTransform->Compose(this->GetParent()->m_ObjectToWorldTransform, false);
   }
 
   if (!m_ObjectToWorldTransform->GetInverse(m_ObjectToWorldTransformInverse))
@@ -532,11 +514,9 @@ SpatialObject<TDimension>::ProtectedComputeObjectToWorldTransform()
   }
 
   // Propagate the changes to the children
-  auto it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    (*it)->Update();
-    ++it;
+    child->Update();
   }
 
   this->Modified();
@@ -579,7 +559,7 @@ SpatialObject<TDimension>::ComputeObjectToParentTransform()
   if (this->HasParent())
   {
     auto inverse = TransformType::New();
-    if (this->GetParent()->GetObjectToWorldTransform()->GetInverse(inverse))
+    if (this->GetParent()->m_ObjectToWorldTransform->GetInverse(inverse))
     {
       m_ObjectToParentTransform->Compose(inverse, true);
     }
@@ -602,18 +582,16 @@ SpatialObject<TDimension>::GetMTime() const
 {
   ModifiedTimeType latestTime = Object::GetMTime();
 
-  auto             it = m_ChildrenList.begin();
   ModifiedTimeType localTime;
 
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    localTime = (*it)->GetMTime();
+    localTime = child->GetMTime();
 
     if (localTime > latestTime)
     {
       latestTime = localTime;
     }
-    ++it;
   }
 
   return latestTime;
@@ -624,7 +602,7 @@ void
 SpatialObject<TDimension>::ComputeMyBoundingBox()
 {
   typename BoundingBoxType::PointType pnt;
-  pnt.Fill(NumericTraits<typename BoundingBoxType::PointType::ValueType>::ZeroValue());
+  pnt.Fill(typename BoundingBoxType::PointType::ValueType{});
   if (m_MyBoundingBoxInObjectSpace->GetMinimum() != pnt || m_MyBoundingBoxInObjectSpace->GetMaximum() != pnt)
   {
     m_MyBoundingBoxInObjectSpace->SetMinimum(pnt);
@@ -644,15 +622,9 @@ SpatialObject<TDimension>::GetMyBoundingBoxInWorldSpace() const -> const Boundin
   auto       transformedCorners = PointsContainer::New();
   transformedCorners->Reserve(static_cast<typename PointsContainer::ElementIdentifier>(corners.size()));
 
-  auto it = corners.begin();
-  auto itTrans = transformedCorners->begin();
-  while (it != corners.end())
-  {
-    PointType pnt = this->GetObjectToWorldTransform()->TransformPoint(*it);
-    *itTrans = pnt;
-    ++it;
-    ++itTrans;
-  }
+  std::transform(corners.cbegin(), corners.cend(), transformedCorners->begin(), [this](const auto & point) {
+    return m_ObjectToWorldTransform->TransformPoint(point);
+  });
 
   m_MyBoundingBoxInWorldSpace->SetPoints(transformedCorners);
   m_MyBoundingBoxInWorldSpace->ComputeBoundingBox();
@@ -667,7 +639,7 @@ SpatialObject<TDimension>::ComputeFamilyBoundingBox(unsigned int depth, const st
   itkDebugMacro("Computing Bounding Box");
 
   typename BoundingBoxType::PointType zeroPnt;
-  zeroPnt.Fill(NumericTraits<typename BoundingBoxType::PointType::ValueType>::ZeroValue());
+  zeroPnt.Fill(typename BoundingBoxType::PointType::ValueType{});
   m_FamilyBoundingBoxInObjectSpace->SetMinimum(zeroPnt);
   m_FamilyBoundingBoxInObjectSpace->SetMaximum(zeroPnt);
   bool bbDefined = false;
@@ -692,31 +664,29 @@ SpatialObject<TDimension>::ComputeFamilyBoundingBox(unsigned int depth, const st
   {
     PointType pnt;
     PointType tPnt;
-    auto      it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      (*it)->ComputeFamilyBoundingBox(depth - 1, name);
+      child->ComputeFamilyBoundingBox(depth - 1, name);
 
       if (!bbDefined)
       {
-        pnt = (*it)->GetFamilyBoundingBoxInObjectSpace()->GetMinimum();
-        tPnt = (*it)->GetObjectToParentTransform()->TransformPoint(pnt);
+        pnt = child->GetFamilyBoundingBoxInObjectSpace()->GetMinimum();
+        tPnt = child->GetObjectToParentTransform()->TransformPoint(pnt);
         m_FamilyBoundingBoxInObjectSpace->SetMinimum(tPnt);
-        pnt = (*it)->GetFamilyBoundingBoxInObjectSpace()->GetMaximum();
-        tPnt = (*it)->GetObjectToParentTransform()->TransformPoint(pnt);
+        pnt = child->GetFamilyBoundingBoxInObjectSpace()->GetMaximum();
+        tPnt = child->GetObjectToParentTransform()->TransformPoint(pnt);
         m_FamilyBoundingBoxInObjectSpace->SetMaximum(tPnt);
         bbDefined = true;
       }
       else
       {
-        pnt = (*it)->GetFamilyBoundingBoxInObjectSpace()->GetMinimum();
-        tPnt = (*it)->GetObjectToParentTransform()->TransformPoint(pnt);
+        pnt = child->GetFamilyBoundingBoxInObjectSpace()->GetMinimum();
+        tPnt = child->GetObjectToParentTransform()->TransformPoint(pnt);
         m_FamilyBoundingBoxInObjectSpace->ConsiderPoint(tPnt);
-        pnt = (*it)->GetFamilyBoundingBoxInObjectSpace()->GetMaximum();
-        tPnt = (*it)->GetObjectToParentTransform()->TransformPoint(pnt);
+        pnt = child->GetFamilyBoundingBoxInObjectSpace()->GetMaximum();
+        tPnt = child->GetObjectToParentTransform()->TransformPoint(pnt);
         m_FamilyBoundingBoxInObjectSpace->ConsiderPoint(tPnt);
       }
-      ++it;
     }
   }
 
@@ -729,23 +699,19 @@ SpatialObject<TDimension>::GetChildren(unsigned int depth, const std::string & n
 {
   auto * childrenSO = new ChildrenListType;
 
-  auto it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    if ((*it)->GetTypeName().find(name) != std::string::npos)
+    if (child->GetTypeName().find(name) != std::string::npos)
     {
-      childrenSO->push_back((*it));
+      childrenSO->push_back(child);
     }
-    ++it;
   }
 
   if (depth > 0)
   {
-    it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      (*it)->AddChildrenToList(childrenSO, depth - 1, name);
-      ++it;
+      child->AddChildrenToList(childrenSO, depth - 1, name);
     }
   }
 
@@ -759,23 +725,19 @@ SpatialObject<TDimension>::GetConstChildren(unsigned int depth, const std::strin
 {
   auto * childrenSO = new ChildrenConstListType;
 
-  auto it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    if ((*it)->GetTypeName().find(name) != std::string::npos)
+    if (child->GetTypeName().find(name) != std::string::npos)
     {
-      childrenSO->push_back((*it));
+      childrenSO->push_back(child);
     }
-    ++it;
   }
 
   if (depth > 0)
   {
-    it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      (*it)->AddChildrenToConstList(childrenSO, depth - 1, name);
-      ++it;
+      child->AddChildrenToConstList(childrenSO, depth - 1, name);
     }
   }
 
@@ -788,23 +750,19 @@ SpatialObject<TDimension>::AddChildrenToList(ChildrenListType *  childrenList,
                                              unsigned int        depth,
                                              const std::string & name) const
 {
-  auto it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    if ((*it)->GetTypeName().find(name) != std::string::npos)
+    if (child->GetTypeName().find(name) != std::string::npos)
     {
-      childrenList->push_back((*it));
+      childrenList->push_back(child);
     }
-    ++it;
   }
 
   if (depth > 0)
   {
-    it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      (*it)->AddChildrenToList(childrenList, depth - 1, name);
-      ++it;
+      child->AddChildrenToList(childrenList, depth - 1, name);
     }
   }
 }
@@ -815,23 +773,19 @@ SpatialObject<TDimension>::AddChildrenToConstList(ChildrenConstListType * childr
                                                   unsigned int            depth,
                                                   const std::string &     name) const
 {
-  auto it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    if ((*it)->GetTypeName().find(name) != std::string::npos)
+    if (child->GetTypeName().find(name) != std::string::npos)
     {
-      childrenCList->push_back(*it);
+      childrenCList->push_back(child);
     }
-    ++it;
   }
 
   if (depth > 0)
   {
-    it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      (*it)->AddChildrenToConstList(childrenCList, depth - 1, name);
-      ++it;
+      child->AddChildrenToConstList(childrenCList, depth - 1, name);
     }
   }
 }
@@ -843,11 +797,9 @@ SpatialObject<TDimension>::SetChildren(ChildrenListType & children)
   this->RemoveAllChildren(0);
 
   // Add children
-  auto it = children.begin();
-  while (it != children.end())
+  for (const auto & child : children)
   {
-    this->AddChild((*it));
-    ++it;
+    this->AddChild(child);
   }
 }
 
@@ -856,23 +808,19 @@ unsigned int
 SpatialObject<TDimension>::GetNumberOfChildren(unsigned int depth, const std::string & name) const
 {
   unsigned int ccount = 0;
-  auto         it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    if ((*it)->GetTypeName().find(name) != std::string::npos)
+    if (child->GetTypeName().find(name) != std::string::npos)
     {
       ++ccount;
     }
-    ++it;
   }
 
   if (depth > 0)
   {
-    it = m_ChildrenList.begin();
-    while (it != m_ChildrenList.end())
+    for (const auto & child : m_ChildrenList)
     {
-      ccount += (*it)->GetNumberOfChildren(depth - 1, name);
-      ++it;
+      ccount += child->GetNumberOfChildren(depth - 1, name);
     }
   }
 
@@ -888,15 +836,13 @@ SpatialObject<TDimension>::GetObjectById(int id)
     return this;
   }
 
-  auto it = m_ChildrenList.begin();
-  while (it != m_ChildrenList.end())
+  for (const auto & child : m_ChildrenList)
   {
-    SpatialObject<TDimension> * tmp = (*it)->GetObjectById(id);
+    SpatialObject<TDimension> * tmp = child->GetObjectById(id);
     if (tmp != nullptr)
     {
       return tmp;
     }
-    ++it;
   }
 
   return nullptr;
@@ -1023,17 +969,14 @@ SpatialObject<TDimension>::GetNextAvailableId() const
 {
   int maxId = this->GetId();
 
-  auto it = m_ChildrenList.begin();
-  auto itEnd = m_ChildrenList.end();
-  int  id;
-  while (it != itEnd)
+  int id;
+  for (const auto & child : m_ChildrenList)
   {
-    id = (*it)->GetNextAvailableId() - 1;
+    id = child->GetNextAvailableId() - 1;
     if (id > maxId)
     {
       maxId = id;
     }
-    ++it;
   }
 
   return maxId + 1;
@@ -1060,7 +1003,7 @@ SpatialObject<TDimension>::SetParent(Self * parent)
   if (parent != m_Parent)
   {
     Self *                oldParent = m_Parent;
-    const TransformType * oldObjectWorldTransform = this->GetObjectToWorldTransform();
+    const TransformType * oldObjectWorldTransform = this->m_ObjectToWorldTransform;
 
     m_Parent = parent;
     if (parent != nullptr)
@@ -1296,7 +1239,7 @@ SpatialObject<TDimension>::CopyInformation(const DataObject * data)
   this->SetProperty(source->GetProperty());
 
   // copy the ivars
-  this->SetObjectToWorldTransform(source->GetObjectToWorldTransform());
+  this->SetObjectToWorldTransform(source->m_ObjectToWorldTransform);
   this->SetDefaultInsideValue(source->GetDefaultInsideValue());
   this->SetDefaultOutsideValue(source->GetDefaultOutsideValue());
 

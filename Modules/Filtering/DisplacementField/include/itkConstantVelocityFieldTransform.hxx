@@ -93,15 +93,7 @@ auto
 ConstantVelocityFieldTransform<TParametersValueType, VDimension>::GetInverseTransform() const
   -> InverseTransformBasePointer
 {
-  Pointer inverseTransform = New();
-  if (this->GetInverse(inverseTransform))
-  {
-    return inverseTransform.GetPointer();
-  }
-  else
-  {
-    return nullptr;
-  }
+  return Superclass::InvertTransform(*this);
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
@@ -184,16 +176,12 @@ ConstantVelocityFieldTransform<TParametersValueType, VDimension>::SetFixedParame
     }
   }
 
-  PixelType zeroDisplacement;
-  zeroDisplacement.Fill(0.0);
-
   auto velocityField = ConstantVelocityFieldType::New();
   velocityField->SetSpacing(spacing);
   velocityField->SetOrigin(origin);
   velocityField->SetDirection(direction);
   velocityField->SetRegions(size);
-  velocityField->Allocate();
-  velocityField->FillBuffer(zeroDisplacement);
+  velocityField->AllocateInitialized();
 
   this->SetConstantVelocityField(velocityField);
 }

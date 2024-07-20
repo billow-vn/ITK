@@ -24,7 +24,6 @@
 #include "itkIterationReporter.h"
 #include "itkMath.h"
 #include "itkNumericTraits.h"
-#include "itkMath.h"
 #include "itkPrintHelper.h"
 
 namespace itk
@@ -38,7 +37,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::IsolatedConnectedImageF
   m_Seeds1.clear();
   m_Seeds2.clear();
   m_ReplaceValue = NumericTraits<OutputImagePixelType>::OneValue();
-  m_IsolatedValue = NumericTraits<InputImagePixelType>::ZeroValue();
+  m_IsolatedValue = InputImagePixelType{};
   m_IsolatedValueTolerance = NumericTraits<InputImagePixelType>::OneValue();
   m_FindUpperThreshold = true;
   m_ThresholdingFailed = false;
@@ -70,8 +69,8 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream 
   os << indent << "IsolatedValueTolerance: "
      << static_cast<typename NumericTraits<InputImagePixelType>::PrintType>(m_IsolatedValueTolerance) << std::endl;
 
-  os << indent << "FindUpperThreshold: " << (m_FindUpperThreshold ? "On" : "Off") << std::endl;
-  os << indent << "ThresholdingFailed: " << (m_ThresholdingFailed ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(FindUpperThreshold);
+  itkPrintSelfBooleanMacro(ThresholdingFailed);
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -186,8 +185,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   // Zero the output
   OutputImageRegionType region = outputImage->GetRequestedRegion();
   outputImage->SetBufferedRegion(region);
-  outputImage->Allocate();
-  outputImage->FillBuffer(NumericTraits<OutputImagePixelType>::ZeroValue());
+  outputImage->AllocateInitialized();
 
   using FunctionType = BinaryThresholdImageFunction<InputImageType>;
   using IteratorType = FloodFilledImageFunctionConditionalIterator<OutputImageType, FunctionType>;
@@ -220,7 +218,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     {
       ProgressReporter progress(this, 0, region.GetNumberOfPixels(), 100, cumulatedProgress, progressWeight);
       cumulatedProgress += progressWeight;
-      outputImage->FillBuffer(NumericTraits<OutputImagePixelType>::ZeroValue());
+      outputImage->FillBuffer(OutputImagePixelType{});
       function->ThresholdBetween(m_Lower, static_cast<InputImagePixelType>(guess));
       it.GoToBegin();
       while (!it.IsAtEnd())
@@ -247,7 +245,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
         ++si;
       }
 
-      if (Math::NotExactlyEquals(seedIntensitySum, NumericTraits<InputRealType>::ZeroValue()))
+      if (Math::NotExactlyEquals(seedIntensitySum, InputRealType{}))
       {
         upper = guess;
       }
@@ -285,7 +283,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     {
       ProgressReporter progress(this, 0, region.GetNumberOfPixels(), 100, cumulatedProgress, progressWeight);
       cumulatedProgress += progressWeight;
-      outputImage->FillBuffer(NumericTraits<OutputImagePixelType>::ZeroValue());
+      outputImage->FillBuffer(OutputImagePixelType{});
       function->ThresholdBetween(static_cast<InputImagePixelType>(guess), m_Upper);
       it.GoToBegin();
       while (!it.IsAtEnd())
@@ -312,7 +310,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
         ++si;
       }
 
-      if (Math::NotExactlyEquals(seedIntensitySum, NumericTraits<InputRealType>::ZeroValue()))
+      if (Math::NotExactlyEquals(seedIntensitySum, InputRealType{}))
       {
         lower = guess;
       }
@@ -335,7 +333,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
   // now rerun the algorithm with the thresholds that separate the seeds.
   ProgressReporter progress(this, 0, region.GetNumberOfPixels(), 100, cumulatedProgress, progressWeight);
 
-  outputImage->FillBuffer(NumericTraits<OutputImagePixelType>::ZeroValue());
+  outputImage->FillBuffer(OutputImagePixelType{});
   if (m_FindUpperThreshold)
   {
     function->ThresholdBetween(m_Lower, m_IsolatedValue);
@@ -379,7 +377,7 @@ IsolatedConnectedImageFilter<TInputImage, TOutputImage>::GenerateData()
     ++si2;
   }
   if (Math::NotAlmostEquals(seed1IntensitySum, m_ReplaceValue * m_Seeds1.size()) ||
-      Math::NotExactlyEquals(seed2IntensitySum, NumericTraits<InputRealType>::ZeroValue()))
+      Math::NotExactlyEquals(seed2IntensitySum, InputRealType{}))
   {
     m_ThresholdingFailed = true;
   }

@@ -34,8 +34,6 @@ template <typename TInput, typename TOutput>
 class Sqrt
 {
 public:
-  Sqrt() = default;
-  ~Sqrt() = default;
   bool
   operator==(const Sqrt &) const
   {
@@ -78,7 +76,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(SqrtImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

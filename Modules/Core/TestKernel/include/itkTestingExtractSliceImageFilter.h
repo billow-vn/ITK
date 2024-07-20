@@ -34,7 +34,6 @@ class ExtractSliceImageFilterEnums
 {
 public:
   /**
-   * \class TestExtractSliceImageFilterCollapseStrategy
    * \ingroup ITKTestKernel
    */
   enum class TestExtractSliceImageFilterCollapseStrategy : uint8_t
@@ -118,7 +117,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ExtractSliceImageFilter);
 
   /** Image type information. */

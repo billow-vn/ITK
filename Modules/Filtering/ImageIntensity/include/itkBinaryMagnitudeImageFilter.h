@@ -33,8 +33,6 @@ template <typename TInput1, typename TInput2, typename TOutput>
 class Modulus2
 {
 public:
-  Modulus2() = default;
-  ~Modulus2() = default;
   bool
   operator==(const Modulus2 &) const
   {
@@ -98,7 +96,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(BinaryMagnitudeImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

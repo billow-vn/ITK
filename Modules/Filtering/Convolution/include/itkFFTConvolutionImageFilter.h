@@ -72,7 +72,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information ( and related methods ) */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(FFTConvolutionImageFilter);
 
   /** Dimensionality of input and output data is assumed to be the same. */
@@ -107,7 +107,6 @@ public:
 
   /** Typedef to describe the boundary condition. */
   using typename Superclass::BoundaryConditionType;
-  using typename Superclass::BoundaryConditionPointerType;
 
   itkSetMacro(SizeGreatestPrimeFactor, SizeValueType);
   itkGetMacro(SizeGreatestPrimeFactor, SizeValueType);

@@ -40,9 +40,7 @@ itkReflectiveImageRegionIteratorTest(int, char *[])
   ImageType::IndexType start;
   start.Fill(0);
 
-  ImageType::RegionType region;
-  region.SetIndex(start);
-  region.SetSize(size);
+  ImageType::RegionType region{ start, size };
 
   myImage->SetRegions(region);
   myImage->Allocate();
@@ -64,7 +62,7 @@ itkReflectiveImageRegionIteratorTest(int, char *[])
     // set the pixel index as value
     nit.Set(nit.GetIndex());
     // Set the number of visits to zero
-    vit.Set(itk::NumericTraits<ImageVisitsType::PixelType>::ZeroValue());
+    vit.Set(ImageVisitsType::PixelType{});
     ++nit;
     ++vit;
   }

@@ -32,7 +32,6 @@ class ConvolutionImageFilterBaseEnums
 {
 public:
   /**
-   * \class ConvolutionImageFilterOutputRegion
    * \ingroup ITKConvolution
    * Output region mode type enumeration
    */
@@ -64,7 +63,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information ( and related methods ) */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ConvolutionImageFilterBase);
 
   /** Dimensionality of input and output data is assumed to be the same. */
@@ -89,12 +88,15 @@ public:
 
   /** Typedef to describe the boundary condition. */
   using BoundaryConditionType = ImageBoundaryCondition<TInputImage>;
-  using BoundaryConditionPointerType = BoundaryConditionType *;
+#ifndef ITK_FUTURE_LEGACY_REMOVE
+  using BoundaryConditionPointerType [[deprecated("Please just use `BoundaryConditionType *` instead!")]] =
+    BoundaryConditionType *;
+#endif
   using DefaultBoundaryConditionType = ZeroFluxNeumannBoundaryCondition<TInputImage>;
 
   /** Set/get the boundary condition. */
-  itkSetMacro(BoundaryCondition, BoundaryConditionPointerType);
-  itkGetConstMacro(BoundaryCondition, BoundaryConditionPointerType);
+  itkSetMacro(BoundaryCondition, BoundaryConditionType *);
+  itkGetConstMacro(BoundaryCondition, BoundaryConditionType *);
 
   /** Set/get the image kernel. */
   itkSetInputMacro(KernelImage, KernelImageType);
@@ -151,13 +153,13 @@ protected:
   /** Default superclass implementation ensures that input images
    * occupy same physical space. This is not needed for this filter. */
   void
-  VerifyInputInformation() ITKv5_CONST override{};
+  VerifyInputInformation() const override{}
 
 private:
   bool m_Normalize{ false };
 
   DefaultBoundaryConditionType m_DefaultBoundaryCondition{};
-  BoundaryConditionPointerType m_BoundaryCondition{};
+  BoundaryConditionType *      m_BoundaryCondition{};
 
   OutputRegionModeEnum m_OutputRegionMode{ ConvolutionImageFilterBaseEnums::ConvolutionImageFilterOutputRegion::SAME };
 };

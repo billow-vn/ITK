@@ -23,7 +23,6 @@
 #include "itkProgressReporter.h"
 #include "vnl/algo/vnl_real_eigensystem.h"
 #include "vnl/algo/vnl_symmetric_eigensystem.h"
-#include "itkMath.h"
 
 namespace itk
 {
@@ -267,13 +266,12 @@ StatisticsLabelMapFilter<TImage, TFeatureImage>::ThreadedProcessLabelObject(Labe
       principalAxes[ImageDimension - 1][i] *= std::real(det);
     }
 
-    if (ImageDimension < 2)
+    if constexpr (ImageDimension < 2)
     {
       elongation = 1;
       flatness = 1;
     }
-    else if (Math::NotAlmostEquals(principalMoments[0],
-                                   itk::NumericTraits<typename VectorType::ValueType>::ZeroValue()))
+    else if (Math::NotAlmostEquals(principalMoments[0], typename VectorType::ValueType{}))
     {
       //    elongation = principalMoments[ImageDimension-1] /
       // principalMoments[0];

@@ -58,8 +58,6 @@ template <typename TInput1, typename TInput2, typename TOutput>
 class MagnitudeAndPhaseToComplex
 {
 public:
-  MagnitudeAndPhaseToComplex() = default;
-  ~MagnitudeAndPhaseToComplex() = default;
   bool
   operator==(const MagnitudeAndPhaseToComplex &) const
   {
@@ -105,7 +103,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MagnitudeAndPhaseToComplexImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

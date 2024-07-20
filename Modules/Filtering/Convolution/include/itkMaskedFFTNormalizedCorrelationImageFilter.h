@@ -156,7 +156,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MaskedFFTNormalizedCorrelationImageFilter);
 
   /** Extract some information from the image types.  Dimensionality
@@ -248,7 +248,7 @@ protected:
 
   /** Overlap the VerifyInputInformation method */
   void
-  VerifyInputInformation() ITKv5_CONST override;
+  VerifyInputInformation() const override;
 
   /** Standard pipeline method.*/
   void

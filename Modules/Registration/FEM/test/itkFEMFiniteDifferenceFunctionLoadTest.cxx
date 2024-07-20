@@ -132,7 +132,7 @@ CreateMesh(InputImageType * image, unsigned int elementWidth = 1)
   meshFilter->SetInput(image);
   meshFilter->SetPixelsPerElement(pixelsPerElement);
   auto material = MaterialType::New();
-  if (ImageDimension == 2)
+  if constexpr (ImageDimension == 2)
   {
     auto element = Element2DType::New();
     element->SetMaterial(material);
@@ -385,9 +385,7 @@ itkFEMFiniteDifferenceFunctionLoadTest(int argc, char * argv[])
   IndexType index;
   index.Fill(0);
 
-  RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  RegionType region{ index, size };
 
   auto movingImage = InputImageType::New();
   auto fixedImage = InputImageType::New();

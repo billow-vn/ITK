@@ -35,7 +35,6 @@ class GaussianDerivativeOperatorEnums
 {
 public:
   /**
-   * \class InterpolationMode
    * \ingroup ITKCommon
    * Interpolation modes
    */
@@ -109,7 +108,7 @@ public:
   using Self = GaussianDerivativeOperator;
   using Superclass = NeighborhoodOperator<TPixel, VDimension, TAllocator>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(GaussianDerivativeOperator);
 
   using InterpolationModeEnum = GaussianDerivativeOperatorEnums::InterpolationMode;

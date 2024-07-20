@@ -58,8 +58,6 @@ template <typename TInput1, typename TInput2, typename TOutput>
 class AbsoluteValueDifference2
 {
 public:
-  AbsoluteValueDifference2() = default;
-  ~AbsoluteValueDifference2() = default;
   bool
   operator==(const AbsoluteValueDifference2 &) const
   {
@@ -103,7 +101,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(AbsoluteValueDifferenceImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

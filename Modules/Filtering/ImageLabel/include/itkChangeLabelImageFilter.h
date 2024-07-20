@@ -54,9 +54,6 @@ template <typename TInput, typename TOutput>
 class ITK_TEMPLATE_EXPORT ChangeLabel
 {
 public:
-  ChangeLabel() = default;
-  ~ChangeLabel() = default;
-
   using ChangeMapType = std::map<TInput, TOutput>;
 
 
@@ -131,7 +128,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ChangeLabelImageFilter);
 
   /** Pixel types. */

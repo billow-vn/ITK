@@ -399,6 +399,37 @@ ImageBase<VImageDimension>::VerifyRequestedRegion()
 
 
 template <unsigned int VImageDimension>
+bool
+ImageBase<VImageDimension>::IsCongruentImageGeometry(const ImageBase * otherImage,
+                                                     double            coordinateTolerance,
+                                                     double            directionTolerance) const
+{
+  // check that the image occupy the same physical space, and that
+  // each index is at the same physical location
+
+  // tolerance for origin and spacing depends on the size of pixel
+  // tolerance for directions a fraction of the unit cube.
+  const SpacePrecisionType coordinateTol =
+    itk::Math::abs(coordinateTolerance * this->GetSpacing()[0]); // use first dimension spacing
+
+  return this->GetOrigin().GetVnlVector().is_equal(otherImage->GetOrigin().GetVnlVector(), coordinateTol) &&
+         this->GetSpacing().GetVnlVector().is_equal(otherImage->GetSpacing().GetVnlVector(), coordinateTol) &&
+         this->GetDirection().GetVnlMatrix().is_equal(otherImage->GetDirection().GetVnlMatrix(), directionTolerance);
+}
+
+
+template <unsigned int VImageDimension>
+bool
+ImageBase<VImageDimension>::IsSameImageGeometryAs(const ImageBase * otherImage,
+                                                  double            coordinateTolerance,
+                                                  double            directionTolerance) const
+{
+  return this->IsCongruentImageGeometry(otherImage, coordinateTolerance, directionTolerance) &&
+         this->GetLargestPossibleRegion() == otherImage->GetLargestPossibleRegion();
+}
+
+
+template <unsigned int VImageDimension>
 void
 ImageBase<VImageDimension>::SetBufferedRegion(const RegionType & region)
 {
@@ -497,16 +528,18 @@ ImageBase<VImageDimension>::PrintSelf(std::ostream & os, Indent indent) const
 
   os << indent << "Origin: " << this->GetOrigin() << std::endl;
 
-  os << indent << "Direction: " << std::endl << this->GetDirection() << std::endl;
+
+  os << indent << "Direction: " << std::endl;
+  this->GetDirection().PrintSelf(os, indent.GetNextIndent());
 
   os << indent << "IndexToPointMatrix: " << std::endl;
-  os << this->m_IndexToPhysicalPoint << std::endl;
+  this->m_IndexToPhysicalPoint.PrintSelf(os, indent.GetNextIndent());
 
   os << indent << "PointToIndexMatrix: " << std::endl;
-  os << this->m_PhysicalPointToIndex << std::endl;
+  this->m_PhysicalPointToIndex.PrintSelf(os, indent.GetNextIndent());
 
   os << indent << "Inverse Direction: " << std::endl;
-  os << this->GetInverseDirection() << std::endl;
+  this->m_InverseDirection.PrintSelf(os, indent.GetNextIndent());
 }
 
 } // end namespace itk

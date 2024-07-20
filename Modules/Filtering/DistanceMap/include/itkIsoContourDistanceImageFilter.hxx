@@ -28,7 +28,7 @@ namespace itk
 template <typename TInputImage, typename TOutputImage>
 IsoContourDistanceImageFilter<TInputImage, TOutputImage>::IsoContourDistanceImageFilter()
 {
-  m_LevelSetValue = NumericTraits<InputPixelType>::ZeroValue();
+  m_LevelSetValue = InputPixelType{};
 
   m_FarValue = 10 * NumericTraits<PixelType>::OneValue();
 
@@ -58,7 +58,7 @@ IsoContourDistanceImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream
   os << indent << "FarValue: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_FarValue) << std::endl;
   os << indent << "Spacing: " << static_cast<typename NumericTraits<InputSpacingType>::PrintType>(m_Spacing)
      << std::endl;
-  os << indent << "NarrowBanding: " << (m_NarrowBanding ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(NarrowBanding);
 
   itkPrintSelfObjectMacro(NarrowBand);
 
@@ -204,7 +204,7 @@ IsoContourDistanceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
     }
     else
     {
-      outIt.Set(NumericTraits<PixelType>::ZeroValue());
+      outIt.Set(PixelType{});
     }
     ++inIt;
     ++outIt;

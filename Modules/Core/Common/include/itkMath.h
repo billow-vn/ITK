@@ -107,12 +107,11 @@ static constexpr float float_sqrteps = vnl_math::float_sqrteps;
   template <typename TReturn, typename TInput>                              \
   inline TReturn name(TInput x)                                             \
   {                                                                         \
-                                                                            \
-    if (sizeof(TReturn) <= 4)                                               \
+    if constexpr (sizeof(TReturn) <= 4)                                     \
     {                                                                       \
       return static_cast<TReturn>(Detail::name##_32(x));                    \
     }                                                                       \
-    else if (sizeof(TReturn) <= 8)                                          \
+    else if constexpr (sizeof(TReturn) <= 8)                                \
     {                                                                       \
       return static_cast<TReturn>(Detail::name##_64(x));                    \
     }                                                                       \
@@ -141,7 +140,7 @@ static constexpr float float_sqrteps = vnl_math::float_sqrteps;
  *  \warning We assume that the rounding mode is not changed from the default
  *  one (or at least that it is always restored to the default one).
  */
-itkTemplateFloatingToIntegerMacro(RoundHalfIntegerToEven);
+itkTemplateFloatingToIntegerMacro(RoundHalfIntegerToEven)
 
 /** \brief Round towards nearest integer
  *
@@ -165,7 +164,7 @@ itkTemplateFloatingToIntegerMacro(RoundHalfIntegerToEven);
  *  the default one (or at least that it is always restored to the
  *  default one).
  */
-itkTemplateFloatingToIntegerMacro(RoundHalfIntegerUp);
+itkTemplateFloatingToIntegerMacro(RoundHalfIntegerUp)
 
 /** \brief Round towards nearest integer (This is a synonym for RoundHalfIntegerUp)
  *
@@ -193,7 +192,7 @@ Round(TInput x)
  *  the default one (or at least that it is always restored to the
  *  default one).
  */
-itkTemplateFloatingToIntegerMacro(Floor);
+itkTemplateFloatingToIntegerMacro(Floor)
 
 /** \brief Round towards plus infinity
  *
@@ -205,7 +204,7 @@ itkTemplateFloatingToIntegerMacro(Floor);
  *  the default one (or at least that it is always restored to the
  *  default one).
  */
-itkTemplateFloatingToIntegerMacro(Ceil);
+itkTemplateFloatingToIntegerMacro(Ceil)
 
 #undef itkTemplateFloatingToIntegerMacro
 
@@ -219,14 +218,14 @@ CastWithRangeCheck(TInput x)
 #endif // ITK_USE_CONCEPT_CHECKING
 
   auto ret = static_cast<TReturn>(x);
-  if (sizeof(TReturn) > sizeof(TInput) &&
-      !(!itk::NumericTraits<TReturn>::is_signed && itk::NumericTraits<TInput>::is_signed))
+  if constexpr (sizeof(TReturn) > sizeof(TInput) &&
+                !(!itk::NumericTraits<TReturn>::is_signed && itk::NumericTraits<TInput>::is_signed))
   {
     // if the output type is bigger and we are not converting a signed
     // integer to an unsigned integer then we have no problems
     return ret;
   }
-  else if (sizeof(TReturn) >= sizeof(TInput))
+  else if constexpr (sizeof(TReturn) >= sizeof(TInput))
   {
     if (itk::NumericTraits<TInput>::IsPositive(x) != itk::NumericTraits<TReturn>::IsPositive(ret))
     {
@@ -578,9 +577,7 @@ struct AlmostEqualsScalarVsComplex
   static bool
   AlmostEqualsFunction(TScalarType scalarVariable, TComplexType complexVariable)
   {
-    if (!AlmostEqualsScalarComparer(
-          complexVariable.imag(),
-          itk::NumericTraits<typename itk::NumericTraits<TComplexType>::ValueType>::ZeroValue()))
+    if (!AlmostEqualsScalarComparer(complexVariable.imag(), typename itk::NumericTraits<TComplexType>::ValueType{}))
     {
       return false;
     }
@@ -727,9 +724,10 @@ template <typename TInput1, typename TInput2>
 inline bool
 ExactlyEquals(const TInput1 & x1, const TInput2 & x2)
 {
-  CLANG_PRAGMA_PUSH
-  CLANG_SUPPRESS_Wfloat_equal return x1 == x2;
-  CLANG_PRAGMA_POP
+  ITK_GCC_PRAGMA_PUSH
+  ITK_GCC_SUPPRESS_Wfloat_equal
+  return x1 == x2;
+  ITK_GCC_PRAGMA_POP
 }
 
 // The NotExactlyEquals function

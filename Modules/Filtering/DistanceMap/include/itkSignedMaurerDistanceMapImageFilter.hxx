@@ -26,13 +26,12 @@
 #include "itkProgressAccumulator.h"
 #include "itkMath.h"
 #include "vnl/vnl_vector.h"
-#include "itkMath.h"
 
 namespace itk
 {
 template <typename TInputImage, typename TOutputImage>
 SignedMaurerDistanceMapImageFilter<TInputImage, TOutputImage>::SignedMaurerDistanceMapImageFilter()
-  : m_BackgroundValue(NumericTraits<InputPixelType>::ZeroValue())
+  : m_BackgroundValue(InputPixelType{})
   , m_Spacing()
   , m_InputCache(nullptr)
 {
@@ -127,7 +126,7 @@ SignedMaurerDistanceMapImageFilter<TInputImage, TOutputImage>::GenerateData()
   binaryFilter->SetLowerThreshold(this->m_BackgroundValue);
   binaryFilter->SetUpperThreshold(this->m_BackgroundValue);
   binaryFilter->SetInsideValue(NumericTraits<OutputPixelType>::max());
-  binaryFilter->SetOutsideValue(NumericTraits<OutputPixelType>::ZeroValue());
+  binaryFilter->SetOutsideValue(OutputPixelType{});
   binaryFilter->SetInput(inputPtr);
   binaryFilter->SetNumberOfWorkUnits(numberOfWorkUnits);
   progressAcc->RegisterInternalFilter(binaryFilter, 0.1f);
@@ -139,7 +138,7 @@ SignedMaurerDistanceMapImageFilter<TInputImage, TOutputImage>::GenerateData()
   using BorderFilterType = BinaryContourImageFilter<OutputImageType, OutputImageType>;
   auto borderFilter = BorderFilterType::New();
   borderFilter->SetInput(binaryFilter->GetOutput());
-  borderFilter->SetForegroundValue(NumericTraits<OutputPixelType>::ZeroValue());
+  borderFilter->SetForegroundValue(OutputPixelType{});
   borderFilter->SetBackgroundValue(NumericTraits<OutputPixelType>::max());
   borderFilter->SetFullyConnected(true);
   borderFilter->SetNumberOfWorkUnits(numberOfWorkUnits);

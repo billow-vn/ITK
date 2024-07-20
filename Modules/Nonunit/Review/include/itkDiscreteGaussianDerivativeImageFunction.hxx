@@ -38,7 +38,7 @@ void
 DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::PrintSelf(std::ostream & os, Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseImageSpacing);
   os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
   os << indent << "Variance: " << m_Variance << std::endl;
   os << indent << "Order: " << m_Order << std::endl;
@@ -74,7 +74,7 @@ DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::RecomputeGaussian
     m_OperatorArray[direction].SetMaximumKernelWidth(m_MaximumKernelWidth);
     m_OperatorArray[direction].SetMaximumError(m_MaximumError);
 
-    if ((m_UseImageSpacing == true) && (this->GetInputImage()))
+    if (m_UseImageSpacing && (this->GetInputImage()))
     {
       if (this->GetInputImage()->GetSpacing()[direction] == 0.0)
       {
@@ -109,8 +109,7 @@ DiscreteGaussianDerivativeImageFunction<TInputImage, TOutput>::RecomputeGaussian
   region.SetSize(size);
 
   kernelImage->SetRegions(region);
-  kernelImage->Allocate();
-  kernelImage->FillBuffer(itk::NumericTraits<TOutput>::ZeroValue());
+  kernelImage->AllocateInitialized();
 
   // Initially the kernel image will be an impulse at the center
   typename KernelImageType::IndexType centerIndex;

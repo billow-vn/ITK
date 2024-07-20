@@ -105,6 +105,7 @@ itkMetaArrowConverterTest(int argc, char * argv[])
 
   // set up itkArrow
   auto itkArrow = SpatialObjectType::New();
+  itkArrow->SetId(0);
   itkArrow->SetDirectionInObjectSpace(direction);
   itkArrow->SetPositionInObjectSpace(position);
   itkArrow->SetLengthInObjectSpace(length);
@@ -120,6 +121,7 @@ itkMetaArrowConverterTest(int argc, char * argv[])
 
   // set up metaArrow
   auto * metaArrow = new MetaArrow(Dimensions);
+  metaArrow->ID(2);
   metaArrow->Length(static_cast<float>(length));
   metaArrow->Position((const double *)mPosition);
   metaArrow->Direction((const double *)mDirection);
@@ -269,12 +271,9 @@ itkMetaArrowConverterTest(int argc, char * argv[])
   mDirectionNorm[0] = mDirection[0];
   mDirectionNorm[1] = mDirection[1];
   mDirectionNorm[2] = mDirection[2];
-  if (itk::Math::NotExactlyEquals(mDirection[0],
-                                  itk::NumericTraits<SpatialObjectType::VectorType::ValueType>::ZeroValue()) ||
-      itk::Math::NotExactlyEquals(mDirection[1],
-                                  itk::NumericTraits<SpatialObjectType::VectorType::ValueType>::ZeroValue()) ||
-      itk::Math::NotExactlyEquals(mDirection[2],
-                                  itk::NumericTraits<SpatialObjectType::VectorType::ValueType>::ZeroValue()))
+  if (itk::Math::NotExactlyEquals(mDirection[0], SpatialObjectType::VectorType::ValueType{}) ||
+      itk::Math::NotExactlyEquals(mDirection[1], SpatialObjectType::VectorType::ValueType{}) ||
+      itk::Math::NotExactlyEquals(mDirection[2], SpatialObjectType::VectorType::ValueType{}))
   {
     mDirectionNorm.Normalize();
   }
@@ -344,12 +343,9 @@ itkMetaArrowConverterTest(int argc, char * argv[])
 
   // check direction (note: need to normalize before comparing)
   SpatialObjectType::VectorType reLoadDirectionNorm = reLoad->GetDirectionInWorldSpace();
-  if (itk::Math::NotExactlyEquals(reLoadDirectionNorm[0],
-                                  itk::NumericTraits<SpatialObjectType::VectorType::ValueType>::ZeroValue()) ||
-      itk::Math::NotExactlyEquals(reLoadDirectionNorm[1],
-                                  itk::NumericTraits<SpatialObjectType::VectorType::ValueType>::ZeroValue()) ||
-      itk::Math::NotExactlyEquals(reLoadDirectionNorm[2],
-                                  itk::NumericTraits<SpatialObjectType::VectorType::ValueType>::ZeroValue()))
+  if (itk::Math::NotExactlyEquals(reLoadDirectionNorm[0], SpatialObjectType::VectorType::ValueType{}) ||
+      itk::Math::NotExactlyEquals(reLoadDirectionNorm[1], SpatialObjectType::VectorType::ValueType{}) ||
+      itk::Math::NotExactlyEquals(reLoadDirectionNorm[2], SpatialObjectType::VectorType::ValueType{}))
   {
     reLoadDirectionNorm.Normalize();
   }
@@ -359,6 +355,8 @@ itkMetaArrowConverterTest(int argc, char * argv[])
       itk::Math::abs(reLoadDirectionNorm[2] - directionNorm[2]) > precisionLimit)
   {
     std::cout << "Didn't read direction properly [FAILED]" << std::endl;
+    std::cout << "  Direction: " << reLoadDirectionNorm << std::endl;
+    std::cout << "    vs: " << directionNorm << std::endl;
     return EXIT_FAILURE;
   }
   std::cout << "[PASSED]  Reading: direction" << std::endl;

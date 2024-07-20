@@ -22,10 +22,8 @@
 #include "itkKLMSegmentationRegion.h"
 #include "itkMacro.h"
 #include "ITKKLMRegionGrowingExport.h"
-
 #include "itkMath.h"
 #include "vnl/vnl_vector.h"
-#include "itkMath.h"
 
 namespace itk
 {
@@ -150,7 +148,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(KLMSegmentationBorder);
 
   /** Set the region 1 associated with the border */

@@ -29,11 +29,6 @@ namespace itk
 /** \class QuadrilateralCell
  *  \brief Represents a quadrilateral for a Mesh.
  *
- * \tparam TPixelType The type associated with a point, cell, or boundary
- * for use in storing its data.
- *
- * \tparam TCellTraits Type information of mesh containing cell.
- *
  * \ingroup MeshObjects
  * \ingroup ITKCommon
  */
@@ -50,7 +45,7 @@ public:
   itkCellCommonTypedefs(QuadrilateralCell);
   itkCellInheritedTypedefs(TCellInterface);
 
-  /** Standard part of every itk Object. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(QuadrilateralCell);
 
   /** The type of boundary for this triangle's vertices. */
@@ -134,17 +129,7 @@ public:
 
   /** Constructor and destructor */
   QuadrilateralCell() = default;
-
-#if defined(__GNUC__)
-  // A bug in some versions of the GCC and Clang compilers
-  // result in an ICE or linker error when "= default" is requested.
-  // This was observed in at least gcc 4.8 and 5.4.0, and
-  // AppleClang 7.0.2 and 8.0.0. Probably others too.
-  // "= default" doesn't gain us much, so just don't use it here.
-  ~QuadrilateralCell() override{};
-#else
   ~QuadrilateralCell() override = default;
-#endif
 
 protected:
   /** Store the number of points needed for a quadrilateral. */

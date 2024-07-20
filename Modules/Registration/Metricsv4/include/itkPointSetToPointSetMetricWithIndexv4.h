@@ -87,7 +87,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(PointSetToPointSetMetricWithIndexv4);
 
   /**  Type of the measure. */
@@ -418,13 +418,13 @@ protected:
   RequiresMovingPointsLocator() const
   {
     return true;
-  };
+  }
 
   virtual bool
   RequiresFixedPointsLocator() const
   {
     return true;
-  };
+  }
 
   /**
    * Function to be defined in the appropriate derived classes.  Calculates

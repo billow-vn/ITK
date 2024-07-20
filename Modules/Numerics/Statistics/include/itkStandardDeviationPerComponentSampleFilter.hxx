@@ -29,10 +29,7 @@ template <typename TSample>
 StandardDeviationPerComponentSampleFilter<TSample>::StandardDeviationPerComponentSampleFilter()
 {
   this->ProcessObject::SetNumberOfRequiredInputs(1);
-  this->ProcessObject::SetNumberOfRequiredOutputs(2);
-
-  this->ProcessObject::SetNthOutput(0, this->MakeOutput(0));
-  this->ProcessObject::SetNthOutput(1, this->MakeOutput(1));
+  ProcessObject::MakeRequiredOutputs(*this, 2);
 }
 
 template <typename TSample>
@@ -66,7 +63,7 @@ StandardDeviationPerComponentSampleFilter<TSample>::MakeOutput(DataObjectPointer
     using ValueType = typename MeasurementVectorTraitsTypes<MeasurementVectorType>::ValueType;
     MeasurementVectorType standardDeviation;
     NumericTraits<MeasurementVectorType>::SetLength(standardDeviation, this->GetMeasurementVectorSize());
-    standardDeviation.Fill(NumericTraits<ValueType>::ZeroValue());
+    standardDeviation.Fill(ValueType{});
     typename MeasurementVectorRealDecoratedType::Pointer decoratedStandardDeviation =
       MeasurementVectorRealDecoratedType::New();
     decoratedStandardDeviation->Set(standardDeviation);
@@ -78,7 +75,7 @@ StandardDeviationPerComponentSampleFilter<TSample>::MakeOutput(DataObjectPointer
     using ValueType = typename MeasurementVectorTraitsTypes<MeasurementVectorType>::ValueType;
     MeasurementVectorType mean;
     NumericTraits<MeasurementVectorType>::SetLength(mean, this->GetMeasurementVectorSize());
-    mean.Fill(NumericTraits<ValueType>::ZeroValue());
+    mean.Fill(ValueType{});
     typename MeasurementVectorRealDecoratedType::Pointer decoratedStandardDeviation =
       MeasurementVectorRealDecoratedType::New();
     decoratedStandardDeviation->Set(mean);

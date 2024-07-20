@@ -58,9 +58,7 @@ MakeImage(const int count, T pixel)
   size[0] = count;
   size[1] = count;
   size[2] = count;
-  RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  RegionType region{ index, size };
 
   testImage->SetRegions(region);
   testImage->Allocate();
@@ -78,11 +76,11 @@ ReallocateImage()
   SizeType size = { { 5, 3 } };
 
   testImage->SetRegions(size);
-  testImage->Allocate(true); // initialize buffer to zero
+  testImage->AllocateInitialized();
 
   SizeType size2 = { { 100, 100 } };
   testImage->SetRegions(size2);
-  testImage->Allocate(true); // initialize buffer to zero
+  testImage->AllocateInitialized();
 }
 
 int

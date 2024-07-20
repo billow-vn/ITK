@@ -64,7 +64,7 @@ public:
   /** New method for creating an object using a factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MINCTransformAdapter);
 
   /** Dimension of the domain space. */
@@ -291,7 +291,7 @@ public:
 protected:
   MINCTransformAdapter()
   {
-    if (VInputDimension != 3 || VOutputDimension != 3)
+    if constexpr (VInputDimension != 3 || VOutputDimension != 3)
     {
       itkExceptionMacro("MINC transform is currently implemented only for 3D to 3D.");
     }

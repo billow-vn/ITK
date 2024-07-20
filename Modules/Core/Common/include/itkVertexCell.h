@@ -29,11 +29,6 @@ namespace itk
 /** \class VertexCell
  *  \brief Represents a single vertex for a Mesh.
  *
- * \tparam TPixelType The type associated with a point, cell, or boundary
- * for use in storing its data.
- *
- * \tparam TCellTraits Type information of mesh containing cell.
- *
  * \ingroup MeshObjects
  * \ingroup ITKCommon
  */
@@ -48,7 +43,7 @@ public:
   itkCellCommonTypedefs(VertexCell);
   itkCellInheritedTypedefs(TCellInterface);
 
-  /** Standard part of every itk Object. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(VertexCell);
 
   /** Vertex-specific topology numbers. */

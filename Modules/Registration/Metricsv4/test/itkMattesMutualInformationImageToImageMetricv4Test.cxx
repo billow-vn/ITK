@@ -66,9 +66,7 @@ TestMattesMetricWithAffineTransform(TInterpolator * const interpolator, const bo
   typename MovingImageType::SizeType   size = { { static_cast<SizeValueType>(imageSize),
                                                 static_cast<SizeValueType>(imageSize) } };
   typename MovingImageType::IndexType  index = { { 0, 0 } };
-  typename MovingImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  typename MovingImageType::RegionType region{ index, size };
 
   typename MovingImageType::SpacingType imgSpacing;
   imgSpacing[0] = 3.0;
@@ -141,12 +139,12 @@ TestMattesMetricWithAffineTransform(TInterpolator * const interpolator, const bo
   auto imgMovingMask = MovingImageType::New();
   imgMovingMask->CopyInformation(imgMoving);
   imgMovingMask->SetRegions(region);
-  imgMovingMask->Allocate(true); // initialize buffer to zero
+  imgMovingMask->AllocateInitialized();
 
   auto imgFixedMask = FixedImageType::New();
   imgFixedMask->CopyInformation(imgFixed);
   imgFixedMask->SetRegions(region);
-  imgFixedMask->Allocate(true); // initialize buffer to zero
+  imgFixedMask->AllocateInitialized();
 
   {
     {

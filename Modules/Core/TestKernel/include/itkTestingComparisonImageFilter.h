@@ -54,7 +54,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ComparisonImageFilter);
 
   /** Some convenient type alias. */
@@ -135,7 +135,7 @@ protected:
   AfterThreadedGenerateData() override;
 
   void
-  VerifyInputInformation() ITKv5_CONST override;
+  VerifyInputInformation() const override;
 
   OutputPixelType m_DifferenceThreshold{};
 

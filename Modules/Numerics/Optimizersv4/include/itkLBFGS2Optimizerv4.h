@@ -183,7 +183,8 @@ public:
    * define so lbfgs.h uses the correct version
    **/
   using PrecisionType = double;
-
+  static_assert(std::is_same<TInternalComputationValueType, double>::value,
+                "LBFGS2Optimizerv4Template only supports double precision");
   /** Standard "Self" type alias. */
   using Self = LBFGS2Optimizerv4Template;
   using Superclass = GradientDescentOptimizerv4Template<TInternalComputationValueType>;
@@ -200,7 +201,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(LBFGS2Optimizerv4Template);
 
   /** Start optimization with an initial value. */
@@ -518,28 +519,27 @@ private:
   /**
    * itkGradientDecentOptimizerv4Template specific non supported methods.
    */
-  void
-  SetMinimumConvergenceValue(double) override
+  void SetMinimumConvergenceValue(PrecisionType) override
   {
     itkWarningMacro("Not supported. Please use LBFGS specific convergence methods.");
-  };
+  }
   void SetConvergenceWindowSize(SizeValueType) override
   {
     itkWarningMacro("Not supported. Please use LBFGS specific convergence methods.");
-  };
-  const double &
+  }
+  const PrecisionType &
   GetConvergenceValue() const override
   {
     itkWarningMacro("Not supported. Please use LBFGS specific convergence methods.");
-    static double value = 0;
+    static PrecisionType value{};
     return value;
-  };
+  }
 
   void
   AdvanceOneStep() override
   {
     itkWarningMacro("LBFGS2Optimizerv4Template does not implement single step advance");
-  };
+  }
 };
 
 

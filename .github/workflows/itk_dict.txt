@@ -37,13 +37,13 @@ Conners
 ConvertAnitkImageTovtkImageData
 ConvertRGBvtkImageDataToAnitkImage
 Cortesi's
+Coverity
 Creade
 CreateListOfSamplesWithIDs
 Crofton's
 Cuadra
 Cz
 DDataFrameobject
-Dz
 Dasarathy
 Deref
 Dij
@@ -54,6 +54,7 @@ Dxx
 Dyx
 Dyy
 Dyz
+Dz
 Dzx
 Dzy
 Dzz
@@ -73,13 +74,13 @@ Fletch
 Freesurfer
 Frenet
 GEAdw
+GPUSuperclass's
 Gao
 Gibbsian
+Gifti
 Golby
 Graphviz
 Greenleaf
-Gifti
-GPUSuperclass's
 Guillen
 Haar
 Hackathon
@@ -98,6 +99,7 @@ IOregion
 ITKIOMeshGifti
 ITKImageToIplImage
 ITKOptimizersv
+Intelli
 Irfan
 Irix
 Isocenter
@@ -198,6 +200,7 @@ Spall
 Sprengel
 Stegun
 Stiehl
+Synopsys
 Syst
 Tajbakhsh
 Talos
@@ -221,6 +224,7 @@ Vkept
 Vox
 Wachowiak
 Wanlin
+Wdeprecated
 Wi
 Wtautological
 Xu
@@ -587,6 +591,7 @@ lin
 lina
 lins
 lm
+lnt
 loc
 localizer
 lockings
@@ -647,6 +652,7 @@ mv
 myhistogram
 myreferenceimage
 mx
+natively
 nbOfDirections
 nbOfPixels
 ncodewords
@@ -736,6 +742,7 @@ ponderation
 posn
 postcondition
 posteriori
+pragmas
 preallocated
 precalculate
 precalculating

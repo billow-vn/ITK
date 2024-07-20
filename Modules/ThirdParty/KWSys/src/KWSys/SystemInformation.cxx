@@ -22,10 +22,10 @@
 // Consider using these on Win32/Win64 for some of them:
 //
 // IsProcessorFeaturePresent
-// http://msdn.microsoft.com/en-us/library/ms724482(VS.85).aspx
+// https://msdn.microsoft.com/en-us/library/ms724482(VS.85).aspx
 //
 // GetProcessMemoryInfo
-// http://msdn.microsoft.com/en-us/library/ms683219(VS.85).aspx
+// https://msdn.microsoft.com/en-us/library/ms683219(VS.85).aspx
 
 #include "kwsysPrivate.h"
 #include KWSYS_HEADER(SystemInformation.hxx)
@@ -3443,7 +3443,7 @@ bool SystemInformationImplementation::RetrieveInformationFromCpuInfoFile()
 
   FILE* fd = fopen("/proc/cpuinfo", "r");
   if (!fd) {
-    std::cout << "Problem opening /proc/cpuinfo" << std::endl;
+    std::cerr << "Problem opening /proc/cpuinfo\n";
     return false;
   }
 
@@ -3453,6 +3453,10 @@ bool SystemInformationImplementation::RetrieveInformationFromCpuInfoFile()
     fileSize++;
   }
   fclose(fd);
+  if (fileSize < 2) {
+    std::cerr << "No data in /proc/cpuinfo\n";
+    return false;
+  }
   buffer.resize(fileSize - 2);
   // Number of logical CPUs (combination of multiple processors, multi-core
   // and SMT)
@@ -4158,7 +4162,7 @@ bool SystemInformationImplementation::QueryLinuxMemory()
   struct utsname unameInfo;
   int errorFlag = uname(&unameInfo);
   if (errorFlag != 0) {
-    std::cout << "Problem calling uname(): " << strerror(errno) << std::endl;
+    std::cerr << "Problem calling uname(): " << strerror(errno) << "\n";
     return false;
   }
 
@@ -4178,7 +4182,7 @@ bool SystemInformationImplementation::QueryLinuxMemory()
 
   FILE* fd = fopen("/proc/meminfo", "r");
   if (!fd) {
-    std::cout << "Problem opening /proc/meminfo" << std::endl;
+    std::cerr << "Problem opening /proc/meminfo\n";
     return false;
   }
 
@@ -4217,7 +4221,7 @@ bool SystemInformationImplementation::QueryLinuxMemory()
       this->TotalVirtualMemory = value[mSwapTotal] / 1024;
       this->AvailableVirtualMemory = value[mSwapFree] / 1024;
     } else {
-      std::cout << "Problem parsing /proc/meminfo" << std::endl;
+      std::cerr << "Problem parsing /proc/meminfo\n";
       fclose(fd);
       return false;
     }
@@ -4244,7 +4248,7 @@ bool SystemInformationImplementation::QueryLinuxMemory()
       this->AvailablePhysicalMemory =
         (ap + buffersMem + cachedMem) >> 10 >> 10;
     } else {
-      std::cout << "Problem parsing /proc/meminfo" << std::endl;
+      std::cerr << "Problem parsing /proc/meminfo\n";
       fclose(fd);
       return false;
     }
@@ -4261,7 +4265,7 @@ bool SystemInformationImplementation::QueryCygwinMemory()
 {
 #ifdef __CYGWIN__
   // _SC_PAGE_SIZE does return the mmap() granularity on Cygwin,
-  // see http://cygwin.com/ml/cygwin/2006-06/msg00350.html
+  // see https://sourceware.org/legacy-ml/cygwin/2006-06/msg00350.html
   // Therefore just use 4096 as the page size of Windows.
   long m = sysconf(_SC_PHYS_PAGES);
   if (m < 0) {
@@ -4468,8 +4472,8 @@ void SystemInformationImplementation::CPUCountWindows()
   typedef BOOL(WINAPI * GetLogicalProcessorInformationType)(
     PSYSTEM_LOGICAL_PROCESSOR_INFORMATION, PDWORD);
   static GetLogicalProcessorInformationType pGetLogicalProcessorInformation =
-    (GetLogicalProcessorInformationType)GetProcAddress(
-      GetModuleHandleW(L"kernel32"), "GetLogicalProcessorInformation");
+    reinterpret_cast<GetLogicalProcessorInformationType>(GetProcAddress(
+      GetModuleHandleW(L"kernel32"), "GetLogicalProcessorInformation"));
 
   if (!pGetLogicalProcessorInformation) {
     // Fallback to approximate implementation on ancient Windows versions.
@@ -4886,7 +4890,7 @@ std::string SystemInformationImplementation::ParseValueFromKStat(
   args.reserve(3 + args_string.size());
   args.push_back("kstat");
   args.push_back("-p");
-  for (auto& i : args_string) {
+  for (const auto& i : args_string) {
     args.push_back(i.c_str());
   }
   args.push_back(nullptr);

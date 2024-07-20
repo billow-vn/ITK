@@ -304,9 +304,7 @@ itkVectorImageTest(int, char * argv[])
       }
       start.Fill(0);
       size.Fill(50);
-      VariableLengthVectorImageType::RegionType region;
-      region.SetSize(size);
-      region.SetIndex(start);
+      VariableLengthVectorImageType::RegionType region{ start, size };
       image->SetRegions(region);
       image->Allocate();
       image->FillBuffer(f);
@@ -350,9 +348,7 @@ itkVectorImageTest(int, char * argv[])
       }
       start.Fill(0);
       size.Fill(50);
-      FixedArrayImageType::RegionType region;
-      region.SetSize(size);
-      region.SetIndex(start);
+      FixedArrayImageType::RegionType region{ start, size };
       image->SetRegions(region);
       image->Allocate();
       image->FillBuffer(f);
@@ -409,9 +405,7 @@ itkVectorImageTest(int, char * argv[])
       }
       start.Fill(0);
       size.Fill(50);
-      VectorImageType::RegionType region;
-      region.SetSize(size);
-      region.SetIndex(start);
+      VectorImageType::RegionType region{ start, size };
       vectorImage->SetVectorLength(VectorLength);
       vectorImage->SetRegions(region);
       vectorImage->Allocate();
@@ -474,7 +468,7 @@ itkVectorImageTest(int, char * argv[])
       VectorImageType::IndexType           start;
       itk::VariableLengthVector<PixelType> f(VectorLength);
       itk::VariableLengthVector<PixelType> ZeroPixel(VectorLength);
-      ZeroPixel.Fill(itk::NumericTraits<PixelType>::ZeroValue());
+      ZeroPixel.Fill(PixelType{});
       for (unsigned int i = 0; i < VectorLength; ++i)
       {
         f[i] = i;
@@ -870,7 +864,7 @@ itkVectorImageTest(int, char * argv[])
         failed = true;
       }
 
-      if (Dimension == 3)
+      if constexpr (Dimension == 3)
       {
 
         //

@@ -53,7 +53,7 @@ namespace itk
 class MultiThreaderBaseEnums
 {
 public:
-  /** \class Threader
+  /**
    * \ingroup ITKCommon
    * Currently supported types of multi-threader implementations.
    * Last will change with additional implementations.
@@ -68,7 +68,7 @@ public:
     Unknown = -1
   };
 
-  /** \class ThreadExitCode
+  /**
    * \ingroup ITKCommon
    */
   enum class ThreadExitCode : uint8_t
@@ -118,7 +118,7 @@ public:
   static Pointer
   New();
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MultiThreaderBase);
 
   /** Get/Set the number of threads to use. It will be clamped to the range
@@ -238,16 +238,13 @@ ITK_GCC_PRAGMA_DIAG_PUSH()
 ITK_GCC_PRAGMA_DIAG(ignored "-Wattributes")
 INTEL_PRAGMA_WARN_PUSH
 INTEL_SUPPRESS_warning_1292
-CLANG_PRAGMA_PUSH
-CLANG_SUPPRESS_Wcpp14_extensions
   // clang-format on
 #  ifdef ITK_LEGACY_SILENT
-    struct ThreadInfoStruct
+  struct ThreadInfoStruct
 #  else
-    struct [[deprecated("Use WorkUnitInfo, ThreadInfoStruct is deprecated since ITK 5.0")]] ThreadInfoStruct
+  struct [[deprecated("Use WorkUnitInfo, ThreadInfoStruct is deprecated since ITK 5.0")]] ThreadInfoStruct
 #  endif
-      // clang-format off
-CLANG_PRAGMA_POP
+    // clang-format off
 INTEL_PRAGMA_WARN_POP
   // clang-format on
   {
@@ -307,6 +304,10 @@ ITK_GCC_PRAGMA_DIAG_POP()
    * type void *. */
   virtual void
   SetSingleMethod(ThreadFunctionType, void * data) = 0;
+
+  /** Set the method and the user data, by SetSingleMethod, and executes the method, by SingleMethodExecute. */
+  void
+  SetSingleMethodAndExecute(ThreadFunctionType func, void * data);
 
 #ifndef ITK_FUTURE_LEGACY_REMOVE
   // `TemplatedThreadingFunctorType` was previously used to declare the `funcP` parameter of `ParallelizeImageRegion`

@@ -77,9 +77,8 @@ public:
 
   /** Typedef to describe the boundary condition. */
   using BoundaryConditionType = ImageBoundaryCondition<TInputImage, TOutputImage>;
-  using BoundaryConditionPointerType = BoundaryConditionType *;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(PadImageFilter);
 
   /** ImageDimension enumeration. */

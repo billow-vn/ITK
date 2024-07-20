@@ -140,7 +140,10 @@ ImageSeriesWriter<TInputImage, TOutputImage>::GenerateNumericFileNames()
 
   for (unsigned int slice = 0; slice < numberOfFiles; ++slice)
   {
+    ITK_GCC_PRAGMA_PUSH
+    ITK_GCC_SUPPRESS_Wformat_nonliteral
     snprintf(fileName, IOCommon::ITK_MAXPATHLEN + 1, m_SeriesFormat.c_str(), fileNumber);
+    ITK_GCC_PRAGMA_POP
     m_FileNames.push_back(fileName);
     fileNumber += this->m_IncrementIndex;
   }
@@ -354,19 +357,16 @@ ImageSeriesWriter<TInputImage, TOutputImage>::PrintSelf(std::ostream & os, Inden
 
   itkPrintSelfObjectMacro(ImageIO);
 
+  itkPrintSelfBooleanMacro(UserSpecifiedImageIO);
+  for (unsigned int i = 0; i < m_FileNames.size(); ++i)
+  {
+    os << indent << "FileNames[" << i << "]: " << m_FileNames[i] << std::endl;
+  }
+  os << indent << "SeriesFormat: " << m_SeriesFormat << std::endl;
   os << indent << "StartIndex: " << m_StartIndex << std::endl;
   os << indent << "IncrementIndex: " << m_IncrementIndex << std::endl;
-  os << indent << "SeriesFormat: " << m_SeriesFormat << std::endl;
+  itkPrintSelfBooleanMacro(UseCompression);
   os << indent << "MetaDataDictionaryArray: " << m_MetaDataDictionaryArray << std::endl;
-
-  if (m_UseCompression)
-  {
-    os << indent << "Compression: On\n";
-  }
-  else
-  {
-    os << indent << "Compression: Off\n";
-  }
 }
 } // end namespace itk
 

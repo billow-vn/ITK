@@ -35,7 +35,6 @@ class HistogramToTextureFeaturesFilterEnums
 {
 public:
   /**
-   * \class TextureFeature
    * \ingroup ITKStatistics
    * Texture feature types
    */
@@ -140,7 +139,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(HistogramToTextureFeaturesFilter);
 
   /** standard New() method support */

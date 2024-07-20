@@ -39,14 +39,7 @@ void
 MRIBiasEnergyFunction<TImage, TImageMask, TBiasField>::InitializeDistributions(Array<double> classMeans,
                                                                                Array<double> classSigmas)
 {
-  m_InternalEnergyFunction = new InternalEnergyFunction(classMeans, classSigmas);
-}
-
-template <typename TImage, typename TImageMask, typename TBiasField>
-MRIBiasEnergyFunction<TImage, TImageMask, TBiasField>::~MRIBiasEnergyFunction()
-{
-  delete m_InternalEnergyFunction;
-  m_InternalEnergyFunction = nullptr;
+  m_InternalEnergyFunction = std::make_unique<InternalEnergyFunction>(classMeans, classSigmas);
 }
 
 template <typename TImage, typename TImageMask, typename TBiasField>
@@ -199,7 +192,7 @@ MRIBiasFieldCorrectionFilter<TInputImage, TOutputImage, TMaskImage>::MRIBiasFiel
 {
   m_NormalVariateGenerator->Initialize(time(nullptr));
 
-  if (ImageDimension == 3)
+  if constexpr (ImageDimension == 3)
   {
     m_UsingInterSliceIntensityCorrection = true;
     m_SlicingDirection = 2;
@@ -231,9 +224,7 @@ MRIBiasFieldCorrectionFilter<TInputImage, TOutputImage, TMaskImage>::SetNumberOf
   }
 
   // Resize the schedules
-  ScheduleType temp(m_NumberOfLevels, ImageDimension);
-  temp.Fill(0);
-  m_Schedule = temp;
+  m_Schedule = ScheduleType(m_NumberOfLevels, ImageDimension, 0);
 
   // Determine initial shrink factor
   unsigned int startfactor = 1;
@@ -956,12 +947,11 @@ MRIBiasFieldCorrectionFilter<TInputImage, TOutputImage, TMaskImage>::PrintSelf(s
 
   os << indent << "SlicingDirection: " << m_SlicingDirection << std::endl;
 
-  os << indent << "BiasFieldMultiplicative: " << (m_BiasFieldMultiplicative ? "On" : "Off") << std::endl;
-  os << indent << "UsingInterSliceIntensityCorrection: " << (m_UsingInterSliceIntensityCorrection ? "On" : "Off")
-     << std::endl;
-  os << indent << "UsingSlabIdentification: " << (m_UsingSlabIdentification ? "On" : "Off") << std::endl;
-  os << indent << "UsingBiasFieldCorrection: " << (m_UsingBiasFieldCorrection ? "On" : "Off") << std::endl;
-  os << indent << "GeneratingOutput: " << (m_GeneratingOutput ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(BiasFieldMultiplicative);
+  itkPrintSelfBooleanMacro(UsingInterSliceIntensityCorrection);
+  itkPrintSelfBooleanMacro(UsingSlabIdentification);
+  itkPrintSelfBooleanMacro(UsingBiasFieldCorrection);
+  itkPrintSelfBooleanMacro(GeneratingOutput);
 
   os << indent << "SlabNumberOfSamples: " << m_SlabNumberOfSamples << std::endl;
   os << indent << "SlabBackgroundMinimumThreshold: "

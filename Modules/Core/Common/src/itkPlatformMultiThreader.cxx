@@ -30,7 +30,6 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 #if defined(ITK_USE_PTHREADS)
 #  include "itkPlatformMultiThreaderPosix.cxx"
@@ -80,7 +79,7 @@ PlatformMultiThreader::SetNumberOfWorkUnits(ThreadIdType numberOfWorkUnits)
 void
 PlatformMultiThreader::SetSingleMethod(ThreadFunctionType f, void * data)
 {
-  m_SingleMethod = f;
+  m_SingleMethod = std::move(f);
   m_SingleData = data;
 }
 

@@ -54,9 +54,7 @@ ReadWriteTest(const std::string fileName, const bool isRealDisplacementField, co
     size.Fill(dimLength);
     typename FieldType::IndexType start;
     start.Fill(0);
-    typename FieldType::RegionType region;
-    region.SetSize(size);
-    region.SetIndex(start);
+    typename FieldType::RegionType region{ start, size };
     knownField->SetRegions(region);
 
     typename FieldType::SpacingType spacing;
@@ -243,6 +241,8 @@ oneTest(const std::string goodname, const std::string badname, const bool useCom
     while (lit != list->end())
     {
       (*lit)->Print(std::cout);
+      std::cout << "Input space name: " << (*lit)->GetInputSpaceName() << std::endl;
+      std::cout << "Output space name: " << (*lit)->GetOutputSpaceName() << std::endl;
       ++lit;
     }
   }

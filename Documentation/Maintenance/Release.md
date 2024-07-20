@@ -10,6 +10,7 @@ Current Maintainers
 The current ITK maintainers with a trusted GPG key are:
 
   * Matt McCormick (@thewtex) <matt.mccormick@kitware.com>
+  * Pablo Hernandez-Cerdan <pablo.hernandez.cerdan@outlook.com>
   * Brad King (@bradking) <brad.king@kitware.com>
   * Jean-Christophe Fillion-Robin (@jcfr) <jchris.fillionr@kitware.com>
 
@@ -203,10 +204,10 @@ Archive ExternalData
 --------------------
 
 More background on the testing data can be found in the
-[Contributing Upload Binary Data][../docs/contributing/upload_binary_data.md) documentation.
+[Contributing Upload Binary Data](../docs/contributing/upload_binary_data.md) documentation.
 
 The following steps archive data for release on various resources. Both
-[datalad] and [@web3-storage/w3] should be installed locally. And the [kubo]
+[datalad] and [@web3-storage/w3cli] should be installed locally. And the [kubo]
 `ipfs` cli. It is recommended to install and run [ipfs-desktop] and symlink
 the `ipfs` cli it comes with into your PATH.
 
@@ -243,6 +244,8 @@ cd ~/data/ITKData
 ./ContentLinkSynchronization.sh --create ~/src/ITK
 ```
 
+
+
 Upload the tree to archival storage with:
 
 ```bash
@@ -262,6 +265,10 @@ If there is new content, commit it with:
 ```bash
 datalad save -m "ENH: Updates for ITK-v<itk-release-version>"
 ```
+
+The first time uploading to web3.storage, you will need to create an account,
+[install the w3 cli], and create a space, e.g. with `w3 space create itk` or
+add your DID, obtained with `w3 whoami`, to the shared space.
 
 Upload the repository update to web3.storage:
 
@@ -283,13 +290,17 @@ If the [pinata] pinning service is not already available, create it:
 ```bash
 ipfs pin remote service add pinata https://api.pinata.cloud/psa/ PINATA_JWT
 ```
+Where `PINATA_JWT` is the secret key associated to an API key at the
+InsightSoftwareConsortium workspace in pinata.
 
 Then pin the root CID locally and on Pinata:
 
 ```bash
-ipfs pin add /ipfs/bafy<rest-of-cid>
+ipfs pin add /ipfs/bafy<rest-of-cid> --progress
 ipfs pin remote add --service=pinata --name=ITKData-ITK-v<itk-release-version> /ipfs/bafy<rest-of-cid>
 ```
+
+The command `ipfs pin add` requires `ipfs daemon` to be running, and can take some time.
 
 ### Pin the CID on Kitware's ipfs server
 
@@ -348,6 +359,9 @@ tree that has been fully tested in the [Dashboard].
 
 ### Tag with a branch point reference
 
+In the documentation below `$version` examples are `5.4rc03`, `5.4.0`, or
+`5.4.1`.
+
 In the source tree that was just updated, use the command
 
 ```bash
@@ -385,12 +399,12 @@ For minor releases, merge the release branch into `master` branch as for a
 normal commit, and resolve conflicts (arising from mismatch in version number)
 by keeping `master` branch versions.
 
-Merge the `release` branch into the current named version branch, e.g. `5.4`.
+Merge the `release` branch into the current named `$major_minor` version branch, e.g. `5.4`.
 
 ```bash
-git checkout $version
+git checkout $major_minor
 git merge --ff-only release
-git push upstream $version
+git push upstream $major_minor
 ```
 
 ### Remote modules
@@ -398,6 +412,11 @@ git push upstream $version
 Add any new remote modules to nightly builds. Some builds may be difficult to add
 due to third-party dependencies.
 
+When a new ITK version is released, experience has shown that the remote
+module packages are not binary compatible across ITK major or minor releases.
+Thus, remote module versions should be bumped into a new major version when
+requiring a new ITK major or minor version. The process described below
+ensures appropriate versioning and compatibility of the remotes with ITK.
 
 Update Remote Modules
 ---------------------
@@ -528,7 +547,7 @@ sudo git clean -fdx
 sudo rm -rf ITK-source
 ./scripts/dockcross-manylinux-build-wheels.sh
 tar cvzf /tmp/dist-linux-manylinux_2_28.tar.gz ./dist
-rm dist/*
+rm -f dist/*
 cd ..
 ./ITKPythonPackage/scripts/dockcross-manylinux-build-tarball.sh
 mv ITKPythonBuilds-linux.tar.zst ITKPythonBuilds-linux-manylinux_2_28.tar.zst
@@ -542,27 +561,51 @@ git cherry-pick origin/manylinux2014
 ./scripts/dockcross-manylinux-build-wheels.sh
 # Create wheel archive
 tar cvzf /tmp/dist-linux-manylinux2014.tar.gz ./dist
-rm dist/*
+rm -f dist/*
 # Create build tarball
 cd ..
 ./ITKPythonPackage/scripts/dockcross-manylinux-build-tarball.sh
 mv ITKPythonBuilds-linux.tar.zst ITKPythonBuilds-linux-manylinux2014.tar.zst
+cd ITKPythonPackage
 git reset --hard HEAD~1
 ```
 
 For Linux ARM builds, the steps are similar, but the wheel build step is:
 
 ```bash
-docker run --privileged --rm tonistiigi/binfmt --install all
-docker run -it -v $(pwd):/work/ quay.io/pypa/manylinux_2_28_aarch64:latest bash
+sudo podman run --privileged --rm tonistiigi/binfmt --install all
+podman run -it -v $(pwd):/work/ quay.io/pypa/manylinux_2_28_aarch64:2024-03-25-9206bd9 bash
 # In the container
 cd /work
-yum install sudo
+# Upgrade GPG keys
+dnf upgrade -y almalinux-release
+# Newer Python.cmake module required for the SABI
+pipx upgrade cmake
+yum install sudo ninja-build
 ./scripts/internal/manylinux-build-wheels.sh
+# Exit the container
+exit
+tar cvzf /tmp/dist-linux-manylinux_2_28_aarch64.tar.gz ./dist
+rm -f dist/*
+cd ..
+./ITKPythonPackage/scripts/dockcross-manylinux-build-tarball.sh
+mv ITKPythonBuilds-linux.tar.zst ITKPythonBuilds-linux-manylinux_2_28_aarch64.tar.zst
 ```
 
+On the macOS build system, we use the same build toolchain, toolchain path, and build
+path as is used in the remote module GitHub Actions builds on the [macos-14 GitHub Action Runner].
 
-Build the wheels for macOS (both amd64 and ARM):
+- Install Xcode 15.0.1 from https://developer.apple.com/downloads/all/
+- Unpack and move to /Applications/Xcode_15.0.1.app
+``` bash
+sudo xcode-select -s /Applications/Xcode_15.0.1.app
+sudo xcodebuild -license
+xcodebuild -version
+# Xcode 15.0.1
+# Build version 15A507
+```
+
+Build the wheels for macOS (both amd64 and ARM).
 
 ```bash
 ssh misty
@@ -963,7 +1006,8 @@ excellent packaging.
 [releases page]: https://itk.org/Wiki/ITK/Releases
 [release schedule]: https://itk.org/Wiki/ITK/Release_Schedule
 [Software Guide]: https://itk.org/ItkSoftwareGuide.pdf
-[@web3-storage/w3]: https://www.npmjs.com/package/@web3-storage/w3
+[@web3-storage/w3cli]: https://www.npmjs.com/package/@web3-storage/w3cli
+[install the w3cli]: https://web3.storage/docs/w3cli/
 
 [kitware]: https://www.kitware.com/
 [public.kitware.com]: public.kitware.com
@@ -975,3 +1019,4 @@ excellent packaging.
 [ITK GitHub Releases]: https://github.com/InsightSoftwareConsortium/ITK/releases
 [ITK data.kitware.com Releases]: https://data.kitware.com/#item/5b22a47f8d777f2e622564d8
 [ITK GitHub Milestones]: https://github.com/InsightSoftwareConsortium/ITK/milestones
+[macos-14 GitHub Action Runner]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md

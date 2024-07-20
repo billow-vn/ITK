@@ -34,7 +34,9 @@ namespace itk
 class ITKIOImageBase_EXPORT ImageFileWriterException : public ExceptionObject
 {
 public:
-  /** Run-time information. */
+  ITK_DEFAULT_COPY_AND_MOVE(ImageFileWriterException);
+
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ImageFileWriterException);
 
   /** Constructor. */
@@ -98,7 +100,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ImageFileWriter);
 
   /** Some convenient type alias. */

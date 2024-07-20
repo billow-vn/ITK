@@ -27,6 +27,7 @@
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkImageAlgorithm.h"
 
+#include <algorithm>   // For max.
 #include <type_traits> // For is_same.
 
 namespace itk
@@ -80,7 +81,7 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
     Transform<TTransformPrecisionType, Self::OutputImageDimension, Self::OutputImageDimension>;
   typename IdentityTransformType::Pointer defaultTransform =
     IdentityTransform<TTransformPrecisionType, OutputImageDimension>::New();
-  if (InputImageDimension == OutputImageDimension)
+  if constexpr (InputImageDimension == OutputImageDimension)
   {
     using DecoratorType = DataObjectDecorator<IdentityTransformType>;
     auto decoratedInput = DecoratorType::New();
@@ -101,7 +102,7 @@ template <typename TInputImage,
           typename TTransformPrecisionType>
 void
 ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType>::
-  VerifyPreconditions() ITKv5_CONST
+  VerifyPreconditions() const
 {
   this->Superclass::VerifyPreconditions();
   const ReferenceImageBaseType * const referenceImage = this->GetReferenceImage();
@@ -596,7 +597,7 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
   GenerateOutputInformation()
 {
   // Call the superclass' implementation of this method
-  if (InputImageDimension == OutputImageDimension)
+  if constexpr (InputImageDimension == OutputImageDimension)
   {
     Superclass::GenerateOutputInformation();
   }
@@ -642,10 +643,7 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
 
   if (m_Interpolator)
   {
-    if (latestTime < m_Interpolator->GetMTime())
-    {
-      latestTime = m_Interpolator->GetMTime();
-    }
+    latestTime = std::max(latestTime, m_Interpolator->GetMTime());
   }
 
   return latestTime;
@@ -673,7 +671,7 @@ ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType, TTran
   os << indent << "Transform: " << this->GetTransform() << std::endl;
   os << indent << "Interpolator: " << m_Interpolator.GetPointer() << std::endl;
   os << indent << "Extrapolator: " << m_Extrapolator.GetPointer() << std::endl;
-  os << indent << "UseReferenceImage: " << (m_UseReferenceImage ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseReferenceImage);
 }
 } // end namespace itk
 

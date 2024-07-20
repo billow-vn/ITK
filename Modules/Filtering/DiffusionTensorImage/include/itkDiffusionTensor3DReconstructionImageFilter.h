@@ -159,7 +159,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(DiffusionTensor3DReconstructionImageFilter);
 
   using ReferencePixelType = TReferenceImagePixelType;
@@ -312,7 +312,7 @@ protected:
   DynamicThreadedGenerateData(const OutputImageRegionType & outputRegionForThread) override;
 
   void
-  VerifyPreconditions() ITKv5_CONST override;
+  VerifyPreconditions() const override;
 
   /** Enables backwards compatibility for enum values */
   using GradientImageTypeEnumeration = DiffusionTensor3DReconstructionImageFilterEnums::GradientImageFormat;

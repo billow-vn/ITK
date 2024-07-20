@@ -36,9 +36,6 @@ template <typename TInput1, typename TInput2, typename TInput3, typename TOutput
 class ITK_TEMPLATE_EXPORT LandweberMethod
 {
 public:
-  LandweberMethod() = default;
-  ~LandweberMethod() = default;
-
   bool
   operator==(const LandweberMethod &) const
   {
@@ -126,7 +123,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(LandweberDeconvolutionImageFilter);
 
   /** Set/get relaxation factor. */

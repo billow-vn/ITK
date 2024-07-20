@@ -35,8 +35,6 @@ template <typename TInput, typename TOutput>
 class ComplexToModulus
 {
 public:
-  ComplexToModulus() = default;
-  ~ComplexToModulus() = default;
   bool
   operator==(const ComplexToModulus &) const
   {
@@ -69,7 +67,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ComplexToModulusImageFilter);
 
   using InputPixelType = typename TInputImage::PixelType;

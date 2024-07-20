@@ -39,7 +39,8 @@
     {                                                                                                          \
       v->VisitFromCell(cellid, this);                                                                          \
     }                                                                                                          \
-  }
+  }                                                                                                            \
+  ITK_MACROEND_NOOP_STATEMENT
 
 // Define a macro for the common type alias required by the
 // classes deriving form CellInterface (included).
@@ -387,7 +388,7 @@ public:
   CoordRepType
   GetBoundingBoxDiagonalLength2()
   {
-    return NumericTraits<CoordRepType>::ZeroValue();
+    return CoordRepType{};
   }
 
   /** Intersect the given bounding box (bounds[PointDimension*2]) with a line
@@ -461,7 +462,7 @@ public:
 
 #endif
 
-  /** Standard part of every itk Object. */
+  /** \see LightObject::GetNameOfClass() */
   itkVirtualGetNameOfClassMacro(CellInterface);
 
 public:

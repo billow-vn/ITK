@@ -81,7 +81,7 @@ public:
   LightObject::Pointer
   CreateAnother() const override;
 
-  /** Standard part of all itk objects. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(Object);
 
   /** Turn debugging output on.  */
@@ -201,7 +201,7 @@ public:
 
   /** Remove the observer with this tag value. */
   void
-  RemoveObserver(unsigned long tag);
+  RemoveObserver(unsigned long tag) const;
 
   /** Remove all observers . */
   void

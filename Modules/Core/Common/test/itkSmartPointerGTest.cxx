@@ -38,7 +38,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(Derived1);
 
   itkNewMacro(Derived1);
@@ -76,7 +76,7 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(Derived2);
 
   itkNewMacro(Derived2);
@@ -129,12 +129,17 @@ TEST(SmartPointer, EmptyAndNull)
   cptr = nullptr;
   EXPECT_TRUE(cptr.IsNull());
 
+ITK_CLANG_PRAGMA_PUSH
+ITK_CLANG_SUPPRESS_Wzero_as_null_pointer_constant
+
   // NOLINTNEXTLINE(modernize-use-nullptr)
   ptr = NULL; // Do not change NULL, null, Null in this file. This file intentionally contains usage of legacy NULL
   EXPECT_TRUE(ptr.IsNull());
 
   // NOLINTNEXTLINE(modernize-use-nullptr)
   cptr = NULL; // Do not change NULL, null, Null in this file. This file intentionally contains usage of legacy NULL
+ITK_CLANG_PRAGMA_POP
+
   EXPECT_TRUE(cptr.IsNull());
 
 

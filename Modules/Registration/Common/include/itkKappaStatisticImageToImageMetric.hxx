@@ -180,15 +180,15 @@ KappaStatisticImageToImageMetric<TFixedImage, TMovingImage>::GetDerivative(const
 
   const unsigned int ParametersDimension = this->GetNumberOfParameters();
   derivative = DerivativeType(ParametersDimension);
-  derivative.Fill(NumericTraits<typename DerivativeType::ValueType>::ZeroValue());
+  derivative.Fill(typename DerivativeType::ValueType{});
 
   using ArrayType = Array<double>;
 
   ArrayType sum1(ParametersDimension);
-  sum1.Fill(NumericTraits<typename ArrayType::ValueType>::ZeroValue());
+  sum1.Fill(typename ArrayType::ValueType{});
 
   ArrayType sum2(ParametersDimension);
-  sum2.Fill(NumericTraits<typename ArrayType::ValueType>::ZeroValue());
+  sum2.Fill(typename ArrayType::ValueType{});
 
   int fixedArea = 0;
   int movingArea = 0;
@@ -368,7 +368,7 @@ KappaStatisticImageToImageMetric<TFixedImage, TMovingImage>::PrintSelf(std::ostr
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Complement: " << (m_Complement ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(Complement);
   os << indent << "ForegroundValue: " << m_ForegroundValue << std::endl;
 }
 

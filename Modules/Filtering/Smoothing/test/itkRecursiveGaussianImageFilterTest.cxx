@@ -61,9 +61,7 @@ itkRecursiveGaussianImageFilterTest(int, char *[])
     myIndexType start;
     start.Fill(0);
 
-    myRegionType region;
-    region.SetIndex(start);
-    region.SetSize(size);
+    myRegionType region{ start, size };
 
     // Initialize Image A
     inputImage->SetRegions(region);
@@ -206,7 +204,7 @@ itkRecursiveGaussianImageFilterTest(int, char *[])
     inputImage->SetRegions(region);
     inputImage->Allocate();
     inputImage->SetSpacing(spacing);
-    inputImage->FillBuffer(itk::NumericTraits<PixelType>::ZeroValue());
+    inputImage->FillBuffer(PixelType{});
 
     IndexType index;
     index[0] = (size[0] - 1) / 2; // the middle pixel
@@ -487,7 +485,7 @@ itkRecursiveGaussianImageFilterTest(int, char *[])
     inputImage->SetRegions(region);
     inputImage->Allocate();
     inputImage->SetSpacing(spacing);
-    inputImage->FillBuffer(itk::NumericTraits<PixelType>::ZeroValue());
+    inputImage->FillBuffer(PixelType{});
 
     IndexType index;
     index[0] = (size[0] - 1) / 2; // the middle pixel

@@ -34,8 +34,6 @@ template <typename TInput, typename TOutput>
 class Round
 {
 public:
-  Round() = default;
-  ~Round() = default;
   bool
   operator==(const Round &) const
   {
@@ -77,7 +75,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(RoundImageFilter);
 
 protected:

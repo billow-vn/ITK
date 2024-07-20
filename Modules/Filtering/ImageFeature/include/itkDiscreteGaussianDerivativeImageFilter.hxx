@@ -51,7 +51,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::GenerateInputR
     // Determine the size of the operator in this dimension.  Note that the
     // Gaussian is built as a 1D operator in each of the specified directions.
     oper.SetDirection(i);
-    if (m_UseImageSpacing == true)
+    if (m_UseImageSpacing)
     {
       oper.SetSpacing(this->GetInput()->GetSpacing()[i]);
     }
@@ -157,7 +157,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
     // Set up the operator for this dimension
     oper[reverse_i].SetDirection(i);
     oper[reverse_i].SetOrder(m_Order[i]);
-    if (m_UseImageSpacing == true)
+    if (m_UseImageSpacing)
     {
       // convert the variance from physical units to pixels
       double s = localInput->GetSpacing()[i];
@@ -176,7 +176,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
   }
 
   // Create a chain of filters
-  if (ImageDimension == 1)
+  if constexpr (ImageDimension == 1)
   {
     // Use just a single filter
     SingleFilterPointer singleFilter = SingleFilterType::New();
@@ -212,7 +212,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
 
     // Middle filters convolves from real to real
     std::vector<IntermediateFilterPointer> intermediateFilters;
-    if (ImageDimension > 2)
+    if constexpr (ImageDimension > 2)
     {
       const unsigned int max_dim = ImageDimension - 1;
       for (unsigned int i = 1; i != max_dim; ++i)
@@ -239,7 +239,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::GenerateData()
     LastFilterPointer lastFilter = LastFilterType::New();
     lastFilter->SetOperator(oper[ImageDimension - 1]);
     lastFilter->ReleaseDataFlagOn();
-    if (ImageDimension > 2)
+    if constexpr (ImageDimension > 2)
     {
       const unsigned int temp_dim = ImageDimension - 3;
       lastFilter->SetInput(intermediateFilters[temp_dim]->GetOutput());
@@ -282,7 +282,7 @@ DiscreteGaussianDerivativeImageFilter<TInputImage, TOutputImage>::PrintSelf(std:
   os << indent << "Variance: " << m_Variance << std::endl;
   os << indent << "MaximumError: " << m_MaximumError << std::endl;
   os << indent << "MaximumKernelWidth: " << m_MaximumKernelWidth << std::endl;
-  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseImageSpacing);
   os << indent << "InternalNumberOfStreamDivisions: " << m_InternalNumberOfStreamDivisions << std::endl;
   os << indent << "NormalizeAcrossScale: " << m_NormalizeAcrossScale << std::endl;
 }

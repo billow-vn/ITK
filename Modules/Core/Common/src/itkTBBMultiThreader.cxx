@@ -47,14 +47,10 @@ namespace itk
 TBBMultiThreader::TBBMultiThreader()
 {
   ThreadIdType defaultThreads = std::max(1u, GetGlobalDefaultNumberOfThreads());
-#if defined(ITKV4_COMPATIBILITY)
-  m_NumberOfWorkUnits = defaultThreads;
-#else
   if (defaultThreads > 1) // one work unit for only one thread
   {
     m_NumberOfWorkUnits = 16 * defaultThreads;
   }
-#endif
 }
 
 TBBMultiThreader::~TBBMultiThreader() = default;
@@ -62,7 +58,7 @@ TBBMultiThreader::~TBBMultiThreader() = default;
 void
 TBBMultiThreader::SetSingleMethod(ThreadFunctionType f, void * data)
 {
-  m_SingleMethod = f;
+  m_SingleMethod = std::move(f);
   m_SingleData = data;
 }
 
@@ -182,7 +178,7 @@ struct TBBImageRegionSplitter : public itk::ImageIORegion
   {
     // The following if statement is primarily used to ensure use of
     // is_splittable_in_proportion to avoid unused variable warning.
-    if (TBBImageRegionSplitter::is_splittable_in_proportion == true)
+    if (TBBImageRegionSplitter::is_splittable_in_proportion)
     {
       *this = region; // most things will be the same
       for (int d = static_cast<int>(this->GetImageDimension()) - 1; d >= 0;

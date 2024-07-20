@@ -68,9 +68,7 @@ itkLevelSetEquationOverlapPenaltyTermTest(int, char *[])
   InputImageType::IndexType index;
   index.Fill(0);
 
-  InputImageType::RegionType region;
-  region.SetIndex(index);
-  region.SetSize(size);
+  InputImageType::RegionType region{ index, size };
 
   // Binary initialization
   auto binary = InputImageType::New();
@@ -78,7 +76,7 @@ itkLevelSetEquationOverlapPenaltyTermTest(int, char *[])
   binary->SetSpacing(spacing);
   binary->SetOrigin(origin);
   binary->Allocate();
-  binary->FillBuffer(itk::NumericTraits<InputPixelType>::ZeroValue());
+  binary->FillBuffer(InputPixelType{});
 
   index.Fill(10);
   size.Fill(30);
@@ -198,8 +196,7 @@ itkLevelSetEquationOverlapPenaltyTermTest(int, char *[])
   index[1] = 5;
 
   std::cout << penaltyTerm0->Evaluate(index) << std::endl;
-  if (itk::Math::NotAlmostEquals(penaltyTerm0->Evaluate(index),
-                                 itk::NumericTraits<OverlapPenaltyTermType::LevelSetOutputRealType>::ZeroValue()))
+  if (itk::Math::NotAlmostEquals(penaltyTerm0->Evaluate(index), OverlapPenaltyTermType::LevelSetOutputRealType{}))
   {
     return EXIT_FAILURE;
   }

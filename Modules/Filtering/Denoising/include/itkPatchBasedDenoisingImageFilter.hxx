@@ -23,9 +23,9 @@
 #include "itkResampleImageFilter.h"
 #include "itkIdentityTransform.h"
 #include "itkLinearInterpolateImageFunction.h"
-#include "itkImageFileWriter.h"
 #include "itkGaussianOperator.h"
 #include "itkImageAlgorithm.h"
+#include "itkIntTypes.h"
 #include "itkVectorImageToImageAdaptor.h"
 #include "itkSpatialNeighborSubsampler.h"
 #include "itkMacro.h"
@@ -43,7 +43,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::PatchBasedDenoisingIm
   m_MinProbability(NumericTraits<RealValueType>::min() * 100)
   , // to avoid divide by zero
   m_SigmaUpdateDecimationFactor(
-    static_cast<unsigned int>(Math::Round<double>(1.0 / m_KernelBandwidthFractionPixelsForEstimation)))
+    static_cast<unsigned int>(Math::Round<int64_t>(1.0 / m_KernelBandwidthFractionPixelsForEstimation)))
   , m_NoiseSigma()
   , m_NoiseSigmaSquared()
   , m_SearchSpaceList(ListAdaptorType::New())
@@ -239,10 +239,10 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::Initialize()
 
   // For automatic sigma estimation, select every 'k'th pixel.
   m_SigmaUpdateDecimationFactor =
-    static_cast<unsigned int>(Math::Round<double>(1.0 / m_KernelBandwidthFractionPixelsForEstimation));
+    static_cast<unsigned int>(Math::Round<int64_t>(1.0 / m_KernelBandwidthFractionPixelsForEstimation));
   // For automatic sigma estimation, use at least 1% of pixels.
-  m_SigmaUpdateDecimationFactor = std::min(m_SigmaUpdateDecimationFactor,
-                                           static_cast<unsigned int>(Math::Round<double>(m_TotalNumberPixels / 100.0)));
+  m_SigmaUpdateDecimationFactor = std::min(
+    m_SigmaUpdateDecimationFactor, static_cast<unsigned int>(Math::Round<int64_t>(m_TotalNumberPixels / 100.0)));
   // For automatic sigma estimation, can't use more than 100% of pixels.
   m_SigmaUpdateDecimationFactor = std::max(m_SigmaUpdateDecimationFactor, 1u);
 
@@ -401,7 +401,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::EnforceConstraints()
   {
     for (unsigned int ic = 0; ic < m_NumIndependentComponents; ++ic)
     {
-      if (m_ImageMin[ic] < NumericTraits<PixelValueType>::ZeroValue())
+      if (m_ImageMin[ic] < PixelValueType{})
       {
         itkExceptionMacro("When using POISSON or RICIAN noise models, "
                           << "all components of all pixels in the image must "
@@ -636,9 +636,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::DispatchedRiemannianM
   str.Filter = this;
   str.Img = const_cast<InputImageType *>(img);
   this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
-  this->GetMultiThreader()->SetSingleMethod(this->RiemannianMinMaxThreaderCallback, &str);
-  // Multithread the execution
-  this->GetMultiThreader()->SingleMethodExecute();
+  this->GetMultiThreader()->SetSingleMethodAndExecute(this->RiemannianMinMaxThreaderCallback, &str);
   this->ResolveRiemannianMinMax();
 }
 
@@ -881,9 +879,9 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::Compute3x3EigenAnalys
   // If these occur, default to the standard eigen analysis.
   // These basically enforce that the spdMatrix is in fact
   // symmetric positive definite.
-  if ((I3 < NumericTraits<RealTensorValueT>::epsilon()) || (D0 < NumericTraits<RealTensorValueT>::ZeroValue()) ||
-      (D3 < NumericTraits<RealTensorValueT>::ZeroValue()) || (D5 < NumericTraits<RealTensorValueT>::ZeroValue()) ||
-      (D0 * D3 < DSq1) || (D0 * D5 < DSq2) || (D3 * D5 < DSq4) || (n < NumericTraits<RealTensorValueT>::epsilon()))
+  if ((I3 < NumericTraits<RealTensorValueT>::epsilon()) || (D0 < RealTensorValueT{}) || (D3 < RealTensorValueT{}) ||
+      (D5 < RealTensorValueT{}) || (D0 * D3 < DSq1) || (D0 * D5 < DSq2) || (D3 * D5 < DSq4) ||
+      (n < NumericTraits<RealTensorValueT>::epsilon()))
   {
     spdMatrix.ComputeEigenAnalysis(eigenVals, eigenVecs);
     return;
@@ -1358,9 +1356,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ApplyUpdate()
   ThreadFilterStruct str;
   str.Filter = this;
   this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
-  this->GetMultiThreader()->SetSingleMethod(this->ApplyUpdateThreaderCallback, &str);
-  // Multithread the execution
-  this->GetMultiThreader()->SingleMethodExecute();
+  this->GetMultiThreader()->SetSingleMethodAndExecute(this->ApplyUpdateThreaderCallback, &str);
 
   // Explicitly call Modified on GetOutput here since ThreadedApplyUpdate
   // changes this buffer through iterators which don't increment the output
@@ -1856,8 +1852,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ResolveSigmaUpdate() 
 
     // If second derivative is zero or negative, compute update using gradient
     // descent
-    if ((Math::ExactlyEquals(itk::Math::abs(secondDerivative), NumericTraits<RealValueType>::ZeroValue())) ||
-        (secondDerivative < 0))
+    if ((Math::ExactlyEquals(itk::Math::abs(secondDerivative), RealValueType{})) || (secondDerivative < 0))
     {
       itkDebugMacro("** Second derivative NOT POSITIVE");
       sigmaUpdate[ic] = -itk::Math::sgn(firstDerivative) * kernelSigma * 0.3;
@@ -1910,10 +1905,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::ComputeImageUpdate()
   // Compute smoothing updated for intensities at each pixel
   // based on gradient of the joint entropy
   this->GetMultiThreader()->SetNumberOfWorkUnits(this->GetNumberOfWorkUnits());
-  this->GetMultiThreader()->SetSingleMethod(this->ComputeImageUpdateThreaderCallback, &str);
-
-  // Multithread the execution
-  this->GetMultiThreader()->SingleMethodExecute();
+  this->GetMultiThreader()->SetSingleMethodAndExecute(this->ComputeImageUpdateThreaderCallback, &str);
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -2396,33 +2388,11 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostrea
     os << "(Cannot be computed: input not set)" << std::endl;
   }
 
-  if (m_UseSmoothDiscPatchWeights)
-  {
-    os << indent << "UseSmoothDiscPatchWeights: On" << std::endl;
-  }
-  else
-  {
-    os << indent << "UseSmoothDiscPatchWeights: Off" << std::endl;
-  }
+  itkPrintSelfBooleanMacro(UseSmoothDiscPatchWeights);
+  itkPrintSelfBooleanMacro(UseFastTensorComputations);
 
-  if (m_UseFastTensorComputations)
-  {
-    os << indent << "UseFastTensorComputations: On" << std::endl;
-  }
-  else
-  {
-    os << indent << "UseFastTensorComputations: Off" << std::endl;
-  }
-
-  os << indent << "Kernel bandwidth sigma: " << m_KernelBandwidthSigma << std::endl;
-  if (m_KernelBandwidthSigmaIsSet)
-  {
-    os << indent << "KernelBandwidthSigmaIsSet: On" << std::endl;
-  }
-  else
-  {
-    os << indent << "KernelBandwidthSigmaIsSet: Off" << std::endl;
-  }
+  os << indent << "KernelBandwidthSigma: " << m_KernelBandwidthSigma << std::endl;
+  itkPrintSelfBooleanMacro(KernelBandwidthSigmaIsSet);
 
   os << indent << "IntensityRescaleInvFactor: " << m_IntensityRescaleInvFactor << std::endl;
 
@@ -2433,17 +2403,10 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostrea
   os << indent << "KernelBandwidthFractionPixelsForEstimation: " << m_KernelBandwidthFractionPixelsForEstimation
      << std::endl;
 
-  if (m_ComputeConditionalDerivatives)
-  {
-    os << indent << "ComputeConditionalDerivatives: On" << std::endl;
-  }
-  else
-  {
-    os << indent << "ComputeConditionalDerivatives: Off" << std::endl;
-  }
+  itkPrintSelfBooleanMacro(ComputeConditionalDerivatives);
 
-  os << indent << "Min sigma: " << m_MinSigma << std::endl;
-  os << indent << "Min probability: " << m_MinProbability << std::endl;
+  os << indent << "MinSigma: " << m_MinSigma << std::endl;
+  os << indent << "MinProbability: " << m_MinProbability << std::endl;
 
   os << indent << "SigmaUpdateDecimationFactor: " << m_SigmaUpdateDecimationFactor << std::endl;
   os << indent << "Sigma update convergence tolerance: " << m_SigmaUpdateConvergenceTolerance << std::endl;
@@ -2452,14 +2415,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostrea
 
   os << indent << "NoiseSigma: " << m_NoiseSigma << std::endl;
   os << indent << "NoiseSigmaSquared: " << m_NoiseSigmaSquared << std::endl;
-  if (m_NoiseSigmaIsSet)
-  {
-    os << indent << "NoiseSigmaIsSet: On" << std::endl;
-  }
-  else
-  {
-    os << indent << "NoiseSigmaIsSet: Off" << std::endl;
-  }
+  itkPrintSelfBooleanMacro(NoiseSigmaIsSet);
 
   itkPrintSelfObjectMacro(Sampler);
   itkPrintSelfObjectMacro(UpdateBuffer);

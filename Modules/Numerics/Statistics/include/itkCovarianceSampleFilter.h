@@ -62,7 +62,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
   using SampleType = TSample;
 
-  /** Standard Macros */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(CovarianceSampleFilter);
   itkNewMacro(Self);
 
@@ -121,12 +121,6 @@ public:
   MeasurementVectorSizeType
   GetMeasurementVectorSize() const;
 
-protected:
-  CovarianceSampleFilter();
-  ~CovarianceSampleFilter() override = default;
-  void
-  PrintSelf(std::ostream & os, Indent indent) const override;
-
   /** DataObject pointer */
   using DataObjectPointer = DataObject::Pointer;
 
@@ -134,6 +128,12 @@ protected:
   using Superclass::MakeOutput;
   DataObjectPointer
   MakeOutput(DataObjectPointerArraySizeType index) override;
+
+protected:
+  CovarianceSampleFilter();
+  ~CovarianceSampleFilter() override = default;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   void
   GenerateData() override;

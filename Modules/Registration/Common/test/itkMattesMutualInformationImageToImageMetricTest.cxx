@@ -61,9 +61,7 @@ TestMattesMetricWithAffineTransform(TInterpolator * interpolator,
 
   typename MovingImageType::SizeType   size = { { 100, 100 } };
   typename MovingImageType::IndexType  index = { { 0, 0 } };
-  typename MovingImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  typename MovingImageType::RegionType region{ index, size };
 
   typename MovingImageType::SpacingType imgSpacing;
   imgSpacing[0] = 3.0;
@@ -134,14 +132,12 @@ TestMattesMetricWithAffineTransform(TInterpolator * interpolator,
   auto imgMovingMask = MovingImageType::New();
   imgMovingMask->CopyInformation(imgMoving);
   imgMovingMask->SetRegions(region);
-  imgMovingMask->Allocate(true); // initialize
-                                 // buffer to zero
+  imgMovingMask->AllocateInitialized();
 
   auto imgFixedMask = FixedImageType::New();
   imgFixedMask->CopyInformation(imgFixed);
   imgFixedMask->SetRegions(region);
-  imgFixedMask->Allocate(true); // initialize
-                                // buffer to zero
+  imgFixedMask->AllocateInitialized();
 
   int NumberFixedImageMaskVoxels = 0;
   { // Set up a mask that only has every 10th voxel listed is used in
@@ -464,9 +460,7 @@ TestMattesMetricWithBSplineTransform(TInterpolator * interpolator,
 
   typename MovingImageType::SizeType   size = { { 100, 100 } };
   typename MovingImageType::IndexType  index = { { 0, 0 } };
-  typename MovingImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  typename MovingImageType::RegionType region{ index, size };
 
   typename MovingImageType::SpacingType imgSpacing;
   imgSpacing[0] = 1.5;

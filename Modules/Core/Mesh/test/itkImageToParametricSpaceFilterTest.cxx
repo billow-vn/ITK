@@ -70,9 +70,7 @@ itkImageToParametricSpaceFilterTest(int, char *[])
   size[0] = 10;
   size[1] = 10;
 
-  ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(start);
+  ImageType::RegionType region{ start, size };
 
   imageX->SetRegions(region);
   imageY->SetRegions(region);
@@ -129,7 +127,7 @@ itkImageToParametricSpaceFilterTest(int, char *[])
   // Get the Smart Pointer to the Filter Output
   MeshType::Pointer outputMesh = filter->GetOutput();
 
-  // Get the the point container
+  // Get the point container
   MeshType::PointsContainer::Iterator beginPoint = outputMesh->GetPoints()->Begin();
 
   MeshType::PointsContainer::Iterator endPoint = outputMesh->GetPoints()->End();

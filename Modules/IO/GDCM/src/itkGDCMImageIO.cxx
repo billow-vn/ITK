@@ -188,12 +188,6 @@ readNoPreambleDicom(std::ifstream & file) // NOTE: This file is duplicated in it
     }
   } while (groupNo == 2);
 
-#if defined(NDEBUG)
-  std::ostringstream itkmsg;
-  itkmsg << "No DICOM magic number found, but the file appears to be DICOM without a preamble.\n"
-         << "Proceeding without caution.";
-  itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());
-#endif
   return true;
 }
 
@@ -286,6 +280,13 @@ GDCMImageIO::Read(void * pointer)
   inputFileStream.close();
 
   itkAssertInDebugAndIgnoreInReleaseMacro(gdcm::ImageHelper::GetForceRescaleInterceptSlope());
+// Only available in newer versions
+#if (!defined(ITK_USE_SYSTEM_GDCM) ||                                                    \
+     ((GDCM_MAJOR_VERSION == 3 && GDCM_MINOR_VERSION == 0 && GDCM_BUILD_VERSION > 23) || \
+      (GDCM_MAJOR_VERSION == 3 && GDCM_MINOR_VERSION > 0) || GDCM_MAJOR_VERSION > 3))
+  // Secondary capture image orientation patient and image position patient support
+  itkAssertInDebugAndIgnoreInReleaseMacro(gdcm::ImageHelper::GetSecondaryCaptureImagePlaneModule());
+#endif
   gdcm::ImageReader reader;
   reader.SetFileName(m_FileName.c_str());
   if (!reader.Read())
@@ -454,6 +455,13 @@ GDCMImageIO::InternalReadImageInformation()
 
   // In general this should be relatively safe to assume
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
+// Only available in newer versions
+#if (!defined(ITK_USE_SYSTEM_GDCM) ||                                                    \
+     ((GDCM_MAJOR_VERSION == 3 && GDCM_MINOR_VERSION == 0 && GDCM_BUILD_VERSION > 23) || \
+      (GDCM_MAJOR_VERSION == 3 && GDCM_MINOR_VERSION > 0) || GDCM_MAJOR_VERSION > 3))
+  // Secondary capture image orientation patient and image position patient support
+  gdcm::ImageHelper::SetSecondaryCaptureImagePlaneModule(true);
+#endif
 
   gdcm::ImageReader reader;
   reader.SetFileName(m_FileName.c_str());
@@ -639,9 +647,8 @@ GDCMImageIO::InternalReadImageInformation()
     {
       std::vector<double> sp;
       gdcm::Tag           spacingTag(0x0028, 0x0030);
-      if (ds.FindDataElement(spacingTag) && !ds.GetDataElement(spacingTag).IsEmpty())
+      if (const gdcm::DataElement & de = ds.GetDataElement(spacingTag); !de.IsEmpty())
       {
-        gdcm::DataElement                            de = ds.GetDataElement(spacingTag);
         std::stringstream                            m_Ss;
         gdcm::Element<gdcm::VR::DS, gdcm::VM::VM1_n> m_El;
         const gdcm::ByteValue *                      bv = de.GetByteValue();
@@ -1614,13 +1621,13 @@ GDCMImageIO::PrintSelf(std::ostream & os, Indent indent) const
   os << indent << "StudyInstanceUID: " << m_StudyInstanceUID << std::endl;
   os << indent << "SeriesInstanceUID: " << m_SeriesInstanceUID << std::endl;
   os << indent << "FrameOfReferenceInstanceUID: " << m_FrameOfReferenceInstanceUID << std::endl;
-  os << indent << "KeepOriginalUID: " << (m_KeepOriginalUID ? "On" : "Off") << std::endl;
-  os << indent << "LoadPrivateTags: " << (m_LoadPrivateTags ? "On" : "Off") << std::endl;
-  os << indent << "ReadYBRtoRGB: " << (m_ReadYBRtoRGB ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(KeepOriginalUID);
+  itkPrintSelfBooleanMacro(LoadPrivateTags);
+  itkPrintSelfBooleanMacro(ReadYBRtoRGB);
 
   os << indent << "GlobalNumberOfDimensions: " << m_GlobalNumberOfDimensions << std::endl;
   os << indent << "CompressionType: " << m_CompressionType << std::endl;
-  os << indent << "SingleBit: " << (m_SingleBit ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(SingleBit);
   os << indent << "InternalComponentType: " << m_InternalComponentType << std::endl;
 
   os << indent << "DICOMHeader: ";

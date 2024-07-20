@@ -387,8 +387,21 @@ ${DO_NOT_WAIT_FOR_THREADS_CALLS}
     ${cpp_file}
     "")
 
+  set(use_python_limited_api_default 0)
+  if(ITK_WRAP_PYTHON_VERSION VERSION_GREATER_EQUAL 3.11)
+    set(use_python_limited_api_default 1)
+  endif()
+  set(ITK_USE_PYTHON_LIMITED_API ${use_python_limited_api_default} CACHE BOOL "Use Python's limited API for Python minor version compatibility." FORCE)
+  mark_as_advanced(ITK_USE_PYTHON_LIMITED_API)
+  unset(use_python_limited_api_default)
+
   # build all the c++ files from this module in a common lib
   if(NOT TARGET ${lib})
+    set(development_component "Development.Module")
+    if(ITK_USE_PYTHON_LIMITED_API)
+      set(development_component "Development.SABIModule")
+    endif()
+    find_package(Python3 COMPONENTS Interpreter ${development_component} REQUIRED)
     add_library(${lib} MODULE ${cpp_file} ${ITK_WRAP_PYTHON_CXX_FILES} ${WRAPPER_LIBRARY_CXX_SOURCES})
     set_target_properties(${lib} PROPERTIES PREFIX "_")
 
@@ -398,14 +411,18 @@ ${DO_NOT_WAIT_FOR_THREADS_CALLS}
     endif()
     # extension is not the same on windows
     if(WIN32)
-      # normally need *.pyd
-      # python_d requires libraries named *_d.pyd
       set_target_properties(${lib} PROPERTIES SUFFIX .pyd)
       set_target_properties(${lib} PROPERTIES DEBUG_POSTFIX "_d")
 
       if(MSVC)
         # Disables 'conversion from 'type1' to 'type2', possible loss of data warnings
         set_target_properties(${lib} PROPERTIES COMPILE_FLAGS "/wd4244")
+      endif()
+    else()
+      if (ITK_USE_PYTHON_LIMITED_API)
+        set_target_properties(${lib} PROPERTIES SUFFIX .abi3.so)
+      else()
+        set_target_properties(${lib} PROPERTIES SUFFIX .so)
       endif()
     endif()
     if(NOT MSVC)
@@ -417,9 +434,17 @@ ${DO_NOT_WAIT_FOR_THREADS_CALLS}
       unset(ipo_is_supported)
     endif()
 
+    # Python Limited API / Stable ABI
+    if (ITK_USE_PYTHON_LIMITED_API)
+      target_compile_definitions(${lib} PUBLIC -DPy_LIMITED_API=0x030b0000)
+    endif()
     # Link the modules together
     target_link_libraries(${lib} LINK_PUBLIC ${WRAPPER_LIBRARY_LINK_LIBRARIES})
-    itk_target_link_libraries_with_dynamic_lookup(${lib} LINK_PUBLIC ${Python3_LIBRARIES})
+    if (ITK_USE_PYTHON_LIMITED_API)
+      itk_target_link_libraries_with_dynamic_lookup(${lib} LINK_PUBLIC ${Python3_SABI_LIBRARIES})
+    else()
+      itk_target_link_libraries_with_dynamic_lookup(${lib} LINK_PUBLIC ${Python3_LIBRARIES})
+    endif()
 
     if(USE_COMPILER_HIDDEN_VISIBILITY)
       # Prefer to use target properties supported by newer cmake

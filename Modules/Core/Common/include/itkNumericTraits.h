@@ -27,7 +27,8 @@
   static constexpr ValueType min(ValueType) { return std::numeric_limits<ValueType>::min(); } \
   static constexpr ValueType max(ValueType) { return std::numeric_limits<ValueType>::max(); } \
   static constexpr ValueType min() { return std::numeric_limits<ValueType>::min(); }          \
-  static constexpr ValueType max() { return std::numeric_limits<ValueType>::max(); }
+  static constexpr ValueType max() { return std::numeric_limits<ValueType>::max(); }          \
+  ITK_MACROEND_NOOP_STATEMENT
 
 #include <limits> // for std::numeric_limits
 #include <complex>
@@ -189,7 +190,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
   /** Return the length of the scalar. This API is needed for
    * VariableLengthVector because
@@ -368,7 +369,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -474,7 +475,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -596,7 +597,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -700,7 +701,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -802,7 +803,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -905,7 +906,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1007,7 +1008,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1129,7 +1130,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1232,7 +1233,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1335,7 +1336,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1439,7 +1440,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1542,7 +1543,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1653,7 +1654,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1757,7 +1758,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1852,7 +1853,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a scalar to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 };
 
@@ -1978,7 +1979,7 @@ public:
     {
       itkGenericExceptionMacro("Cannot set the size of a complex to " << s);
     }
-    m = NumericTraits<ValueType>::ZeroValue();
+    m = ValueType{};
   }
 
 #if defined(ITK_LEGACY_REMOVE)

@@ -48,9 +48,6 @@ template <typename TPixel1, typename TPixel2>
 class JoinFunctor
 {
 public:
-  JoinFunctor() = default;
-  ~JoinFunctor() = default;
-
   /** Standard type alias */
   using Self = JoinFunctor;
 
@@ -230,7 +227,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(JoinImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

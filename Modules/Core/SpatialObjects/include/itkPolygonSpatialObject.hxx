@@ -19,6 +19,7 @@
 #define itkPolygonSpatialObject_hxx
 
 #include "itkMath.h"
+#include <algorithm> // For min and max.
 
 namespace itk
 {
@@ -69,14 +70,8 @@ PolygonSpatialObject<TDimension>::GetOrientationInObjectSpace() const
     PointType curpoint = it->GetPositionInObjectSpace();
     for (unsigned int i = 0; i < TDimension; ++i)
     {
-      if (minPnt[i] > curpoint[i])
-      {
-        minPnt[i] = curpoint[i];
-      }
-      if (maxPnt[i] < curpoint[i])
-      {
-        maxPnt[i] = curpoint[i];
-      }
+      minPnt[i] = std::min(minPnt[i], curpoint[i]);
+      maxPnt[i] = std::max(maxPnt[i], curpoint[i]);
     }
     ++it;
   }
@@ -312,15 +307,8 @@ PolygonSpatialObject<TDimension>::PrintSelf(std::ostream & os, Indent indent) co
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "OrientationInObjectSpace: " << m_OrientationInObjectSpace << std::endl;
-  os << indent << "OrientationInObjectSpace Time: " << m_OrientationInObjectSpaceMTime << std::endl;
-  if (m_IsClosed)
-  {
-    os << indent << "IsClosed: True" << std::endl;
-  }
-  else
-  {
-    os << indent << "IsClosed: False" << std::endl;
-  }
+  os << indent << "OrientationInObjectSpaceMTime: " << m_OrientationInObjectSpaceMTime << std::endl;
+  itkPrintSelfBooleanMacro(IsClosed);
   os << indent << "ThicknessInObjectSpace: " << m_ThicknessInObjectSpace << std::endl;
 }
 

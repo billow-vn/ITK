@@ -500,10 +500,9 @@ BSplineDeformableTransform<TParametersValueType, VDimension, VSplineOrder>::Tran
   this->m_WeightsFunction->Evaluate(index, weights, supportIndex);
 
   // For each dimension, correlate coefficient with weights
-  constexpr SizeType supportSize = WeightsFunctionType::SupportSize;
-  const RegionType   supportRegion(supportIndex, supportSize);
+  const RegionType supportRegion(supportIndex, WeightsFunctionType::SupportSize);
 
-  outputPoint.Fill(NumericTraits<ScalarType>::ZeroValue());
+  outputPoint.Fill(ScalarType{});
 
   using IteratorType = ImageScanlineConstIterator<ImageType>;
   IteratorType                coeffIterator[SpaceDimension];

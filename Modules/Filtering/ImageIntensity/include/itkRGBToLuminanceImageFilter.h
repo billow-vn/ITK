@@ -43,8 +43,6 @@ public:
   using ComponentType = typename TInput::ComponentType;
   using RealType = typename itk::NumericTraits<ComponentType>::RealType;
 
-  RGBToLuminance() = default;
-  ~RGBToLuminance() = default;
   bool
   operator==(const RGBToLuminance &) const
   {
@@ -77,7 +75,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(RGBToLuminanceImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

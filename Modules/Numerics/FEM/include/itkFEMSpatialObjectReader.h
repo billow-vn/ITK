@@ -41,8 +41,8 @@ public:
   using Superclass = SpatialObjectReader<VDimension, PixelType, TMeshTraits>;
   using Pointer = SmartPointer<Self>;
 
-  /** Run-time type information (and related methods). */
-  itkOverrideGetNameOfClassMacro(Superclass);
+  /** \see LightObject::GetNameOfClass() */
+  itkOverrideGetNameOfClassMacro(FEMSpatialObjectReader);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);

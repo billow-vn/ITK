@@ -10,6 +10,7 @@ set(ITKSpatialObjectsTests
     itkImageMaskSpatialObjectTest2.cxx
     itkImageMaskSpatialObjectTest3.cxx
     itkImageMaskSpatialObjectTest4.cxx
+    itkImageMaskSpatialObjectTest5.cxx
     itkBlobSpatialObjectTest.cxx
     itkContourSpatialObjectTest.cxx
     itkSurfaceSpatialObjectTest.cxx
@@ -91,6 +92,12 @@ itk_add_test(
   COMMAND
   ITKSpatialObjectsTestDriver
   itkImageMaskSpatialObjectTest4)
+itk_add_test(
+  NAME
+  itkImageMaskSpatialObjectTest5
+  COMMAND
+  ITKSpatialObjectsTestDriver
+  itkImageMaskSpatialObjectTest5)
 itk_add_test(
   NAME
   itkBlobSpatialObjectTest
@@ -215,5 +222,8 @@ itk_add_test(
   itkNewMetaObjectTypeTest
   ${ITK_TEST_OUTPUT_DIR}/NewMetaObjectType.meta)
 
-set(ITKSpatialObjectsGTests itkImageMaskSpatialObjectGTest.cxx)
+set(ITKSpatialObjectsGTests
+  itkImageMaskSpatialObjectGTest.cxx
+  itkSpatialObjectPointGTest.cxx
+)
 creategoogletestdriver(ITKSpatialObjects "${ITKSpatialObjects-Test_LIBRARIES}" "${ITKSpatialObjectsGTests}")

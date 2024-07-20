@@ -259,7 +259,7 @@ PointSetToPointSetMetricWithIndexv4<TFixedPointSet, TMovingPointSet, TInternalCo
   {
     derivative.SetSize(PointDimension * this->m_FixedTransformedPointSet->GetNumberOfPoints());
   }
-  derivative.Fill(NumericTraits<DerivativeValueType>::ZeroValue());
+  derivative.Fill(DerivativeValueType{});
 
   /*
    * Split pointset in nWorkUnits ranges and sum individually
@@ -288,7 +288,7 @@ PointSetToPointSetMetricWithIndexv4<TFixedPointSet, TMovingPointSet, TInternalCo
       MovingTransformJacobianType jacobianCache;
 
       DerivativeType threadLocalTransformDerivative(numberOfLocalParameters);
-      threadLocalTransformDerivative.Fill(NumericTraits<DerivativeValueType>::ZeroValue());
+      threadLocalTransformDerivative.Fill(DerivativeValueType{});
 
       CompensatedDerivative threadDerivativeSum(numberOfLocalParameters);
 
@@ -330,7 +330,7 @@ PointSetToPointSetMetricWithIndexv4<TFixedPointSet, TMovingPointSet, TInternalCo
         }
 
         // Map into parameter space
-        threadLocalTransformDerivative.Fill(NumericTraits<DerivativeValueType>::ZeroValue());
+        threadLocalTransformDerivative.Fill(DerivativeValueType{});
 
         if (this->m_CalculateValueAndDerivativeInTangentSpace)
         {
@@ -665,19 +665,13 @@ PointSetToPointSetMetricWithIndexv4<TFixedPointSet, TMovingPointSet, TInternalCo
   itkPrintSelfObjectMacro(MovingTransformedPointsLocator);
   itkPrintSelfObjectMacro(VirtualTransformedPointSet);
 
-  os << indent << "UsePointSetData: " << (m_UsePointSetData ? "On" : "Off") << std::endl;
-  os << indent
-     << "CalculateValueAndDerivativeInTangentSpace: " << (m_CalculateValueAndDerivativeInTangentSpace ? "On" : "Off")
-     << std::endl;
+  itkPrintSelfBooleanMacro(UsePointSetData);
+  itkPrintSelfBooleanMacro(CalculateValueAndDerivativeInTangentSpace);
 
-  os << indent << "MovingTransformPointLocatorsNeedInitialization: "
-     << (m_MovingTransformPointLocatorsNeedInitialization ? "On" : "Off") << std::endl;
-  os << indent << "FixedTransformPointLocatorsNeedInitialization: "
-     << (m_FixedTransformPointLocatorsNeedInitialization ? "On" : "Off") << std::endl;
-  os << indent << "HaveWarnedAboutNumberOfValidPoints: " << (m_HaveWarnedAboutNumberOfValidPoints ? "On" : "Off")
-     << std::endl;
-  os << indent << "StoreDerivativeAsSparseFieldForLocalSupportTransforms: "
-     << (m_StoreDerivativeAsSparseFieldForLocalSupportTransforms ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(MovingTransformPointLocatorsNeedInitialization);
+  itkPrintSelfBooleanMacro(FixedTransformPointLocatorsNeedInitialization);
+  itkPrintSelfBooleanMacro(HaveWarnedAboutNumberOfValidPoints);
+  itkPrintSelfBooleanMacro(StoreDerivativeAsSparseFieldForLocalSupportTransforms);
 
   os << indent << "MovingTransformedPointSetTime: "
      << static_cast<typename NumericTraits<ModifiedTimeType>::PrintType>(m_MovingTransformedPointSetTime) << std::endl;

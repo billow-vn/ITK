@@ -36,7 +36,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(FastMarchingBaseTestHelper);
 
   using typename Superclass::Traits;
@@ -65,7 +65,7 @@ protected:
   const OutputPixelType
   GetOutputValue(OutputDomainType *, const NodeType &) const override
   {
-    return NumericTraits<OutputPixelType>::ZeroValue();
+    return OutputPixelType{};
   }
 
   unsigned char
@@ -190,9 +190,7 @@ itkFastMarchingBaseTest(int argc, char * argv[])
 
 
     using OutputImageType = ImageFastMarching::OutputDomainType;
-    OutputImageType::Pointer output = fmm->GetOutput();
-
-    (void)output;
+    [[maybe_unused]] OutputImageType::Pointer output = fmm->GetOutput();
   }
   else if (useMeshVsImage == 1)
   {
@@ -208,9 +206,7 @@ itkFastMarchingBaseTest(int argc, char * argv[])
 
 
     using OutputMeshType = MeshFastMarching::OutputDomainType;
-    OutputMeshType::Pointer output = fmm->GetOutput();
-
-    (void)output;
+    [[maybe_unused]] OutputMeshType::Pointer output = fmm->GetOutput();
   }
 
   // Test streaming enumeration for FastMarchingTraitsEnums::TopologyCheck elements

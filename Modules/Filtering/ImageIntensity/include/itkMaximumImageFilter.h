@@ -33,8 +33,6 @@ template <typename TInput1, typename TInput2 = TInput1, typename TOutput = TInpu
 class Maximum
 {
 public:
-  Maximum() = default;
-  ~Maximum() = default;
   bool
   operator==(const Maximum &) const
   {
@@ -96,7 +94,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MaximumImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

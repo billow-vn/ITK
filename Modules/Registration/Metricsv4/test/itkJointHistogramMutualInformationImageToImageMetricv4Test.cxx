@@ -19,7 +19,6 @@
 #include "itkMath.h"
 #include "itkJointHistogramMutualInformationImageToImageMetricv4.h"
 #include "itkTranslationTransform.h"
-#include "itkMath.h"
 #include "itkTestingMacros.h"
 
 /* Simple test to verify that class builds and runs.
@@ -41,9 +40,7 @@ itkJointHistogramMutualInformationImageToImageMetricv4Test(int, char *[])
   size.Fill(imageSize);
   ImageType::IndexType index;
   index.Fill(0);
-  ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  ImageType::RegionType  region{ index, size };
   ImageType::SpacingType spacing;
   spacing.Fill(1.0);
   ImageType::PointType origin;

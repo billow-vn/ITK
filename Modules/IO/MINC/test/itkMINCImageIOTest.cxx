@@ -323,9 +323,7 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
 
   auto im = ImageType::New();
 
-  typename ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  typename ImageType::RegionType region{ index, size };
   im->SetRegions(region);
   im->SetSpacing(spacing);
   im->SetOrigin(origin);
@@ -335,7 +333,7 @@ MINCReadWriteTest(const char * fileName, const char * minc_storage_type, double 
 
   mat.SetIdentity();
 
-  if (VDimension == 3)
+  if constexpr (VDimension == 3)
   { // there are problems with 4D direction cosines!
     // 30deg rotation
     mat[1][1] = mat[0][0] = 0.866025403784439;
@@ -589,9 +587,7 @@ MINCReadWriteTestVector(const char * fileName,
   auto im = ImageType::New();
 
   // itk::IOTestHelper::AllocateImageFromRegionAndSpacing<ImageType>(imageRegion,spacing);
-  typename ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  typename ImageType::RegionType region{ index, size };
   im->SetRegions(region);
   im->SetSpacing(spacing);
   im->SetOrigin(origin);
@@ -602,7 +598,7 @@ MINCReadWriteTestVector(const char * fileName,
 
   mat.SetIdentity();
 
-  if (VDimension == 3)
+  if constexpr (VDimension == 3)
   { // there are problems with 4D direction cosines!
     // 30deg rotation
     mat[1][1] = mat[0][0] = 0.866025403784439;

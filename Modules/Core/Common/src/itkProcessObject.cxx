@@ -465,7 +465,7 @@ ProcessObject::SetOutput(const DataObjectIdentifierType & name, DataObject * out
     this->SetOutput(key, newOutput);
 
     // If we had an output object before, copy the requested region
-    // ivars and release data flag to the the new output
+    // ivars and release data flag to the new output
     if (oldOutput)
     {
       newOutput->SetRequestedRegion(oldOutput);
@@ -1268,10 +1268,9 @@ ProcessObject::PrintSelf(std::ostream & os, Indent indent) const
   }
 
   os << indent << "NumberOfRequiredOutputs: " << m_NumberOfRequiredOutputs << std::endl;
-  os << indent << "Number Of Work Units: " << m_NumberOfWorkUnits << std::endl;
-  os << indent << "ReleaseDataFlag: " << (this->GetReleaseDataFlag() ? "On" : "Off") << std::endl;
-  os << indent << "ReleaseDataBeforeUpdateFlag: " << (m_ReleaseDataBeforeUpdateFlag ? "On" : "Off") << std::endl;
-  os << indent << "AbortGenerateData: " << (m_AbortGenerateData ? "On" : "Off") << std::endl;
+  os << indent << "NumberOfWorkUnits: " << m_NumberOfWorkUnits << std::endl;
+  itkPrintSelfBooleanMacro(ReleaseDataBeforeUpdateFlag);
+  itkPrintSelfBooleanMacro(AbortGenerateData);
   os << indent << "Progress: " << progressFixedToFloat(m_Progress) << std::endl;
   os << indent << "Multithreader: " << std::endl;
   m_MultiThreader->PrintSelf(os, indent.GetNextIndent());
@@ -1327,7 +1326,7 @@ ProcessObject::PropagateResetPipeline()
 
 
 void
-ProcessObject::VerifyPreconditions() ITKv5_CONST
+ProcessObject::VerifyPreconditions() const
 {
   /**
    * Make sure that all the required named inputs are there and non null
@@ -1356,7 +1355,7 @@ ProcessObject::VerifyPreconditions() ITKv5_CONST
 
 
 void
-ProcessObject::VerifyInputInformation() ITKv5_CONST
+ProcessObject::VerifyInputInformation() const
 {}
 
 

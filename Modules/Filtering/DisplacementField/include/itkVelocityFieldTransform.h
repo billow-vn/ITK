@@ -44,7 +44,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(VelocityFieldTransform);
 
   /** New macro for creation of through a Smart Pointer */
@@ -166,7 +166,7 @@ public:
 
   /** Trigger the computation of the displacement field by integrating the velocity field. */
   virtual void
-  IntegrateVelocityField(){};
+  IntegrateVelocityField(){}
 
   /**
    * Set the lower time bound defining the integration domain of the transform.

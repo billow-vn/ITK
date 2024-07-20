@@ -189,7 +189,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ImageToImageMetricv4);
 
   /** Type used internally for computations */
@@ -407,19 +407,43 @@ public:
   itkGetModifiableObjectMacro(MovingInterpolator, MovingInterpolatorType);
 
   /** Set/Get the moving image mask. */
-  itkSetObjectMacro(MovingImageMask, MovingImageMaskType);
+#ifndef ITK_FUTURE_LEGACY_REMOVE
+  virtual void
+  SetMovingImageMask(MovingImageMaskType * const arg)
+  {
+    const auto * const constArg = arg;
+    // Call the overload defined by itkSetConstObjectMacro, or an override.
+    this->SetMovingImageMask(constArg);
+  }
+#endif
   itkSetConstObjectMacro(MovingImageMask, MovingImageMaskType);
   itkGetConstObjectMacro(MovingImageMask, MovingImageMaskType);
 
   /** Set/Get the fixed image mask. */
-  itkSetObjectMacro(FixedImageMask, FixedImageMaskType);
+#ifndef ITK_FUTURE_LEGACY_REMOVE
+  virtual void
+  SetFixedImageMask(FixedImageMaskType * const arg)
+  {
+    const auto * const constArg = arg;
+    // Call the overload defined by itkSetConstObjectMacro, or an override.
+    this->SetFixedImageMask(constArg);
+  }
+#endif
   itkSetConstObjectMacro(FixedImageMask, FixedImageMaskType);
   itkGetConstObjectMacro(FixedImageMask, FixedImageMaskType);
 
   /** Set/Get the fixed image domain sampling point set
    * See main documentation regarding using fixed vs virtual domain
    * for the point set. */
-  itkSetObjectMacro(FixedSampledPointSet, FixedSampledPointSetType);
+#ifndef ITK_FUTURE_LEGACY_REMOVE
+  virtual void
+  SetFixedSampledPointSet(FixedSampledPointSetType * const arg)
+  {
+    const auto * const constArg = arg;
+    // Call the overload defined by itkSetConstObjectMacro, or an override.
+    this->SetFixedSampledPointSet(constArg);
+  }
+#endif
   itkSetConstObjectMacro(FixedSampledPointSet, FixedSampledPointSetType);
   itkGetConstObjectMacro(FixedSampledPointSet, FixedSampledPointSetType);
 
@@ -471,7 +495,7 @@ public:
   itkGetConstReferenceMacro(UseMovingImageGradientFilter, bool);
   itkBooleanMacro(UseMovingImageGradientFilter);
 
-  /** Get number of work units to used in the the most recent
+  /** Get number of work units to used in the most recent
    * evaluation.  Only valid after GetValueAndDerivative() or
    * GetValue() has been called. */
   virtual ThreadIdType
@@ -486,7 +510,7 @@ public:
   GetMaximumNumberOfWorkUnits() const;
 
 #if !defined(ITK_LEGACY_REMOVE)
-  /** Get number of threads to used in the the most recent
+  /** Get number of threads to used in the most recent
    * evaluation.  Only valid after GetValueAndDerivative() or
    * GetValue() has been called.
    *

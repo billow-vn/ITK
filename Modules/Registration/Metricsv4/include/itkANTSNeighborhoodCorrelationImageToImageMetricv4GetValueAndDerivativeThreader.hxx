@@ -189,6 +189,16 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
         {
           pointIsValid =
             this->m_ANTSAssociate->TransformAndEvaluateMovingPoint(virtualPoint, mappedMovingPoint, movingImageValue);
+
+          if (pointIsValid)
+          {
+            sumFixed2 += fixedImageValue * fixedImageValue;
+            sumMoving2 += movingImageValue * movingImageValue;
+            sumFixed += fixedImageValue;
+            sumMoving += movingImageValue;
+            sumFixedMoving += fixedImageValue * movingImageValue;
+            count += NumericTraits<LocalRealType>::OneValue();
+          }
         }
       }
       catch (const ExceptionObject & exc)
@@ -197,17 +207,6 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
         std::string msg("Caught exception: \n");
         msg += exc.what();
         throw ExceptionObject(__FILE__, __LINE__, msg);
-      }
-
-
-      if (pointIsValid)
-      {
-        sumFixed2 += fixedImageValue * fixedImageValue;
-        sumMoving2 += movingImageValue * movingImageValue;
-        sumFixed += fixedImageValue;
-        sumMoving += movingImageValue;
-        sumFixedMoving += fixedImageValue * movingImageValue;
-        count += NumericTraits<LocalRealType>::OneValue();
       }
     } // for indct
 
@@ -273,6 +272,16 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
       {
         pointIsValid =
           this->m_ANTSAssociate->TransformAndEvaluateMovingPoint(virtualPoint, mappedMovingPoint, movingImageValue);
+
+        if (pointIsValid)
+        {
+          sumFixed2 += fixedImageValue * fixedImageValue;
+          sumMoving2 += movingImageValue * movingImageValue;
+          sumFixed += fixedImageValue;
+          sumMoving += movingImageValue;
+          sumFixedMoving += fixedImageValue * movingImageValue;
+          count += NumericTraits<LocalRealType>::OneValue();
+        }
       }
     }
     catch (const ExceptionObject & exc)
@@ -281,15 +290,6 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
       std::string msg("Caught exception: \n");
       msg += exc.what();
       throw ExceptionObject(__FILE__, __LINE__, msg);
-    }
-    if (pointIsValid)
-    {
-      sumFixed2 += fixedImageValue * fixedImageValue;
-      sumMoving2 += movingImageValue * movingImageValue;
-      sumFixed += fixedImageValue;
-      sumMoving += movingImageValue;
-      sumFixedMoving += fixedImageValue * movingImageValue;
-      count += NumericTraits<LocalRealType>::OneValue();
     }
   }
   scanMem.QsumFixed2.push_back(sumFixed2);
@@ -326,9 +326,9 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
   OffsetValueType numberOfFillZero =
     this->m_ANTSAssociate->GetVirtualRegion().GetIndex(0) - (scanRegion.GetIndex(0) - scanParameters.radius[0]);
 
-  if (numberOfFillZero < NumericTraits<OffsetValueType>::ZeroValue())
+  if (numberOfFillZero < OffsetValueType{})
   {
-    numberOfFillZero = NumericTraits<OffsetValueType>::ZeroValue();
+    numberOfFillZero = OffsetValueType{};
   }
 
   scanParameters.numberOfFillZero = numberOfFillZero;
@@ -337,11 +337,11 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
   scanParameters.windowLength = scanIt.Size();
   scanParameters.scanRegionBeginIndexDim0 = scanIt.GetBeginIndex()[0];
 
-  scanMem.fixedA = NumericTraits<QueueRealType>::ZeroValue();
-  scanMem.movingA = NumericTraits<QueueRealType>::ZeroValue();
-  scanMem.sFixedMoving = NumericTraits<QueueRealType>::ZeroValue();
-  scanMem.sFixedFixed = NumericTraits<QueueRealType>::ZeroValue();
-  scanMem.sMovingMoving = NumericTraits<QueueRealType>::ZeroValue();
+  scanMem.fixedA = QueueRealType{};
+  scanMem.movingA = QueueRealType{};
+  scanMem.sFixedMoving = QueueRealType{};
+  scanMem.sFixedFixed = QueueRealType{};
+  scanMem.sMovingMoving = QueueRealType{};
 
   scanMem.fixedImageGradient.Fill(0.0);
   scanMem.movingImageGradient.Fill(0.0);
@@ -466,6 +466,27 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
           this->m_ANTSAssociate->ComputeMovingImageGradientAtPoint(mappedMovingPoint, movingImageGradient);
         }
       }
+      if (pointIsValid)
+      {
+        scanMem.fixedA = fixedImageValue - fixedMean;
+        scanMem.movingA = movingImageValue - movingMean;
+        scanMem.sFixedMoving = sFixedMoving;
+        scanMem.sFixedFixed = sFixedFixed;
+        scanMem.sMovingMoving = sMovingMoving;
+
+        if (this->m_ANTSAssociate->GetComputeDerivative() && this->m_ANTSAssociate->GetGradientSourceIncludesFixed())
+        {
+          scanMem.fixedImageGradient = fixedImageGradient;
+        }
+        if (this->m_ANTSAssociate->GetComputeDerivative() && this->m_ANTSAssociate->GetGradientSourceIncludesMoving())
+        {
+          scanMem.movingImageGradient = movingImageGradient;
+        }
+
+        scanMem.mappedFixedPoint = mappedFixedPoint;
+        scanMem.mappedMovingPoint = mappedMovingPoint;
+        scanMem.virtualPoint = virtualPoint;
+      }
     }
   }
   catch (const ExceptionObject & exc)
@@ -476,27 +497,6 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
     throw ExceptionObject(__FILE__, __LINE__, msg);
   }
 
-  if (pointIsValid)
-  {
-    scanMem.fixedA = fixedImageValue - fixedMean;
-    scanMem.movingA = movingImageValue - movingMean;
-    scanMem.sFixedMoving = sFixedMoving;
-    scanMem.sFixedFixed = sFixedFixed;
-    scanMem.sMovingMoving = sMovingMoving;
-
-    if (this->m_ANTSAssociate->GetComputeDerivative() && this->m_ANTSAssociate->GetGradientSourceIncludesFixed())
-    {
-      scanMem.fixedImageGradient = fixedImageGradient;
-    }
-    if (this->m_ANTSAssociate->GetComputeDerivative() && this->m_ANTSAssociate->GetGradientSourceIncludesMoving())
-    {
-      scanMem.movingImageGradient = movingImageGradient;
-    }
-
-    scanMem.mappedFixedPoint = mappedFixedPoint;
-    scanMem.mappedMovingPoint = mappedMovingPoint;
-    scanMem.virtualPoint = virtualPoint;
-  }
 
   return pointIsValid;
 }
@@ -538,7 +538,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
     if (!(sFixedFixed > NumericTraits<LocalRealType>::epsilon() &&
           sMovingMoving > NumericTraits<LocalRealType>::epsilon()))
     {
-      deriv.Fill(NumericTraits<DerivativeValueType>::ZeroValue());
+      deriv.Fill(DerivativeValueType{});
       return;
     }
 
@@ -563,7 +563,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader<
 
     for (NumberOfParametersType par = 0; par < numberOfLocalParameters; ++par)
     {
-      deriv[par] = NumericTraits<DerivativeValueType>::ZeroValue();
+      deriv[par] = DerivativeValueType{};
       for (ImageDimensionType dim = 0; dim < TImageToImageMetric::MovingImageDimension; ++dim)
       {
         deriv[par] += derivWRTImage[dim] * jacobian(dim, par);

@@ -34,8 +34,6 @@ template <typename TInput, typename TOutput>
 class Asin
 {
 public:
-  Asin() = default;
-  ~Asin() = default;
   bool
   operator==(const Asin &) const
   {
@@ -91,7 +89,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(AsinImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

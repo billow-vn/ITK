@@ -113,7 +113,7 @@ public:
    * This policy, when used from \c VariableLengthVector::SetSize(), always
    * implies that the previous internal buffer will be reallocated. Even if
    * enough memory was available.
-   * \return true (always)
+   * Returns true (always)
    *
    * \sa \c itk::VariableLengthVector::SetSize
    * \sa \c NeverReallocate
@@ -138,8 +138,7 @@ public:
    *
    * The typical use case of this policy is to make sure a \c
    * VariableLengthVector is not a proxy object.
-   * \return false (always)
-   *
+   * Returns false (always)
    * \pre <tt>oldSize == newSize</tt>, checked by assertion
    *
    * \sa \c itk::VariableLengthVector::SetSize
@@ -152,10 +151,8 @@ public:
   struct NeverReallocate : AllocateRootPolicy
   {
     bool
-    operator()(unsigned int newSize, unsigned int oldSize) const
+    operator()([[maybe_unused]] unsigned int newSize, [[maybe_unused]] unsigned int oldSize) const
     {
-      (void)newSize;
-      (void)oldSize;
       itkAssertInDebugAndIgnoreInReleaseMacro(newSize == oldSize &&
                                               "SetSize is expected to never change the VariableLengthVector size...");
       return true;
@@ -1033,9 +1030,8 @@ struct GetType
    * \note the default unspecialized behaviour returns the input number \c v.
    */
   static Type
-  Load(Type const & v, unsigned int idx)
+  Load(Type const & v, unsigned int itkNotUsed(idx))
   {
-    (void)idx;
     return v;
   }
 };
@@ -1052,9 +1048,8 @@ struct GetType
  */
 template <typename TExpr1, typename TExpr2>
 inline std::enable_if_t<mpl::And<mpl::IsArray<TExpr1>, mpl::IsArray<TExpr2>>::Value, unsigned int>
-GetSize(TExpr1 const & lhs, TExpr2 const & rhs)
+GetSize(TExpr1 const & lhs, [[maybe_unused]] TExpr2 const & rhs)
 {
-  (void)rhs;
   itkAssertInDebugAndIgnoreInReleaseMacro(lhs.Size() == rhs.Size());
   return lhs.Size();
 }

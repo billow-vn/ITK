@@ -64,7 +64,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(IntermodesThresholdImageFilter);
 
   using InputImageType = TInputImage;
@@ -118,7 +118,7 @@ protected:
   ~IntermodesThresholdImageFilter() override = default;
 
   void
-  VerifyPreconditions() ITKv5_CONST override
+  VerifyPreconditions() const override
   {
     Superclass::VerifyPreconditions();
     if (dynamic_cast<const CalculatorType *>(Superclass::GetCalculator()) == nullptr)

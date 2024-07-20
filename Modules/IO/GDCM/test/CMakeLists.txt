@@ -13,7 +13,8 @@ set(ITKIOGDCMTests
     itkGDCMImageOrientationPatientTest.cxx
     itkGDCMLoadImageSpacingTest.cxx
     itkGDCMLegacyMultiFrameTest.cxx
-    itkGDCMImageIONoPreambleTest.cxx)
+    itkGDCMImageIONoPreambleTest.cxx
+    itkGDCMImageIO32bitsStoredTest.cxx)
 
 createtestdriver(ITKIOGDCM "${ITKIOGDCM-Test_LIBRARIES}" "${ITKIOGDCMTests}")
 
@@ -85,6 +86,20 @@ itk_add_test(
   ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOTest4.mha
   ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOTest4Rescaled.dcm
   ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOTest4Rescaled.mha)
+itk_add_test(
+  NAME
+  itkGDCMImageIOSecondaryCaptureSpacingTest
+  COMMAND
+  ITKIOGDCMTestDriver
+  --compare
+  DATA{Baseline/itkGDCMImageIOSecondaryCaptureSpacingTestBaseline.mha}
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOSecondaryCaptureSpacingTest.mha
+  itkGDCMImageIOTest
+  DATA{Input/image_slice0.dcm}
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOSecondaryCaptureSpacingTest.dcm
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOSecondaryCaptureSpacingTest.mha
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOSecondaryCaptureSpacingTestRescaled.dcm
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageIOSecondaryCaptureSpacingTestRescaled.mha)
 itk_add_test(
   NAME
   itkGDCMImageIOTest5
@@ -255,6 +270,24 @@ itk_add_test(
   itkGDCMImageIONoPreambleTest
   DATA{Input/NoPreambleDicomTest.dcm})
 
+# Re-use the test driver to ensure that CanReadFile returns true for a file
+# with a preamble.
+itk_add_test(
+  NAME
+  itkGDCMImageIOPreambleCanReadTest
+  COMMAND
+  ITKIOGDCMTestDriver
+  itkGDCMImageIONoPreambleTest
+  DATA{Input/preamble.dcm})
+
+itk_add_test(
+  NAME
+  itkGDCMImageIO32bitsStoredTest
+  COMMAND
+  ITKIOGDCMTestDriver
+  itkGDCMImageIO32bitsStoredTest
+  DATA{Input/image32bitsStoredTest.dcm})
+
 itk_add_test(
   NAME
   itkGDCMImageReadWriteTest_RGB
@@ -266,6 +299,19 @@ itk_add_test(
   itkGDCMImageReadWriteTest
   DATA{${ITK_DATA_ROOT}/Input/RGBDicomTest.dcm}
   ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageReadWriteTest_RGB.mha
+  rgb)
+
+itk_add_test(
+  NAME
+  itkGDCMImageReadWriteTest_SC_RGB
+  COMMAND
+  ITKIOGDCMTestDriver
+  --compare
+  DATA{Baseline/itkGDCMImageReadWriteTest_SC_RGB.nrrd}
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageReadWriteTest_SC_RGB.nrrd
+  itkGDCMImageReadWriteTest
+  DATA{Input/visible-male-rgb-slice.dcm}
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageReadWriteTest_SC_RGB.nrrd
   rgb)
 
 itk_add_test(
@@ -310,6 +356,18 @@ itk_add_test(
   DATA{Input/JPEGBaseline1DicomTest.dcm}
   ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageReadWriteTest_JPEGBaseline1.mha
   rgb)
+itk_add_test(
+  NAME
+  itkGDCMImageReadWriteTest_MultiFrameMRIZSpacing
+  COMMAND
+  ITKIOGDCMTestDriver
+  --compare
+  DATA{Baseline/itkGDCMImageReadWriteTest_MultiFrameMRIZSpacingBaseline.mha}
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageReadWriteTest_MultiFrameMRIZSpacing.mha
+  itkGDCMImageReadWriteTest
+  DATA{Input/MultiFrameMRIZSpacing.dcm}
+  ${ITK_TEST_OUTPUT_DIR}/itkGDCMImageReadWriteTest_MultiFrameMRIZSpacing.mha
+  scalar)
 
 itk_add_test(
   NAME
@@ -338,6 +396,32 @@ itk_add_test(
   ${ITK_TEST_OUTPUT_DIR}/single-bit.mha
   scalar)
 
+itk_add_test(
+  NAME
+  itkGDCMImageReadWriteTest_preamble
+  COMMAND
+  ITKIOGDCMTestDriver
+  --compare
+  DATA{Baseline/preamble.mha}
+  ${ITK_TEST_OUTPUT_DIR}/preamble.mha
+  itkGDCMImageReadWriteTest
+  DATA{Input/preamble.dcm}
+  ${ITK_TEST_OUTPUT_DIR}/preamble.mha
+  scalar)
+
+itk_add_test(
+  NAME
+  itkGDCMImageReadWriteTest_no_preamble
+  COMMAND
+  ITKIOGDCMTestDriver
+  --compare
+  DATA{Baseline/no_preamble.mha}
+  ${ITK_TEST_OUTPUT_DIR}/no_preamble.mha
+  itkGDCMImageReadWriteTest
+  DATA{Input/no_preamble.dcm}
+  ${ITK_TEST_OUTPUT_DIR}/no_preamble.mha
+  scalar)
+
 function(AddComplianceTest fileName)
   itk_add_test(
     NAME
@@ -349,7 +433,7 @@ function(AddComplianceTest fileName)
     --compareCoordinateTolerance
     0.001
     --compare
-    DATA{Baseline/Lily.png}
+    DATA{Baseline/Lily.mha}
     ${ITK_TEST_OUTPUT_DIR}/itkGDCM_ComplianceTestRGB_${fileName}.mha
     itkGDCMImageReadWriteTest
     DATA{Input/Lily/${fileName}.dcm}

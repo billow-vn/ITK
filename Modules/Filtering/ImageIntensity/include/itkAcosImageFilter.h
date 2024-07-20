@@ -34,8 +34,6 @@ template <typename TInput, typename TOutput>
 class Acos
 {
 public:
-  Acos() = default;
-  ~Acos() = default;
   bool
   operator==(const Acos &) const
   {
@@ -92,7 +90,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(AcosImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

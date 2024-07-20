@@ -142,7 +142,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(VanillaImageToImageMetricv4);
 
   /** Superclass types */
@@ -213,9 +213,7 @@ itkMetricImageGradientTestRunTest(unsigned int                 imageSize,
   size.Fill(imageSize);
   typename ImageType::IndexType virtualIndex;
   virtualIndex.Fill(0);
-  typename ImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(virtualIndex);
+  typename ImageType::RegionType  region{ virtualIndex, size };
   typename ImageType::SpacingType spacing;
   spacing.Fill(1.0);
   typename ImageType::PointType origin;

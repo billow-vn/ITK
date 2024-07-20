@@ -21,7 +21,6 @@
 #include "itkMath.h"
 #include "itkNumericTraits.h"
 #include "vnl/algo/vnl_matrix_inverse.h"
-#include "itkMath.h"
 
 namespace itk
 {
@@ -60,6 +59,7 @@ ScalableAffineTransform<TParametersValueType, VDimension>::ScalableAffineTransfo
   }
 }
 
+#if !defined(ITK_LEGACY_REMOVE)
 template <typename TParametersValueType, unsigned int VDimension>
 ScalableAffineTransform<TParametersValueType, VDimension>::ScalableAffineTransform(const MatrixType &       matrix,
                                                                                    const OutputVectorType & offset)
@@ -71,6 +71,7 @@ ScalableAffineTransform<TParametersValueType, VDimension>::ScalableAffineTransfo
     m_MatrixScale[i] = 1;
   }
 }
+#endif
 
 template <typename TParametersValueType, unsigned int VDimension>
 void
@@ -145,9 +146,7 @@ template <typename TParametersValueType, unsigned int VDimension>
 auto
 ScalableAffineTransform<TParametersValueType, VDimension>::GetInverseTransform() const -> InverseTransformBasePointer
 {
-  Pointer inv = New();
-
-  return this->GetInverse(inv) ? inv.GetPointer() : nullptr;
+  return Superclass::InvertTransform(*this);
 }
 
 template <typename TParametersValueType, unsigned int VDimension>
@@ -168,8 +167,7 @@ ScalableAffineTransform<TParametersValueType, VDimension>::ComputeMatrix()
     typename MatrixType::InternalMatrixType & imat = mat.GetVnlMatrix();
     for (unsigned int i = 0; i < VDimension; ++i)
     {
-      if (Math::NotAlmostEquals(m_MatrixScale[i],
-                                NumericTraits<typename NumericTraits<InputVectorType>::ValueType>::ZeroValue()) &&
+      if (Math::NotAlmostEquals(m_MatrixScale[i], typename NumericTraits<InputVectorType>::ValueType{}) &&
           Math::NotAlmostEquals(m_Scale[i], 0.0))
       {
         imat.put(i, i, m_Scale[i] / m_MatrixScale[i] * this->GetMatrix()[i][i]);

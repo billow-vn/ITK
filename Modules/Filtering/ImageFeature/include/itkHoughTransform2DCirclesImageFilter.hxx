@@ -65,8 +65,7 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
 
 template <typename TInputPixelType, typename TOutputPixelType, typename TRadiusPixelType>
 void
-HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPixelType>::VerifyPreconditions()
-  ITKv5_CONST
+HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPixelType>::VerifyPreconditions() const
 {
   Superclass::VerifyPreconditions();
 
@@ -103,7 +102,7 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
   m_RadiusImage->SetOrigin(inputImage->GetOrigin());
   m_RadiusImage->SetSpacing(inputImage->GetSpacing());
   m_RadiusImage->SetDirection(inputImage->GetDirection());
-  m_RadiusImage->Allocate(true); // initialize buffer to zero
+  m_RadiusImage->AllocateInitialized();
 
   ImageRegionConstIteratorWithIndex<InputImageType> image_it(inputImage, inputImage->GetRequestedRegion());
 
@@ -293,7 +292,7 @@ HoughTransform2DCirclesImageFilter<TInputPixelType, TOutputPixelType, TRadiusPix
   os << indent << "Disc Radius Ratio: " << m_DiscRadiusRatio << std::endl;
   os << indent << "Accumulator blur variance: " << m_Variance << std::endl;
   os << indent << "Sweep angle : " << m_SweepAngle << std::endl;
-  os << indent << "UseImageSpacing: " << (m_UseImageSpacing ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseImageSpacing);
 
   itkPrintSelfObjectMacro(RadiusImage);
 

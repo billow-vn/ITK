@@ -33,7 +33,6 @@ namespace itk
 namespace Statistics
 {
 /** \class MeasurementVectorTraits
- * \brief
  * \ingroup Statistics
  * \ingroup ITKStatistics
  */
@@ -46,7 +45,7 @@ public:
       the frequency by one does not change the total frequency (because of lack of
       precision). Using double type will also ultimately fall into the same problem.
       Hence in the new statistics framework, InstanceIdentifier/FrequencyTypes are
-      set to the the largest possible integer on the machine */
+      set to the largest possible integer on the machine */
   using InstanceIdentifier = IdentifierType;
 
   /** Type defined for representing the frequency of measurement vectors */
@@ -410,7 +409,6 @@ public:
 };
 
 /** \class MeasurementVectorTraitsTypes
- * \brief
  * \ingroup Statistics
  * \ingroup ITKStatistics
  */

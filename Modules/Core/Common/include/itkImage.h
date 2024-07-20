@@ -100,7 +100,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(Image);
 
   /** Pixel type alias support. Used to declare pixel type in filters
@@ -171,7 +171,7 @@ public:
    * example usage:
    * using OutputImageType = typename ImageType::template Rebind< float >::Type;
    *
-   * \deprecated Use RebindImageType instead
+   * Deprecated: Use RebindImageType instead
    */
   template <typename UPixelType, unsigned int VUImageDimension = VImageDimension>
   struct Rebind

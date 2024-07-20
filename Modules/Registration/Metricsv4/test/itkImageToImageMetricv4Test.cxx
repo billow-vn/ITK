@@ -120,7 +120,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ImageToImageMetricv4TestMetric);
 
   /** superclass types */
@@ -386,11 +386,9 @@ itkImageToImageMetricv4Test(int, char ** const)
   using DimensionSizeType = unsigned int;
   constexpr DimensionSizeType imageSize = 4;
 
-  ImageToImageMetricv4TestImageType::SizeType   size = { { imageSize, imageSize } };
-  ImageToImageMetricv4TestImageType::IndexType  index = { { 0, 0 } };
-  ImageToImageMetricv4TestImageType::RegionType region;
-  region.SetSize(size);
-  region.SetIndex(index);
+  ImageToImageMetricv4TestImageType::SizeType    size = { { imageSize, imageSize } };
+  ImageToImageMetricv4TestImageType::IndexType   index = { { 0, 0 } };
+  ImageToImageMetricv4TestImageType::RegionType  region{ index, size };
   ImageToImageMetricv4TestImageType::SpacingType spacing;
   spacing.Fill(1.0);
   ImageToImageMetricv4TestImageType::PointType origin;

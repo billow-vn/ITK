@@ -48,13 +48,11 @@ itkLineIteratorTest(int argc, char * argv[])
   ImageType::RegionType::SizeType size;
   size.Fill(200);
 
-  ImageType::RegionType region;
-  region.SetIndex(index);
-  region.SetSize(size);
+  ImageType::RegionType region{ index, size };
 
   auto output = ImageType::New();
   output->SetRegions(region);
-  output->Allocate(true); // initialize buffer to zero
+  output->AllocateInitialized();
 
   // First test: empty line
   IndexType startIndex;

@@ -34,11 +34,11 @@ LevelSetFunction<TImageType>::ComputeCurvatureTerm(const NeighborhoodType & neig
   }
   else
   {
-    if (ImageDimension == 3)
+    if constexpr (ImageDimension == 3)
     {
       return this->Compute3DMinimalCurvature(neighborhood, offset, gd);
     }
-    else if (ImageDimension == 2)
+    else if constexpr (ImageDimension == 2)
     {
       return this->ComputeMeanCurvature(neighborhood, offset, gd);
     }
@@ -180,7 +180,7 @@ LevelSetFunction<TImageType>::InitializeZeroVectorConstant() -> VectorType
 
   for (unsigned int i = 0; i < ImageDimension; ++i)
   {
-    ans[i] = NumericTraits<ScalarValueType>::ZeroValue();
+    ans[i] = ScalarValueType{};
   }
 
   return ans;
@@ -252,9 +252,9 @@ LevelSetFunction<TImageType>::ComputeGlobalTimeStep(void * GlobalData) const -> 
   dt /= maxScaleCoefficient;
 
   // reset the values
-  d->m_MaxAdvectionChange = NumericTraits<ScalarValueType>::ZeroValue();
-  d->m_MaxPropagationChange = NumericTraits<ScalarValueType>::ZeroValue();
-  d->m_MaxCurvatureChange = NumericTraits<ScalarValueType>::ZeroValue();
+  d->m_MaxAdvectionChange = ScalarValueType{};
+  d->m_MaxPropagationChange = ScalarValueType{};
+  d->m_MaxCurvatureChange = ScalarValueType{};
 
   return dt;
 }

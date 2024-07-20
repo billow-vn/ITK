@@ -29,7 +29,7 @@ template <typename TInputImage, typename TOutputImage>
 GrayscaleConnectedClosingImageFilter<TInputImage, TOutputImage>::GrayscaleConnectedClosingImageFilter()
 
 {
-  m_Seed.Fill(NumericTraits<typename InputImageIndexType::OffsetValueType>::ZeroValue());
+  m_Seed.Fill(typename InputImageIndexType::OffsetValueType{});
   m_FullyConnected = false;
 }
 
@@ -144,7 +144,7 @@ GrayscaleConnectedClosingImageFilter<TInputImage, TOutputImage>::PrintSelf(std::
 
   os << indent << "Seed point: " << m_Seed << std::endl;
   os << indent << "Number of iterations used to produce current output: " << m_NumberOfIterationsUsed << std::endl;
-  os << indent << "FullyConnected: " << (m_FullyConnected ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(FullyConnected);
 }
 } // end namespace itk
 #endif

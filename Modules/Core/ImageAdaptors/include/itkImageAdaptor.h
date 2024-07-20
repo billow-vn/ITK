@@ -71,7 +71,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
   using ConstWeakPointer = WeakPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ImageAdaptor);
 
   /** Typedef of unadapted image */
@@ -132,7 +132,7 @@ public:
    * example usage:
    * using OutputImageType = typename ImageAdaptorType::template Rebind< float >::Type;
    *
-   * \deprecated Use RebindImageType instead
+   * Deprecated: Use RebindImageType instead
    */
   template <typename UPixelType, unsigned int UImageDimension = TImage::ImageDimension>
   struct Rebind
@@ -271,8 +271,10 @@ public:
   virtual void
   Graft(const Self * imgData);
 
+#ifndef ITK_FUTURE_LEGACY_REMOVE
   /** Convenient type alias. */
-  using InternalPixelPointerType = InternalPixelType *;
+  using InternalPixelPointerType [[deprecated("Please just use `InternalPixelType *` instead!")]] = InternalPixelType *;
+#endif
 
   /** Return a pointer to the beginning of the buffer.  This is used by
    * the image iterator class. */

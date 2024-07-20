@@ -72,7 +72,7 @@ public:
   using ConstPointer = SmartPointer<const Self>;
 
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(Rigid3DTransform);
 
   /** New macro for creation of through a Smart Pointer   */
@@ -124,8 +124,7 @@ public:
   InverseTransformBasePointer
   GetInverseTransform() const override
   {
-    Pointer inv = New();
-    return this->GetInverse(inv) ? inv.GetPointer() : nullptr;
+    return Superclass::InvertTransform(*this);
   }
 
 protected:

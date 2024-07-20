@@ -32,10 +32,12 @@ namespace itk
 class ITKIOMeshBase_EXPORT MeshFileReaderException : public ExceptionObject
 {
 public:
+  ITK_DEFAULT_COPY_AND_MOVE(MeshFileReaderException);
+
   /** Has to have empty throw(). */
   ~MeshFileReaderException() noexcept override;
 
-  /** Run-time information. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MeshFileReaderException);
 
   /** Constructor. */

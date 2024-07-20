@@ -35,7 +35,7 @@ Histogram<TMeasurement, TFrequencyContainer>::Histogram()
 {
   for (unsigned int i = 0; i < this->GetMeasurementVectorSize() + 1; ++i)
   {
-    this->m_OffsetTable[i] = itk::NumericTraits<InstanceIdentifier>::ZeroValue();
+    this->m_OffsetTable[i] = InstanceIdentifier{};
   }
 }
 
@@ -45,7 +45,7 @@ Histogram<TMeasurement, TFrequencyContainer>::Size() const -> InstanceIdentifier
 {
   if (this->GetMeasurementVectorSize() == 0)
   {
-    return itk::NumericTraits<InstanceIdentifier>::ZeroValue();
+    return InstanceIdentifier{};
   }
   InstanceIdentifier size = 1;
   for (unsigned int i = 0; i < this->GetMeasurementVectorSize(); ++i)
@@ -706,7 +706,7 @@ Histogram<TMeasurement, TFrequencyContainer>::PrintSelf(std::ostream & os, Inden
 
   os << indent << "TempMeasurementVector: " << m_TempMeasurementVector << std::endl;
   os << indent << "TempIndex: " << static_cast<typename NumericTraits<IndexType>::PrintType>(m_TempIndex) << std::endl;
-  os << indent << "ClipBinsAtEnds: " << (m_ClipBinsAtEnds ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(ClipBinsAtEnds);
 }
 
 template <typename TMeasurement, typename TFrequencyContainer>

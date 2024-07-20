@@ -53,7 +53,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods).  */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(IsolatedWatershedImageFilter);
 
   using InputImageType = TInputImage;
@@ -141,7 +141,7 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
   void
-  VerifyInputInformation() ITKv5_CONST override;
+  VerifyInputInformation() const override;
   void
   GenerateData() override;
 };

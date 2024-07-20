@@ -40,7 +40,7 @@ public:
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(TestImageFunction);
 
   /** Method for creation through the object factory. */
@@ -130,9 +130,7 @@ itkImageFunctionTest(int, char *[])
   size[0] = 3;
   size[1] = 4;
   size[2] = 5;
-  RegionType region;
-  region.SetSize(size);
-  region.SetIndex(start);
+  RegionType region{ start, size };
 
   image->SetRegions(region);
   image->Allocate();

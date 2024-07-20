@@ -16,7 +16,9 @@
  *
  *=========================================================================*/
 
-#define ITK_LEGACY_TEST
+#ifndef ITK_LEGACY_REMOVE
+#  define ITK_LEGACY_TEST
+#endif
 #include <iostream>
 #include "itkBoundingBox.h"
 #include "itkMath.h"
@@ -38,7 +40,7 @@ itkBoundingBoxTest(int, char *[])
     const BB::BoundsArrayType & bounds = myBox->GetBounds();
     for (unsigned int i = 0; i < bounds.Size(); ++i)
     {
-      if (itk::Math::NotExactlyEquals(bounds[i], itk::NumericTraits<BB::CoordRepType>::ZeroValue()))
+      if (itk::Math::NotExactlyEquals(bounds[i], BB::CoordRepType{}))
       {
         std::cerr << "Bounding Box initialization test failed" << std::endl;
         std::cerr << bounds << std::endl;
@@ -52,7 +54,7 @@ itkBoundingBoxTest(int, char *[])
     BB::PointType center = myBox->GetCenter();
     for (unsigned int i = 0; i < 1; ++i)
     {
-      if (itk::Math::NotExactlyEquals(center[i], itk::NumericTraits<BB::CoordRepType>::ZeroValue()))
+      if (itk::Math::NotExactlyEquals(center[i], BB::CoordRepType{}))
       {
         std::cerr << "Empty Box GetCenter initialization test failed" << std::endl;
         return EXIT_FAILURE;

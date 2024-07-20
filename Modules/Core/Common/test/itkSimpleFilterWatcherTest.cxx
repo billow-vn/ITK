@@ -28,8 +28,6 @@ template <typename TInput, typename TOutput>
 class TanHelper
 {
 public:
-  TanHelper() = default;
-  ~TanHelper() = default;
   bool
   operator==(const TanHelper & rhs) const
   {
@@ -69,7 +67,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Runtime information support. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(TanHelperImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

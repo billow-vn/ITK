@@ -34,7 +34,7 @@ namespace itk
 class ContourSpatialObjectEnums
 {
 public:
-  /*** \class InterpolationMethodEnum
+  /**
    * \ingroup ITKSpatialObjects
    * Hold interpolation method type
    */
@@ -104,7 +104,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Method for creation through the object factory. */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(ContourSpatialObject);
 
   /** Reset the spatial object to its initial condition, yet preserves

@@ -30,7 +30,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::ComposeScaleSkewVersor3
   : Superclass(ParametersDimension)
 {
   m_Scale.Fill(NumericTraits<TParametersValueType>::OneValue());
-  m_Skew.Fill(NumericTraits<TParametersValueType>::ZeroValue());
+  m_Skew.Fill(TParametersValueType{});
 }
 
 // Constructor with arguments
@@ -43,6 +43,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::ComposeScaleSkewVersor3
   m_Skew.Fill(0.0);
 }
 
+#if !defined(ITK_LEGACY_REMOVE)
 // Constructor with arguments
 template <typename TParametersValueType>
 ComposeScaleSkewVersor3DTransform<TParametersValueType>::ComposeScaleSkewVersor3DTransform(
@@ -52,6 +53,7 @@ ComposeScaleSkewVersor3DTransform<TParametersValueType>::ComposeScaleSkewVersor3
 {
   this->ComputeMatrixParameters();
 }
+#endif
 
 // Directly set the matrix
 template <typename TParametersValueType>
@@ -182,7 +184,7 @@ void
 ComposeScaleSkewVersor3DTransform<TParametersValueType>::SetIdentity()
 {
   m_Scale.Fill(NumericTraits<ScaleVectorValueType>::OneValue());
-  m_Skew.Fill(NumericTraits<SkewVectorValueType>::ZeroValue());
+  m_Skew.Fill(SkewVectorValueType{});
   Superclass::SetIdentity();
 }
 

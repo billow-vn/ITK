@@ -59,9 +59,7 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::SetNumberOfLevels(
   }
 
   // resize the schedules
-  ScheduleType temp(m_NumberOfLevels, ImageDimension);
-  temp.Fill(0);
-  m_Schedule = temp;
+  m_Schedule = ScheduleType(m_NumberOfLevels, ImageDimension, 0);
 
   // determine initial shrink factor
   unsigned int startfactor = 1;
@@ -299,7 +297,7 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ost
   os << indent << "MaximumError: " << m_MaximumError << std::endl;
   os << indent << "NumberOfLevels: " << m_NumberOfLevels << std::endl;
   os << indent << "Schedule: " << static_cast<typename NumericTraits<ScheduleType>::PrintType>(m_Schedule) << std::endl;
-  os << indent << "UseShrinkImageFilter: " << (m_UseShrinkImageFilter ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(UseShrinkImageFilter);
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -503,7 +501,7 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateInputReque
   using OutputPixelType = typename TOutputImage::PixelType;
   using OperatorType = GaussianOperator<OutputPixelType, ImageDimension>;
 
-  auto * oper = new OperatorType;
+  OperatorType oper;
 
   typename TInputImage::SizeType radius;
 
@@ -512,13 +510,12 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>::GenerateInputReque
 
   for (idim = 0; idim < TInputImage::ImageDimension; ++idim)
   {
-    oper->SetDirection(idim);
-    oper->SetVariance(itk::Math::sqr(0.5 * static_cast<float>(m_Schedule[refLevel][idim])));
-    oper->SetMaximumError(m_MaximumError);
-    oper->CreateDirectional();
-    radius[idim] = oper->GetRadius()[idim];
+    oper.SetDirection(idim);
+    oper.SetVariance(itk::Math::sqr(0.5 * static_cast<float>(m_Schedule[refLevel][idim])));
+    oper.SetMaximumError(m_MaximumError);
+    oper.CreateDirectional();
+    radius[idim] = oper.GetRadius()[idim];
   }
-  delete oper;
 
   inputRequestedRegion.PadByRadius(radius);
 

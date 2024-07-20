@@ -100,7 +100,7 @@ typename ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Valu
 template <typename TInputImage, typename TOutputImage>
 typename ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType
   ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::m_ValueZero =
-    NumericTraits<typename ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType>::ZeroValue();
+    typename ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType{};
 
 template <typename TInputImage, typename TOutputImage>
 typename ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::StatusType
@@ -375,7 +375,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActi
           break;
         }
       }
-      if (bounds_status == true)
+      if (bounds_status)
       {
         // Here record the histogram information
         m_GlobalZHistogram[center_index[m_SplitAxis]]++;
@@ -413,7 +413,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructActi
             }
 
             statusIt.SetPixel(m_NeighborList.GetArrayIndex(i), layer_number, bounds_status);
-            if (bounds_status == true) // In bounds
+            if (bounds_status) // In bounds
             {
               node = m_LayerNodeStore->Borrow();
               node->m_Index = offset_index;
@@ -453,7 +453,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ConstructLaye
       {
         statusIt.SetPixel(m_NeighborList.GetArrayIndex(i), to, boundary_status);
 
-        if (boundary_status == true) // in bounds
+        if (boundary_status) // in bounds
         {
           node = m_LayerNodeStore->Borrow();
           node->m_Index = statusIt.GetIndex() + m_NeighborList.GetNeighborhoodOffset(i);
@@ -473,10 +473,12 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::InitializeAct
 
   if (this->GetUseImageSpacing())
   {
+    const auto & spacing = this->GetInput()->GetSpacing();
+
     SpacePrecisionType minSpacing = NumericTraits<SpacePrecisionType>::max();
     for (unsigned int i = 0; i < ImageDimension; ++i)
     {
-      minSpacing = std::min(minSpacing, this->GetInput()->GetSpacing()[i]);
+      minSpacing = std::min(minSpacing, spacing[i]);
     }
     MIN_NORM *= minSpacing;
   }
@@ -613,7 +615,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::PropagateLaye
         found_neighbor_flag = true;
       }
     }
-    if (found_neighbor_flag == true)
+    if (found_neighbor_flag)
     {
       // Set the new value using the smallest magnitude
       // found in our "from" neighbors.
@@ -766,14 +768,14 @@ void
 ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedAllocateData(ThreadIdType ThreadId)
 {
   static constexpr float SAFETY_FACTOR = 4.0;
-  unsigned int           i, j;
 
   m_Data[ThreadId].m_Semaphore[0] = 0;
   m_Data[ThreadId].m_Semaphore[1] = 0;
 
+  const std::size_t bufferLayerSize = 2 * m_NumberOfLayers + 1;
   // Allocate the layers for the sparse field.
-  m_Data[ThreadId].m_Layers.reserve(2 * m_NumberOfLayers + 1);
-  for (i = 0; i < 2 * static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
+  m_Data[ThreadId].m_Layers.reserve(bufferLayerSize);
+  for (unsigned int i = 0; i < 2 * static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
   {
     m_Data[ThreadId].m_Layers.push_back(LayerType::New());
   }
@@ -784,12 +786,13 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedAlloc
   }
 
   // Layers used as buffers for transferring pixels during load balancing
-  m_Data[ThreadId].m_LoadTransferBufferLayers = new LayerListType[2 * m_NumberOfLayers + 1];
-  for (i = 0; i < 2 * static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
+
+  m_Data[ThreadId].m_LoadTransferBufferLayers = new LayerListType[bufferLayerSize];
+  for (unsigned int i = 0; i < 2 * static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
   {
     m_Data[ThreadId].m_LoadTransferBufferLayers[i].reserve(m_NumOfWorkUnits);
 
-    for (j = 0; j < m_NumOfWorkUnits; ++j)
+    for (unsigned int j = 0; j < m_NumOfWorkUnits; ++j)
     {
       m_Data[ThreadId].m_LoadTransferBufferLayers[i].push_back(LayerType::New());
     }
@@ -801,14 +804,13 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedAlloc
 
   // The SAFETY_FACTOR simple ensures that the number of nodes created
   // is larger than those required to start with for each thread.
-  auto nodeNum =
-    static_cast<unsigned int>(SAFETY_FACTOR * m_Layers[0]->Size() * (2 * m_NumberOfLayers + 1) / m_NumOfWorkUnits);
+  auto nodeNum = static_cast<unsigned int>(SAFETY_FACTOR * m_Layers[0]->Size() * (bufferLayerSize) / m_NumOfWorkUnits);
 
   m_Data[ThreadId].m_LayerNodeStore->Reserve(nodeNum);
   m_Data[ThreadId].m_RMSChange = m_ValueZero;
 
   // UpLists and Downlists
-  for (i = 0; i < 2; ++i)
+  for (unsigned int i = 0; i < 2; ++i)
   {
     m_Data[ThreadId].UpList[i] = LayerType::New();
     m_Data[ThreadId].DownList[i] = LayerType::New();
@@ -822,29 +824,25 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedAlloc
   // for the Downlists
   m_Data[ThreadId].m_InterNeighborNodeTransferBufferLayers[1] = new LayerPointerType *[m_NumberOfLayers + 1];
 
-  for (i = 0; i < static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
+  for (unsigned int i = 0; i < static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
   {
     m_Data[ThreadId].m_InterNeighborNodeTransferBufferLayers[0][i] = new LayerPointerType[m_NumOfWorkUnits];
     m_Data[ThreadId].m_InterNeighborNodeTransferBufferLayers[1][i] = new LayerPointerType[m_NumOfWorkUnits];
   }
 
-  for (i = 0; i < static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
+  for (unsigned int i = 0; i < static_cast<unsigned int>(m_NumberOfLayers) + 1; ++i)
   {
-    for (j = 0; j < m_NumOfWorkUnits; ++j)
+    for (unsigned int j = 0; j < m_NumOfWorkUnits; ++j)
     {
       m_Data[ThreadId].m_InterNeighborNodeTransferBufferLayers[0][i][j] = LayerType::New();
       m_Data[ThreadId].m_InterNeighborNodeTransferBufferLayers[1][i][j] = LayerType::New();
     }
   }
 
-  // Local histogram for every thread (used during Iterate() )
-  m_Data[ThreadId].m_ZHistogram = new int[m_ZSize];
-  for (i = 0; i < m_ZSize; ++i)
-  {
-    m_Data[ThreadId].m_ZHistogram[i] = 0;
-  }
+  // Local histogram for every thread (used during Iterate()), initialized to zeros.
+  m_Data[ThreadId].m_ZHistogram = new int[m_ZSize]();
 
-  // Every thread must have its own copy of the the GlobalData struct.
+  // Every thread must have its own copy of the GlobalData struct.
   m_Data[ThreadId].globalData = this->GetDifferenceFunction()->GetGlobalDataPointer();
 
   //
@@ -1067,7 +1065,7 @@ template <typename TInputImage, typename TOutputImage>
 void
 ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Iterate()
 {
-  m_TimeStep = NumericTraits<TimeStepType>::ZeroValue();
+  m_TimeStep = TimeStepType{};
 
   MultiThreaderBase * mt = this->GetMultiThreader();
   mt->SetNumberOfWorkUnits(m_NumOfWorkUnits);
@@ -1200,7 +1198,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Iterate()
     }
 
     // The active layer is too small => stop iterating
-    if (this->m_Stop == true)
+    if (this->m_Stop)
     {
       return;
     }
@@ -1221,7 +1219,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::Iterate()
     {
       this->CheckLoadBalance();
 
-      if (this->m_BoundaryChanged == true)
+      if (this->m_BoundaryChanged)
       {
         // the situation at this point in time:
         // the OPTIMAL boundaries (that divide work equally) have changed but ...
@@ -1263,14 +1261,16 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedCalcu
   typename FiniteDifferenceFunctionType::Pointer         df = this->GetDifferenceFunction();
   typename FiniteDifferenceFunctionType::FloatOffsetType offset;
   ValueType                                              norm_grad_phi_squared, dx_forward, dx_backward;
-  ValueType                                              centerValue, forwardValue, backwardValue;
+  ValueType                                              centerValue = 0.0, forwardValue, backwardValue;
   ValueType                                              MIN_NORM = 1.0e-6;
   if (this->GetUseImageSpacing())
   {
+    const auto & spacing = this->GetInput()->GetSpacing();
+
     SpacePrecisionType minSpacing = NumericTraits<SpacePrecisionType>::max();
     for (unsigned int i = 0; i < ImageDimension; ++i)
     {
-      minSpacing = std::min(minSpacing, this->GetInput()->GetSpacing()[i]);
+      minSpacing = std::min(minSpacing, spacing[i]);
     }
     MIN_NORM *= minSpacing;
   }
@@ -1300,7 +1300,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedCalcu
     // neighborhood.  This is used by some level set functions in sampling a
     // speed, advection, or curvature term.
     if (this->m_InterpolateSurfaceLocation &&
-        Math::NotExactlyEquals((centerValue = outputIt.GetCenterPixel()), NumericTraits<ValueType>::ZeroValue()))
+        Math::NotExactlyEquals((centerValue = outputIt.GetCenterPixel()), ValueType{}))
     {
       // Surface is at the zero crossing, so distance to surface is:
       // phi(x) / norm(grad(phi)), where phi(x) is the center of the
@@ -1522,7 +1522,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedUpdat
           break;
         }
       }
-      if (flag == true)
+      if (flag)
       {
         ++layerIt;
         continue;
@@ -1559,7 +1559,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedUpdat
           break;
         }
       }
-      if (flag == true)
+      if (flag)
       {
         ++layerIt;
         continue;
@@ -2087,7 +2087,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ThreadedPropa
         found_neighbor_flag = true;
       }
     }
-    if (found_neighbor_flag == true)
+    if (found_neighbor_flag)
     {
       // Set the new value using the smallest magnitude found in our "from"
       // neighbors
@@ -2544,7 +2544,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::PrintSelf(std
 
   os << indent << "SplitAxis: " << m_SplitAxis << std::endl;
   os << indent << "ZSize: " << m_ZSize << std::endl;
-  os << indent << "BoundaryChanged: " << (m_BoundaryChanged ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(BoundaryChanged);
 
   os << indent << "Boundary: ";
   if (m_Boundary != nullptr)
@@ -2601,9 +2601,9 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::PrintSelf(std
   }
   os << std::endl;
 
-  os << indent << "Stop: " << (m_Stop ? "On" : "Off") << std::endl;
-  os << indent << "InterpolateSurfaceLocation: " << (m_InterpolateSurfaceLocation ? "On" : "Off") << std::endl;
-  os << indent << "BoundsCheckingActive: " << (m_BoundsCheckingActive ? "On" : "Off") << std::endl;
+  itkPrintSelfBooleanMacro(Stop);
+  itkPrintSelfBooleanMacro(InterpolateSurfaceLocation);
+  itkPrintSelfBooleanMacro(BoundsCheckingActive);
 }
 } // end namespace itk
 

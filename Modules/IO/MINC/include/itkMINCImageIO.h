@@ -32,6 +32,7 @@
 #include "itkMatrix.h"
 
 #include "ITKIOMINCExport.h"
+#include <memory> // For unique_ptr.
 
 namespace itk
 {
@@ -80,7 +81,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Run-time type information (and related methods). */
+  /** \see LightObject::GetNameOfClass() */
   itkOverrideGetNameOfClassMacro(MINCImageIO);
 
   /** Right now MINC supports up to 3D with multiple components */
@@ -146,7 +147,7 @@ protected:
   CloseVolume();
 
 private:
-  MINCImageIOPImpl * m_MINCPImpl{};
+  const std::unique_ptr<MINCImageIOPImpl> m_MINCPImpl;
 
   MatrixType m_DirectionCosines{};
 
